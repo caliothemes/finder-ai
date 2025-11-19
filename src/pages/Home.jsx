@@ -5,7 +5,6 @@ import HeroSection from '@/components/home/HeroSection';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import FeaturedAI from '@/components/home/FeaturedAI';
 import NewsletterSection from '@/components/home/NewsletterSection';
-import StoriesViewer from '@/components/StoriesViewer';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -90,12 +89,6 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroSection onSearch={handleSearch} />
-      <div className="py-6 bg-white border-b">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl font-bold text-slate-900 mb-4 px-6">Stories du jour</h2>
-          <StoriesViewer />
-        </div>
-      </div>
       <CategoryGrid categories={categories} />
       <FeaturedAI
         aiServices={aiServices}

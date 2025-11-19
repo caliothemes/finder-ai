@@ -5,8 +5,7 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
-export default function StoriesViewer() {
-  const [showStories, setShowStories] = useState(false);
+export default function StoriesViewer({ onClose }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const queryClient = useQueryClient();
 
@@ -25,19 +24,13 @@ export default function StoriesViewer() {
     },
   });
 
-  const openStory = (index) => {
-    setCurrentIndex(index);
-    setShowStories(true);
-    incrementViewMutation.mutate(stories[index].id);
-  };
-
   const nextStory = () => {
     if (currentIndex < stories.length - 1) {
       const newIndex = currentIndex + 1;
       setCurrentIndex(newIndex);
       incrementViewMutation.mutate(stories[newIndex].id);
     } else {
-      setShowStories(false);
+      onClose();
     }
   };
 
@@ -50,41 +43,35 @@ export default function StoriesViewer() {
   };
 
   useEffect(() => {
-    if (!showStories) return;
-    
+    if (stories.length && stories[currentIndex]) {
+      incrementViewMutation.mutate(stories[currentIndex].id);
+    }
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(nextStory, 5000);
     return () => clearTimeout(timer);
-  }, [showStories, currentIndex]);
+  }, [currentIndex]);
 
-  if (!stories.length) return null;
+  if (!stories.length) {
+    return (
+      <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors z-10"
+        >
+          <X className="w-6 h-6 text-white" />
+        </button>
+        <div className="text-white text-center">
+          <p className="text-xl">Aucune story disponible</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {/* Stories Horizontal Scroll */}
-      <div className="flex gap-3 overflow-x-auto pb-4 px-6 scrollbar-hide">
-        {stories.map((story, index) => (
-          <button
-            key={story.id}
-            onClick={() => openStory(index)}
-            className="flex-shrink-0 relative group cursor-pointer"
-          >
-            <div className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-purple-600 via-pink-600 to-purple-600">
-              <div className="w-full h-full rounded-full border-4 border-white overflow-hidden">
-                <img 
-                  src={story.image_url} 
-                  alt={story.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-            <p className="text-xs text-center mt-1 text-slate-700 truncate w-20">{story.title}</p>
-          </button>
-        ))}
-      </div>
-
-      {/* Story Viewer Modal */}
-      {showStories && stories[currentIndex] && (
-        <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">{stories[currentIndex] && (
+      <>
           {/* Progress bars */}
           <div className="absolute top-4 left-0 right-0 flex gap-1 px-4 z-10">
             {stories.map((_, index) => (
@@ -101,7 +88,7 @@ export default function StoriesViewer() {
 
           {/* Close button */}
           <button
-            onClick={() => setShowStories(false)}
+            onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors z-10"
           >
             <X className="w-6 h-6 text-white" />
@@ -146,9 +133,13 @@ export default function StoriesViewer() {
               </div>
             </Link>
           </div>
-        </div>
+        </>
       )}
+    </div>
+  );
+}
 
+const oldCode = `
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
@@ -164,7 +155,4 @@ export default function StoriesViewer() {
         .animate-progress {
           animation: progress 5s linear forwards;
         }
-      `}</style>
-    </>
-  );
-}
+      `};

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
+import StoriesViewer from '@/components/StoriesViewer';
 import { 
         Menu, X, User, Heart, 
         LogOut, LogIn, PlusCircle, Crown, Search 
@@ -20,6 +21,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [storiesOpen, setStoriesOpen] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -47,11 +49,12 @@ export default function Layout({ children, currentPageName }) {
         {/* Logo Section */}
         <div className="p-6 text-center border-b border-slate-200">
           <div className="flex justify-center mb-3">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '4px' }}>
-                <div className="w-full h-full rounded-full bg-white" />
-              </div>
-              <div className="relative" style={{ padding: '6px' }}>
+            <button onClick={() => setStoriesOpen(true)} className="cursor-pointer">
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '4px' }}>
+                  <div className="w-full h-full rounded-full bg-white" />
+                </div>
+                <div className="relative" style={{ padding: '6px' }}>
                 <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -87,10 +90,11 @@ export default function Layout({ children, currentPageName }) {
               <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
               <circle cx="100" cy="160" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
                 </svg>
-              </div>
-              </div>
-              </div>
-              <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
+                </div>
+                </div>
+                </button>
+                </div>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
             Finder AI
           </h2>
           <p className="text-xs text-slate-600">
@@ -415,6 +419,11 @@ export default function Layout({ children, currentPageName }) {
           )}
         </div>
         </header>
+
+        {/* Stories Modal */}
+        {storiesOpen && (
+          <StoriesViewer onClose={() => setStoriesOpen(false)} />
+        )}
 
         {/* Main Content */}
         <main>{children}</main>
