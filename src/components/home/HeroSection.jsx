@@ -3,11 +3,12 @@ import { Search, Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function HeroSection({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [floatingElements, setFloatingElements] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const elements = Array(15).fill(0).map((_, i) => ({
@@ -22,7 +23,9 @@ export default function HeroSection({ onSearch }) {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (onSearch) onSearch(searchQuery);
+    if (searchQuery.trim()) {
+      navigate(createPageUrl(`Explore?search=${encodeURIComponent(searchQuery)}`));
+    }
   };
 
   return (
@@ -41,6 +44,13 @@ export default function HeroSection({ onSearch }) {
           />
         ))}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.1),transparent_50%)]" />
+        
+        {/* Rocket image bottom right */}
+        <img 
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/691d22f0734aabcae8c2dd9d/304f1aa01_fusee.png"
+          alt="Rocket"
+          className="absolute bottom-0 right-0 w-64 md:w-96 opacity-20 pointer-events-none"
+        />
       </div>
 
       {/* Grid overlay */}
@@ -56,7 +66,7 @@ export default function HeroSection({ onSearch }) {
 
         {/* Main heading */}
         <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
-          <span className="bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent animate-gradient">
+          <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 bg-clip-text text-transparent animate-gradient drop-shadow-2xl">
             Finder AI
           </span>
         </h1>

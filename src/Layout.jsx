@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { 
   Sparkles, Menu, X, User, Heart, 
-  LogOut, LogIn, PlusCircle, Crown 
+  LogOut, LogIn, PlusCircle, Crown, Search 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,10 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import SearchModal from '@/components/SearchModal';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -46,16 +48,24 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to={createPageUrl('Home')} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-950 to-purple-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+                <Sparkles className="w-6 h-6 text-white relative z-10" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent">
                 Finder AI
               </span>
             </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-6">
+              <button
+                onClick={() => setSearchModalOpen(true)}
+                className="flex items-center gap-2 text-slate-700 hover:text-purple-600 font-medium transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                Rechercher
+              </button>
               <Link
                 to={createPageUrl('Home')}
                 className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
@@ -86,7 +96,7 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                   
                   <Link to={createPageUrl('SubmitAI')}>
-                    <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                    <Button className="bg-purple-950 hover:bg-purple-900 text-white">
                       <PlusCircle className="w-4 h-4 mr-2" />
                       Proposer mon IA
                     </Button>
@@ -123,13 +133,15 @@ export default function Layout({ children, currentPageName }) {
               ) : (
                 <Button
                   onClick={() => base44.auth.redirectToLogin()}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                  className="bg-purple-950 hover:bg-purple-900 text-white"
                 >
                   <LogIn className="w-4 h-4 mr-2" />
                   Connexion
                 </Button>
               )}
             </nav>
+
+            <SearchModal isOpen={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
 
             {/* Mobile menu button */}
             <button
