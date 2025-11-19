@@ -17,12 +17,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import SearchModal from '@/components/SearchModal';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [storiesOpen, setStoriesOpen] = useState(false);
+  const { language, changeLanguage, t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -110,21 +112,21 @@ export default function Layout({ children, currentPageName }) {
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
             <Search className="w-4 h-4" />
-            Accueil
+            {t('nav_home')}
           </Link>
           <Link
             to={createPageUrl('Explore')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
             <Search className="w-4 h-4" />
-            Explorer
+            {t('nav_explore')}
           </Link>
           <Link
             to={createPageUrl('Categories')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
             <Search className="w-4 h-4" />
-            Catégories
+            {t('nav_categories')}
           </Link>
           
           {user && (
@@ -134,28 +136,28 @@ export default function Layout({ children, currentPageName }) {
                 className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
                 <Heart className="w-4 h-4" />
-                Favoris
+                {t('nav_favorites')}
               </Link>
               <Link
                 to={createPageUrl('Profile')}
                 className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
                 <User className="w-4 h-4" />
-                Mon Profil
+                {t('nav_profile')}
               </Link>
               <Link
                 to={createPageUrl('ProAccount')}
                 className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
                 <Crown className="w-4 h-4" />
-                Compte Pro
+                {t('nav_pro_account')}
               </Link>
               <Link
                 to={createPageUrl('BannerManager')}
                 className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
                 <PlusCircle className="w-4 h-4" />
-                Mes Bannières
+                {t('nav_my_banners')}
               </Link>
 
               {user.role === 'admin' && (
@@ -169,7 +171,7 @@ export default function Layout({ children, currentPageName }) {
                     className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium"
                   >
                     <Crown className="w-4 h-4" />
-                    Admin
+                    {t('nav_admin')}
                   </Link>
                 </>
               )}
@@ -180,20 +182,20 @@ export default function Layout({ children, currentPageName }) {
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
               >
                 <LogOut className="w-4 h-4" />
-                Se déconnecter
+                {t('nav_logout')}
               </button>
-            </>
-          )}
-          
-          {!user && (
-            <button
+              </>
+              )}
+
+              {!user && (
+              <button
               onClick={() => base44.auth.redirectToLogin()}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
-            >
+              >
               <LogIn className="w-4 h-4" />
-              Connexion
-            </button>
-          )}
+              {t('nav_login')}
+              </button>
+              )}
         </nav>
       </aside>
 
@@ -251,29 +253,50 @@ export default function Layout({ children, currentPageName }) {
                 to={createPageUrl('Explore')}
                 className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
               >
-                Explorer
+                {t('nav_explore')}
               </Link>
-              
+
               {user && (
                 <Link
                   to={createPageUrl('Favorites')}
                   className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2"
                 >
                   <Heart className="w-4 h-4" />
-                  Favoris
+                  {t('nav_favorites')}
                 </Link>
               )}
-              
+
               <Link to={createPageUrl('SubmitAI')}>
                 <Button className="bg-purple-950 hover:bg-purple-900 text-white">
                   <PlusCircle className="w-4 h-4 mr-2" />
-                  Proposer mon IA
+                  {t('nav_submit_ai')}
                 </Button>
               </Link>
             </nav>
 
             {/* Right Actions */}
             <div className="hidden lg:flex items-center gap-4">
+              {/* Language Selector */}
+              <div className="flex items-center gap-2 border border-slate-200 rounded-lg p-1">
+                <button
+                  onClick={() => changeLanguage('fr')}
+                  className={`px-2 py-1 rounded text-xl transition-all ${
+                    language === 'fr' ? 'bg-purple-100' : 'opacity-50 hover:opacity-100'
+                  }`}
+                  title="Français"
+                >
+                  🇫🇷
+                </button>
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={`px-2 py-1 rounded text-xl transition-all ${
+                    language === 'en' ? 'bg-purple-100' : 'opacity-50 hover:opacity-100'
+                  }`}
+                  title="English"
+                >
+                  🇬🇧
+                </button>
+              </div>
               <button
                 onClick={() => setSearchModalOpen(true)}
                 className="p-2 text-slate-700 hover:text-purple-600 transition-colors"
@@ -311,10 +334,10 @@ export default function Layout({ children, currentPageName }) {
                   className="bg-purple-950 hover:bg-purple-900 text-white"
                 >
                   <LogIn className="w-4 h-4 mr-2" />
-                  Connexion
+                  {t('nav_login')}
                 </Button>
               )}
-            </div>
+              </div>
 
             {/* Mobile menu button */}
             <button
