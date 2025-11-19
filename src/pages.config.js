@@ -7,6 +7,7 @@ import Favorites from './pages/Favorites';
 import Explore from './pages/Explore';
 import ProAccount from './pages/ProAccount';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 import __Layout from './Layout.jsx';
 
 
@@ -20,6 +21,7 @@ export const PAGES = {
     "Explore": Explore,
     "ProAccount": ProAccount,
     "Profile": Profile,
+    "Admin": Admin,
 }
 
 export const pagesConfig = {

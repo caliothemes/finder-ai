@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
 import { Link, useNavigate } from 'react-router-dom';
+import Logo from '@/components/Logo';
 
 export default function HeroSection({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,6 +59,11 @@ export default function HeroSection({ onSearch }) {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        {/* Logo */}
+        <div className="mb-8 flex justify-center">
+          <Logo size={180} animated={true} />
+        </div>
+
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-8 backdrop-blur-sm">
           <Sparkles className="w-4 h-4" />
@@ -142,6 +148,13 @@ export default function HeroSection({ onSearch }) {
         .animate-gradient {
           background-size: 200% 200%;
           animation: gradient 3s ease infinite;
+        }
+        .animate-float {
+          animation: logoFloat 6s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(2deg); }
         }
       `}</style>
     </div>
