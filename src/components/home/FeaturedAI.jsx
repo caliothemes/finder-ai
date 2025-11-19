@@ -27,6 +27,11 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
   return (
     <div className="py-24 px-6 bg-slate-50">
       <div className="max-w-7xl mx-auto">
+        {/* Bannière Hero */}
+        <div className="mb-12">
+          <ActiveBanner position="homepage_hero" />
+        </div>
+
         <div className="flex items-center justify-between mb-12">
           <div>
             <div className="flex items-center gap-3 mb-3">
@@ -209,7 +214,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
                       <TrendingUp className="w-3 h-3 mr-1" />
-                      En vedette
+                      {t('home_featured_badge')}
                     </Badge>
                   </div>
                 )}
@@ -273,7 +278,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 {/* Action button */}
                 <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
                   <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
-                    <span>Découvrir</span>
+                    <span>{t('home_featured_discover')}</span>
                     <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
