@@ -4,9 +4,8 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, ExternalLink, FileText } from 'lucide-react';
+import { CheckCircle, XCircle, FileText } from 'lucide-react';
 import { toast } from 'sonner';
-import { Textarea } from '@/components/ui/textarea';
 
 export default function AdminOwnershipClaims() {
   const queryClient = useQueryClient();
