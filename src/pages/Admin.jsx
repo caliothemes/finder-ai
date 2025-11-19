@@ -91,6 +91,10 @@ export default function Admin() {
             <AdminServices />
           </TabsContent>
 
+          <TabsContent value="categories">
+            <AdminCategories />
+          </TabsContent>
+
           <TabsContent value="newsletter">
             <AdminNewsletter />
           </TabsContent>
