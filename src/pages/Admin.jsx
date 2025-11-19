@@ -14,6 +14,7 @@ import AdminStats from '@/components/admin/AdminStats';
 import AdminCategories from '@/components/admin/AdminCategories';
 import AdminReviews from '@/components/admin/AdminReviews';
 import AdminBanners from '@/components/admin/AdminBanners';
+import AdminEmailTemplates from '@/components/admin/AdminEmailTemplates';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -62,7 +63,7 @@ export default function Admin() {
 
         {/* Tabs */}
         <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-7 gap-2">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-8 gap-2">
             <TabsTrigger value="stats" className="flex items-center gap-1 text-xs">
               <BarChart3 className="w-3 h-3" />
               Stats
@@ -82,6 +83,10 @@ export default function Admin() {
             <TabsTrigger value="banners" className="flex items-center gap-1 text-xs">
               <Image className="w-3 h-3" />
               Bannières
+            </TabsTrigger>
+            <TabsTrigger value="emails" className="flex items-center gap-1 text-xs">
+              <Mail className="w-3 h-3" />
+              Emails
             </TabsTrigger>
             <TabsTrigger value="newsletter" className="flex items-center gap-1 text-xs">
               <Mail className="w-3 h-3" />
@@ -111,6 +116,10 @@ export default function Admin() {
 
           <TabsContent value="banners">
             <AdminBanners />
+          </TabsContent>
+
+          <TabsContent value="emails">
+            <AdminEmailTemplates />
           </TabsContent>
 
           <TabsContent value="newsletter">

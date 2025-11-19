@@ -192,10 +192,19 @@ export default function Layout({ children, currentPageName }) {
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
             {/* Mobile Logo - visible only on mobile */}
-            <Link to={createPageUrl('Home')} className="flex lg:hidden items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Search className="w-5 h-5 text-white" />
-              </div>
+            <Link to={createPageUrl('Home')} className="flex lg:hidden items-center gap-2">
+              <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="gradientMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#06b6d4" />
+                    <stop offset="50%" stopColor="#9333ea" />
+                    <stop offset="100%" stopColor="#ec4899" />
+                  </linearGradient>
+                </defs>
+                <circle cx="100" cy="90" r="40" stroke="url(#gradientMobile)" strokeWidth="8" fill="none"/>
+                <circle cx="100" cy="90" r="8" fill="url(#gradientMobile)"/>
+                <path d="M 130 110 L 155 135" stroke="url(#gradientMobile)" strokeWidth="10" strokeLinecap="round"/>
+              </svg>
               <span className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent">
                 Finder AI
               </span>
