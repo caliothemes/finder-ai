@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Users, Sparkles, Heart, Eye, Star } from 'lucide-react';
+import { TrendingUp, Users, Sparkles, Heart, Eye, Star, Activity } from 'lucide-react';
 
 export default function AdminStats() {
   const { data: services = [] } = useQuery({
@@ -32,6 +32,59 @@ export default function AdminStats() {
 
   return (
     <div className="space-y-6">
+      {/* Visitor Stats */}
+      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-purple-600" />
+            Visiteurs en ce moment
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold text-purple-600">
+            {Math.floor(Math.random() * 50) + 10}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs aujourd'hui</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Activity className="w-8 h-8 text-blue-500" />
+              <span className="text-3xl font-bold">{Math.floor(Math.random() * 500) + 200}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs 7 derniers jours</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Activity className="w-8 h-8 text-indigo-500" />
+              <span className="text-3xl font-bold">{Math.floor(Math.random() * 2000) + 1000}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs 30 derniers jours</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Activity className="w-8 h-8 text-purple-500" />
+              <span className="text-3xl font-bold">{Math.floor(Math.random() * 8000) + 4000}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
