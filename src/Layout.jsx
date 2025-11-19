@@ -17,9 +17,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import SearchModal from '@/components/SearchModal';
-import { useLanguage } from '@/components/LanguageProvider';
+import { LanguageProvider, useLanguage } from '@/components/LanguageProvider';
 
-export default function Layout({ children, currentPageName }) {
+function LayoutContent({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -509,5 +509,13 @@ export default function Layout({ children, currentPageName }) {
         </footer>
       </div>
     </div>
-  );
-}
+    );
+    }
+
+    export default function Layout({ children, currentPageName }) {
+    return (
+    <LanguageProvider>
+    <LayoutContent children={children} currentPageName={currentPageName} />
+    </LanguageProvider>
+    );
+    }
