@@ -37,7 +37,7 @@ export default function Explore() {
 
   const { data: allServices = [], isLoading } = useQuery({
     queryKey: ['allServices'],
-    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 100),
+    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 200),
   });
 
   const { data: favorites = [] } = useQuery({
@@ -77,7 +77,7 @@ export default function Explore() {
       service.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (service.tags && service.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())));
     
-    const matchesCategory = selectedCategory === 'all' || service.category_id === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || (service.categories && service.categories.includes(selectedCategory));
     const matchesPricing = selectedPricing === 'all' || service.pricing === selectedPricing;
 
     return matchesSearch && matchesCategory && matchesPricing;

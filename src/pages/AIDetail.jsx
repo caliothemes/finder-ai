@@ -45,13 +45,14 @@ export default function AIDetail() {
     enabled: !!serviceId,
   });
 
-  const { data: category } = useQuery({
-    queryKey: ['category', service?.category_id],
+  const { data: categories = [] } = useQuery({
+    queryKey: ['serviceCategories', service?.categories],
     queryFn: async () => {
-      const cats = await base44.entities.Category.filter({ id: service.category_id });
-      return cats[0] || null;
+      if (!service.categories || service.categories.length === 0) return [];
+      const allCats = await base44.entities.Category.list();
+      return allCats.filter(cat => service.categories.includes(cat.id));
     },
-    enabled: !!service?.category_id,
+    enabled: !!service?.categories,
   });
 
   const { data: reviews = [] } = useQuery({
@@ -151,9 +152,20 @@ export default function AIDetail() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <div className="relative bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 pt-24 pb-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.1),transparent_50%)]" />
-        
+      <div className="relative bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 pt-24 pb-32 overflow-hidden">
+        {service.cover_image_url && (
+          <>
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${service.cover_image_url})` }}
+            />
+            <div className="absolute inset-0 bg-black/60" />
+          </>
+        )}
+        {!service.cover_image_url && (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.1),transparent_50%)]" />
+        )}
+
         <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Logo */}
@@ -173,19 +185,24 @@ export default function AIDetail() {
 
             {/* Info */}
             <div className="flex-1">
-              {category && (
-                <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30">
-                  {category.name}
-                </Badge>
-              )}
-              
-              <h1 className="text-5xl font-bold text-white mb-4">
-                {service.name}
-              </h1>
-              
-              <p className="text-2xl text-slate-300 mb-6">
-                {service.tagline}
-              </p>
+              <div className={`${service.cover_image_url ? 'bg-black/40 backdrop-blur-sm' : ''} rounded-2xl p-6`}>
+                {categories.length > 0 && (
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {categories.map(cat => (
+                      <Badge key={cat.id} className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                        {cat.name}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+
+                <h1 className="text-5xl font-bold text-white mb-4">
+                  {service.name}
+                </h1>
+
+                <p className="text-2xl text-slate-300 mb-6">
+                  {service.tagline}
+                </p>
 
               <div className="flex flex-wrap gap-4 mb-6">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl">
@@ -234,12 +251,13 @@ export default function AIDetail() {
                   className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 px-6 py-6"
                 >
                   <Share2 className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                  </Button>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-24">

@@ -14,9 +14,11 @@ export default function AdminServices() {
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({
-    name: '', slug: '', tagline: '', description: '', category_id: '',
-    pricing: 'freemium', website_url: '', status: 'approved'
+    name: '', slug: '', tagline: '', description: '', categories: [],
+    pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: ''
   });
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: services = [], isLoading } = useQuery({
@@ -34,7 +36,8 @@ export default function AdminServices() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       setShowForm(false);
-      setFormData({ name: '', slug: '', tagline: '', description: '', category_id: '', pricing: 'freemium', website_url: '', status: 'approved' });
+      setEditingService(null);
+      setFormData({ name: '', slug: '', tagline: '', description: '', categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
       toast.success('Service créé avec succès');
     },
   });
@@ -59,7 +62,67 @@ export default function AdminServices() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const slug = formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-');
-    createServiceMutation.mutate({ ...formData, slug });
+    if (editingService) {
+      updateServiceMutation.mutate({ id: editingService.id, data: { ...formData, slug } });
+    } else {
+      createServiceMutation.mutate({ ...formData, slug });
+    }
+  };
+
+  const handleEdit = (service) => {
+    setEditingService(service);
+    setFormData({
+      name: service.name,
+      slug: service.slug,
+      tagline: service.tagline || '',
+      description: service.description,
+      categories: service.categories || [],
+      pricing: service.pricing,
+      website_url: service.website_url || '',
+      status: service.status,
+      logo_url: service.logo_url || '',
+      cover_image_url: service.cover_image_url || ''
+    });
+    setShowForm(true);
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingLogo(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setFormData({ ...formData, logo_url: file_url });
+      toast.success('Logo uploadé');
+    } catch (error) {
+      toast.error('Erreur upload logo');
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleCoverUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingCover(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setFormData({ ...formData, cover_image_url: file_url });
+      toast.success('Image de couverture uploadée');
+    } catch (error) {
+      toast.error('Erreur upload cover');
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
+  const toggleCategory = (catId) => {
+    const cats = formData.categories || [];
+    if (cats.includes(catId)) {
+      setFormData({ ...formData, categories: cats.filter(c => c !== catId) });
+    } else {
+      setFormData({ ...formData, categories: [...cats, catId] });
+    }
   };
 
   const handleStatusChange = (service, newStatus) => {
@@ -84,7 +147,7 @@ export default function AdminServices() {
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Créer un service IA</CardTitle>
+            <CardTitle>{editingService ? 'Modifier le service' : 'Créer un service IA'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -112,17 +175,57 @@ export default function AdminServices() {
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 required
               />
-              <div className="grid md:grid-cols-3 gap-4">
-                <Select value={formData.category_id} onValueChange={(v) => setFormData({...formData, category_id: v})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Catégorie" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map(cat => (
-                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              
+              {/* Categories */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">Catégories (sélection multiple)</label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {categories.map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => toggleCategory(cat.id)}
+                      className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+                        (formData.categories || []).includes(cat.id)
+                          ? 'bg-purple-100 border-purple-600 text-purple-900'
+                          : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Image Uploads */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Logo</label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    disabled={uploadingLogo}
+                  />
+                  {formData.logo_url && (
+                    <img src={formData.logo_url} alt="Logo" className="mt-2 w-20 h-20 object-cover rounded-lg" />
+                  )}
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Image de couverture</label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverUpload}
+                    disabled={uploadingCover}
+                  />
+                  {formData.cover_image_url && (
+                    <img src={formData.cover_image_url} alt="Cover" className="mt-2 w-full h-20 object-cover rounded-lg" />
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
                 <Select value={formData.pricing} onValueChange={(v) => setFormData({...formData, pricing: v})}>
                   <SelectTrigger>
                     <SelectValue placeholder="Prix" />
@@ -151,10 +254,13 @@ export default function AdminServices() {
                 onChange={(e) => setFormData({...formData, website_url: e.target.value})}
               />
               <div className="flex gap-2">
-                <Button type="submit" disabled={createServiceMutation.isPending}>
-                  Créer le service
+                <Button type="submit" disabled={createServiceMutation.isPending || updateServiceMutation.isPending}>
+                  {editingService ? 'Mettre à jour' : 'Créer le service'}
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
+                <Button type="button" variant="outline" onClick={() => {
+                  setShowForm(false);
+                  setEditingService(null);
+                }}>
                   Annuler
                 </Button>
               </div>
@@ -240,27 +346,36 @@ export default function AdminServices() {
                       </div>
                       </div>
                       <div className="flex items-center gap-2">
-                      <Select value={service.status} onValueChange={(v) => handleStatusChange(service, v)}>
-                      <SelectTrigger className="w-32">
-                      <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                      <SelectItem value="approved">Approuvé</SelectItem>
-                      <SelectItem value="pending">En attente</SelectItem>
-                      <SelectItem value="rejected">Rejeté</SelectItem>
-                      </SelectContent>
-                      </Select>
-                      <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => {
-                      if (confirm('Supprimer ce service ?')) {
-                        deleteServiceMutation.mutate(service.id);
-                      }
-                      }}
-                      >
-                      <Trash2 className="w-4 h-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleEdit(service)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Select value={service.status} onValueChange={(v) => handleStatusChange(service, v)}>
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="approved">Approuvé</SelectItem>
+                            <SelectItem value="pending">En attente</SelectItem>
+                            <SelectItem value="rejected">Rejeté</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => {
+                            if (confirm('Supprimer ce service ?')) {
+                              deleteServiceMutation.mutate(service.id);
+                            }
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                       </div>
               </div>
             ))}

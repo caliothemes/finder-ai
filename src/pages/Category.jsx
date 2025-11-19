@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import AIServiceCard from '@/components/AIServiceCard';
-import { Sparkles } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Category() {
@@ -32,14 +32,16 @@ export default function Category() {
     enabled: !!categoryId,
   });
 
-  const { data: aiServices = [], isLoading: servicesLoading } = useQuery({
+  const { data: allServices = [], isLoading: servicesLoading } = useQuery({
     queryKey: ['categoryServices', categoryId],
-    queryFn: () => base44.entities.AIService.filter(
-      { category_id: categoryId, status: 'approved' },
-      '-created_date'
-    ),
+    queryFn: async () => {
+      const services = await base44.entities.AIService.filter({ status: 'approved' }, '-created_date');
+      return services.filter(s => s.categories && s.categories.includes(categoryId));
+    },
     enabled: !!categoryId,
   });
+
+  const aiServices = allServices;
 
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
@@ -97,7 +99,10 @@ export default function Category() {
       <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 py-24 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-6">
-            <Sparkles className="w-4 h-4" />
+            {(() => {
+              const IconComponent = Icons[category.icon] || Icons.Box;
+              return <IconComponent className="w-4 h-4" />;
+            })()}
             <span>Catégorie</span>
           </div>
           
