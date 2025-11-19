@@ -5,9 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock } from 'lucide-react';
+import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import BannerCalendar from '@/components/banners/BannerCalendar';
 
 export default function BannerManager() {
   const [user, setUser] = useState(null);
@@ -17,6 +18,7 @@ export default function BannerManager() {
   });
   const [selectedDates, setSelectedDates] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [reservingBanner, setReservingBanner] = useState(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function BannerManager() {
     mutationFn: async ({ bannerId, dates }) => {
       const banner = myBanners.find(b => b.id === bannerId);
       const newDates = [...(banner.reserved_dates || []), ...dates];
-      const creditsNeeded = dates.length;
+      const creditsNeeded = dates.length * 5;
       
       if (proAccount.credits < creditsNeeded) {
         throw new Error('Crédits insuffisants');
@@ -92,7 +94,9 @@ export default function BannerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myBanners'] });
       queryClient.invalidateQueries({ queryKey: ['proAccount'] });
-      toast.success('Dates réservées avec succès');
+      queryClient.invalidateQueries({ queryKey: ['bannerReservations'] });
+      setReservingBanner(null);
+      toast.success('Dates réservées avec succès ! 🎉');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -216,40 +220,76 @@ export default function BannerManager() {
 
         <div className="grid gap-6">
           {myBanners.map((banner) => (
-            <Card key={banner.id}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-xl font-bold">{banner.title}</h3>
-                      {banner.validated ? (
-                        <Badge className="bg-green-100 text-green-800">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Validée
-                        </Badge>
-                      ) : (
-                        <Badge className="bg-orange-100 text-orange-800">
-                          <Clock className="w-3 h-3 mr-1" />
-                          En attente
-                        </Badge>
+            <div key={banner.id}>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className="text-xl font-bold">{banner.title}</h3>
+                        {banner.validated ? (
+                          <Badge className="bg-green-100 text-green-800">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Validée
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-orange-100 text-orange-800">
+                            <Clock className="w-3 h-3 mr-1" />
+                            En attente de validation
+                          </Badge>
+                        )}
+                      </div>
+                      {banner.image_url && (
+                        <img src={banner.image_url} alt={banner.title} className="w-full h-48 object-cover rounded-lg mb-3" />
+                      )}
+                      <div className="grid md:grid-cols-2 gap-2 text-sm text-slate-600 mb-4">
+                        <p>📍 Position: {positions.find(p => p.value === banner.position)?.label}</p>
+                        <p>💳 Crédits utilisés: {banner.credits_used || 0}</p>
+                        <p>📅 Dates réservées: {(banner.reserved_dates || []).length}</p>
+                        <p>🔗 URL: <a href={banner.target_url} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">{banner.target_url}</a></p>
+                      </div>
+
+                      {banner.validated && (
+                        <Button
+                          onClick={() => setReservingBanner(reservingBanner === banner.id ? null : banner.id)}
+                          variant={reservingBanner === banner.id ? "outline" : "default"}
+                          className={reservingBanner === banner.id ? "" : "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"}
+                        >
+                          {reservingBanner === banner.id ? (
+                            <>
+                              <X className="w-4 h-4 mr-2" />
+                              Fermer le calendrier
+                            </>
+                          ) : (
+                            <>
+                              <Calendar className="w-4 h-4 mr-2" />
+                              Réserver des dates
+                            </>
+                          )}
+                        </Button>
+                      )}
+
+                      {!banner.validated && (
+                        <p className="text-sm text-orange-600 mt-2">
+                          ⏳ Votre bannière est en cours de validation. Vous pourrez réserver des dates une fois validée.
+                        </p>
                       )}
                     </div>
-                    {banner.image_url && (
-                      <img src={banner.image_url} alt={banner.title} className="w-full h-32 object-cover rounded-lg mb-3" />
-                    )}
-                    <p className="text-sm text-slate-600">
-                      Position: {positions.find(p => p.value === banner.position)?.label}
-                    </p>
-                    <p className="text-sm text-slate-600">
-                      Crédits utilisés: {banner.credits_used || 0}
-                    </p>
-                    <p className="text-sm text-slate-600">
-                      Dates réservées: {(banner.reserved_dates || []).length}
-                    </p>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Calendrier de réservation */}
+              {reservingBanner === banner.id && banner.validated && (
+                <div className="mt-4">
+                  <BannerCalendar
+                    bannerId={banner.id}
+                    position={banner.position}
+                    onReserve={(dates) => reserveDatesMutation.mutate({ bannerId: banner.id, dates })}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+              )}
+            </div>
           ))}
         </div>
       </div>
