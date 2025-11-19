@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
+import ActiveBanner from '@/components/banners/ActiveBanner';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -92,6 +93,12 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroSection onSearch={handleSearch} />
+
+      {/* Bannière Hero */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <ActiveBanner position="homepage_hero" />
+      </div>
+
       <FeaturedAI
         aiServices={aiServices}
         favorites={favorites}

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
+import ActiveBanner from '@/components/banners/ActiveBanner';
 
 export default function Explore() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -102,6 +103,11 @@ export default function Explore() {
           <p className="text-xl text-slate-600">
             Découvrez {allServices.length} outils d'intelligence artificielle
           </p>
+        </div>
+
+        {/* Bannière */}
+        <div className="mb-8">
+          <ActiveBanner position="homepage_sidebar" />
         </div>
 
         {/* Filters */}

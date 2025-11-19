@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import ActiveBanner from '@/components/banners/ActiveBanner';
 import { toast } from 'sonner';
 
 export default function Category() {
@@ -136,6 +137,11 @@ export default function Category() {
 
       {/* Services Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Bannière catégorie */}
+        <div className="mb-8">
+          <ActiveBanner position="category_top" />
+        </div>
+
         {aiServices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {aiServices.slice(0, 5).map((service) => (

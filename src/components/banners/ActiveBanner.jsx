@@ -1,0 +1,54 @@
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles } from 'lucide-react';
+
+export default function ActiveBanner({ position }) {
+  const today = new Date().toISOString().split('T')[0];
+
+  const { data: activeBanner } = useQuery({
+    queryKey: ['activeBanner', position, today],
+    queryFn: async () => {
+      const banners = await base44.entities.BannerReservation.filter({
+        position: position,
+        validated: true,
+        active: true
+      });
+      
+      // Trouver une bannière qui a réservé aujourd'hui
+      const banner = banners.find(b => 
+        (b.reserved_dates || []).includes(today)
+      );
+      
+      return banner || null;
+    },
+  });
+
+  if (!activeBanner) return null;
+
+  return (
+    <div className="relative group overflow-hidden rounded-2xl shadow-xl">
+      <a 
+        href={activeBanner.target_url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="block"
+      >
+        <img 
+          src={activeBanner.image_url} 
+          alt={activeBanner.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        
+        {/* Badge "À l'affiche" */}
+        <div className="absolute top-4 right-4">
+          <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
+            <Sparkles className="w-3 h-3 mr-1" />
+            À l'affiche
+          </Badge>
+        </div>
+      </a>
+    </div>
+  );
+}
