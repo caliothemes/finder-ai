@@ -480,7 +480,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
           
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>© 2024 Finder AI. Tous droits réservés.</p>
+            <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
           </div>
         </div>
         </footer>
