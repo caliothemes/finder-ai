@@ -275,6 +275,13 @@ const translations = {
     // Badge
     badge_featured: "À l'affiche",
     
+    // Reviews
+    reviews_title: "Avis des utilisateurs",
+    reviews_write: "Laisser un avis",
+    reviews_placeholder: "Partagez votre expérience...",
+    reviews_submit: "Publier l'avis",
+    reviews_empty: "Aucun avis pour le moment. Soyez le premier à donner votre avis !",
+
     // Common
     common_loading: "Chargement...",
     common_cancel: "Annuler",
@@ -593,6 +600,13 @@ const translations = {
     // Badge
     badge_featured: "Featured",
     
+    // Reviews
+    reviews_title: "User reviews",
+    reviews_write: "Write a review",
+    reviews_placeholder: "Share your experience...",
+    reviews_submit: "Submit review",
+    reviews_empty: "No reviews yet. Be the first to share your thoughts!",
+
     // Common
     common_loading: "Loading...",
     common_cancel: "Cancel",

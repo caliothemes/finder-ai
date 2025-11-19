@@ -10,8 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function AIDetail() {
+  const { language, t } = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
   const serviceId = urlParams.get('id');
   const [user, setUser] = useState(null);
@@ -273,7 +275,7 @@ export default function AIDetail() {
                 </h1>
 
                 <p className="text-2xl text-slate-300 mb-6">
-                  {service.tagline}
+                  {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
                 </p>
 
               <div className="flex flex-wrap gap-4 mb-6">
@@ -439,7 +441,7 @@ export default function AIDetail() {
             <div className="bg-white rounded-3xl p-8 shadow-xl">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Description</h2>
               <p className="text-slate-700 text-lg leading-relaxed whitespace-pre-line">
-                {service.description}
+                {language === 'en' && service.description_en ? service.description_en : service.description}
               </p>
             </div>
 
@@ -451,7 +453,7 @@ export default function AIDetail() {
                   Fonctionnalités principales
                 </h2>
                 <ul className="space-y-3">
-                  {service.features.map((feature, idx) => (
+                  {(language === 'en' && service.features_en ? service.features_en : service.features).map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <Check className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
                       <span className="text-slate-700 text-lg">{feature}</span>
@@ -465,12 +467,12 @@ export default function AIDetail() {
             <div className="bg-white rounded-3xl p-8 shadow-xl">
               <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                 <MessageSquare className="w-6 h-6 text-purple-600" />
-                Avis des utilisateurs ({reviews.length})
+                {t('reviews_title')} ({reviews.length})
               </h2>
 
               {/* Write review */}
               <div className="mb-8 p-6 bg-slate-50 rounded-2xl">
-                <h3 className="font-semibold text-lg mb-4">Laisser un avis</h3>
+                <h3 className="font-semibold text-lg mb-4">{t('reviews_write')}</h3>
                 
                 <div className="flex gap-2 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -491,7 +493,7 @@ export default function AIDetail() {
                 </div>
 
                 <Textarea
-                  placeholder="Partagez votre expérience..."
+                  placeholder={t('reviews_placeholder')}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   className="mb-4 min-h-32"
@@ -502,7 +504,7 @@ export default function AIDetail() {
                   disabled={submitReviewMutation.isPending}
                   className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 >
-                  Publier l'avis
+                  {t('reviews_submit')}
                 </Button>
               </div>
 
@@ -536,7 +538,7 @@ export default function AIDetail() {
 
                 {reviews.length === 0 && (
                   <p className="text-center text-slate-500 py-8">
-                    Aucun avis pour le moment. Soyez le premier à donner votre avis !
+                    {t('reviews_empty')}
                   </p>
                 )}
               </div>
