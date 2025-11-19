@@ -16,6 +16,11 @@ export default function AIDetail() {
   const [user, setUser] = useState(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [showClaimForm, setShowClaimForm] = useState(false);
+  const [claimData, setClaimData] = useState({
+    first_name: '', last_name: '', company: '', ai_website: '', id_document_url: ''
+  });
+  const [uploadingDoc, setUploadingDoc] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -93,6 +98,72 @@ export default function AIDetail() {
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
     },
   });
+
+  const { data: existingClaim } = useQuery({
+    queryKey: ['ownershipClaim', serviceId, user?.email],
+    queryFn: async () => {
+      const claims = await base44.entities.AIOwnershipClaim.filter({
+        ai_service_id: serviceId,
+        user_email: user.email
+      });
+      return claims[0] || null;
+    },
+    enabled: !!user && !!serviceId,
+  });
+
+  const submitClaimMutation = useMutation({
+    mutationFn: async () => {
+      if (!user) {
+        toast.error('Veuillez vous connecter');
+        base44.auth.redirectToLogin();
+        return;
+      }
+
+      await base44.entities.AIOwnershipClaim.create({
+        ai_service_id: serviceId,
+        user_email: user.email,
+        ...claimData,
+        status: 'pending'
+      });
+
+      // Envoyer email à l'admin
+      await base44.integrations.Core.SendEmail({
+        to: 'admin@finderai.com',
+        subject: `Nouvelle revendication IA: ${service.name}`,
+        body: `
+          <h2>Nouvelle revendication d'IA</h2>
+          <p><strong>Service IA:</strong> ${service.name}</p>
+          <p><strong>Demandeur:</strong> ${claimData.first_name} ${claimData.last_name}</p>
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Société:</strong> ${claimData.company}</p>
+          <p><strong>Site web de l'IA:</strong> ${claimData.ai_website}</p>
+          <p><strong>Document d'identité:</strong> <a href="${claimData.id_document_url}">Voir le document</a></p>
+          <p>Veuillez vérifier cette revendication dans l'admin.</p>
+        `
+      });
+
+      toast.success('Revendication soumise avec succès !');
+      setShowClaimForm(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ownershipClaim'] });
+    },
+  });
+
+  const handleDocumentUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingDoc(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setClaimData({ ...claimData, id_document_url: file_url });
+      toast.success('Document uploadé');
+    } catch (error) {
+      toast.error('Erreur upload');
+    } finally {
+      setUploadingDoc(false);
+    }
+  };
 
   const submitReviewMutation = useMutation({
     mutationFn: async () => {
@@ -174,10 +245,10 @@ export default function AIDetail() {
                 <img
                   src={service.logo_url}
                   alt={service.name}
-                  className="w-32 h-32 rounded-3xl object-cover border-4 border-white/20 shadow-2xl"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-white/20 shadow-2xl"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-5xl shadow-2xl">
+                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-5xl shadow-2xl">
                   🤖
                 </div>
               )}
@@ -251,13 +322,112 @@ export default function AIDetail() {
                   className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 px-6 py-6"
                 >
                   <Share2 className="w-5 h-5" />
+                </Button>
+                
+                {user && service.submitted_by !== user.email && !existingClaim && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowClaimForm(true)}
+                    className="bg-yellow-500/20 backdrop-blur-sm border-yellow-400/30 text-yellow-300 hover:bg-yellow-500/30 px-6 py-6"
+                  >
+                    Revendiquer cette IA
                   </Button>
+                )}
+
+                {existingClaim && (
+                  <Badge className="px-6 py-3 text-sm">
+                    {existingClaim.status === 'pending' ? '⏳ En attente de validation' : 
+                     existingClaim.status === 'approved' ? '✅ Revendication approuvée' : 
+                     '❌ Revendication refusée'}
+                  </Badge>
+                )}
                   </div>
                   </div>
                   </div>
                   </div>
                   </div>
                   </div>
+
+      {/* Claim Form Modal */}
+      {showClaimForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-3xl font-bold mb-2">Revendiquer cette IA</h2>
+            <p className="text-slate-600 mb-6">Remplissez ce formulaire pour revendiquer la propriété de cette fiche IA</p>
+            
+            <form onSubmit={(e) => { e.preventDefault(); submitClaimMutation.mutate(); }} className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Prénom *</label>
+                  <Input
+                    value={claimData.first_name}
+                    onChange={(e) => setClaimData({...claimData, first_name: e.target.value})}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Nom *</label>
+                  <Input
+                    value={claimData.last_name}
+                    onChange={(e) => setClaimData({...claimData, last_name: e.target.value})}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Société *</label>
+                <Input
+                  value={claimData.company}
+                  onChange={(e) => setClaimData({...claimData, company: e.target.value})}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Site web de l'IA *</label>
+                <Input
+                  type="url"
+                  value={claimData.ai_website}
+                  onChange={(e) => setClaimData({...claimData, ai_website: e.target.value})}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Pièce d'identité * (pour vérification)</label>
+                <Input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={handleDocumentUpload}
+                  disabled={uploadingDoc}
+                  required={!claimData.id_document_url}
+                />
+                {claimData.id_document_url && (
+                  <p className="text-sm text-green-600 mt-2">✓ Document uploadé</p>
+                )}
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="submit"
+                  disabled={submitClaimMutation.isPending || uploadingDoc}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 flex-1"
+                >
+                  Soumettre la revendication
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowClaimForm(false)}
+                >
+                  Annuler
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-24">

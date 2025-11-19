@@ -52,7 +52,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
             <img
               src={service.logo_url}
               alt={service.name}
-              className="w-10 h-10 rounded-lg object-cover border border-slate-200"
+              className="w-10 h-10 rounded-full object-cover border border-slate-200"
             />
           )}
           <div className="flex-1 min-w-0">
