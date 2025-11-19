@@ -49,7 +49,7 @@ export default function HeroSection({ onSearch }) {
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/691d22f0734aabcae8c2dd9d/304f1aa01_fusee.png"
           alt="Rocket"
-          className="absolute bottom-0 right-0 w-64 md:w-96 opacity-20 pointer-events-none"
+          className="absolute bottom-0 right-0 w-96 md:w-[600px] lg:w-[700px] opacity-20 pointer-events-none"
         />
       </div>
 

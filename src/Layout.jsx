@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { 
-  Sparkles, Menu, X, User, Heart, 
-  LogOut, LogIn, PlusCircle, Crown, Search 
-} from 'lucide-react';
+        Menu, X, User, Heart, 
+        LogOut, LogIn, PlusCircle, Crown, Search 
+      } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -48,9 +48,13 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to={createPageUrl('Home')} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-950 to-purple-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
-                <Sparkles className="w-6 h-6 text-white relative z-10" />
+              <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.3),transparent_70%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.3),transparent_70%)]" />
+                <Search className="w-5 h-5 text-white relative z-10 drop-shadow-lg" />
+                <div className="absolute inset-0 border-2 border-white/30 rounded-xl" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full blur-sm animate-pulse" />
+                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full blur-sm animate-pulse" style={{animationDelay: '0.5s'}} />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent">
                 Finder AI
@@ -246,7 +250,10 @@ export default function Layout({ children, currentPageName }) {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-purple-400" />
+                <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center relative overflow-hidden">
+                  <Search className="w-4 h-4 text-white relative z-10" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.3),transparent_70%)]" />
+                </div>
                 <span className="text-xl font-bold">Finder AI</span>
               </div>
               <p className="text-slate-400">
