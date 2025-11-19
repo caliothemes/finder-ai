@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
 import ActiveBanner from '@/components/banners/ActiveBanner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Explore() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -21,6 +22,7 @@ export default function Explore() {
   const [selectedPricing, setSelectedPricing] = useState('all');
   const [sortBy, setSortBy] = useState('-created_date');
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -61,13 +63,13 @@ export default function Explore() {
       const existing = favorites.find(f => f.ai_service_id === serviceId);
       if (existing) {
         await base44.entities.Favorite.delete(existing.id);
-        toast.success('Retiré des favoris');
+        toast.success(t('toast_favorite_removed'));
       } else {
         await base44.entities.Favorite.create({
           user_email: user.email,
           ai_service_id: serviceId
         });
-        toast.success('Ajouté aux favoris ❤️');
+        toast.success(t('toast_favorite_added'));
       }
     },
     onSuccess: () => {
@@ -98,10 +100,10 @@ export default function Explore() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Explorer tous les outils IA
+            {t('explore_title')}
           </h1>
           <p className="text-xl text-slate-600">
-            Découvrez {allServices.length} outils d'intelligence artificielle
+            {t('explore_subtitle')} {allServices.length} {t('explore_subtitle_suffix')}
           </p>
         </div>
 
@@ -114,7 +116,7 @@ export default function Explore() {
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-12">
           <div className="flex items-center gap-3 mb-6">
             <Filter className="w-5 h-5 text-purple-600" />
-            <h2 className="text-lg font-semibold">Filtres et Recherche</h2>
+            <h2 className="text-lg font-semibold">{t('explore_filters_title')}</h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-4">
@@ -124,7 +126,7 @@ export default function Explore() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <Input
                   type="text"
-                  placeholder="Rechercher un outil, tag..."
+                  placeholder={t('explore_search_placeholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -136,10 +138,10 @@ export default function Explore() {
             <div>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Catégorie" />
+                  <SelectValue placeholder={t('explore_all_categories')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  <SelectItem value="all">{t('explore_all_categories')}</SelectItem>
                   {categories.map(cat => (
                     <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                   ))}
@@ -151,14 +153,14 @@ export default function Explore() {
             <div>
               <Select value={selectedPricing} onValueChange={setSelectedPricing}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Prix" />
+                  <SelectValue placeholder={t('explore_all_pricing')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les prix</SelectItem>
-                  <SelectItem value="gratuit">Gratuit</SelectItem>
-                  <SelectItem value="freemium">Freemium</SelectItem>
-                  <SelectItem value="payant">Payant</SelectItem>
-                  <SelectItem value="abonnement">Abonnement</SelectItem>
+                  <SelectItem value="all">{t('explore_all_pricing')}</SelectItem>
+                  <SelectItem value="gratuit">{t('explore_pricing_free')}</SelectItem>
+                  <SelectItem value="freemium">{t('explore_pricing_freemium')}</SelectItem>
+                  <SelectItem value="payant">{t('explore_pricing_paid')}</SelectItem>
+                  <SelectItem value="abonnement">{t('explore_pricing_subscription')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -167,7 +169,7 @@ export default function Explore() {
           {/* Sort */}
           <div className="flex items-center gap-3 mt-4">
             <SlidersHorizontal className="w-4 h-4 text-slate-500" />
-            <span className="text-sm text-slate-600">Trier par:</span>
+            <span className="text-sm text-slate-600">{t('explore_sort_by')}</span>
             <div className="flex gap-2">
               <button
                 onClick={() => setSortBy('-created_date')}
@@ -177,7 +179,7 @@ export default function Explore() {
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                Plus récents
+                {t('explore_sort_recent')}
               </button>
               <button
                 onClick={() => setSortBy('-views')}
@@ -187,7 +189,7 @@ export default function Explore() {
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                Plus vus
+                {t('explore_sort_views')}
               </button>
               <button
                 onClick={() => setSortBy('-average_rating')}
@@ -197,7 +199,7 @@ export default function Explore() {
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                Mieux notés
+                {t('explore_sort_rating')}
               </button>
             </div>
           </div>
@@ -206,7 +208,7 @@ export default function Explore() {
         {/* Results count */}
         <div className="mb-6">
           <p className="text-slate-600">
-            <span className="font-semibold text-slate-900">{filteredServices.length}</span> résultat{filteredServices.length > 1 ? 's' : ''}
+            <span className="font-semibold text-slate-900">{filteredServices.length}</span> {filteredServices.length > 1 ? t('explore_results_plural') : t('explore_results')}
           </p>
         </div>
 
@@ -233,15 +235,15 @@ export default function Explore() {
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Votre Service IA ici
+                  {t('promo_your_service')}
                 </h3>
                 <p className="text-sm text-slate-600 mb-4">
-                  Augmentez votre visibilité avec un compte pro
+                  {t('promo_increase_visibility')}
                 </p>
                 <Link to={createPageUrl('ProAccount')}>
                   <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                     <Crown className="w-4 h-4 mr-2" />
-                    Devenir Pro
+                    {t('promo_become_pro')}
                   </Button>
                 </Link>
               </div>
@@ -260,10 +262,10 @@ export default function Explore() {
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">
-              Aucun résultat
+              {t('explore_no_results')}
             </h2>
             <p className="text-slate-600">
-              Essayez de modifier vos critères de recherche
+              {t('explore_no_results_subtitle')}
             </p>
           </div>
         )}

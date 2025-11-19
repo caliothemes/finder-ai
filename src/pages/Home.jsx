@@ -11,10 +11,12 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
 import ActiveBanner from '@/components/banners/ActiveBanner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -62,13 +64,13 @@ export default function Home() {
       const existing = favorites.find(f => f.ai_service_id === serviceId);
       if (existing) {
         await base44.entities.Favorite.delete(existing.id);
-        toast.success('Retiré des favoris');
+        toast.success(t('toast_favorite_removed'));
       } else {
         await base44.entities.Favorite.create({
           user_email: user.email,
           ai_service_id: serviceId
         });
-        toast.success('Ajouté aux favoris ❤️');
+        toast.success(t('toast_favorite_added'));
       }
     },
     onSuccess: () => {
@@ -110,7 +112,7 @@ export default function Home() {
         <Link to={createPageUrl('Explore')}>
           <Button className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white px-12 py-6 text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105">
             <Sparkles className="w-6 h-6 mr-3" />
-            Continuer l'exploration des IA
+            {t('explore_continue')}
             <ChevronRight className="w-6 h-6 ml-3" />
           </Button>
         </Link>

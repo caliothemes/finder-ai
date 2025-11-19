@@ -9,8 +9,11 @@ import {
   Camera, Mic, Terminal, Wand2, Mail, Calendar, Database,
   Globe, Shield, Zap, Brain, Image as ImageIcon
 } from 'lucide-react';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Categories() {
+  const { t } = useLanguage();
+  
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => base44.entities.Category.list(),
@@ -65,13 +68,13 @@ export default function Categories() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm mb-6">
             <Sparkles className="w-4 h-4" />
-            <span>Toutes les catégories</span>
+            <span>{t('categories_all')}</span>
           </div>
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            Explorez par Catégorie
+            {t('categories_title')}
           </h1>
           <p className="text-xl text-slate-600">
-            Découvrez les meilleurs outils IA classés par usage
+            {t('categories_subtitle')}
           </p>
         </div>
 
@@ -108,12 +111,12 @@ export default function Categories() {
                   
                   <div className="mb-3">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
-                      {categoryCount} outil{categoryCount > 1 ? 's' : ''}
+                      {categoryCount} {categoryCount > 1 ? t('categories_tools_plural') : t('categories_tools')}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center text-purple-600 font-medium text-sm group-hover:gap-2 transition-all">
-                    <span>Explorer</span>
+                    <span>{t('categories_explore')}</span>
                     <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
