@@ -15,6 +15,7 @@ import AdminCategories from '@/components/admin/AdminCategories';
 import AdminReviews from '@/components/admin/AdminReviews';
 import AdminBanners from '@/components/admin/AdminBanners';
 import AdminEmailTemplates from '@/components/admin/AdminEmailTemplates';
+import AdminStories from '@/components/admin/AdminStories';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -63,7 +64,7 @@ export default function Admin() {
 
         {/* Tabs */}
         <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-8 gap-2">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-9 gap-2">
             <TabsTrigger value="stats" className="flex items-center gap-1 text-xs">
               <BarChart3 className="w-3 h-3" />
               Stats
@@ -71,6 +72,10 @@ export default function Admin() {
             <TabsTrigger value="services" className="flex items-center gap-1 text-xs">
               <Sparkles className="w-3 h-3" />
               Services
+            </TabsTrigger>
+            <TabsTrigger value="stories" className="flex items-center gap-1 text-xs">
+              <Image className="w-3 h-3" />
+              Stories
             </TabsTrigger>
             <TabsTrigger value="categories" className="flex items-center gap-1 text-xs">
               <FileText className="w-3 h-3" />
@@ -104,6 +109,10 @@ export default function Admin() {
 
           <TabsContent value="services">
             <AdminServices />
+          </TabsContent>
+
+          <TabsContent value="stories">
+            <AdminStories />
           </TabsContent>
 
           <TabsContent value="categories">

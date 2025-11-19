@@ -47,7 +47,12 @@ export default function Layout({ children, currentPageName }) {
         {/* Logo Section */}
         <div className="p-6 text-center border-b border-slate-200">
           <div className="flex justify-center mb-3">
-            <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '4px' }}>
+                <div className="w-full h-full rounded-full bg-white" />
+              </div>
+              <div className="relative" style={{ padding: '6px' }}>
+                <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#06b6d4" />
@@ -81,9 +86,11 @@ export default function Layout({ children, currentPageName }) {
               <circle cx="50" cy="145" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
               <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
               <circle cx="100" cy="160" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
+                </svg>
+              </div>
+              </div>
+              </div>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
             Finder AI
           </h2>
           <p className="text-xs text-slate-600">
@@ -411,6 +418,16 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Main Content */}
         <main>{children}</main>
+
+        <style>{`
+          @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+          }
+        `}</style>
 
         {/* Footer */}
         <footer className="bg-slate-900 text-white py-12 px-6">
