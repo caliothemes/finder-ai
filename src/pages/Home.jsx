@@ -89,12 +89,12 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroSection onSearch={handleSearch} />
-      <CategoryGrid categories={categories} />
       <FeaturedAI
         aiServices={aiServices}
         favorites={favorites}
         onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
       />
+      <CategoryGrid categories={categories} />
       <NewsletterSection />
     </div>
   );
