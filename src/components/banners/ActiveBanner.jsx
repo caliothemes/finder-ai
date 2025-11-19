@@ -7,25 +7,30 @@ import { Sparkles } from 'lucide-react';
 export default function ActiveBanner({ position }) {
   const today = new Date().toISOString().split('T')[0];
 
-  const { data: activeBanner } = useQuery({
+  const { data: activeBanner, isLoading } = useQuery({
     queryKey: ['activeBanner', position, today],
     queryFn: async () => {
-      const banners = await base44.entities.BannerReservation.filter({
-        position: position,
-        validated: true,
-        active: true
-      });
-      
-      // Trouver une bannière qui a réservé aujourd'hui
-      const banner = banners.find(b => 
-        (b.reserved_dates || []).includes(today)
-      );
-      
-      return banner || null;
+      try {
+        const banners = await base44.entities.BannerReservation.filter({
+          position: position,
+          validated: true,
+          active: true
+        });
+        
+        // Trouver une bannière qui a réservé aujourd'hui
+        const banner = banners.find(b => 
+          (b.reserved_dates || []).includes(today)
+        );
+        
+        return banner || null;
+      } catch (error) {
+        console.error('Error loading banner:', error);
+        return null;
+      }
     },
   });
 
-  if (!activeBanner) return null;
+  if (isLoading || !activeBanner) return null;
 
   return (
     <div className="relative group overflow-hidden rounded-2xl shadow-xl">
