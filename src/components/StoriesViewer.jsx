@@ -135,19 +135,8 @@ export default function StoriesViewer({ onClose }) {
           </div>
         </>
       )}
-    </div>
-  );
-}
-
-const oldCode = `
+      
       <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
         @keyframes progress {
           from { width: 0%; }
           to { width: 100%; }
@@ -155,4 +144,7 @@ const oldCode = `
         .animate-progress {
           animation: progress 5s linear forwards;
         }
-      `};
+      `}</style>
+    </div>
+  );
+}
