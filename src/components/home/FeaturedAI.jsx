@@ -5,6 +5,7 @@ import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/components/LanguageProvider';
+import ActiveBanner from '@/components/banners/ActiveBanner';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
   const { t } = useLanguage();

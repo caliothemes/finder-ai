@@ -96,11 +96,6 @@ export default function Home() {
     <div className="min-h-screen">
       <HeroSection onSearch={handleSearch} />
 
-      {/* Bannière Hero */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <ActiveBanner position="homepage_hero" />
-      </div>
-
       <FeaturedAI
         aiServices={aiServices}
         favorites={favorites}
