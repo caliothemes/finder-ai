@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { 
   Settings, FileText, Mail, Image, 
-  BarChart3, Users, Sparkles, Shield 
+  BarChart3, Users, Sparkles, Shield, Search 
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import AdminReviews from '@/components/admin/AdminReviews';
 import AdminBanners from '@/components/admin/AdminBanners';
 import AdminEmailTemplates from '@/components/admin/AdminEmailTemplates';
 import AdminStories from '@/components/admin/AdminStories';
+import AdminAISearchScan from '@/components/admin/AdminAISearchScan';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -63,8 +64,12 @@ export default function Admin() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-9 gap-2">
+        <Tabs defaultValue="ai-scan" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-10 gap-2">
+            <TabsTrigger value="ai-scan" className="flex items-center gap-1 text-xs">
+              <Search className="w-3 h-3" />
+              AI Scan
+            </TabsTrigger>
             <TabsTrigger value="stats" className="flex items-center gap-1 text-xs">
               <BarChart3 className="w-3 h-3" />
               Stats
@@ -102,6 +107,10 @@ export default function Admin() {
               Logo
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="ai-scan">
+            <AdminAISearchScan />
+          </TabsContent>
 
           <TabsContent value="stats">
             <AdminStats />
