@@ -11,6 +11,40 @@ export default function Categories() {
     queryFn: () => base44.entities.Category.list(),
   });
 
+  const { data: aiServices = [] } = useQuery({
+    queryKey: ['aiServices'],
+    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }),
+  });
+
+  const iconMap = {
+    'Sparkles': Sparkles,
+    'MessageSquare': MessageSquare,
+    'Video': Video,
+    'Music': Music,
+    'Code': Code,
+    'Palette': Palette,
+    'TrendingUp': TrendingUp,
+    'FileText': FileText,
+    'Search': Search,
+    'BarChart': BarChart,
+    'Camera': Camera,
+    'Mic': Mic,
+    'Terminal': Terminal,
+    'Wand2': Wand2,
+    'Mail': Mail,
+    'Calendar': Calendar,
+    'Database': Database,
+    'Globe': Globe,
+    'Shield': Shield,
+    'Zap': Zap,
+    'Brain': Brain,
+    'Image': ImageIcon,
+  };
+
+  const getIconComponent = (iconName) => {
+    return iconMap[iconName] || Box;
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

@@ -7,7 +7,7 @@ import {
   GraduationCap, Heart, ShoppingBag, Cpu 
 } from 'lucide-react';
 
-export default function CategoryGrid({ categories }) {
+export default function CategoryGrid({ categories, aiServices = [] }) {
   const iconMap = {
     'Sparkles': Sparkles,
     'Image': Image,
