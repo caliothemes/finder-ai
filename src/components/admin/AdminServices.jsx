@@ -83,7 +83,6 @@ export default function AdminServices() {
       logo_url: service.logo_url || '',
       cover_image_url: service.cover_image_url || ''
     });
-    setShowForm(true);
   };
 
   const handleLogoUpload = async (e) => {
