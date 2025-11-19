@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import HeroSection from '../components/home/HeroSection';
-import CategoryGrid from '../components/home/CategoryGrid';
-import FeaturedAI from '../components/home/FeaturedAI';
-import NewsletterSection from '../components/home/NewsletterSection';
+import HeroSection from '@/components/home/HeroSection';
+import CategoryGrid from '@/components/home/CategoryGrid';
+import FeaturedAI from '@/components/home/FeaturedAI';
+import NewsletterSection from '@/components/home/NewsletterSection';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 

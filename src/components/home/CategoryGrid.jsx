@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from './utils';
+import { createPageUrl } from '@/utils';
 import { 
   ArrowRight, Box, Sparkles, Image, MessageSquare, 
   Video, Music, Code, FileText, Briefcase, 
