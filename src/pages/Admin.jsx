@@ -3,9 +3,9 @@ import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { 
   Settings, FileText, Mail, Image, 
-  BarChart3, Users, Sparkles, Shield, Search 
+  BarChart3, Users, Sparkles, Shield, Search,
+  ChevronRight
 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLogo from '@/components/admin/AdminLogo';
 import AdminServices from '@/components/admin/AdminServices';
@@ -21,6 +21,7 @@ import AdminAISearchScan from '@/components/admin/AdminAISearchScan';
 export default function Admin() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('ai-scan');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +52,35 @@ export default function Admin() {
 
   if (!user) return null;
 
+  const adminSections = [
+    { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600' },
+    { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
+    { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
+    { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
+    { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
+    { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
+    { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600' },
+    { id: 'emails', label: 'Templates Email', icon: Mail, description: 'Gérer les emails', color: 'from-red-600 to-pink-600' },
+    { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
+    { id: 'logo', label: 'Logo', icon: Image, description: 'Personnaliser le logo', color: 'from-slate-600 to-gray-600' },
+  ];
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'ai-scan': return <AdminAISearchScan />;
+      case 'stats': return <AdminStats />;
+      case 'services': return <AdminServices />;
+      case 'stories': return <AdminStories />;
+      case 'categories': return <AdminCategories />;
+      case 'reviews': return <AdminReviews />;
+      case 'banners': return <AdminBanners />;
+      case 'emails': return <AdminEmailTemplates />;
+      case 'newsletter': return <AdminNewsletter />;
+      case 'logo': return <AdminLogo />;
+      default: return <AdminAISearchScan />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
       <div className="max-w-7xl mx-auto">
@@ -63,91 +93,41 @@ export default function Admin() {
           <p className="text-slate-600">Gérez Finder AI - Tableau de bord administrateur</p>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="ai-scan" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-10 gap-2">
-            <TabsTrigger value="ai-scan" className="flex items-center gap-1 text-xs">
-              <Search className="w-3 h-3" />
-              AI Scan
-            </TabsTrigger>
-            <TabsTrigger value="stats" className="flex items-center gap-1 text-xs">
-              <BarChart3 className="w-3 h-3" />
-              Stats
-            </TabsTrigger>
-            <TabsTrigger value="services" className="flex items-center gap-1 text-xs">
-              <Sparkles className="w-3 h-3" />
-              Services
-            </TabsTrigger>
-            <TabsTrigger value="stories" className="flex items-center gap-1 text-xs">
-              <Image className="w-3 h-3" />
-              Stories
-            </TabsTrigger>
-            <TabsTrigger value="categories" className="flex items-center gap-1 text-xs">
-              <FileText className="w-3 h-3" />
-              Catégories
-            </TabsTrigger>
-            <TabsTrigger value="reviews" className="flex items-center gap-1 text-xs">
-              <Users className="w-3 h-3" />
-              Avis
-            </TabsTrigger>
-            <TabsTrigger value="banners" className="flex items-center gap-1 text-xs">
-              <Image className="w-3 h-3" />
-              Bannières
-            </TabsTrigger>
-            <TabsTrigger value="emails" className="flex items-center gap-1 text-xs">
-              <Mail className="w-3 h-3" />
-              Emails
-            </TabsTrigger>
-            <TabsTrigger value="newsletter" className="flex items-center gap-1 text-xs">
-              <Mail className="w-3 h-3" />
-              Newsletter
-            </TabsTrigger>
-            <TabsTrigger value="logo" className="flex items-center gap-1 text-xs">
-              <Image className="w-3 h-3" />
-              Logo
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="ai-scan">
-            <AdminAISearchScan />
-          </TabsContent>
-
-          <TabsContent value="stats">
-            <AdminStats />
-          </TabsContent>
-
-          <TabsContent value="services">
-            <AdminServices />
-          </TabsContent>
-
-          <TabsContent value="stories">
-            <AdminStories />
-          </TabsContent>
-
-          <TabsContent value="categories">
-            <AdminCategories />
-          </TabsContent>
-
-          <TabsContent value="reviews">
-            <AdminReviews />
-          </TabsContent>
-
-          <TabsContent value="banners">
-            <AdminBanners />
-          </TabsContent>
-
-          <TabsContent value="emails">
-            <AdminEmailTemplates />
-          </TabsContent>
-
-          <TabsContent value="newsletter">
-            <AdminNewsletter />
-          </TabsContent>
-
-          <TabsContent value="logo">
-            <AdminLogo />
-          </TabsContent>
-        </Tabs>
+        {activeSection ? (
+          <div>
+            <button
+              onClick={() => setActiveSection(null)}
+              className="mb-6 text-purple-600 hover:text-purple-700 font-medium flex items-center gap-2"
+            >
+              ← Retour au menu
+            </button>
+            {renderSection()}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {adminSections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <Card
+                  key={section.id}
+                  className="cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-300"
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  <CardHeader>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <CardTitle className="flex items-center justify-between">
+                      {section.label}
+                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+                    </CardTitle>
+                    <CardDescription>{section.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

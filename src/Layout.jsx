@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import StoriesViewer from '@/components/StoriesViewer';
+import Logo from '@/components/Logo';
 import { 
         Menu, X, User, Heart, 
         LogOut, LogIn, PlusCircle, Crown, Search 
@@ -443,11 +444,8 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center relative overflow-hidden">
-                  <Search className="w-4 h-4 text-white relative z-10" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.3),transparent_70%)]" />
-                </div>
+              <div className="flex items-center gap-3 mb-4">
+                <Logo size={50} />
                 <span className="text-xl font-bold">Finder AI</span>
               </div>
               <p className="text-slate-400">
