@@ -88,23 +88,20 @@ export default function ProAccount() {
       features: [
         'Soumettre des outils IA',
         'Profil public',
-        'Support communautaire',
-        'Statistiques de base'
+        'Support communautaire'
       ],
       color: 'from-slate-600 to-slate-700',
       current: proAccount?.plan_type === 'free'
     },
     {
       name: 'Starter',
-      price: '29€',
+      price: '9,90€',
       period: '/mois',
-      credits: 100,
+      credits: 10,
       features: [
         'Tout du plan Free',
-        '100 crédits publicitaires',
-        '1 bannière active',
-        'Statistiques avancées',
-        'Badge vérifié',
+        '10 crédits publicitaires/mois',
+        '1 crédit = 1 jour bannière',
         'Support prioritaire'
       ],
       color: 'from-blue-600 to-cyan-600',
@@ -113,39 +110,26 @@ export default function ProAccount() {
     },
     {
       name: 'Pro',
-      price: '99€',
+      price: '29,90€',
       period: '/mois',
-      credits: 500,
+      credits: 50,
       features: [
         'Tout du plan Starter',
-        '500 crédits publicitaires',
-        '3 bannières actives',
-        'Placement premium',
-        'Analytics complets',
-        'Support dédié',
-        'Badge Pro'
+        '50 crédits publicitaires/mois',
+        'Badge Pro',
+        'Analytics détaillés',
+        'Support premium'
       ],
       color: 'from-purple-600 to-pink-600',
+      popular: true,
       current: proAccount?.plan_type === 'pro'
-    },
-    {
-      name: 'Enterprise',
-      price: '299€',
-      period: '/mois',
-      credits: 2000,
-      features: [
-        'Tout du plan Pro',
-        '2000 crédits publicitaires',
-        'Bannières illimitées',
-        'Placement exclusif',
-        'API access',
-        'White label',
-        'Account manager',
-        'Badge Enterprise'
-      ],
-      color: 'from-yellow-600 to-orange-600',
-      current: proAccount?.plan_type === 'enterprise'
     }
+  ];
+
+  const creditPacks = [
+    { credits: 10, price: '12,90€' },
+    { credits: 50, price: '39,90€' },
+    { credits: 100, price: '59,90€' }
   ];
 
   return (
@@ -202,7 +186,7 @@ export default function ProAccount() {
         )}
 
         {/* Plans */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           {plans.map((plan) => (
             <div
               key={plan.name}
@@ -294,6 +278,31 @@ export default function ProAccount() {
               </Button>
             </div>
           ))}
+        </div>
+
+        {/* Credit Packs */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
+            Acheter des crédits publicitaires
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {creditPacks.map((pack) => (
+              <div key={pack.credits} className="bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-purple-400 transition-all">
+                <div className="text-center mb-6">
+                  <div className="text-5xl font-bold text-slate-900 mb-2">
+                    {pack.credits}
+                  </div>
+                  <div className="text-slate-600 mb-4">crédits</div>
+                  <div className="text-4xl font-bold text-purple-600">
+                    {pack.price}
+                  </div>
+                </div>
+                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  Acheter maintenant
+                </Button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Benefits */}
