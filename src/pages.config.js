@@ -4,6 +4,9 @@ import SubmitAI from './pages/SubmitAI';
 import Categories from './pages/Categories';
 import Category from './pages/Category';
 import Favorites from './pages/Favorites';
+import Explore from './pages/Explore';
+import ProAccount from './pages/ProAccount';
+import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +17,9 @@ export const PAGES = {
     "Categories": Categories,
     "Category": Category,
     "Favorites": Favorites,
+    "Explore": Explore,
+    "ProAccount": ProAccount,
+    "Profile": Profile,
 }
 
 export const pagesConfig = {
