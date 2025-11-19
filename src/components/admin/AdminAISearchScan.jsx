@@ -77,25 +77,74 @@ export default function AdminAISearchScan() {
   const triggerScanMutation = useMutation({
     mutationFn: async () => {
       setIsScanning(true);
-      const conversation = await base44.agents.createConversation({
-        agent_name: 'ai_scanner',
-        metadata: { name: 'Scan automatique', type: 'scheduled' }
+      
+      // Utilisation de InvokeLLM avec recherche web pour trouver de nouveaux services IA
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `Tu es un expert en intelligence artificielle. Ta mission est de rechercher sur internet les 5 services IA les plus récents et innovants lancés ces derniers mois.
+
+Pour chaque service trouvé, fournis les informations suivantes dans un format JSON structuré:
+- name: Le nom du service
+- website_url: L'URL du site officiel
+- description: Une description détaillée du service (minimum 100 mots)
+- tagline: Une phrase d'accroche courte et percutante
+- suggested_pricing: Le modèle de prix (gratuit, freemium, payant, ou abonnement)
+- features: Une liste de 5-7 fonctionnalités principales
+- tags: Une liste de 5-10 tags pertinents
+- suggested_categories: Liste de catégories parmi: génération d'images, chatbot, vidéo, audio, code, design, marketing, productivité, écriture, recherche, analyse de données
+
+Concentre-toi sur des outils innovants, récents et de qualité professionnelle.`,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            services: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  website_url: { type: "string" },
+                  description: { type: "string" },
+                  tagline: { type: "string" },
+                  suggested_pricing: { type: "string" },
+                  features: { type: "array", items: { type: "string" } },
+                  tags: { type: "array", items: { type: "string" } },
+                  suggested_categories: { type: "array", items: { type: "string" } }
+                }
+              }
+            }
+          }
+        }
       });
 
-      await base44.agents.addMessage(conversation, {
-        role: 'user',
-        content: 'Lance une recherche approfondie sur internet pour trouver 5 nouveaux services IA qui ne sont pas encore dans notre base. Concentre-toi sur les outils récents et innovants. Pour chaque service trouvé, crée une entrée AIServiceDiscovery avec toutes les informations disponibles.'
-      });
+      // Créer les découvertes
+      const services = result.services || [];
+      const created = [];
+      
+      for (const service of services) {
+        try {
+          const discovery = await base44.entities.AIServiceDiscovery.create({
+            ...service,
+            status: 'new',
+            source: 'auto_scan'
+          });
+          created.push(discovery);
+        } catch (error) {
+          console.error('Erreur création discovery:', error);
+        }
+      }
 
-      return conversation;
+      return created;
     },
-    onSuccess: () => {
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['discoveries'] });
-        setIsScanning(false);
-        toast.success('Scan terminé ! Nouvelles découvertes disponibles.');
-      }, 15000);
+    onSuccess: (created) => {
+      queryClient.invalidateQueries({ queryKey: ['discoveries'] });
+      setIsScanning(false);
+      toast.success(`Scan terminé ! ${created.length} nouveau(x) service(s) découvert(s).`);
     },
+    onError: (error) => {
+      setIsScanning(false);
+      toast.error('Erreur lors du scan: ' + error.message);
+    }
   });
 
   const handleStatusChange = (id, status) => {
