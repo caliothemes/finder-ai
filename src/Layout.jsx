@@ -41,108 +41,193 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to={createPageUrl('Home')} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 flex">
+      {/* Sidebar */}
+      <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
+        {/* Logo Section */}
+        <div className="p-8 text-center border-b border-slate-200">
+          <div className="flex justify-center mb-4">
+            <div className="w-32">
+              <div className="w-32 h-32 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden mx-auto">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.3),transparent_70%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.3),transparent_70%)]" />
-                <Search className="w-5 h-5 text-white relative z-10 drop-shadow-lg" />
-                <div className="absolute inset-0 border-2 border-white/30 rounded-xl" />
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full blur-sm animate-pulse" />
-                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full blur-sm animate-pulse" style={{animationDelay: '0.5s'}} />
+                <Search className="w-16 h-16 text-white relative z-10 drop-shadow-lg" />
+                <div className="absolute inset-0 border-4 border-white/30 rounded-2xl" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent">
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-2">
+            Finder AI
+          </h2>
+          <p className="text-sm text-slate-600">
+            Le répertoire ultime des outils d'IA
+          </p>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-6 space-y-2">
+          <Link
+            to={createPageUrl('Home')}
+            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+          >
+            <Search className="w-5 h-5" />
+            Accueil
+          </Link>
+          <Link
+            to={createPageUrl('Explore')}
+            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+          >
+            <Search className="w-5 h-5" />
+            Explorer
+          </Link>
+          <Link
+            to={createPageUrl('Categories')}
+            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+          >
+            <Search className="w-5 h-5" />
+            Catégories
+          </Link>
+          
+          {user && (
+            <>
+              <Link
+                to={createPageUrl('Favorites')}
+                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+              >
+                <Heart className="w-5 h-5" />
+                Favoris
+              </Link>
+              <Link
+                to={createPageUrl('Profile')}
+                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+              >
+                <User className="w-5 h-5" />
+                Mon Profil
+              </Link>
+              <Link
+                to={createPageUrl('ProAccount')}
+                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+              >
+                <Crown className="w-5 h-5" />
+                Compte Pro
+              </Link>
+
+              {user.role === 'admin' && (
+                <>
+                  <div className="my-4 border-t border-slate-200" />
+                  <div className="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    Administration
+                  </div>
+                  <Link
+                    to={createPageUrl('Admin')}
+                    className="flex items-center gap-3 px-4 py-3 text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-xl transition-all font-medium"
+                  >
+                    <Crown className="w-5 h-5" />
+                    Admin
+                  </Link>
+                </>
+              )}
+
+              <div className="my-4 border-t border-slate-200" />
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all font-medium"
+              >
+                <LogOut className="w-5 h-5" />
+                Se déconnecter
+              </button>
+            </>
+          )}
+          
+          {!user && (
+            <button
+              onClick={() => base44.auth.redirectToLogin()}
+              className="w-full flex items-center gap-3 px-4 py-3 text-purple-600 hover:bg-purple-50 rounded-xl transition-all font-medium"
+            >
+              <LogIn className="w-5 h-5" />
+              Connexion
+            </button>
+          )}
+        </nav>
+      </aside>
+
+      {/* Main Content Wrapper */}
+      <div className="flex-1 lg:ml-72">
+        {/* Header */}
+        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+            {/* Mobile Logo - visible only on mobile */}
+            <Link to={createPageUrl('Home')} className="flex lg:hidden items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Search className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent">
                 Finder AI
               </span>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-6">
-              <button
-                onClick={() => setSearchModalOpen(true)}
-                className="flex items-center gap-2 text-slate-700 hover:text-purple-600 font-medium transition-colors"
-              >
-                <Search className="w-4 h-4" />
-                Rechercher
-              </button>
-              <Link
-                to={createPageUrl('Home')}
-                className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
-              >
-                Accueil
-              </Link>
+            {/* Desktop Nav - Simplified */}
+            <nav className="hidden lg:flex items-center gap-6 flex-1 justify-center">
               <Link
                 to={createPageUrl('Explore')}
                 className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
               >
                 Explorer
               </Link>
-              <Link
-                to={createPageUrl('Categories')}
-                className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
-              >
-                Catégories
-              </Link>
               
-              {user ? (
-                <>
-                  <Link
-                    to={createPageUrl('Favorites')}
-                    className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2"
-                  >
-                    <Heart className="w-4 h-4" />
-                    Favoris
-                  </Link>
-                  
-                  <Link to={createPageUrl('SubmitAI')}>
-                    <Button className="bg-purple-950 hover:bg-purple-900 text-white">
-                      <PlusCircle className="w-4 h-4 mr-2" />
-                      Proposer mon IA
-                    </Button>
-                  </Link>
+              {user && (
+                <Link
+                  to={createPageUrl('Favorites')}
+                  className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2"
+                >
+                  <Heart className="w-4 h-4" />
+                  Favoris
+                </Link>
+              )}
+              
+              <Link to={createPageUrl('SubmitAI')}>
+                <Button className="bg-purple-950 hover:bg-purple-900 text-white">
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Proposer mon IA
+                </Button>
+              </Link>
+            </nav>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="rounded-xl">
+            {/* Right Actions */}
+            <div className="hidden lg:flex items-center gap-4">
+              <button
+                onClick={() => setSearchModalOpen(true)}
+                className="p-2 text-slate-700 hover:text-purple-600 transition-colors"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              
+              {user && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="rounded-xl">
+                      <User className="w-4 h-4 mr-2" />
+                      {user.full_name || user.email}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem asChild>
+                      <Link to={createPageUrl('Profile')} className="cursor-pointer">
                         <User className="w-4 h-4 mr-2" />
-                        {user.full_name || user.email}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl('Profile')} className="cursor-pointer">
-                          <User className="w-4 h-4 mr-2" />
-                          Mon Profil
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl('ProAccount')} className="cursor-pointer">
-                          <Crown className="w-4 h-4 mr-2" />
-                          Compte Pro
-                        </Link>
-                      </DropdownMenuItem>
-                      {user.role === 'admin' && (
-                        <DropdownMenuItem asChild>
-                          <Link to={createPageUrl('Admin')} className="cursor-pointer">
-                            <Crown className="w-4 h-4 mr-2" />
-                            Admin
-                          </Link>
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Se déconnecter
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </>
-              ) : (
+                        Mon Profil
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Se déconnecter
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+              
+              {!user && (
                 <Button
                   onClick={() => base44.auth.redirectToLogin()}
                   className="bg-purple-950 hover:bg-purple-900 text-white"
@@ -151,13 +236,11 @@ export default function Layout({ children, currentPageName }) {
                   Connexion
                 </Button>
               )}
-            </nav>
-
-            <SearchModal isOpen={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
+            </div>
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2"
+              className="lg:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
@@ -168,9 +251,11 @@ export default function Layout({ children, currentPageName }) {
             </button>
           </div>
 
+          <SearchModal isOpen={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
+
           {/* Mobile Nav */}
           {mobileMenuOpen && (
-            <nav className="md:hidden pt-4 pb-2 space-y-2">
+            <nav className="lg:hidden pt-4 pb-2 space-y-2">
               <Link
                 to={createPageUrl('Home')}
                 className="block py-2 text-slate-700 hover:text-purple-600 font-medium"
@@ -256,13 +341,13 @@ export default function Layout({ children, currentPageName }) {
             </nav>
           )}
         </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main>{children}</main>
+        {/* Main Content */}
+        <main>{children}</main>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12 px-6">
+        {/* Footer */}
+        <footer className="bg-slate-900 text-white py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -308,7 +393,8 @@ export default function Layout({ children, currentPageName }) {
             <p>© 2024 Finder AI. Tous droits réservés.</p>
           </div>
         </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }

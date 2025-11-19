@@ -59,11 +59,6 @@ export default function HeroSection({ onSearch }) {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        {/* Logo */}
-        <div className="mb-8 flex justify-center">
-          <Logo size={180} animated={true} />
-        </div>
-
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-8 backdrop-blur-sm">
           <Sparkles className="w-4 h-4" />
@@ -77,9 +72,14 @@ export default function HeroSection({ onSearch }) {
           </span>
         </h1>
         
-        <p className="text-xl md:text-2xl text-slate-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
           Le répertoire ultime des outils d'IA
         </p>
+
+        {/* Logo */}
+        <div className="mb-12 flex justify-center">
+          <Logo size={180} animated={true} />
+        </div>
         
         <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
           Explorez, comparez et découvrez les meilleurs services d'intelligence artificielle pour tous vos besoins
