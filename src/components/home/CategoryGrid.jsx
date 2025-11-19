@@ -1,13 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
-import * as Icons from 'lucide-react';
-import { ArrowRight } from 'lucide-react';
+import { 
+  ArrowRight, Box, Sparkles, Image, MessageSquare, 
+  Video, Music, Code, FileText, Briefcase, 
+  GraduationCap, Heart, ShoppingBag, Cpu 
+} from 'lucide-react';
 
 export default function CategoryGrid({ categories }) {
+  const iconMap = {
+    'Sparkles': Sparkles,
+    'Image': Image,
+    'MessageSquare': MessageSquare,
+    'Video': Video,
+    'Music': Music,
+    'Code': Code,
+    'FileText': FileText,
+    'Briefcase': Briefcase,
+    'GraduationCap': GraduationCap,
+    'Heart': Heart,
+    'ShoppingBag': ShoppingBag,
+    'Cpu': Cpu,
+    'Box': Box
+  };
+
   const getIcon = (iconName) => {
-    const Icon = Icons[iconName] || Icons.Box;
-    return Icon;
+    return iconMap[iconName] || Box;
   };
 
   return (
