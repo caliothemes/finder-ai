@@ -72,48 +72,49 @@ export default function Categories() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              to={createPageUrl(`Category?id=${category.id}`)}
-              className="group bg-white rounded-2xl p-8 border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="relative">
-                <div 
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 text-3xl"
-                  style={{ backgroundColor: `${category.color}15` }}
-                >
-                  {category.icon === 'Sparkles' && '✨'}
-                  {category.icon === 'Image' && '🖼️'}
-                  {category.icon === 'MessageSquare' && '💬'}
-                  {category.icon === 'Video' && '🎬'}
-                  {category.icon === 'Music' && '🎵'}
-                  {category.icon === 'Code' && '💻'}
-                  {category.icon === 'FileText' && '📄'}
-                  {category.icon === 'Briefcase' && '💼'}
-                  {category.icon === 'GraduationCap' && '🎓'}
-                  {category.icon === 'Heart' && '❤️'}
-                  {category.icon === 'ShoppingBag' && '🛍️'}
-                  {category.icon === 'Cpu' && '🤖'}
+          {categories.map((category) => {
+            const IconComponent = getIconComponent(category.icon);
+            const categoryCount = aiServices.filter(service => 
+              service.categories && service.categories.includes(category.id)
+            ).length;
+            
+            return (
+              <Link
+                key={category.id}
+                to={createPageUrl(`Category?id=${category.id}`)}
+                className="group bg-white rounded-2xl p-8 border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative">
+                  <div 
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 bg-gradient-to-br from-purple-100 to-pink-100"
+                  >
+                    <IconComponent className="w-7 h-7 text-purple-600" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors">
+                    {category.name}
+                  </h3>
+                  
+                  <p className="text-sm text-slate-600 mb-4 line-clamp-2">
+                    {category.description}
+                  </p>
+                  
+                  <div className="mb-3">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                      {categoryCount} outil{categoryCount > 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center text-purple-600 font-medium text-sm group-hover:gap-2 transition-all">
+                    <span>Explorer</span>
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-                
-                <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors">
-                  {category.name}
-                </h3>
-                
-                <p className="text-sm text-slate-600 mb-4 line-clamp-2">
-                  {category.description}
-                </p>
-                
-                <div className="flex items-center text-purple-600 font-medium text-sm group-hover:gap-2 transition-all">
-                  <span>Explorer</span>
-                  <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
