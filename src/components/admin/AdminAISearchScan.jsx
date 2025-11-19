@@ -78,57 +78,112 @@ export default function AdminAISearchScan() {
     mutationFn: async () => {
       setIsScanning(true);
       
-      // Utilisation de InvokeLLM avec recherche web pour trouver de nouveaux services IA
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Tu es un expert en intelligence artificielle. Ta mission est de rechercher sur internet les 5 services IA les plus récents et innovants lancés ces derniers mois.
+      // Scan massif en plusieurs vagues pour découvrir des milliers de services IA
+      const scanPrompts = [
+        // Vague 1: Outils créatifs et génératifs
+        `Recherche et liste 50 services IA dans les domaines suivants: génération d'images (DALL-E, Midjourney, Stable Diffusion, etc.), génération de vidéos (Runway, Synthesia, etc.), génération audio et musique, génération de voix (text-to-speech), avatar IA, art génératif.`,
+        
+        // Vague 2: Chatbots et assistants
+        `Recherche et liste 50 services IA de type chatbot, assistant virtuel, agent conversationnel, customer support IA, chatbot pour site web, assistant personnel IA, GPT wrappers, Claude wrappers.`,
+        
+        // Vague 3: Code et développement
+        `Recherche et liste 50 services IA pour le code et développement: génération de code, autocomplétion, débogage IA, GitHub Copilot alternatives, outils de refactoring, code review IA, génération de tests, documentation automatique.`,
+        
+        // Vague 4: Écriture et contenu
+        `Recherche et liste 50 services IA d'écriture: rédaction de contenu, copywriting, SEO writing, email writing, article generator, paraphrasing, résumé automatique, traduction IA, correction grammaticale.`,
+        
+        // Vague 5: Business et productivité
+        `Recherche et liste 50 services IA business: CRM IA, email automation, meeting assistant, note-taking IA, agenda intelligent, task management IA, project management IA, automatisation workflow.`,
+        
+        // Vague 6: Marketing et analytics
+        `Recherche et liste 50 services IA marketing: social media management, ad creation IA, analytics IA, SEO tools IA, email marketing IA, landing page optimization, A/B testing IA, conversion optimization.`,
+        
+        // Vague 7: Design et UX
+        `Recherche et liste 50 services IA design: UI/UX design IA, logo generation, graphic design IA, prototype automation, design system IA, website builder IA, mockup generation, color palette IA.`,
+        
+        // Vague 8: Data et recherche
+        `Recherche et liste 50 services IA data science: data analysis, data visualization IA, predictive analytics, business intelligence IA, research assistant IA, academic research IA, data cleaning IA.`,
+        
+        // Vague 9: Audio et transcription
+        `Recherche et liste 50 services IA audio: transcription automatique, podcast editing IA, voice cloning, audio enhancement IA, music generation, sound effects IA, dubbing IA, subtitle generation.`,
+        
+        // Vague 10: RH et recrutement
+        `Recherche et liste 50 services IA RH: recruitment IA, CV parsing, interview IA, candidate screening, employee onboarding IA, performance review IA, training IA, HR analytics.`
+      ];
 
-Pour chaque service trouvé, fournis les informations suivantes dans un format JSON structuré:
-- name: Le nom du service
-- website_url: L'URL du site officiel
-- description: Une description détaillée du service (minimum 100 mots)
-- tagline: Une phrase d'accroche courte et percutante
-- suggested_pricing: Le modèle de prix (gratuit, freemium, payant, ou abonnement)
-- features: Une liste de 5-7 fonctionnalités principales
-- tags: Une liste de 5-10 tags pertinents
-- suggested_categories: Liste de catégories parmi: génération d'images, chatbot, vidéo, audio, code, design, marketing, productivité, écriture, recherche, analyse de données
+      const allServices = [];
+      
+      for (let i = 0; i < scanPrompts.length; i++) {
+        try {
+          const result = await base44.integrations.Core.InvokeLLM({
+            prompt: `${scanPrompts[i]}
 
-Concentre-toi sur des outils innovants, récents et de qualité professionnelle.`,
-        add_context_from_internet: true,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            services: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  website_url: { type: "string" },
-                  description: { type: "string" },
-                  tagline: { type: "string" },
-                  suggested_pricing: { type: "string" },
-                  features: { type: "array", items: { type: "string" } },
-                  tags: { type: "array", items: { type: "string" } },
-                  suggested_categories: { type: "array", items: { type: "string" } }
+Pour chaque service IA trouvé, fournis EXACTEMENT les informations suivantes dans un format JSON:
+- name: Le nom exact du service
+- website_url: L'URL complète et valide du site officiel
+- description: Description détaillée (minimum 80 mots) expliquant ce que fait le service, ses cas d'usage, et ses avantages
+- tagline: Une phrase d'accroche marketing courte (max 10 mots)
+- suggested_pricing: Le modèle exact (gratuit, freemium, payant, ou abonnement)
+- features: Liste de 5-7 fonctionnalités clés et spécifiques
+- tags: Liste de 8-12 mots-clés pertinents pour la recherche
+- suggested_categories: Les catégories qui correspondent parmi la liste disponible
+
+IMPORTANT: 
+- Ne liste QUE des services qui EXISTENT réellement avec des URLs valides
+- Priorise les services populaires, actifs et bien notés
+- Inclus un mix de services gratuits et payants
+- Assure-toi que les descriptions sont détaillées et informatives`,
+            add_context_from_internet: true,
+            response_json_schema: {
+              type: "object",
+              properties: {
+                services: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      name: { type: "string" },
+                      website_url: { type: "string" },
+                      description: { type: "string" },
+                      tagline: { type: "string" },
+                      suggested_pricing: { type: "string" },
+                      features: { type: "array", items: { type: "string" } },
+                      tags: { type: "array", items: { type: "string" } },
+                      suggested_categories: { type: "array", items: { type: "string" } }
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      });
-
-      // Créer les découvertes
-      const services = result.services || [];
-      const created = [];
-      
-      for (const service of services) {
-        try {
-          const discovery = await base44.entities.AIServiceDiscovery.create({
-            ...service,
-            status: 'new',
-            source: 'auto_scan'
           });
-          created.push(discovery);
+
+          if (result.services && Array.isArray(result.services)) {
+            allServices.push(...result.services);
+            toast.info(`Vague ${i + 1}/${scanPrompts.length}: ${result.services.length} services trouvés`);
+          }
+        } catch (error) {
+          console.error(`Erreur vague ${i + 1}:`, error);
+          toast.error(`Erreur lors de la vague ${i + 1}`);
+        }
+      }
+
+      // Créer les découvertes avec déduplication
+      const created = [];
+      const existingDiscoveries = await base44.entities.AIServiceDiscovery.list();
+      const existingNames = new Set(existingDiscoveries.map(d => d.name.toLowerCase()));
+      
+      for (const service of allServices) {
+        try {
+          // Éviter les doublons
+          if (!existingNames.has(service.name.toLowerCase())) {
+            const discovery = await base44.entities.AIServiceDiscovery.create({
+              ...service,
+              status: 'new',
+              source: 'auto_scan_massive'
+            });
+            created.push(discovery);
+            existingNames.add(service.name.toLowerCase());
+          }
         } catch (error) {
           console.error('Erreur création discovery:', error);
         }
