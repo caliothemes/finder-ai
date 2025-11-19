@@ -3,7 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { 
+  ArrowRight, Sparkles, MessageSquare, Video, Music, Code, 
+  Palette, TrendingUp, FileText, Search, BarChart, Box,
+  Camera, Mic, Terminal, Wand2, Mail, Calendar, Database,
+  Globe, Shield, Zap, Brain, Image as ImageIcon
+} from 'lucide-react';
 
 export default function Categories() {
   const { data: categories = [], isLoading } = useQuery({
