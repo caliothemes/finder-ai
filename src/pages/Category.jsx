@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import AIServiceCard from '@/components/AIServiceCard';
-import * as Icons from 'lucide-react';
+import { 
+  Sparkles, Zap, Image as ImageIcon, MessageSquare, Music, Video, 
+  Brain, Code, FileText, Palette, Box, Search, Bot, Database, 
+  Globe, Shield, Target, TrendingUp, Users, Workflow, Mic,
+  Camera, Mail, Heart, Settings, Grid, Layers, PenTool
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Category() {
@@ -100,7 +105,13 @@ export default function Category() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-6">
             {(() => {
-              const IconComponent = Icons[category.icon] || Icons.Box;
+              const iconMap = {
+                Sparkles, Zap, ImageIcon, MessageSquare, Music, Video, 
+                Brain, Code, FileText, Palette, Box, Search, Bot, Database, 
+                Globe, Shield, Target, TrendingUp, Users, Workflow, Mic,
+                Camera, Mail, Heart, Settings, Grid, Layers, PenTool
+              };
+              const IconComponent = iconMap[category.icon] || Box;
               return <IconComponent className="w-4 h-4" />;
             })()}
             <span>Catégorie</span>
