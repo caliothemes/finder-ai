@@ -75,7 +75,7 @@ export default function BannerCalendar({ bannerId, position, onReserve }) {
   const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
-  const totalCredits = selectedDates.length * 5;
+  const totalCredits = selectedDates.length * 1;
 
   return (
     <Card>
@@ -187,7 +187,7 @@ export default function BannerCalendar({ bannerId, position, onReserve }) {
         )}
 
         <div className="mt-4 text-xs text-slate-500 text-center">
-          <p>💡 Tarif: 5 crédits par jour • Les dates grisées sont déjà réservées</p>
+          <p>💡 Tarif: 1 crédit par jour • Les dates grisées sont déjà réservées</p>
         </div>
       </CardContent>
     </Card>

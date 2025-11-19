@@ -78,7 +78,7 @@ export default function BannerManager() {
     mutationFn: async ({ bannerId, dates }) => {
       const banner = myBanners.find(b => b.id === bannerId);
       const newDates = [...(banner.reserved_dates || []), ...dates];
-      const creditsNeeded = dates.length * 5;
+      const creditsNeeded = dates.length * 1;
       
       if (proAccount.credits < creditsNeeded) {
         throw new Error('Crédits insuffisants');

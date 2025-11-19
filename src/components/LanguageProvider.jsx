@@ -207,7 +207,7 @@ const translations = {
     calendar_days_selected_plural: "jours",
     calendar_total_cost: "Coût total:",
     calendar_reserve_now: "Réserver maintenant",
-    calendar_pricing_info: "Tarif: 5 crédits par jour • Les dates grisées sont déjà réservées",
+    calendar_pricing_info: "Tarif: 1 crédit par jour • Les dates grisées sont déjà réservées",
     calendar_months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
     calendar_days: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
     
@@ -525,7 +525,7 @@ const translations = {
     calendar_days_selected_plural: "days",
     calendar_total_cost: "Total cost:",
     calendar_reserve_now: "Reserve now",
-    calendar_pricing_info: "Pricing: 5 credits per day • Grayed dates are already reserved",
+    calendar_pricing_info: "Pricing: 1 credit per day • Grayed dates are already reserved",
     calendar_months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     calendar_days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     
