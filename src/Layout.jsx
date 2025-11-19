@@ -138,6 +138,13 @@ export default function Layout({ children, currentPageName }) {
                 <Crown className="w-4 h-4" />
                 Compte Pro
               </Link>
+              <Link
+                to={createPageUrl('BannerManager')}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+              >
+                <PlusCircle className="w-4 h-4" />
+                Mes Bannières
+              </Link>
 
               {user.role === 'admin' && (
                 <>

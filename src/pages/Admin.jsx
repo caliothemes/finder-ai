@@ -12,6 +12,8 @@ import AdminServices from '@/components/admin/AdminServices';
 import AdminNewsletter from '@/components/admin/AdminNewsletter';
 import AdminStats from '@/components/admin/AdminStats';
 import AdminCategories from '@/components/admin/AdminCategories';
+import AdminReviews from '@/components/admin/AdminReviews';
+import AdminBanners from '@/components/admin/AdminBanners';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -60,25 +62,33 @@ export default function Admin() {
 
         {/* Tabs */}
         <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 gap-4">
-            <TabsTrigger value="stats" className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4" />
-              Statistiques
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-7 gap-2">
+            <TabsTrigger value="stats" className="flex items-center gap-1 text-xs">
+              <BarChart3 className="w-3 h-3" />
+              Stats
             </TabsTrigger>
-            <TabsTrigger value="services" className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Services IA
+            <TabsTrigger value="services" className="flex items-center gap-1 text-xs">
+              <Sparkles className="w-3 h-3" />
+              Services
             </TabsTrigger>
-            <TabsTrigger value="categories" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
+            <TabsTrigger value="categories" className="flex items-center gap-1 text-xs">
+              <FileText className="w-3 h-3" />
               Catégories
             </TabsTrigger>
-            <TabsTrigger value="newsletter" className="flex items-center gap-2">
-              <Mail className="w-4 h-4" />
+            <TabsTrigger value="reviews" className="flex items-center gap-1 text-xs">
+              <Users className="w-3 h-3" />
+              Avis
+            </TabsTrigger>
+            <TabsTrigger value="banners" className="flex items-center gap-1 text-xs">
+              <Image className="w-3 h-3" />
+              Bannières
+            </TabsTrigger>
+            <TabsTrigger value="newsletter" className="flex items-center gap-1 text-xs">
+              <Mail className="w-3 h-3" />
               Newsletter
             </TabsTrigger>
-            <TabsTrigger value="logo" className="flex items-center gap-2">
-              <Image className="w-4 h-4" />
+            <TabsTrigger value="logo" className="flex items-center gap-1 text-xs">
+              <Image className="w-3 h-3" />
               Logo
             </TabsTrigger>
           </TabsList>
@@ -93,6 +103,14 @@ export default function Admin() {
 
           <TabsContent value="categories">
             <AdminCategories />
+          </TabsContent>
+
+          <TabsContent value="reviews">
+            <AdminReviews />
+          </TabsContent>
+
+          <TabsContent value="banners">
+            <AdminBanners />
           </TabsContent>
 
           <TabsContent value="newsletter">

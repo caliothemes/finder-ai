@@ -8,6 +8,7 @@ import Explore from './pages/Explore';
 import ProAccount from './pages/ProAccount';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
+import BannerManager from './pages/BannerManager';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +23,7 @@ export const PAGES = {
     "ProAccount": ProAccount,
     "Profile": Profile,
     "Admin": Admin,
+    "BannerManager": BannerManager,
 }
 
 export const pagesConfig = {

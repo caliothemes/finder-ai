@@ -5,11 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Trash2, Grid } from 'lucide-react';
+import { Plus, Trash2, Grid, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminCategories() {
   const [showForm, setShowForm] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: '', slug: '', description: '', icon: '', color: '' });
   const queryClient = useQueryClient();
 
@@ -24,8 +25,21 @@ export default function AdminCategories() {
       queryClient.invalidateQueries({ queryKey: ['adminCategories'] });
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       setShowForm(false);
+      setEditingCategory(null);
       setFormData({ name: '', slug: '', description: '', icon: '', color: '' });
       toast.success('Catégorie créée');
+    },
+  });
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.Category.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminCategories'] });
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      setShowForm(false);
+      setEditingCategory(null);
+      setFormData({ name: '', slug: '', description: '', icon: '', color: '' });
+      toast.success('Catégorie mise à jour');
     },
   });
 
@@ -41,7 +55,23 @@ export default function AdminCategories() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const slug = formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-');
-    createCategoryMutation.mutate({ ...formData, slug });
+    if (editingCategory) {
+      updateCategoryMutation.mutate({ id: editingCategory.id, data: { ...formData, slug } });
+    } else {
+      createCategoryMutation.mutate({ ...formData, slug });
+    }
+  };
+
+  const handleEdit = (category) => {
+    setEditingCategory(category);
+    setFormData({
+      name: category.name,
+      slug: category.slug,
+      description: category.description || '',
+      icon: category.icon || '',
+      color: category.color || ''
+    });
+    setShowForm(true);
   };
 
   if (isLoading) {
@@ -58,7 +88,7 @@ export default function AdminCategories() {
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Créer une catégorie</CardTitle>
+            <CardTitle>{editingCategory ? 'Modifier la catégorie' : 'Créer une catégorie'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,10 +123,13 @@ export default function AdminCategories() {
                 />
               </div>
               <div className="flex gap-2">
-                <Button type="submit" disabled={createCategoryMutation.isPending}>
-                  Créer
+                <Button type="submit" disabled={createCategoryMutation.isPending || updateCategoryMutation.isPending}>
+                  {editingCategory ? 'Mettre à jour' : 'Créer'}
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
+                <Button type="button" variant="outline" onClick={() => {
+                  setShowForm(false);
+                  setEditingCategory(null);
+                }}>
                   Annuler
                 </Button>
               </div>
@@ -134,17 +167,26 @@ export default function AdminCategories() {
                   <p className="text-sm text-slate-600 mb-1">{category.description}</p>
                   <p className="text-xs text-slate-500">Slug: {category.slug}</p>
                 </div>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => {
-                    if (confirm('Supprimer cette catégorie ?')) {
-                      deleteCategoryMutation.mutate(category.id);
-                    }
-                  }}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleEdit(category)}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => {
+                      if (confirm('Supprimer cette catégorie ?')) {
+                        deleteCategoryMutation.mutate(category.id);
+                      }
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
