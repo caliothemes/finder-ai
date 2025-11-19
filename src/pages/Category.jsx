@@ -13,12 +13,14 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ActiveBanner from '@/components/banners/ActiveBanner';
 import { toast } from 'sonner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Category() {
   const urlParams = new URLSearchParams(window.location.search);
   const categoryId = urlParams.get('id');
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -69,13 +71,13 @@ export default function Category() {
       const existing = favorites.find(f => f.ai_service_id === serviceId);
       if (existing) {
         await base44.entities.Favorite.delete(existing.id);
-        toast.success('Retiré des favoris');
+        toast.success(t('toast_favorite_removed'));
       } else {
         await base44.entities.Favorite.create({
           user_email: user.email,
           ai_service_id: serviceId
         });
-        toast.success('Ajouté aux favoris ❤️');
+        toast.success(t('toast_favorite_added'));
       }
     },
     onSuccess: () => {
@@ -95,12 +97,15 @@ export default function Category() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Catégorie introuvable</h1>
-          <p className="text-slate-600">Cette catégorie n'existe pas.</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-4">{t('category_not_found')}</h1>
+          <p className="text-slate-600">{t('category_not_found_subtitle')}</p>
         </div>
       </div>
     );
   }
+
+  const categoryName = language === 'en' && category.name_en ? category.name_en : category.name;
+  const categoryDesc = language === 'en' && category.description_en ? category.description_en : category.description;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -118,19 +123,19 @@ export default function Category() {
               const IconComponent = iconMap[category.icon] || Box;
               return <IconComponent className="w-4 h-4" />;
             })()}
-            <span>Catégorie</span>
+            <span>{t('categories_all')}</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            {category.name}
+            {categoryName}
           </h1>
           
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            {category.description}
+            {categoryDesc}
           </p>
           
           <div className="mt-8 text-slate-400">
-            {aiServices.length} outil{aiServices.length > 1 ? 's' : ''} disponible{aiServices.length > 1 ? 's' : ''}
+            {aiServices.length} {aiServices.length > 1 ? t('categories_tools_plural') : t('categories_tools')} {aiServices.length > 1 ? t('category_available_plural') : t('category_available')}
           </div>
         </div>
       </div>
@@ -160,15 +165,15 @@ export default function Category() {
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Votre Service IA ici
+                  {t('promo_your_service')}
                 </h3>
                 <p className="text-sm text-slate-600 mb-4">
-                  Augmentez votre visibilité avec un compte pro
+                  {t('promo_increase_visibility')}
                 </p>
                 <Link to={createPageUrl('ProAccount')}>
                   <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                     <Crown className="w-4 h-4 mr-2" />
-                    Devenir Pro
+                    {t('promo_become_pro')}
                   </Button>
                 </Link>
               </div>
@@ -187,10 +192,10 @@ export default function Category() {
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🤔</div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">
-              Aucun outil disponible
+              {t('category_no_tools')}
             </h2>
             <p className="text-slate-600">
-              Aucun outil n'a encore été ajouté dans cette catégorie.
+              {t('category_no_tools_subtitle')}
             </p>
           </div>
         )}

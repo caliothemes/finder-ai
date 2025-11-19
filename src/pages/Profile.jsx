@@ -6,9 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Profile() {
   const [user, setUser] = useState(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -60,7 +62,7 @@ export default function Profile() {
             
             <div className="flex-1">
               <h1 className="text-4xl font-bold mb-2">
-                {user.full_name || 'Utilisateur'}
+                {user.full_name || t('profile_user')}
               </h1>
               <div className="flex items-center gap-4 text-slate-300">
                 <div className="flex items-center gap-2">
@@ -69,13 +71,13 @@ export default function Profile() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>Membre depuis {new Date(user.created_date).toLocaleDateString('fr-FR')}</span>
+                  <span>{t('profile_member_since')} {new Date(user.created_date).toLocaleDateString('fr-FR')}</span>
                 </div>
               </div>
               
               {user.role === 'admin' && (
                 <Badge className="mt-3 bg-yellow-500 text-white">
-                  Administrateur
+                  {t('profile_admin')}
                 </Badge>
               )}
             </div>
@@ -88,7 +90,7 @@ export default function Profile() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-purple-700">
                 <Heart className="w-5 h-5" />
-                Favoris
+                {t('profile_favorites')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -96,7 +98,7 @@ export default function Profile() {
                 {favorites.length}
               </div>
               <p className="text-sm text-slate-600 mt-1">
-                Outils favoris
+                {t('profile_favorite_tools')}
               </p>
             </CardContent>
           </Card>
@@ -105,7 +107,7 @@ export default function Profile() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-700">
                 <PlusCircle className="w-5 h-5" />
-                Contributions
+                {t('profile_contributions')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -113,7 +115,7 @@ export default function Profile() {
                 {mySubmissions.length}
               </div>
               <p className="text-sm text-slate-600 mt-1">
-                Outils proposés
+                {t('profile_tools_submitted')}
               </p>
             </CardContent>
           </Card>
@@ -122,7 +124,7 @@ export default function Profile() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700">
                 <User className="w-5 h-5" />
-                Avis
+                {t('profile_reviews')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -130,7 +132,7 @@ export default function Profile() {
                 {myReviews.length}
               </div>
               <p className="text-sm text-slate-600 mt-1">
-                Avis publiés
+                {t('profile_reviews_published')}
               </p>
             </CardContent>
           </Card>
@@ -140,7 +142,7 @@ export default function Profile() {
         {mySubmissions.length > 0 && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Mes outils IA proposés</CardTitle>
+              <CardTitle>{t('profile_my_tools')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -177,8 +179,8 @@ export default function Profile() {
                           : 'bg-red-100 text-red-800'
                       }
                     >
-                      {service.status === 'approved' ? 'Approuvé' : 
-                       service.status === 'pending' ? 'En attente' : 'Rejeté'}
+                      {service.status === 'approved' ? t('profile_status_approved') : 
+                       service.status === 'pending' ? t('profile_status_pending') : t('profile_status_rejected')}
                     </Badge>
                   </div>
                 ))}
@@ -191,7 +193,7 @@ export default function Profile() {
         {myReviews.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Mes derniers avis</CardTitle>
+              <CardTitle>{t('profile_my_reviews')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">

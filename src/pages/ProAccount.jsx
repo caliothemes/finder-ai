@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function ProAccount() {
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -83,7 +85,7 @@ export default function ProAccount() {
     {
       name: 'Free',
       price: '0€',
-      period: 'toujours',
+      period: t('pro_always'),
       credits: 0,
       features: [
         'Soumettre des outils IA',
@@ -96,7 +98,7 @@ export default function ProAccount() {
     {
       name: 'Starter',
       price: '9,90€',
-      period: '/mois',
+      period: t('pro_per_month'),
       credits: 10,
       features: [
         'Tout du plan Free',
@@ -111,7 +113,7 @@ export default function ProAccount() {
     {
       name: 'Pro',
       price: '29,90€',
-      period: '/mois',
+      period: t('pro_per_month'),
       credits: 50,
       features: [
         'Tout du plan Starter',
@@ -139,15 +141,15 @@ export default function ProAccount() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full text-purple-700 text-sm mb-6">
             <Crown className="w-4 h-4" />
-            <span>Compte Professionnel</span>
+            <span>{t('pro_professional')}</span>
           </div>
           
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Boostez votre visibilité
+            {t('pro_title')}
           </h1>
           
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Mettez en avant vos outils IA et atteignez des milliers d'utilisateurs
+            {t('pro_subtitle')}
           </p>
         </div>
 
@@ -157,25 +159,25 @@ export default function ProAccount() {
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
                 <Crown className="w-6 h-6 text-purple-600" />
-                Votre Compte Pro
+                {t('pro_your_account')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <div className="text-sm text-slate-600 mb-1">Plan actuel</div>
+                  <div className="text-sm text-slate-600 mb-1">{t('pro_current_plan')}</div>
                   <div className="text-2xl font-bold text-purple-600 capitalize">
                     {proAccount.plan_type}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-slate-600 mb-1">Crédits disponibles</div>
+                  <div className="text-sm text-slate-600 mb-1">{t('pro_credits_available')}</div>
                   <div className="text-2xl font-bold text-purple-600">
                     {proAccount.credits || 0}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-slate-600 mb-1">Outils IA gérés</div>
+                  <div className="text-sm text-slate-600 mb-1">{t('pro_tools_managed')}</div>
                   <div className="text-2xl font-bold text-purple-600">
                     {myAIServices.length}
                   </div>
@@ -202,7 +204,7 @@ export default function ProAccount() {
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
                     <Sparkles className="w-3 h-3 mr-1" />
-                    Populaire
+                    {t('pro_popular')}
                   </Badge>
                 </div>
               )}
@@ -211,7 +213,7 @@ export default function ProAccount() {
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <Badge className="bg-green-600 text-white border-0">
                     <Check className="w-3 h-3 mr-1" />
-                    Actif
+                    {t('pro_active')}
                   </Badge>
                 </div>
               )}
@@ -230,7 +232,7 @@ export default function ProAccount() {
                 
                 {plan.credits > 0 && (
                   <div className="mt-2 text-sm text-purple-600 font-medium">
-                    + {plan.credits} crédits/mois
+                    + {plan.credits} {t('pro_credits_per_month')}
                   </div>
                 )}
               </div>
@@ -262,17 +264,17 @@ export default function ProAccount() {
                 {plan.current ? (
                   <>
                     <Check className="w-4 h-4 mr-2" />
-                    Plan actif
+                    {t('pro_plan_active')}
                   </>
                 ) : proAccount ? (
                   <>
                     <TrendingUp className="w-4 h-4 mr-2" />
-                    Mettre à niveau
+                    {t('pro_upgrade')}
                   </>
                 ) : (
                   <>
                     <Zap className="w-4 h-4 mr-2" />
-                    Choisir ce plan
+                    {t('pro_choose_plan')}
                   </>
                 )}
               </Button>
@@ -283,7 +285,7 @@ export default function ProAccount() {
         {/* Credit Packs */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-            Acheter des crédits publicitaires
+            {t('pro_buy_credits')}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {creditPacks.map((pack) => (
@@ -292,13 +294,13 @@ export default function ProAccount() {
                   <div className="text-5xl font-bold text-slate-900 mb-2">
                     {pack.credits}
                   </div>
-                  <div className="text-slate-600 mb-4">crédits</div>
+                  <div className="text-slate-600 mb-4">{t('pro_credits')}</div>
                   <div className="text-4xl font-bold text-purple-600">
                     {pack.price}
                   </div>
                 </div>
                 <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                  Acheter maintenant
+                  {t('pro_buy_now')}
                 </Button>
               </div>
             ))}
@@ -308,7 +310,7 @@ export default function ProAccount() {
         {/* Benefits */}
         <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 rounded-3xl p-12 text-white">
           <h2 className="text-3xl font-bold mb-8 text-center">
-            Pourquoi passer Pro ?
+            {t('pro_why_pro')}
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -316,9 +318,9 @@ export default function ProAccount() {
               <div className="w-16 h-16 mx-auto mb-4 bg-purple-500/20 rounded-2xl flex items-center justify-center">
                 <TrendingUp className="w-8 h-8 text-purple-300" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Visibilité maximale</h3>
+              <h3 className="text-xl font-bold mb-2">{t('pro_visibility_title')}</h3>
               <p className="text-slate-300">
-                Placez vos outils en avant et multipliez votre audience
+                {t('pro_visibility_desc')}
               </p>
             </div>
             
@@ -326,9 +328,9 @@ export default function ProAccount() {
               <div className="w-16 h-16 mx-auto mb-4 bg-pink-500/20 rounded-2xl flex items-center justify-center">
                 <Zap className="w-8 h-8 text-pink-300" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Crédits publicitaires</h3>
+              <h3 className="text-xl font-bold mb-2">{t('pro_credits_title')}</h3>
               <p className="text-slate-300">
-                Utilisez vos crédits pour des bannières et placements premium
+                {t('pro_credits_desc')}
               </p>
             </div>
             
@@ -336,9 +338,9 @@ export default function ProAccount() {
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-500/20 rounded-2xl flex items-center justify-center">
                 <Sparkles className="w-8 h-8 text-blue-300" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Badges exclusifs</h3>
+              <h3 className="text-xl font-bold mb-2">{t('pro_badges_title')}</h3>
               <p className="text-slate-300">
-                Obtenez des badges de confiance pour vos outils
+                {t('pro_badges_desc')}
               </p>
             </div>
           </div>

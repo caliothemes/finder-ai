@@ -9,6 +9,7 @@ import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock, X } from 'lucid
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import BannerCalendar from '@/components/banners/BannerCalendar';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function BannerManager() {
   const [user, setUser] = useState(null);
@@ -20,6 +21,7 @@ export default function BannerManager() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [reservingBanner, setReservingBanner] = useState(null);
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -119,20 +121,20 @@ export default function BannerManager() {
   };
 
   const positions = [
-    { value: 'homepage_hero', label: 'Page d\'accueil - Hero' },
-    { value: 'homepage_sidebar', label: 'Page d\'accueil - Sidebar' },
-    { value: 'category_top', label: 'Catégories - En haut' },
-    { value: 'service_detail', label: 'Détail service' }
+    { value: 'homepage_hero', label: t('banner_position_hero') },
+    { value: 'homepage_sidebar', label: t('banner_position_sidebar') },
+    { value: 'category_top', label: t('banner_position_category') },
+    { value: 'service_detail', label: t('banner_position_detail') }
   ];
 
   if (!user || !proAccount) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Compte Pro requis</h2>
-          <p className="text-slate-600 mb-4">Vous devez avoir un compte Pro pour gérer vos bannières</p>
+          <h2 className="text-2xl font-bold mb-4">{t('banner_pro_required')}</h2>
+          <p className="text-slate-600 mb-4">{t('banner_pro_required_desc')}</p>
           <Button onClick={() => window.location.href = '/ProAccount'}>
-            Découvrir les plans Pro
+            {t('banner_discover_pro')}
           </Button>
         </div>
       </div>
@@ -143,23 +145,23 @@ export default function BannerManager() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Gestion des bannières</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">{t('banner_manager_title')}</h1>
           <p className="text-slate-600">
-            Crédits disponibles: <span className="font-bold text-purple-600">{proAccount.credits}</span>
+            {t('banner_credits')}: <span className="font-bold text-purple-600">{proAccount.credits}</span>
           </p>
         </div>
 
         {showForm && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Créer une bannière</CardTitle>
-              <CardDescription>Votre bannière sera soumise pour validation admin</CardDescription>
+              <CardTitle>{t('banner_create')}</CardTitle>
+              <CardDescription>{t('banner_create_desc')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={(e) => { e.preventDefault(); createBannerMutation.mutate(formData); }} className="space-y-4">
                 <Select value={formData.ai_service_id} onValueChange={(v) => setFormData({...formData, ai_service_id: v})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Service IA" />
+                    <SelectValue placeholder={t('banner_ai_service')} />
                   </SelectTrigger>
                   <SelectContent>
                     {myServices.map(s => (
@@ -169,14 +171,14 @@ export default function BannerManager() {
                 </Select>
 
                 <Input
-                  placeholder="Titre de la bannière"
+                  placeholder={t('banner_title_label')}
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
                   required
                 />
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Image de la bannière</label>
+                  <label className="text-sm font-medium mb-2 block">{t('banner_image_label')}</label>
                   <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
                   {formData.image_url && (
                     <img src={formData.image_url} alt="Preview" className="mt-2 w-full h-32 object-cover rounded-lg" />
@@ -184,7 +186,7 @@ export default function BannerManager() {
                 </div>
 
                 <Input
-                  placeholder="URL de destination"
+                  placeholder={t('banner_url_label')}
                   value={formData.target_url}
                   onChange={(e) => setFormData({...formData, target_url: e.target.value})}
                   required
@@ -192,7 +194,7 @@ export default function BannerManager() {
 
                 <Select value={formData.position} onValueChange={(v) => setFormData({...formData, position: v})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Position" />
+                    <SelectValue placeholder={t('banner_position')} />
                   </SelectTrigger>
                   <SelectContent>
                     {positions.map(p => (
@@ -202,8 +204,8 @@ export default function BannerManager() {
                 </Select>
 
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={createBannerMutation.isPending}>Créer</Button>
-                  <Button type="button" variant="outline" onClick={() => setShowForm(false)}>Annuler</Button>
+                  <Button type="submit" disabled={createBannerMutation.isPending}>{t('banner_create_btn')}</Button>
+                  <Button type="button" variant="outline" onClick={() => setShowForm(false)}>{t('banner_cancel')}</Button>
                 </div>
               </form>
             </CardContent>
@@ -211,10 +213,10 @@ export default function BannerManager() {
         )}
 
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Mes bannières</h2>
+          <h2 className="text-2xl font-bold">{t('banner_my_banners')}</h2>
           <Button onClick={() => setShowForm(!showForm)}>
             <Plus className="w-4 h-4 mr-2" />
-            Créer une bannière
+            {t('banner_create')}
           </Button>
         </div>
 
@@ -230,12 +232,12 @@ export default function BannerManager() {
                         {banner.validated ? (
                           <Badge className="bg-green-100 text-green-800">
                             <CheckCircle className="w-3 h-3 mr-1" />
-                            Validée
+                            {t('banner_validated')}
                           </Badge>
                         ) : (
                           <Badge className="bg-orange-100 text-orange-800">
                             <Clock className="w-3 h-3 mr-1" />
-                            En attente de validation
+                            {t('banner_pending')}
                           </Badge>
                         )}
                       </div>
@@ -243,9 +245,9 @@ export default function BannerManager() {
                         <img src={banner.image_url} alt={banner.title} className="w-full h-48 object-cover rounded-lg mb-3" />
                       )}
                       <div className="grid md:grid-cols-2 gap-2 text-sm text-slate-600 mb-4">
-                        <p>📍 Position: {positions.find(p => p.value === banner.position)?.label}</p>
-                        <p>💳 Crédits utilisés: {banner.credits_used || 0}</p>
-                        <p>📅 Dates réservées: {(banner.reserved_dates || []).length}</p>
+                        <p>📍 {t('banner_position')}: {positions.find(p => p.value === banner.position)?.label}</p>
+                        <p>💳 {t('banner_credits_used')}: {banner.credits_used || 0}</p>
+                        <p>📅 {t('banner_dates_reserved')}: {(banner.reserved_dates || []).length}</p>
                         <p>🔗 URL: <a href={banner.target_url} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">{banner.target_url}</a></p>
                       </div>
 
@@ -258,12 +260,12 @@ export default function BannerManager() {
                           {reservingBanner === banner.id ? (
                             <>
                               <X className="w-4 h-4 mr-2" />
-                              Fermer le calendrier
+                              {t('banner_close_calendar')}
                             </>
                           ) : (
                             <>
                               <Calendar className="w-4 h-4 mr-2" />
-                              Réserver des dates
+                              {t('banner_reserve_dates')}
                             </>
                           )}
                         </Button>
@@ -271,7 +273,7 @@ export default function BannerManager() {
 
                       {!banner.validated && (
                         <p className="text-sm text-orange-600 mt-2">
-                          ⏳ Votre bannière est en cours de validation. Vous pourrez réserver des dates une fois validée.
+                          ⏳ {t('banner_validation_pending')}
                         </p>
                       )}
                     </div>
