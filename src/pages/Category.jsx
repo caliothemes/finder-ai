@@ -6,8 +6,11 @@ import {
   Sparkles, Zap, Image as ImageIcon, MessageSquare, Music, Video, 
   Brain, Code, FileText, Palette, Box, Search, Bot, Database, 
   Globe, Shield, Target, TrendingUp, Users, Workflow, Mic,
-  Camera, Mail, Heart, Settings, Grid, Layers, PenTool
+  Camera, Mail, Heart, Settings, Grid, Layers, PenTool, Crown
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
 
 export default function Category() {
@@ -135,7 +138,37 @@ export default function Category() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         {aiServices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {aiServices.map((service) => (
+            {aiServices.slice(0, 5).map((service) => (
+              <AIServiceCard
+                key={service.id}
+                service={service}
+                isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+              />
+            ))}
+
+            {/* Promo Card */}
+            <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Sparkles className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                  Votre Service IA ici
+                </h3>
+                <p className="text-sm text-slate-600 mb-4">
+                  Augmentez votre visibilité avec un compte pro
+                </p>
+                <Link to={createPageUrl('ProAccount')}>
+                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                    <Crown className="w-4 h-4 mr-2" />
+                    Devenir Pro
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {aiServices.slice(5).map((service) => (
               <AIServiceCard
                 key={service.id}
                 service={service}

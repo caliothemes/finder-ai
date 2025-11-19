@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, TrendingUp, ExternalLink, Heart } from 'lucide-react';
+import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -38,7 +38,137 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {aiServices.map((service) => (
+          {aiServices.slice(0, 4).map((service) => (
+            <div
+              key={service.id}
+              className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              {/* Image */}
+              <div className="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden">
+                {service.cover_image_url ? (
+                  <img
+                    src={service.cover_image_url}
+                    alt={service.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="text-6xl opacity-20">🤖</div>
+                  </div>
+                )}
+                
+                {/* Favorite button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onToggleFavorite(service.id);
+                  }}
+                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110"
+                >
+                  <Heart
+                    className={`w-5 h-5 ${isFavorite(service.id) ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
+                  />
+                </button>
+
+                {/* Featured badge */}
+                {service.featured && (
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
+                      <TrendingUp className="w-3 h-3 mr-1" />
+                      En vedette
+                    </Badge>
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                <div className="flex items-start gap-3 mb-3">
+                  {service.logo_url && (
+                    <img
+                      src={service.logo_url}
+                      alt={service.name}
+                      className="w-12 h-12 rounded-xl object-cover border border-slate-200"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                      <h3 className="text-xl font-bold text-slate-900 mb-1 hover:text-purple-600 transition-colors truncate">
+                        {service.name}
+                      </h3>
+                    </Link>
+                    <p className="text-sm text-slate-600 line-clamp-2">
+                      {service.tagline}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-slate-700 mb-4 line-clamp-2 text-sm">
+                  {service.description}
+                </p>
+
+                {/* Rating and pricing */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm font-semibold text-slate-900">
+                      {service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}
+                    </span>
+                    <span className="text-xs text-slate-500">({service.views || 0})</span>
+                  </div>
+                  
+                  <Badge className={`${getPricingBadge(service.pricing)} border`}>
+                    {service.pricing}
+                  </Badge>
+                </div>
+
+                {/* Tags */}
+                {service.tags && service.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {service.tags.slice(0, 3).map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Action button */}
+                <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
+                    <span>Découvrir</span>
+                    <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          ))}
+
+          {/* Promo Card */}
+          <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-3xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
+                Votre Service IA ici
+              </h3>
+              <p className="text-sm text-slate-600 mb-4">
+                Mettez en avant votre IA dans cet espace premium
+              </p>
+              <Link to={createPageUrl('ProAccount')}>
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  <Crown className="w-4 h-4 mr-2" />
+                  Devenir Pro
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {aiServices.slice(4).map((service) => (
             <div
               key={service.id}
               className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
