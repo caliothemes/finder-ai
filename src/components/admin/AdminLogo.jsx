@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,46 @@ import Logo from '@/components/Logo';
 
 export default function AdminLogo() {
   const downloadLogo = (size, format, shape) => {
+    // Create a temporary container
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+    
+    // Render the Logo component
+    const logoDiv = document.createElement('div');
+    logoDiv.innerHTML = `
+      <svg width="${size}" height="${size}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad${size}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#9333ea;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="90" r="40" stroke="url(#grad${size})" stroke-width="8" fill="none"/>
+        <circle cx="100" cy="90" r="8" fill="url(#grad${size})"/>
+        <path d="M 130 110 L 155 135" stroke="url(#grad${size})" stroke-width="10" stroke-linecap="round"/>
+        <line x1="100" y1="50" x2="100" y2="20" stroke="#9333ea" stroke-width="2" opacity="0.4" />
+        <circle cx="100" cy="20" r="6" fill="#9333ea" />
+        <line x1="125" y1="60" x2="155" y2="30" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
+        <circle cx="155" cy="30" r="6" fill="#06b6d4" />
+        <line x1="140" y1="90" x2="180" y2="90" stroke="#ec4899" stroke-width="2" opacity="0.4" />
+        <circle cx="180" cy="90" r="6" fill="#ec4899" />
+        <line x1="125" y1="115" x2="145" y2="145" stroke="#9333ea" stroke-width="2" opacity="0.4" />
+        <circle cx="145" cy="145" r="6" fill="#9333ea" />
+        <line x1="60" y1="90" x2="20" y2="90" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
+        <circle cx="20" cy="90" r="6" fill="#06b6d4" />
+        <line x1="75" y1="60" x2="45" y2="30" stroke="#ec4899" stroke-width="2" opacity="0.4" />
+        <circle cx="45" cy="30" r="6" fill="#ec4899" />
+        <line x1="75" y1="115" x2="50" y2="145" stroke="#9333ea" stroke-width="2" opacity="0.4" />
+        <circle cx="50" cy="145" r="6" fill="#9333ea" />
+        <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
+        <circle cx="100" cy="160" r="6" fill="#06b6d4" />
+      </svg>
+    `;
+    container.appendChild(logoDiv);
+    
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const padding = format === 'transparent' ? 20 : 40;
@@ -38,50 +78,22 @@ export default function AdminLogo() {
       }
     }
 
-    // Create temporary div with logo SVG
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = `
-      <svg width="${size}" height="${size}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#06b6d4" />
-            <stop offset="50%" stop-color="#9333ea" />
-            <stop offset="100%" stop-color="#ec4899" />
-          </linearGradient>
-        </defs>
-        <circle cx="100" cy="90" r="40" stroke="url(#g1)" stroke-width="8" fill="none"/>
-        <circle cx="100" cy="90" r="8" fill="url(#g1)"/>
-        <path d="M 130 110 L 155 135" stroke="url(#g1)" stroke-width="10" stroke-linecap="round"/>
-        <line x1="100" y1="50" x2="100" y2="20" stroke="#9333ea" stroke-width="2" opacity="0.4" />
-        <circle cx="100" cy="20" r="6" fill="#9333ea" />
-        <line x1="125" y1="60" x2="155" y2="30" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
-        <circle cx="155" cy="30" r="6" fill="#06b6d4" />
-        <line x1="140" y1="90" x2="180" y2="90" stroke="#ec4899" stroke-width="2" opacity="0.4" />
-        <circle cx="180" cy="90" r="6" fill="#ec4899" />
-        <line x1="125" y1="115" x2="145" y2="145" stroke="#9333ea" stroke-width="2" opacity="0.4" />
-        <circle cx="145" cy="145" r="6" fill="#9333ea" />
-        <line x1="60" y1="90" x2="20" y2="90" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
-        <circle cx="20" cy="90" r="6" fill="#06b6d4" />
-        <line x1="75" y1="60" x2="45" y2="30" stroke="#ec4899" stroke-width="2" opacity="0.4" />
-        <circle cx="45" cy="30" r="6" fill="#ec4899" />
-        <line x1="75" y1="115" x2="50" y2="145" stroke="#9333ea" stroke-width="2" opacity="0.4" />
-        <circle cx="50" cy="145" r="6" fill="#9333ea" />
-        <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" stroke-width="2" opacity="0.4" />
-        <circle cx="100" cy="160" r="6" fill="#06b6d4" />
-      </svg>
-    `;
-
-    const svgData = new XMLSerializer().serializeToString(tempDiv.firstChild);
+    const svgElement = logoDiv.querySelector('svg');
+    const svgData = new XMLSerializer().serializeToString(svgElement);
     const img = new Image();
+    
     img.onload = () => {
       ctx.drawImage(img, padding, padding, size, size);
+      
+      document.body.removeChild(container);
       
       const link = document.createElement('a');
       link.download = `finder-ai-logo-${size}x${size}-${shape}-${format}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     };
-    img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+    
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
   };
 
   const sizes = [

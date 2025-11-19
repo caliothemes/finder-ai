@@ -1,15 +1,70 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function AdminServices() {
+  const [showForm, setShowForm] = useState(false);
+  const [editingService, setEditingService] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '', slug: '', tagline: '', description: '', category_id: '',
+    pricing: 'freemium', website_url: '', status: 'approved'
+  });
+  const queryClient = useQueryClient();
+
   const { data: services = [], isLoading } = useQuery({
     queryKey: ['adminServices'],
     queryFn: () => base44.entities.AIService.list('-created_date', 50),
   });
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => base44.entities.Category.list(),
+  });
+
+  const createServiceMutation = useMutation({
+    mutationFn: (data) => base44.entities.AIService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      setShowForm(false);
+      setFormData({ name: '', slug: '', tagline: '', description: '', category_id: '', pricing: 'freemium', website_url: '', status: 'approved' });
+      toast.success('Service créé avec succès');
+    },
+  });
+
+  const updateServiceMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.AIService.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      setEditingService(null);
+      toast.success('Service mis à jour');
+    },
+  });
+
+  const deleteServiceMutation = useMutation({
+    mutationFn: (id) => base44.entities.AIService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      toast.success('Service supprimé');
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const slug = formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-');
+    createServiceMutation.mutate({ ...formData, slug });
+  };
+
+  const handleStatusChange = (service, newStatus) => {
+    updateServiceMutation.mutate({ id: service.id, data: { status: newStatus } });
+  };
 
   const pendingServices = services.filter(s => s.status === 'pending');
   const approvedServices = services.filter(s => s.status === 'approved');
@@ -25,6 +80,89 @@ export default function AdminServices() {
 
   return (
     <div className="space-y-6">
+      {/* Create Form */}
+      {showForm && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Créer un service IA</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <Input
+                  placeholder="Nom du service"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  required
+                />
+                <Input
+                  placeholder="Slug (optionnel)"
+                  value={formData.slug}
+                  onChange={(e) => setFormData({...formData, slug: e.target.value})}
+                />
+              </div>
+              <Input
+                placeholder="Tagline"
+                value={formData.tagline}
+                onChange={(e) => setFormData({...formData, tagline: e.target.value})}
+              />
+              <Textarea
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                required
+              />
+              <div className="grid md:grid-cols-3 gap-4">
+                <Select value={formData.category_id} onValueChange={(v) => setFormData({...formData, category_id: v})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Catégorie" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map(cat => (
+                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={formData.pricing} onValueChange={(v) => setFormData({...formData, pricing: v})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Prix" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="gratuit">Gratuit</SelectItem>
+                    <SelectItem value="freemium">Freemium</SelectItem>
+                    <SelectItem value="payant">Payant</SelectItem>
+                    <SelectItem value="abonnement">Abonnement</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="approved">Approuvé</SelectItem>
+                    <SelectItem value="pending">En attente</SelectItem>
+                    <SelectItem value="rejected">Rejeté</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Input
+                placeholder="URL du site web"
+                value={formData.website_url}
+                onChange={(e) => setFormData({...formData, website_url: e.target.value})}
+              />
+              <div className="flex gap-2">
+                <Button type="submit" disabled={createServiceMutation.isPending}>
+                  Créer le service
+                </Button>
+                <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
+                  Annuler
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
@@ -67,8 +205,16 @@ export default function AdminServices() {
       {/* Services List */}
       <Card>
         <CardHeader>
-          <CardTitle>Services IA soumis</CardTitle>
-          <CardDescription>Gérez les soumissions de services IA</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Services IA soumis</CardTitle>
+              <CardDescription>Gérez les soumissions de services IA</CardDescription>
+            </div>
+            <Button onClick={() => setShowForm(!showForm)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Créer un service
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -90,20 +236,32 @@ export default function AdminServices() {
                     <p className="text-sm text-slate-600">{service.tagline}</p>
                     <p className="text-xs text-slate-500 mt-1">
                       Soumis par: {service.submitted_by || 'N/A'}
-                    </p>
-                  </div>
-                </div>
-                <Badge
-                  className={
-                    service.status === 'approved'
-                      ? 'bg-green-100 text-green-800'
-                      : service.status === 'pending'
-                      ? 'bg-orange-100 text-orange-800'
-                      : 'bg-red-100 text-red-800'
-                  }
-                >
-                  {service.status}
-                </Badge>
+                      </p>
+                      </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                      <Select value={service.status} onValueChange={(v) => handleStatusChange(service, v)}>
+                      <SelectTrigger className="w-32">
+                      <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                      <SelectItem value="approved">Approuvé</SelectItem>
+                      <SelectItem value="pending">En attente</SelectItem>
+                      <SelectItem value="rejected">Rejeté</SelectItem>
+                      </SelectContent>
+                      </Select>
+                      <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => {
+                      if (confirm('Supprimer ce service ?')) {
+                        deleteServiceMutation.mutate(service.id);
+                      }
+                      }}
+                      >
+                      <Trash2 className="w-4 h-4" />
+                      </Button>
+                      </div>
               </div>
             ))}
           </div>

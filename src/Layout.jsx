@@ -45,46 +45,73 @@ export default function Layout({ children, currentPageName }) {
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
         {/* Logo Section */}
-        <div className="p-8 text-center border-b border-slate-200">
-          <div className="flex justify-center mb-4">
-            <div className="w-32">
-              <div className="w-32 h-32 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden mx-auto">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.3),transparent_70%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.3),transparent_70%)]" />
-                <Search className="w-16 h-16 text-white relative z-10 drop-shadow-lg" />
-                <div className="absolute inset-0 border-4 border-white/30 rounded-2xl" />
-              </div>
-            </div>
+        <div className="p-6 text-center border-b border-slate-200">
+          <div className="flex justify-center mb-3">
+            <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#06b6d4" />
+                  <stop offset="50%" stopColor="#9333ea" />
+                  <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+                <filter id="glowSidebar">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <circle cx="100" cy="90" r="40" stroke="url(#gradientSidebar)" strokeWidth="8" fill="none" filter="url(#glowSidebar)"/>
+              <circle cx="100" cy="90" r="8" fill="url(#gradientSidebar)"/>
+              <path d="M 130 110 L 155 135" stroke="url(#gradientSidebar)" strokeWidth="10" strokeLinecap="round" filter="url(#glowSidebar)"/>
+              <line x1="100" y1="50" x2="100" y2="20" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+              <circle cx="100" cy="20" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+              <line x1="125" y1="60" x2="155" y2="30" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+              <circle cx="155" cy="30" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+              <line x1="140" y1="90" x2="180" y2="90" stroke="#ec4899" strokeWidth="2" opacity="0.4" />
+              <circle cx="180" cy="90" r="6" fill="#ec4899" filter="url(#glowSidebar)" />
+              <line x1="125" y1="115" x2="145" y2="145" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+              <circle cx="145" cy="145" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+              <line x1="60" y1="90" x2="20" y2="90" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+              <circle cx="20" cy="90" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+              <line x1="75" y1="60" x2="45" y2="30" stroke="#ec4899" strokeWidth="2" opacity="0.4" />
+              <circle cx="45" cy="30" r="6" fill="#ec4899" filter="url(#glowSidebar)" />
+              <line x1="75" y1="115" x2="50" y2="145" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+              <circle cx="50" cy="145" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+              <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+              <circle cx="100" cy="160" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+            </svg>
           </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-2">
+          <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
             Finder AI
           </h2>
-          <p className="text-sm text-slate-600">
+          <p className="text-xs text-slate-600">
             Le répertoire ultime des outils d'IA
           </p>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-6 space-y-2">
+        <nav className="flex-1 p-4 space-y-1">
           <Link
             to={createPageUrl('Home')}
-            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-5 h-5" />
+            <Search className="w-4 h-4" />
             Accueil
           </Link>
           <Link
             to={createPageUrl('Explore')}
-            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-5 h-5" />
+            <Search className="w-4 h-4" />
             Explorer
           </Link>
           <Link
             to={createPageUrl('Categories')}
-            className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-5 h-5" />
+            <Search className="w-4 h-4" />
             Catégories
           </Link>
           
@@ -92,48 +119,48 @@ export default function Layout({ children, currentPageName }) {
             <>
               <Link
                 to={createPageUrl('Favorites')}
-                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
-                <Heart className="w-5 h-5" />
+                <Heart className="w-4 h-4" />
                 Favoris
               </Link>
               <Link
                 to={createPageUrl('Profile')}
-                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
-                <User className="w-5 h-5" />
+                <User className="w-4 h-4" />
                 Mon Profil
               </Link>
               <Link
                 to={createPageUrl('ProAccount')}
-                className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-all font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
               >
-                <Crown className="w-5 h-5" />
+                <Crown className="w-4 h-4" />
                 Compte Pro
               </Link>
 
               {user.role === 'admin' && (
                 <>
-                  <div className="my-4 border-t border-slate-200" />
-                  <div className="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <div className="my-2 border-t border-slate-200" />
+                  <div className="px-3 py-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Administration
                   </div>
                   <Link
                     to={createPageUrl('Admin')}
-                    className="flex items-center gap-3 px-4 py-3 text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-xl transition-all font-medium"
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium"
                   >
-                    <Crown className="w-5 h-5" />
+                    <Crown className="w-4 h-4" />
                     Admin
                   </Link>
                 </>
               )}
 
-              <div className="my-4 border-t border-slate-200" />
+              <div className="my-2 border-t border-slate-200" />
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4" />
                 Se déconnecter
               </button>
             </>
@@ -142,9 +169,9 @@ export default function Layout({ children, currentPageName }) {
           {!user && (
             <button
               onClick={() => base44.auth.redirectToLogin()}
-              className="w-full flex items-center gap-3 px-4 py-3 text-purple-600 hover:bg-purple-50 rounded-xl transition-all font-medium"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
             >
-              <LogIn className="w-5 h-5" />
+              <LogIn className="w-4 h-4" />
               Connexion
             </button>
           )}
@@ -168,7 +195,7 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
             {/* Desktop Nav - Simplified */}
-            <nav className="hidden lg:flex items-center gap-6 flex-1 justify-center">
+            <nav className="hidden lg:flex items-center gap-6">
               <Link
                 to={createPageUrl('Explore')}
                 className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
