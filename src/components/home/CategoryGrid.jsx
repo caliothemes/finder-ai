@@ -6,8 +6,10 @@ import {
   Video, Music, Code, FileText, Briefcase, 
   GraduationCap, Heart, ShoppingBag, Cpu 
 } from 'lucide-react';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function CategoryGrid({ categories, aiServices = [] }) {
+  const { t, language } = useLanguage();
   const iconMap = {
     'Sparkles': Sparkles,
     'Image': Image,
@@ -33,10 +35,10 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            Explorez par Catégorie
+            {t('home_category_title')}
           </h2>
           <p className="text-xl text-slate-600">
-            Trouvez l'outil IA parfait pour votre besoin
+            {t('home_category_subtitle')}
           </p>
         </div>
 
@@ -46,6 +48,9 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
             const categoryCount = aiServices.filter(service => 
               service.categories && service.categories.includes(category.id)
             ).length;
+            
+            const categoryName = language === 'en' && category.name_en ? category.name_en : category.name;
+            const categoryDesc = language === 'en' && category.description_en ? category.description_en : category.description;
 
             return (
               <Link
@@ -64,21 +69,21 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
                   </div>
 
                   <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors">
-                    {category.name}
+                    {categoryName}
                   </h3>
 
                   <p className="text-sm text-slate-600 mb-4 line-clamp-2">
-                    {category.description}
+                    {categoryDesc}
                   </p>
 
                   <div className="mb-3">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
-                      {categoryCount} outil{categoryCount > 1 ? 's' : ''}
+                      {categoryCount} {categoryCount > 1 ? t('home_category_tools_plural') : t('home_category_tools')}
                     </span>
                   </div>
 
                   <div className="flex items-center text-purple-600 font-medium text-sm group-hover:gap-2 transition-all">
-                    <span>Explorer</span>
+                    <span>{t('home_category_explore')}</span>
                     <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>

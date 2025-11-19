@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '@/components/Logo';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function HeroSection({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [floatingElements, setFloatingElements] = useState([]);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const elements = Array(15).fill(0).map((_, i) => ({
@@ -62,18 +64,18 @@ export default function HeroSection({ onSearch }) {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-8 backdrop-blur-sm">
           <Sparkles className="w-4 h-4" />
-          <span>Découvrez l'univers de l'Intelligence Artificielle</span>
+          <span>{t('home_hero_badge')}</span>
         </div>
 
         {/* Main heading */}
         <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 bg-clip-text text-transparent animate-gradient drop-shadow-2xl">
-            Finder AI
+            {t('home_hero_title')}
           </span>
         </h1>
         
         <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-          Le répertoire ultime des outils d'IA
+          {t('home_hero_subtitle')}
         </p>
 
         {/* Logo */}
@@ -82,7 +84,7 @@ export default function HeroSection({ onSearch }) {
         </div>
         
         <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
-          Explorez, comparez et découvrez les meilleurs services d'intelligence artificielle pour tous vos besoins
+          {t('home_hero_description')}
         </p>
 
         {/* Search bar */}
@@ -93,7 +95,7 @@ export default function HeroSection({ onSearch }) {
               <Search className="absolute left-6 w-6 h-6 text-slate-400" />
               <Input
                 type="text"
-                placeholder="Rechercher un outil IA... (ex: génération d'images, chatbot, vidéo)"
+                placeholder={t('home_hero_search_placeholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-16 pr-40 py-7 bg-transparent border-0 text-white placeholder:text-slate-400 text-lg focus-visible:ring-0"
@@ -102,7 +104,7 @@ export default function HeroSection({ onSearch }) {
                 type="submit"
                 className="absolute right-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-5 rounded-xl font-medium transition-all shadow-lg hover:shadow-purple-500/50"
               >
-                Rechercher
+                {t('home_hero_search_btn')}
               </Button>
             </div>
           </div>
@@ -115,7 +117,7 @@ export default function HeroSection({ onSearch }) {
               <Zap className="w-5 h-5 text-purple-400" />
               <div className="text-3xl font-bold text-white">500+</div>
             </div>
-            <div className="text-sm text-slate-400">Outils IA</div>
+            <div className="text-sm text-slate-400">{t('home_hero_tools')}</div>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
@@ -123,7 +125,7 @@ export default function HeroSection({ onSearch }) {
               <TrendingUp className="w-5 h-5 text-pink-400" />
               <div className="text-3xl font-bold text-white">50+</div>
             </div>
-            <div className="text-sm text-slate-400">Catégories</div>
+            <div className="text-sm text-slate-400">{t('home_hero_categories')}</div>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all col-span-2 md:col-span-1">
@@ -131,7 +133,7 @@ export default function HeroSection({ onSearch }) {
               <Sparkles className="w-5 h-5 text-blue-400" />
               <div className="text-3xl font-bold text-white">10K+</div>
             </div>
-            <div className="text-sm text-slate-400">Utilisateurs</div>
+            <div className="text-sm text-slate-400">{t('home_hero_users')}</div>
           </div>
         </div>
       </div>

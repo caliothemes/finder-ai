@@ -4,8 +4,11 @@ import { createPageUrl } from '@/utils';
 import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
+  const { t } = useLanguage();
+  
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
   };
@@ -28,11 +31,11 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
             <div className="flex items-center gap-3 mb-3">
               <div className="w-1 h-8 bg-gradient-to-b from-purple-600 to-pink-600 rounded-full" />
               <h2 className="text-4xl font-bold text-slate-900">
-                Outils IA en Vedette
+                {t('home_featured_title')}
               </h2>
             </div>
             <p className="text-lg text-slate-600 ml-7">
-              Les outils IA les plus populaires et innovants du moment
+              {t('home_featured_subtitle')}
             </p>
           </div>
         </div>
@@ -154,15 +157,15 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">
-                Votre Service IA ici
+                {t('promo_your_service')}
               </h3>
               <p className="text-sm text-slate-600 mb-4">
-                Mettez en avant votre IA dans cet espace premium
+                {t('promo_increase_visibility')}
               </p>
               <Link to={createPageUrl('ProAccount')}>
                 <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                   <Crown className="w-4 h-4 mr-2" />
-                  Devenir Pro
+                  {t('promo_become_pro')}
                 </Button>
               </Link>
             </div>

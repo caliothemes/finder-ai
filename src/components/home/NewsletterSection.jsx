@@ -4,17 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const { t } = useLanguage();
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) {
-      toast.error('Veuillez entrer votre email');
+      toast.error(t('home_newsletter_error_email'));
       return;
     }
 
@@ -27,11 +29,11 @@ export default function NewsletterSection() {
       });
       
       setSubscribed(true);
-      toast.success('Merci ! Vous êtes inscrit à notre newsletter 🎉');
+      toast.success(t('home_newsletter_success_toast'));
       setEmail('');
       setName('');
     } catch (error) {
-      toast.error("Une erreur s'est produite. Veuillez réessayer.");
+      toast.error(t('home_newsletter_error'));
     } finally {
       setLoading(false);
     }
@@ -47,14 +49,14 @@ export default function NewsletterSection() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-6 backdrop-blur-sm">
             <Sparkles className="w-4 h-4" />
-            <span>Restez à jour</span>
+            <span>{t('home_newsletter_badge')}</span>
           </div>
           
           <h2 className="text-5xl font-bold mb-4 text-white">
-            Ne ratez aucune nouveauté IA
+            {t('home_newsletter_title')}
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Recevez chaque semaine les derniers outils IA, tendances et guides exclusifs directement dans votre boîte mail
+            {t('home_newsletter_subtitle')}
           </p>
         </div>
 
@@ -64,14 +66,14 @@ export default function NewsletterSection() {
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <Input
                   type="text"
-                  placeholder="Votre prénom"
+                  placeholder={t('home_newsletter_name')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="bg-white/10 border-white/20 text-white placeholder:text-slate-400 h-14 rounded-xl focus-visible:ring-purple-500"
                 />
                 <Input
                   type="email"
-                  placeholder="Votre email"
+                  placeholder={t('home_newsletter_email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -85,11 +87,11 @@ export default function NewsletterSection() {
                 className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg font-medium rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all"
               >
                 {loading ? (
-                  'Inscription...'
+                  t('home_newsletter_loading')
                 ) : (
                   <>
                     <Mail className="w-5 h-5 mr-2" />
-                    S'inscrire à la Newsletter
+                    {t('home_newsletter_btn')}
                   </>
                 )}
               </Button>
@@ -97,15 +99,15 @@ export default function NewsletterSection() {
               <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm text-slate-300">
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-400" />
-                  <span>Gratuit</span>
+                  <span>{t('home_newsletter_free')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-400" />
-                  <span>1 email/semaine</span>
+                  <span>{t('home_newsletter_frequency')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-400" />
-                  <span>Désabonnement facile</span>
+                  <span>{t('home_newsletter_unsubscribe')}</span>
                 </div>
               </div>
             </div>
@@ -116,10 +118,10 @@ export default function NewsletterSection() {
               <Check className="w-10 h-10 text-green-400" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">
-              Inscription réussie ! 🎉
+              {t('home_newsletter_success_title')}
             </h3>
             <p className="text-slate-300 text-lg">
-              Vous allez recevoir notre prochaine newsletter avec les meilleurs outils IA
+              {t('home_newsletter_success_subtitle')}
             </p>
           </div>
         )}
