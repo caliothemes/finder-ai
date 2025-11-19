@@ -126,6 +126,14 @@ export default function Layout({ children, currentPageName }) {
                           Compte Pro
                         </Link>
                       </DropdownMenuItem>
+                      {user.role === 'admin' && (
+                        <DropdownMenuItem asChild>
+                          <Link to={createPageUrl('Admin')} className="cursor-pointer">
+                            <Crown className="w-4 h-4 mr-2" />
+                            Admin
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
                         <LogOut className="w-4 h-4 mr-2" />
@@ -215,6 +223,15 @@ export default function Layout({ children, currentPageName }) {
                   >
                     Compte Pro
                   </Link>
+                  {user.role === 'admin' && (
+                    <Link
+                      to={createPageUrl('Admin')}
+                      className="block py-2 text-purple-600 font-semibold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Admin
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       handleLogout();
