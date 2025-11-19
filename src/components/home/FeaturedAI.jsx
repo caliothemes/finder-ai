@@ -142,15 +142,15 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 {/* Action button */}
                 <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
                   <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
-                    <span>Découvrir</span>
+                    <span>{t('home_featured_discover')}</span>
                     <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-              </div>
-            </div>
-          ))}
+                </div>
+                </div>
+                ))}
 
-          {/* Promo Card */}
+                {/* Promo Card */}
           <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-3xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">

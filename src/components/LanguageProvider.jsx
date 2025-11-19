@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const translations = {
+  // Toast messages
+  toast_favorite_added: "Ajouté aux favoris ❤️",
+  toast_favorite_removed: "Retiré des favoris",
   fr: {
     // Navigation
     nav_home: "Accueil",
@@ -282,6 +285,9 @@ const translations = {
     common_filter: "Filtrer",
   },
   en: {
+    // Toast messages
+    toast_favorite_added: "Added to favorites ❤️",
+    toast_favorite_removed: "Removed from favorites",
     // Navigation
     nav_home: "Home",
     nav_explore: "Explore",
