@@ -8,8 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 
 export default function Explore() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialSearch = urlParams.get('search') || '';
+  
   const [user, setUser] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPricing, setSelectedPricing] = useState('all');
   const [sortBy, setSortBy] = useState('-created_date');
