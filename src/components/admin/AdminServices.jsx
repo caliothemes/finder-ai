@@ -14,7 +14,8 @@ export default function AdminServices() {
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({
-    name: '', slug: '', tagline: '', description: '', categories: [],
+    name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', 
+    features: [], features_en: [], categories: [],
     pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: ''
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
@@ -37,7 +38,7 @@ export default function AdminServices() {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       setShowForm(false);
       setEditingService(null);
-      setFormData({ name: '', slug: '', tagline: '', description: '', categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
+      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
       toast.success('Service créé avec succès');
     },
   });
@@ -75,7 +76,11 @@ export default function AdminServices() {
       name: service.name,
       slug: service.slug,
       tagline: service.tagline || '',
+      tagline_en: service.tagline_en || '',
       description: service.description,
+      description_en: service.description_en || '',
+      features: service.features || [],
+      features_en: service.features_en || [],
       categories: service.categories || [],
       pricing: service.pricing,
       website_url: service.website_url || '',
@@ -163,17 +168,39 @@ export default function AdminServices() {
                   onChange={(e) => setFormData({...formData, slug: e.target.value})}
                 />
               </div>
-              <Input
-                placeholder="Tagline"
-                value={formData.tagline}
-                onChange={(e) => setFormData({...formData, tagline: e.target.value})}
-              />
-              <Textarea
-                placeholder="Description"
-                value={formData.description}
-                onChange={(e) => setFormData({...formData, description: e.target.value})}
-                required
-              />
+              <div>
+                <label className="text-sm font-medium mb-2 block">🇫🇷 Tagline (Français)</label>
+                <Input
+                  placeholder="Tagline en français"
+                  value={formData.tagline}
+                  onChange={(e) => setFormData({...formData, tagline: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">🇬🇧 Tagline (English)</label>
+                <Input
+                  placeholder="Tagline in English"
+                  value={formData.tagline_en}
+                  onChange={(e) => setFormData({...formData, tagline_en: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">🇫🇷 Description (Français)</label>
+                <Textarea
+                  placeholder="Description en français"
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">🇬🇧 Description (English)</label>
+                <Textarea
+                  placeholder="Description in English"
+                  value={formData.description_en}
+                  onChange={(e) => setFormData({...formData, description_en: e.target.value})}
+                />
+              </div>
               
               {/* Categories */}
               <div>
@@ -394,17 +421,39 @@ export default function AdminServices() {
                             onChange={(e) => setFormData({...formData, slug: e.target.value})}
                           />
                         </div>
-                        <Input
-                          placeholder="Tagline"
-                          value={formData.tagline}
-                          onChange={(e) => setFormData({...formData, tagline: e.target.value})}
-                        />
-                        <Textarea
-                          placeholder="Description"
-                          value={formData.description}
-                          onChange={(e) => setFormData({...formData, description: e.target.value})}
-                          required
-                        />
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇫🇷 Tagline (Français)</label>
+                          <Input
+                            placeholder="Tagline en français"
+                            value={formData.tagline}
+                            onChange={(e) => setFormData({...formData, tagline: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇬🇧 Tagline (English)</label>
+                          <Input
+                            placeholder="Tagline in English"
+                            value={formData.tagline_en}
+                            onChange={(e) => setFormData({...formData, tagline_en: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇫🇷 Description (Français)</label>
+                          <Textarea
+                            placeholder="Description en français"
+                            value={formData.description}
+                            onChange={(e) => setFormData({...formData, description: e.target.value})}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇬🇧 Description (English)</label>
+                          <Textarea
+                            placeholder="Description in English"
+                            value={formData.description_en}
+                            onChange={(e) => setFormData({...formData, description_en: e.target.value})}
+                          />
+                        </div>
                         
                         <div>
                           <label className="text-sm font-medium mb-2 block">Catégories</label>
