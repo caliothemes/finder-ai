@@ -48,8 +48,8 @@ export default function Home() {
   });
 
   const aiServices = rawAIServices.sort((a, b) => {
-    const aHasImage = a.cover_image_url || a.logo_url;
-    const bHasImage = b.cover_image_url || b.logo_url;
+    const aHasImage = a.cover_image_url;
+    const bHasImage = b.cover_image_url;
     
     if (aHasImage && !bHasImage) return -1;
     if (!aHasImage && bHasImage) return 1;
