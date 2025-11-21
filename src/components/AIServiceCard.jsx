@@ -24,7 +24,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
       gratuit: 'Gratuit',
       freemium: 'Freemium',
       payant: 'Payant',
-      abonnement: 'Abonnement'
+      abonnement: 'Abo'
     };
     return labels[pricing] || pricing;
   };
