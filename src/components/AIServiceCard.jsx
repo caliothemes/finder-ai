@@ -21,9 +21,9 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
 
   const getPricingLabel = (pricing) => {
     const labels = {
-      gratuit: 'Free',
-      freemium: 'Free+',
-      payant: '$',
+      gratuit: 'Gratuit',
+      freemium: 'Freemium',
+      payant: 'Payant',
       abonnement: 'Abo'
     };
     return labels[pricing] || pricing;

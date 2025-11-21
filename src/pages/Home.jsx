@@ -55,7 +55,7 @@ export default function Home() {
     if (!aHasImage && bHasImage) return 1;
     
     return new Date(b.created_date) - new Date(a.created_date);
-  }).filter(s => s.cover_image_url).slice(0, 12);
+  }).filter(s => s.cover_image_url).slice(0, 15);
 
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
