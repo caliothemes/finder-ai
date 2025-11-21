@@ -35,7 +35,7 @@ export default function Home() {
     queryFn: () => base44.entities.Category.list(),
   });
 
-  const { data: aiServices = [], isLoading: servicesLoading } = useQuery({
+  const { data: rawAIServices = [], isLoading: servicesLoading } = useQuery({
     queryKey: ['aiServices'],
     queryFn: async () => {
       const services = await base44.entities.AIService.filter(
@@ -45,6 +45,16 @@ export default function Home() {
       );
       return services;
     },
+  });
+
+  const aiServices = rawAIServices.sort((a, b) => {
+    const aHasImage = a.cover_image_url || a.logo_url;
+    const bHasImage = b.cover_image_url || b.logo_url;
+    
+    if (aHasImage && !bHasImage) return -1;
+    if (!aHasImage && bHasImage) return 1;
+    
+    return new Date(b.created_date) - new Date(a.created_date);
   });
 
   const { data: favorites = [] } = useQuery({
