@@ -52,7 +52,17 @@ export default function Category() {
     enabled: !!categoryId,
   });
 
-  const aiServices = allServices;
+  const aiServices = allServices.sort((a, b) => {
+    // Prioriser les IA avec image de couverture ou logo
+    const aHasImage = a.cover_image_url || a.logo_url;
+    const bHasImage = b.cover_image_url || b.logo_url;
+    
+    if (aHasImage && !bHasImage) return -1;
+    if (!aHasImage && bHasImage) return 1;
+    
+    // Si même statut d'image, trier par date
+    return new Date(b.created_date) - new Date(a.created_date);
+  });
 
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
