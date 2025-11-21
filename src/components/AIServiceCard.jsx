@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, Heart, ExternalLink, Eye } from 'lucide-react';
+import { Star, Heart, ExternalLink, Eye, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite }) {
+  const [pricingOpen, setPricingOpen] = useState(false);
+
   const getPricingBadge = (pricing) => {
     const colors = {
       gratuit: 'bg-green-100 text-green-800 border-green-200',
@@ -14,6 +17,26 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
       abonnement: 'bg-purple-100 text-purple-800 border-purple-200'
     };
     return colors[pricing] || colors.freemium;
+  };
+
+  const getPricingLabel = (pricing) => {
+    const labels = {
+      gratuit: 'Gratuit',
+      freemium: 'Freemium',
+      payant: 'Payant',
+      abonnement: 'Abonnement'
+    };
+    return labels[pricing] || pricing;
+  };
+
+  const getPricingDescription = (pricing) => {
+    const descriptions = {
+      gratuit: 'Service entièrement gratuit',
+      freemium: 'Gratuit avec options payantes',
+      payant: 'Service payant',
+      abonnement: 'Facturation mensuelle ou annuelle'
+    };
+    return descriptions[pricing] || '';
   };
 
   return (
@@ -83,9 +106,22 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
               <span>{service.views || 0}</span>
             </div>
           </div>
-          <Badge className={`${getPricingBadge(service.pricing)} border text-xs`}>
-            {service.pricing}
-          </Badge>
+          <Popover open={pricingOpen} onOpenChange={setPricingOpen}>
+            <PopoverTrigger asChild>
+              <button className="focus:outline-none">
+                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
+                  {getPricingLabel(service.pricing)}
+                  <Info className="w-3 h-3" />
+                </Badge>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-3" align="end">
+              <div className="space-y-2">
+                <div className="font-semibold text-sm">{getPricingLabel(service.pricing)}</div>
+                <div className="text-xs text-slate-600">{getPricingDescription(service.pricing)}</div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Action */}
