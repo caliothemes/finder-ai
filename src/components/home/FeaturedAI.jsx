@@ -167,9 +167,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     <span className="text-xs text-slate-500">({service.views || 0})</span>
                   </div>
                   
-                  <Badge className={`${getPricingBadge(service.pricing)} border`}>
-                    {service.pricing}
-                  </Badge>
+                  <PricingBadge service={service} />
                 </div>
 
                 {/* Tags */}
@@ -297,9 +295,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     <span className="text-xs text-slate-500">({service.views || 0})</span>
                   </div>
                   
-                  <Badge className={`${getPricingBadge(service.pricing)} border`}>
-                    {service.pricing}
-                  </Badge>
+                  <PricingBadge service={service} />
                 </div>
 
                 {/* Tags */}
