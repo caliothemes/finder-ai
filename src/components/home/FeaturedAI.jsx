@@ -28,9 +28,9 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
 
   const getPricingLabel = (pricing) => {
     const labels = {
-      gratuit: 'Gratuit',
-      freemium: 'Freemium',
-      payant: 'Payant',
+      gratuit: 'Free',
+      freemium: 'Free+',
+      payant: '$',
       abonnement: 'Abo'
     };
     return labels[pricing] || pricing;
