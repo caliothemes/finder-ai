@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown } from 'lucide-react';
+import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLanguage } from '@/components/LanguageProvider';
 import ActiveBanner from '@/components/banners/ActiveBanner';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
   const { t } = useLanguage();
+  const [pricingOpen, setPricingOpen] = useState({});
   
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
@@ -23,6 +25,45 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     };
     return colors[pricing] || colors.freemium;
   };
+
+  const getPricingLabel = (pricing) => {
+    const labels = {
+      gratuit: 'Gratuit',
+      freemium: 'Freemium',
+      payant: 'Payant',
+      abonnement: 'Abo'
+    };
+    return labels[pricing] || pricing;
+  };
+
+  const getPricingDescription = (pricing) => {
+    const descriptions = {
+      gratuit: 'Service entièrement gratuit',
+      freemium: 'Gratuit avec options payantes',
+      payant: 'Service payant',
+      abonnement: 'Facturation mensuelle ou annuelle'
+    };
+    return descriptions[pricing] || '';
+  };
+
+  const PricingBadge = ({ service }) => (
+    <Popover open={pricingOpen[service.id]} onOpenChange={(open) => setPricingOpen({...pricingOpen, [service.id]: open})}>
+      <PopoverTrigger asChild>
+        <button className="focus:outline-none">
+          <Badge className={`${getPricingBadge(service.pricing)} border cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
+            {getPricingLabel(service.pricing)}
+            <Info className="w-3 h-3" />
+          </Badge>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-64 p-3" align="end">
+        <div className="space-y-2">
+          <div className="font-semibold text-sm">{getPricingLabel(service.pricing)}</div>
+          <div className="text-xs text-slate-600">{getPricingDescription(service.pricing)}</div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
 
   return (
     <div className="py-24 px-6 bg-slate-50">
