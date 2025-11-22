@@ -42,35 +42,38 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `SEARCH THE WEB NOW for: "${query}"
+          prompt: `Tu es un expert en recherche d'outils IA. Cherche sur le web des outils IA sur: "${query}"
 
-Your task: Find 20-30 REAL AI tools/services that currently exist on the internet.
+TÂCHE: Trouve 15-20 outils IA RÉELS avec ces informations:
 
-Use web search to discover actual AI products. For EACH tool found, return:
-{
-  "name": "exact tool name",
-  "website_url": "full URL like https://example.com",
-  "description": "detailed explanation of what it does (150+ words, in French)",
-  "tagline": "catchy one-liner (French, max 80 characters)",
-  "features": ["feature 1", "feature 2", "feature 3", "feature 4"],
-  "pricing": "gratuit" or "freemium" or "payant" or "abonnement"
-}
+Pour CHAQUE outil:
+- name: Nom exact (ex: "ChatGPT", "Midjourney")
+- website_url: URL complète (ex: "https://openai.com/chatgpt")
+- description: Ce que fait l'outil en détail (100-150 mots, en français)
+- tagline: Phrase d'accroche courte (français, max 60 caractères)
+- features: Liste de 4-5 fonctionnalités clés (en français)
+- pricing: "gratuit", "freemium", "payant" ou "abonnement"
 
-CRITICAL INSTRUCTIONS:
-1. Use web search to find REAL tools - don't invent or guess
-2. Include BOTH famous tools (ChatGPT, Midjourney, etc.) AND niche/new ones
-3. Verify each website URL exists before including it
-4. Focus on tools launched between 2022-2025
-5. Provide diverse tools across different AI categories
-6. All descriptions and features MUST be in French
-7. Return 20-30 different services minimum
+EXEMPLES CONCRETS À INCLURE:
+- ChatGPT (https://chat.openai.com)
+- Midjourney (https://midjourney.com)
+- Claude (https://claude.ai)
+- Jasper (https://jasper.ai)
+- Copy.ai (https://copy.ai)
+- Runway (https://runwayml.com)
+- ElevenLabs (https://elevenlabs.io)
+- Synthesia (https://synthesia.io)
+- Notion AI (https://notion.so)
 
-Examples of good responses:
-- Midjourney (https://midjourney.com) - AI image generation
-- Jasper (https://jasper.ai) - AI writing assistant
-- Runway (https://runwayml.com) - AI video editing
+RÈGLES STRICTES:
+1. Cherche de VRAIS outils qui existent maintenant
+2. Vérifie que les URLs sont correctes
+3. Mélange outils connus ET nouveaux
+4. Varie les catégories (image, texte, vidéo, code, etc.)
+5. Descriptions en français, complètes et détaillées
+6. Retourne minimum 15 outils différents
 
-DO NOT return placeholder data. Search the web and find real services!`,
+Ne JAMAIS inventer. Utilise la recherche web pour trouver des outils réels.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -140,6 +143,15 @@ DO NOT return placeholder data. Search the web and find real services!`,
               if (codeCat) suggestedCategories.push(codeCat.id);
             }
 
+            // Extraire le domaine pour récupérer le favicon
+            let logoUrl = '';
+            try {
+              const url = new URL(service.website_url);
+              logoUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
+            } catch (error) {
+              console.log(`Invalid URL for ${service.name}`);
+            }
+
             allDiscoveries.push({
               name: service.name,
               website_url: service.website_url,
@@ -149,7 +161,7 @@ DO NOT return placeholder data. Search the web and find real services!`,
               suggested_pricing: service.pricing || 'freemium',
               suggested_categories: suggestedCategories,
               cover_image_url: '',
-              logo_url: '',
+              logo_url: logoUrl,
               status: 'new',
               source: `Auto scan: ${query}`
             });
