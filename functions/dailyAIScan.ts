@@ -189,22 +189,45 @@ Ne JAMAIS inventer. Utilise la recherche web pour trouver des outils réels.`,
         // Créer les discoveries
         const createdDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
         
-        // Générer les images en parallèle pour ce batch
+        // Récupérer screenshots ou générer images en parallèle pour ce batch
         const imagePromises = createdDiscoveries.map(async (discovery) => {
           try {
-            const imagePrompt = `Professional, modern, tech-focused cover image for ${discovery.name}, an AI tool. Abstract, gradient, futuristic style with purple and pink tones. No text, no words.`;
-            const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-              prompt: imagePrompt
-            });
+            // Essayer de prendre un screenshot du site web
+            const screenshotUrl = `https://api.screenshotone.com/take?access_key=nLFJt8mJUUt2uw&url=${encodeURIComponent(discovery.website_url)}&format=jpg&image_quality=80&viewport_width=1200&viewport_height=630&full_page=false&device_scale_factor=1&cache=true`;
             
-            // Mettre à jour la discovery avec l'image
-            await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
-              cover_image_url: imageResult.url
-            });
+            const screenshotResponse = await fetch(screenshotUrl);
             
-            console.log(`✅ Image generated for ${discovery.name}`);
+            if (screenshotResponse.ok) {
+              const imageBlob = await screenshotResponse.blob();
+              const file = new File([imageBlob], `${discovery.name.replace(/[^a-z0-9]/gi, '-')}-cover.jpg`, { type: 'image/jpeg' });
+              
+              // Upload l'image
+              const { file_url } = await base44.asServiceRole.integrations.Core.UploadFile({ file });
+              
+              await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
+                cover_image_url: file_url
+              });
+              
+              console.log(`✅ Screenshot captured for ${discovery.name}`);
+            } else {
+              throw new Error('Screenshot failed, using AI generation');
+            }
           } catch (error) {
-            console.log(`❌ Could not generate image for ${discovery.name}:`, error.message);
+            // Fallback: générer une image IA
+            try {
+              const imagePrompt = `Modern professional banner image for ${discovery.name} - ${discovery.tagline}. Technology, AI theme, vibrant purple and pink gradient, minimalist design, futuristic. No text overlay.`;
+              const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+                prompt: imagePrompt
+              });
+              
+              await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
+                cover_image_url: imageResult.url
+              });
+              
+              console.log(`✅ AI image generated for ${discovery.name}`);
+            } catch (genError) {
+              console.log(`❌ Could not get image for ${discovery.name}:`, genError.message);
+            }
           }
         });
         
