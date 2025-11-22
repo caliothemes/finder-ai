@@ -19,18 +19,18 @@ Deno.serve(async (req) => {
 
     const allExistingUrls = [...new Set([...existingUrls, ...existingDiscoveryUrls])];
 
-    // Sources de recherche pour ratisser large - focus sur les 10 premières seulement pour test
+    // Sources de recherche pour ratisser large
     const searchQueries = [
-      "Top 50 AI image generation tools 2025: Midjourney, DALL-E, Stable Diffusion alternatives",
-      "Best AI video editing software: Runway ML, Descript, Pictory, InVideo, Synthesia",
-      "AI writing assistants: Jasper, Copy.ai, Writesonic, Rytr, ChatGPT alternatives",
-      "AI coding tools: GitHub Copilot, Tabnine, Codeium, Replit Ghostwriter",
-      "AI chatbots and virtual assistants: Claude, Perplexity, Character.AI, Replika",
-      "AI design tools: Canva AI, Uizard, Galileo AI, Looka logo maker",
-      "AI voice generators: ElevenLabs, Play.ht, Murf, Resemble AI",
-      "AI productivity tools: Notion AI, ClickUp AI, Otter.ai transcription",
-      "AI marketing tools: Jasper Marketing, Copy.ai, Surfer SEO",
-      "AI data analytics: Tableau AI, Power BI AI, DataRobot"
+      "list of new AI image generation tools launched in 2024-2025 with websites",
+      "best AI video editing software products with URLs and pricing",
+      "popular AI writing tools and content generators website list",
+      "AI coding assistants and code completion tools 2025",
+      "trending AI chatbot platforms and conversational AI services",
+      "AI design and UI/UX tools with official websites",
+      "AI voice generation and text-to-speech services",
+      "AI productivity and automation tools directory",
+      "AI SEO and marketing automation platforms",
+      "AI data analysis and business intelligence tools"
     ];
 
     const allDiscoveries = [];
