@@ -42,25 +42,35 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `You are an AI service discovery bot. Search the web for "${query}".
-          
-Find and extract 30-50 real AI services/tools that exist right now.
+          prompt: `SEARCH THE WEB NOW for: "${query}"
 
-For each service, provide:
-- name: Full service name
-- website_url: Official website URL (must be real and accessible)
-- description: What the service does (2-3 sentences)
-- tagline: Short catchy description (10 words max)
-- features: Array of 3-5 key features
-- pricing: One of: "gratuit", "freemium", "payant", "abonnement"
+Your task: Find 20-30 REAL AI tools/services that currently exist on the internet.
 
-IMPORTANT:
-- Only include services that have an actual website
-- Verify URLs are real (use .com, .ai, .io, .app domains)
-- No concept services or ideas, only real launched products
-- Include both popular and lesser-known services
-- Focus on services from the last 3 years
-- Diversify: don't just list chatbots, include various AI categories`,
+Use web search to discover actual AI products. For EACH tool found, return:
+{
+  "name": "exact tool name",
+  "website_url": "full URL like https://example.com",
+  "description": "detailed explanation of what it does (150+ words, in French)",
+  "tagline": "catchy one-liner (French, max 80 characters)",
+  "features": ["feature 1", "feature 2", "feature 3", "feature 4"],
+  "pricing": "gratuit" or "freemium" or "payant" or "abonnement"
+}
+
+CRITICAL INSTRUCTIONS:
+1. Use web search to find REAL tools - don't invent or guess
+2. Include BOTH famous tools (ChatGPT, Midjourney, etc.) AND niche/new ones
+3. Verify each website URL exists before including it
+4. Focus on tools launched between 2022-2025
+5. Provide diverse tools across different AI categories
+6. All descriptions and features MUST be in French
+7. Return 20-30 different services minimum
+
+Examples of good responses:
+- Midjourney (https://midjourney.com) - AI image generation
+- Jasper (https://jasper.ai) - AI writing assistant
+- Runway (https://runwayml.com) - AI video editing
+
+DO NOT return placeholder data. Search the web and find real services!`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
