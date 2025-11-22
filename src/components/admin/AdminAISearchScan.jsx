@@ -16,6 +16,8 @@ export default function AdminAISearchScan() {
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [isScanning, setIsScanning] = useState(false);
+  const [approvingDiscovery, setApprovingDiscovery] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const queryClient = useQueryClient();
 
   const { data: discoveries = [], isLoading } = useQuery({
@@ -117,7 +119,8 @@ export default function AdminAISearchScan() {
       toast.error('Nom et URL sont requis');
       return;
     }
-    approveDiscoveryMutation.mutate(discovery);
+    setApprovingDiscovery(discovery);
+    setSelectedCategories(discovery.suggested_categories || []);
   };
 
   const newCount = discoveries.filter(d => d.status === 'new').length;
@@ -401,6 +404,68 @@ export default function AdminAISearchScan() {
           </div>
         )}
       </div>
+
+      {/* Modal de validation avec sélection de catégories */}
+      {approvingDiscovery && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-2">Approuver: {approvingDiscovery.name}</h2>
+            <p className="text-slate-600 mb-6">Sélectionnez au moins une catégorie pour ce service IA</p>
+            
+            <div className="space-y-2 mb-6 max-h-96 overflow-y-auto">
+              {categories.map(cat => (
+                <label 
+                  key={cat.id} 
+                  className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(cat.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedCategories([...selectedCategories, cat.id]);
+                      } else {
+                        setSelectedCategories(selectedCategories.filter(id => id !== cat.id));
+                      }
+                    }}
+                    className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium text-slate-900">{cat.name}</div>
+                    {cat.description && (
+                      <div className="text-sm text-slate-500">{cat.description}</div>
+                    )}
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={() => approveDiscoveryMutation.mutate({ 
+                  discovery: approvingDiscovery, 
+                  categories: selectedCategories 
+                })}
+                disabled={selectedCategories.length === 0 || approveDiscoveryMutation.isPending}
+                className="bg-green-600 hover:bg-green-700 text-white flex-1"
+              >
+                <Check className="w-4 h-4 mr-2" />
+                {approveDiscoveryMutation.isPending ? 'Création...' : `Approuver (${selectedCategories.length} catégorie${selectedCategories.length > 1 ? 's' : ''})`}
+              </Button>
+              <Button
+                onClick={() => {
+                  setApprovingDiscovery(null);
+                  setSelectedCategories([]);
+                }}
+                variant="outline"
+                disabled={approveDiscoveryMutation.isPending}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
