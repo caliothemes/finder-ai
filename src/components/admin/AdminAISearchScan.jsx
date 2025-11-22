@@ -38,22 +38,17 @@ export default function AdminAISearchScan() {
   });
 
   const approveDiscoveryMutation = useMutation({
-    mutationFn: async (discovery) => {
+    mutationFn: async ({ discovery, categories }) => {
       const slug = discovery.name.toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-
-      // S'assurer que les catégories sont des IDs valides
-      const validCategories = (discovery.suggested_categories || []).filter(catId => 
-        categories.some(c => c.id === catId)
-      );
 
       const aiServiceData = {
         name: discovery.name,
         slug: slug,
         tagline: discovery.tagline || '',
         description: discovery.description || '',
-        categories: validCategories.length > 0 ? validCategories : [],
+        categories: categories,
         logo_url: discovery.logo_url || '',
         cover_image_url: discovery.cover_image_url || '',
         website_url: discovery.website_url,
@@ -75,6 +70,8 @@ export default function AdminAISearchScan() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['discoveries'] });
+      setApprovingDiscovery(null);
+      setSelectedCategories([]);
       toast.success('Service IA créé et approuvé !');
     },
   });
