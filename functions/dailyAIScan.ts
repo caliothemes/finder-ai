@@ -139,6 +139,18 @@ IMPORTANT:
               if (codeCat) suggestedCategories.push(codeCat.id);
             }
 
+            // Générer une image de couverture avec l'IA
+            let coverImageUrl = '';
+            try {
+              const imagePrompt = `Professional, modern, tech-focused cover image for ${service.name}, an AI tool for ${service.tagline || service.description?.slice(0, 100)}. Abstract, gradient, futuristic style with purple and pink tones. No text.`;
+              const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+                prompt: imagePrompt
+              });
+              coverImageUrl = imageResult.url;
+            } catch (error) {
+              console.log(`Could not generate image for ${service.name}`);
+            }
+
             allDiscoveries.push({
               name: service.name,
               website_url: service.website_url,
@@ -147,6 +159,8 @@ IMPORTANT:
               features: service.features || [],
               suggested_pricing: service.pricing || 'freemium',
               suggested_categories: suggestedCategories,
+              cover_image_url: coverImageUrl,
+              logo_url: '', // Logo sera ajouté manuellement si nécessaire
               status: 'new',
               source: `Auto scan: ${query}`
             });

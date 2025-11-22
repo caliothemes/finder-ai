@@ -43,12 +43,17 @@ export default function AdminAISearchScan() {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
+      // S'assurer que les catégories sont des IDs valides
+      const validCategories = (discovery.suggested_categories || []).filter(catId => 
+        categories.some(c => c.id === catId)
+      );
+
       const aiServiceData = {
         name: discovery.name,
         slug: slug,
         tagline: discovery.tagline || '',
         description: discovery.description || '',
-        categories: discovery.suggested_categories || [],
+        categories: validCategories.length > 0 ? validCategories : [],
         logo_url: discovery.logo_url || '',
         cover_image_url: discovery.cover_image_url || '',
         website_url: discovery.website_url,
