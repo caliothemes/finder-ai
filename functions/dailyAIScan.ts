@@ -130,18 +130,6 @@ IMPORTANT:
               if (codeCat) suggestedCategories.push(codeCat.id);
             }
 
-            // Générer une image de couverture avec l'IA
-            let coverImageUrl = '';
-            try {
-              const imagePrompt = `Professional, modern, tech-focused cover image for ${service.name}, an AI tool for ${service.tagline || service.description?.slice(0, 100)}. Abstract, gradient, futuristic style with purple and pink tones. No text.`;
-              const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: imagePrompt
-              });
-              coverImageUrl = imageResult.url;
-            } catch (error) {
-              console.log(`Could not generate image for ${service.name}`);
-            }
-
             allDiscoveries.push({
               name: service.name,
               website_url: service.website_url,
@@ -150,8 +138,8 @@ IMPORTANT:
               features: service.features || [],
               suggested_pricing: service.pricing || 'freemium',
               suggested_categories: suggestedCategories,
-              cover_image_url: coverImageUrl,
-              logo_url: '', // Logo sera ajouté manuellement si nécessaire
+              cover_image_url: '',
+              logo_url: '',
               status: 'new',
               source: `Auto scan: ${query}`
             });
@@ -168,14 +156,38 @@ IMPORTANT:
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
-    // Créer les découvertes en batch
+    // Créer les découvertes en batch et générer les images en parallèle
     if (allDiscoveries.length > 0) {
       console.log(`📝 Creating ${allDiscoveries.length} new discoveries...`);
       
-      // Créer par batch de 50
-      for (let i = 0; i < allDiscoveries.length; i += 50) {
-        const batch = allDiscoveries.slice(i, i + 50);
-        await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
+      // Créer par batch de 20 pour éviter timeout
+      for (let i = 0; i < allDiscoveries.length; i += 20) {
+        const batch = allDiscoveries.slice(i, i + 20);
+        
+        // Créer les discoveries
+        const createdDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
+        
+        // Générer les images en parallèle pour ce batch
+        const imagePromises = createdDiscoveries.map(async (discovery) => {
+          try {
+            const imagePrompt = `Professional, modern, tech-focused cover image for ${discovery.name}, an AI tool. Abstract, gradient, futuristic style with purple and pink tones. No text, no words.`;
+            const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+              prompt: imagePrompt
+            });
+            
+            // Mettre à jour la discovery avec l'image
+            await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
+              cover_image_url: imageResult.url
+            });
+            
+            console.log(`✅ Image generated for ${discovery.name}`);
+          } catch (error) {
+            console.log(`❌ Could not generate image for ${discovery.name}:`, error.message);
+          }
+        });
+        
+        // Attendre que toutes les images du batch soient générées
+        await Promise.all(imagePromises);
       }
     }
 
