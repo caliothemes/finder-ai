@@ -4,11 +4,7 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Vérifier l'authentification pour les appels manuels
-    const user = await base44.auth.me();
-    const isManual = user && user.role === 'admin';
-
-    console.log('🔍 Starting AI scan...', isManual ? '(Manual)' : '(Automated)');
+    console.log('🔍 Starting AI scan...');
 
     // Récupérer les services existants pour éviter les doublons
     const existingServices = await base44.asServiceRole.entities.AIService.list();
@@ -23,23 +19,18 @@ Deno.serve(async (req) => {
 
     const allExistingUrls = [...new Set([...existingUrls, ...existingDiscoveryUrls])];
 
-    // Sources de recherche pour ratisser large
+    // Sources de recherche pour ratisser large - focus sur les 10 premières seulement pour test
     const searchQueries = [
-      "AI tools 2025 new startups",
-      "artificial intelligence SaaS products",
-      "machine learning applications launched",
-      "AI chatbot services",
-      "AI image generation tools",
-      "AI video editing software",
-      "AI writing assistants",
-      "AI code generators",
-      "AI design tools",
-      "AI productivity tools",
-      "generative AI applications",
-      "AI voice synthesis tools",
-      "AI translation services",
-      "AI data analysis platforms",
-      "AI marketing automation tools"
+      "Top 50 AI image generation tools 2025: Midjourney, DALL-E, Stable Diffusion alternatives",
+      "Best AI video editing software: Runway ML, Descript, Pictory, InVideo, Synthesia",
+      "AI writing assistants: Jasper, Copy.ai, Writesonic, Rytr, ChatGPT alternatives",
+      "AI coding tools: GitHub Copilot, Tabnine, Codeium, Replit Ghostwriter",
+      "AI chatbots and virtual assistants: Claude, Perplexity, Character.AI, Replika",
+      "AI design tools: Canva AI, Uizard, Galileo AI, Looka logo maker",
+      "AI voice generators: ElevenLabs, Play.ht, Murf, Resemble AI",
+      "AI productivity tools: Notion AI, ClickUp AI, Otter.ai transcription",
+      "AI marketing tools: Jasper Marketing, Copy.ai, Surfer SEO",
+      "AI data analytics: Tableau AI, Power BI AI, DataRobot"
     ];
 
     const allDiscoveries = [];
