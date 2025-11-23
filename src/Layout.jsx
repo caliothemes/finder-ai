@@ -50,17 +50,24 @@ function LayoutContent({ children, currentPageName }) {
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
         {/* Logo Section */}
-        <div className="p-6 border-b border-slate-200 flex flex-col items-center justify-center">
-          <div className="mb-3">
-            <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group">
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow blur-sm opacity-75 group-hover:opacity-100" style={{ padding: '5px' }}>
-                  <div className="w-full h-full rounded-full bg-white" />
-                </div>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '5px' }}>
-                  <div className="w-full h-full rounded-full bg-white" />
-                </div>
-                <div className="relative flex items-center justify-center" style={{ padding: '10px' }}>
+        <div className="p-6 border-b border-slate-200 flex items-center justify-center">
+          <div className="relative inline-flex items-center justify-center mb-3">
+            <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative">
+              {/* Glow effect externe */}
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-75 blur-xl group-hover:opacity-100 animate-pulse-slow"></div>
+
+              {/* Bordure animée 1 */}
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '3px' }}>
+                <div className="w-full h-full rounded-full bg-white" />
+              </div>
+
+              {/* Bordure animée 2 (sens inverse) */}
+              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-l from-cyan-500 via-purple-500 to-pink-500 animate-spin-reverse opacity-80" style={{ padding: '2px' }}>
+                <div className="w-full h-full rounded-full bg-white" />
+              </div>
+
+              {/* Logo */}
+              <div className="relative bg-white rounded-full p-2 flex items-center justify-center">
                 <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -97,10 +104,9 @@ function LayoutContent({ children, currentPageName }) {
               <circle cx="100" cy="160" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
                 </svg>
                 </div>
-                </div>
                 </button>
                 </div>
-                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1 text-center">
             Finder AI
           </h2>
           <p className="text-xs text-slate-600">
@@ -460,15 +466,28 @@ function LayoutContent({ children, currentPageName }) {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
           }
-          .animate-spin-slow {
-            animation: spin-slow 2s linear infinite;
+          @keyframes spin-reverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
           }
-          @keyframes pulse-glow {
-            0%, 100% { opacity: 0.75; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+          @keyframes pulse-slow {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 1; }
+          }
+          .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+          }
+          .animate-spin-reverse {
+            animation: spin-reverse 4s linear infinite;
+          }
+          .animate-pulse-slow {
+            animation: pulse-slow 2s ease-in-out infinite;
           }
           .group:hover .animate-spin-slow {
-            animation: spin-slow 1s linear infinite;
+            animation: spin-slow 1.5s linear infinite;
+          }
+          .group:hover .animate-spin-reverse {
+            animation: spin-reverse 2s linear infinite;
           }
         `}</style>
 
