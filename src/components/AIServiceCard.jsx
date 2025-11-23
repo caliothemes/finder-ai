@@ -126,9 +126,9 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
 
         {/* Action */}
         <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
-          <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
+          <Button className="w-full bg-purple-950 hover:bg-purple-900 text-white">
             <span>Découvrir</span>
-            <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+            <ExternalLink className="w-4 h-4 ml-2" />
           </Button>
         </Link>
       </div>
