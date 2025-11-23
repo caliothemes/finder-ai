@@ -53,7 +53,57 @@ function LayoutContent({ children, currentPageName }) {
         <div className="p-6 border-b border-slate-200 flex flex-col items-center justify-center">
           <div className="relative inline-flex items-center justify-center mb-3">
             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative">
-        ...
+              {/* Glow effect externe */}
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-75 blur-xl group-hover:opacity-100 animate-pulse-slow"></div>
+
+              {/* Bordure animée 1 */}
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '3px' }}>
+                <div className="w-full h-full rounded-full bg-white" />
+              </div>
+
+              {/* Bordure animée 2 (sens inverse) */}
+              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-l from-cyan-500 via-purple-500 to-pink-500 animate-spin-reverse opacity-80" style={{ padding: '2px' }}>
+                <div className="w-full h-full rounded-full bg-white" />
+              </div>
+
+              {/* Logo */}
+              <div className="relative bg-white rounded-full p-2 flex items-center justify-center">
+                <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#06b6d4" />
+                      <stop offset="50%" stopColor="#9333ea" />
+                      <stop offset="100%" stopColor="#ec4899" />
+                    </linearGradient>
+                    <filter id="glowSidebar">
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="90" r="40" stroke="url(#gradientSidebar)" strokeWidth="8" fill="none" filter="url(#glowSidebar)"/>
+                  <circle cx="100" cy="90" r="8" fill="url(#gradientSidebar)"/>
+                  <path d="M 130 110 L 155 135" stroke="url(#gradientSidebar)" strokeWidth="10" strokeLinecap="round" filter="url(#glowSidebar)"/>
+                  <line x1="100" y1="50" x2="100" y2="20" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+                  <circle cx="100" cy="20" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+                  <line x1="125" y1="60" x2="155" y2="30" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+                  <circle cx="155" cy="30" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+                  <line x1="140" y1="90" x2="180" y2="90" stroke="#ec4899" strokeWidth="2" opacity="0.4" />
+                  <circle cx="180" cy="90" r="6" fill="#ec4899" filter="url(#glowSidebar)" />
+                  <line x1="125" y1="115" x2="145" y2="145" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+                  <circle cx="145" cy="145" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+                  <line x1="60" y1="90" x2="20" y2="90" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+                  <circle cx="20" cy="90" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+                  <line x1="75" y1="60" x2="45" y2="30" stroke="#ec4899" strokeWidth="2" opacity="0.4" />
+                  <circle cx="45" cy="30" r="6" fill="#ec4899" filter="url(#glowSidebar)" />
+                  <line x1="75" y1="115" x2="50" y2="145" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+                  <circle cx="50" cy="145" r="6" fill="#9333ea" filter="url(#glowSidebar)" />
+                  <line x1="100" y1="130" x2="100" y2="160" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+                  <circle cx="100" cy="160" r="6" fill="#06b6d4" filter="url(#glowSidebar)" />
+                </svg>
+              </div>
             </button>
           </div>
           <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1 text-center">
