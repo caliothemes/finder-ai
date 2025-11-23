@@ -115,7 +115,7 @@ export default function Home() {
       {/* CTA Button */}
       <div className="py-12 px-6 flex justify-center">
         <Link to={createPageUrl('Explore')}>
-          <Button className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white px-12 py-6 text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105">
+          <Button className="bg-purple-950 hover:bg-purple-900 text-white px-12 py-6 text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105">
             <Sparkles className="w-6 h-6 mr-3" />
             {t('explore_continue')}
             <ChevronRight className="w-6 h-6 ml-3" />

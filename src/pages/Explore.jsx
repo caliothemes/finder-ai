@@ -249,7 +249,7 @@ export default function Explore() {
                   {t('promo_increase_visibility')}
                 </p>
                 <Link to={createPageUrl('ProAccount')}>
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  <Button className="bg-purple-950 hover:bg-purple-900 text-white">
                     <Crown className="w-4 h-4 mr-2" />
                     {t('promo_become_pro')}
                   </Button>

@@ -433,7 +433,7 @@ export default function SubmitAI() {
               <Button
                 onClick={() => submitAIMutation.mutate()}
                 disabled={submitAIMutation.isPending}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg py-6"
+                className="w-full bg-purple-950 hover:bg-purple-900 text-white text-lg py-6"
               >
                 {submitAIMutation.isPending ? (
                   'Soumission en cours...'
