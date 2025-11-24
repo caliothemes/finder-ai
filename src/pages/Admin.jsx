@@ -18,6 +18,7 @@ import AdminEmailTemplates from '@/components/admin/AdminEmailTemplates';
 import AdminStories from '@/components/admin/AdminStories';
 import AdminAISearchScan from '@/components/admin/AdminAISearchScan';
 import AdminOwnershipClaims from '@/components/admin/AdminOwnershipClaims';
+import AdminLegalSections from '@/components/admin/AdminLegalSections';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -65,6 +66,7 @@ export default function Admin() {
     { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
     { id: 'logo', label: 'Logo', icon: Image, description: 'Personnaliser le logo', color: 'from-slate-600 to-gray-600' },
     { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600' },
+    { id: 'legal', label: 'Mentions Légales', icon: FileText, description: 'Gérer les mentions légales', color: 'from-slate-600 to-zinc-600' },
   ];
 
   const renderSection = () => {
@@ -80,6 +82,7 @@ export default function Admin() {
       case 'newsletter': return <AdminNewsletter />;
       case 'logo': return <AdminLogo />;
       case 'ownership': return <AdminOwnershipClaims />;
+      case 'legal': return <AdminLegalSections />;
       default: return <AdminAISearchScan />;
     }
   };

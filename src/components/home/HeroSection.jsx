@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, TrendingUp, Zap } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { createPageUrl } from '@/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import { useLanguage } from '@/components/LanguageProvider';
+import SmartSearchBar from '@/components/home/SmartSearchBar';
 
 export default function HeroSection({ onSearch }) {
-  const [searchQuery, setSearchQuery] = useState('');
   const [floatingElements, setFloatingElements] = useState([]);
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -23,13 +21,6 @@ export default function HeroSection({ onSearch }) {
     }));
     setFloatingElements(elements);
   }, []);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(createPageUrl(`Explore?search=${encodeURIComponent(searchQuery)}`));
-    }
-  };
 
   return (
     <div className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 pt-20">
@@ -87,28 +78,10 @@ export default function HeroSection({ onSearch }) {
           {t('home_hero_description')}
         </p>
 
-        {/* Search bar */}
-        <form onSubmit={handleSearch} className="max-w-3xl mx-auto mb-12">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300" />
-            <div className="relative flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
-              <Search className="absolute left-6 w-6 h-6 text-slate-400" />
-              <Input
-                type="text"
-                placeholder={t('home_hero_search_placeholder')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-16 pr-40 py-7 bg-transparent border-0 text-white placeholder:text-slate-400 text-lg focus-visible:ring-0"
-              />
-              <Button 
-                type="submit"
-                className="absolute right-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-5 rounded-xl font-medium transition-all shadow-lg hover:shadow-purple-500/50"
-              >
-                {t('home_hero_search_btn')}
-              </Button>
-            </div>
-          </div>
-        </form>
+        {/* Smart Search bar */}
+        <div className="max-w-3xl mx-auto mb-12">
+          <SmartSearchBar onSearch={(query) => navigate(createPageUrl(`Explore?search=${encodeURIComponent(query)}`))} />
+        </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto px-6 pb-12">
