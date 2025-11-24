@@ -52,38 +52,26 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Tu es un expert en recherche d'outils IA. Cherche sur le web des outils IA sur: "${query}"
+          prompt: `MISSION: Recherche web approfondie sur "${query}"
 
-TÂCHE: Trouve 15-20 outils IA RÉELS avec ces informations:
+Tu dois utiliser Internet pour trouver des outils IA RÉELS. Cherche sur Google, Product Hunt, et les sites spécialisés.
 
-Pour CHAQUE outil:
-- name: Nom exact (ex: "ChatGPT", "Midjourney")
-- website_url: URL complète (ex: "https://openai.com/chatgpt")
-- description: Ce que fait l'outil en détail (100-150 mots, en français)
-- tagline: Phrase d'accroche courte (français, max 60 caractères)
-- features: Liste de 4-5 fonctionnalités clés (en français)
-- pricing: "gratuit", "freemium", "payant" ou "abonnement"
+RETOURNE EXACTEMENT 10-15 outils avec:
+- name: Nom EXACT du produit
+- website_url: URL OFFICIELLE complète (pas d'URL inventée!)
+- description: 80-120 mots en français décrivant l'outil
+- tagline: Slogan court en français (max 50 caractères)
+- features: 4 fonctionnalités principales en français
+- pricing: "gratuit" / "freemium" / "payant" / "abonnement"
 
-EXEMPLES CONCRETS À INCLURE:
-- ChatGPT (https://chat.openai.com)
-- Midjourney (https://midjourney.com)
-- Claude (https://claude.ai)
-- Jasper (https://jasper.ai)
-- Copy.ai (https://copy.ai)
-- Runway (https://runwayml.com)
-- ElevenLabs (https://elevenlabs.io)
-- Synthesia (https://synthesia.io)
-- Notion AI (https://notion.so)
+OUTILS CONNUS À INCLURE SI PERTINENTS:
+ChatGPT (chat.openai.com), Claude (claude.ai), Midjourney (midjourney.com), DALL-E (openai.com/dall-e), Stable Diffusion (stability.ai), Leonardo AI (leonardo.ai), Runway (runwayml.com), Pika (pika.art), ElevenLabs (elevenlabs.io), Jasper (jasper.ai), Copy.ai (copy.ai), Writesonic (writesonic.com), GitHub Copilot (github.com/features/copilot), Cursor (cursor.sh), Notion AI (notion.so), Gamma (gamma.app), Canva AI (canva.com), Remove.bg (remove.bg), Otter.ai (otter.ai), Descript (descript.com), Suno (suno.ai), HeyGen (heygen.com), D-ID (d-id.com), Synthesia (synthesia.io), Perplexity (perplexity.ai), Gemini (gemini.google.com), Fireflies (fireflies.ai), Krisp (krisp.ai), Luma AI (lumalabs.ai), Ideogram (ideogram.ai), Krea AI (krea.ai), Magnific (magnific.ai), Photoroom (photoroom.com), Remini (remini.ai)
 
-RÈGLES STRICTES:
-1. Cherche de VRAIS outils qui existent maintenant
-2. Vérifie que les URLs sont correctes
-3. Mélange outils connus ET nouveaux
-4. Varie les catégories (image, texte, vidéo, code, etc.)
-5. Descriptions en français, complètes et détaillées
-6. Retourne minimum 15 outils différents
-
-Ne JAMAIS inventer. Utilise la recherche web pour trouver des outils réels.`,
+RÈGLES:
+1. UTILISE LA RECHERCHE WEB pour vérifier les URLs
+2. N'invente JAMAIS d'URL - vérifie qu'elles existent
+3. Inclus des outils populaires ET des nouveautés
+4. Descriptions détaillées et utiles en français`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
