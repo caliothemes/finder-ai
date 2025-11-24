@@ -68,7 +68,7 @@ function LayoutContent({ children, currentPageName }) {
 
               {/* Logo */}
               <div className="relative bg-white rounded-full p-2 flex items-center justify-center">
-                <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'translateY(-5px)' }}>
                   <defs>
                     <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#06b6d4" />
