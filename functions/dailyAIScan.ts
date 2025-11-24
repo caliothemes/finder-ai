@@ -19,28 +19,18 @@ Deno.serve(async (req) => {
 
     const allExistingUrls = [...new Set([...existingUrls, ...existingDiscoveryUrls])];
 
-    // Sources de recherche variées et spécifiques
+    // Recherche massive sans filtrage par catégorie
     const searchQueries = [
-      "top 30 AI tools 2025 complete list with official websites URLs",
-      "new AI startups launched 2024 2025 product hunt",
-      "best free AI tools online websites list",
-      "AI image generators DALL-E Stable Diffusion Leonardo Ideogram websites",
-      "AI video generators Runway Pika Luma Kling HeyGen websites",
-      "AI writing assistants Jasper Copy.ai Writesonic Rytr websites",
-      "AI coding tools GitHub Copilot Cursor Codeium Tabnine websites",
-      "AI chatbots Claude ChatGPT Gemini Perplexity Pi websites",
-      "AI voice cloning ElevenLabs Resemble Murf Play.ht websites",
-      "AI music generators Suno Udio Soundraw AIVA websites",
-      "AI presentation tools Gamma Beautiful.ai Tome Decktopus websites",
-      "AI avatar generators D-ID Synthesia HeyGen Colossyan websites",
-      "AI logo design Looka Brandmark Designs.ai Hatchful websites",
-      "AI photo editing tools Remove.bg Photoroom Remini Lensa websites",
-      "AI transcription Otter.ai Whisper Descript Rev websites",
-      "AI meeting assistants Fireflies Krisp Fathom tl;dv websites",
-      "AI research tools Elicit Consensus Scite Semantic Scholar websites",
-      "AI email assistants Lavender Smartwriter Mailmeteor websites",
-      "AI social media tools Ocoya Predis Publer Lately websites",
-      "AI SEO tools Surfer SEO Clearscope Frase MarketMuse websites"
+      "complete list of all AI tools 2024 2025 with websites",
+      "1000 AI tools directory complete database URLs",
+      "futurepedia AI tools list all categories",
+      "there's an AI for that complete database",
+      "product hunt AI tools launched 2024 2025 all",
+      "AI tool aggregator sites complete lists",
+      "best AI tools every category comprehensive list",
+      "new AI products startups 2024 2025 all types",
+      "AI software directory A to Z complete",
+      "topai.tools complete database all AI services"
     ];
 
     const allDiscoveries = [];
