@@ -54,7 +54,7 @@ function LayoutContent({ children, currentPageName }) {
           <div className="relative inline-flex items-center justify-center mb-3">
             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative">
               {/* Glow effect externe */}
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-75 blur-xl group-hover:opacity-100 animate-pulse-slow"></div>
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-30 blur-xl group-hover:opacity-50 animate-pulse-slow"></div>
 
               {/* Bordure animée 1 */}
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '3px' }}>
