@@ -9,6 +9,7 @@ import ProAccount from './pages/ProAccount';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import BannerManager from './pages/BannerManager';
+import LegalMentions from './pages/LegalMentions';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "Profile": Profile,
     "Admin": Admin,
     "BannerManager": BannerManager,
+    "LegalMentions": LegalMentions,
 }
 
 export const pagesConfig = {
