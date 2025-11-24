@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Mail, Edit, Save, X } from 'lucide-react';
+import { Mail, Edit, Save, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminEmailTemplates() {
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [formData, setFormData] = useState({ subject: '', content: '' });
+  const [showPreview, setShowPreview] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: templates = [], isLoading } = useQuery({
@@ -118,13 +119,38 @@ export default function AdminEmailTemplates() {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Contenu HTML</label>
-                <Textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Contenu HTML de l'email"
-                  className="min-h-64 font-mono text-xs"
-                />
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-medium">Contenu HTML</label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowPreview(!showPreview)}
+                  >
+                    {showPreview ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+                    {showPreview ? 'Code' : 'Aperçu'}
+                  </Button>
+                </div>
+                
+                {showPreview ? (
+                  <div className="border rounded-lg bg-white overflow-hidden">
+                    <div className="bg-slate-100 px-4 py-2 border-b text-sm text-slate-600">
+                      Aperçu de l'email
+                    </div>
+                    <iframe
+                      srcDoc={formData.content}
+                      className="w-full min-h-[500px] border-0"
+                      title="Email Preview"
+                    />
+                  </div>
+                ) : (
+                  <Textarea
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    placeholder="Contenu HTML de l'email"
+                    className="min-h-64 font-mono text-xs"
+                  />
+                )}
               </div>
 
               <div className="flex gap-2">
