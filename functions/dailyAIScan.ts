@@ -42,26 +42,29 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `MISSION: Recherche web approfondie sur "${query}"
+          prompt: `RECHERCHE MASSIVE D'OUTILS IA: "${query}"
 
-Tu dois utiliser Internet pour trouver des outils IA RÉELS. Cherche sur Google, Product Hunt, et les sites spécialisés.
+OBJECTIF: Trouver le MAXIMUM d'outils IA possibles. Pas de limite de catégorie.
 
-RETOURNE EXACTEMENT 10-15 outils avec:
-- name: Nom EXACT du produit
-- website_url: URL OFFICIELLE complète (pas d'URL inventée!)
-- description: 80-120 mots en français décrivant l'outil
-- tagline: Slogan court en français (max 50 caractères)
-- features: 4 fonctionnalités principales en français
-- pricing: "gratuit" / "freemium" / "payant" / "abonnement"
+RETOURNE 25-50 outils IA avec:
+- name: Nom du produit
+- website_url: URL officielle (VÉRIFIE sur internet!)
+- description: 50-80 mots en français
+- tagline: Phrase courte français
+- features: 3-4 fonctionnalités
+- pricing: "gratuit"/"freemium"/"payant"/"abonnement"
 
-OUTILS CONNUS À INCLURE SI PERTINENTS:
-ChatGPT (chat.openai.com), Claude (claude.ai), Midjourney (midjourney.com), DALL-E (openai.com/dall-e), Stable Diffusion (stability.ai), Leonardo AI (leonardo.ai), Runway (runwayml.com), Pika (pika.art), ElevenLabs (elevenlabs.io), Jasper (jasper.ai), Copy.ai (copy.ai), Writesonic (writesonic.com), GitHub Copilot (github.com/features/copilot), Cursor (cursor.sh), Notion AI (notion.so), Gamma (gamma.app), Canva AI (canva.com), Remove.bg (remove.bg), Otter.ai (otter.ai), Descript (descript.com), Suno (suno.ai), HeyGen (heygen.com), D-ID (d-id.com), Synthesia (synthesia.io), Perplexity (perplexity.ai), Gemini (gemini.google.com), Fireflies (fireflies.ai), Krisp (krisp.ai), Luma AI (lumalabs.ai), Ideogram (ideogram.ai), Krea AI (krea.ai), Magnific (magnific.ai), Photoroom (photoroom.com), Remini (remini.ai)
+INCLURE TOUS TYPES: chatbots, image, vidéo, audio, code, écriture, productivité, marketing, design, recherche, transcription, avatars, voix, musique, 3D, données, automation, SEO, réseaux sociaux, email, présentations, no-code, traduction, résumé, etc.
 
-RÈGLES:
-1. UTILISE LA RECHERCHE WEB pour vérifier les URLs
-2. N'invente JAMAIS d'URL - vérifie qu'elles existent
-3. Inclus des outils populaires ET des nouveautés
-4. Descriptions détaillées et utiles en français`,
+SOURCES À EXPLORER:
+- Futurepedia, There's an AI for that, TopAI.tools
+- Product Hunt AI, AI Tool Hunt
+- Sites officiels des outils
+
+OUTILS MAJEURS (vérifier s'ils ne sont pas déjà listés):
+ChatGPT, Claude, Gemini, Perplexity, Copilot, Midjourney, DALL-E 3, Stable Diffusion, Leonardo, Ideogram, Flux, Runway, Pika, Luma, Kling, HeyGen, Synthesia, D-ID, ElevenLabs, Murf, Suno, Udio, Jasper, Copy.ai, Writesonic, Rytr, Notion AI, Gamma, Tome, Canva AI, Remove.bg, Photoroom, Remini, Topaz, Otter, Descript, Fireflies, Krisp, Cursor, Codeium, Tabnine, Replit, v0.dev, Bolt, Lovable, Zapier AI, Make, n8n
+
+RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via recherche web.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
