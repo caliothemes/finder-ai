@@ -534,17 +534,14 @@ function LayoutContent({ children, currentPageName }) {
               </ul>
             </div>
 
-            <div>
-              <h3 className="font-bold mb-4">Légal</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">Mentions légales</Link></li>
-              </ul>
             </div>
+
+            <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
+              <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
+              <p className="mt-2">
+                <Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">Mentions légales</Link>
+              </p>
             </div>
-          
-          <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
-          </div>
         </div>
         </footer>
       </div>

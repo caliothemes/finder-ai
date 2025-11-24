@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Edit2, Trash2, GripVertical, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit2, Trash2, GripVertical, Eye, EyeOff, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { toast } from 'sonner';
 import ReactQuill from 'react-quill';
 
 export default function AdminLegalSections() {
   const [editingSection, setEditingSection] = useState(null);
   const [formData, setFormData] = useState({ title: '', content: '', order: 0, active: true });
+  const [formOpen, setFormOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: sections = [], isLoading } = useQuery({
@@ -78,13 +80,18 @@ export default function AdminLegalSections() {
   return (
     <div className="space-y-6">
       {/* Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {editingSection ? 'Modifier la section' : 'Nouvelle section'}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Collapsible open={formOpen || editingSection} onOpenChange={setFormOpen}>
+        <Card>
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors">
+              <CardTitle className="flex items-center justify-between">
+                <span>{editingSection ? 'Modifier la section' : 'Nouvelle section'}</span>
+                {formOpen || editingSection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+              </CardTitle>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-sm font-medium text-slate-700 mb-1 block">
@@ -141,6 +148,7 @@ export default function AdminLegalSections() {
                   onClick={() => {
                     setEditingSection(null);
                     setFormData({ title: '', content: '', order: sections.length, active: true });
+                    setFormOpen(false);
                   }}
                 >
                   Annuler
@@ -148,8 +156,10 @@ export default function AdminLegalSections() {
               )}
             </div>
           </form>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
 
       {/* List */}
       <Card>
