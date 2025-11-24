@@ -54,7 +54,7 @@ function LayoutContent({ children, currentPageName }) {
           <div className="relative inline-flex items-center justify-center mb-3">
             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative">
               {/* Glow effect externe */}
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-30 blur-xl group-hover:opacity-50 animate-pulse-slow"></div>
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-15 blur-lg group-hover:opacity-30 animate-pulse-slow"></div>
 
               {/* Bordure animée 1 */}
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow" style={{ padding: '3px' }}>
@@ -68,7 +68,7 @@ function LayoutContent({ children, currentPageName }) {
 
               {/* Logo */}
               <div className="relative bg-white rounded-full p-2 flex items-center justify-center">
-                <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'translateY(-5px)' }}>
+                <svg width="90" height="90" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#06b6d4" />
