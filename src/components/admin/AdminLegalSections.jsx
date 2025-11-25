@@ -106,12 +106,14 @@ export default function AdminLegalSections() {
               <label className="text-sm font-medium text-slate-700 mb-1 block">
                 Contenu
               </label>
-              <ReactQuill
-                value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
-                className="bg-white"
-                theme="snow"
-              />
+              <div className="bg-white border rounded-lg">
+                <ReactQuill
+                  value={formData.content || ''}
+                  onChange={(value) => setFormData({ ...formData, content: value })}
+                  theme="snow"
+                  style={{ minHeight: '200px' }}
+                />
+              </div>
             </div>
 
             <div className="flex items-center gap-4">
