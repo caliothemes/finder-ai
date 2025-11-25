@@ -110,11 +110,6 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 pt-6 pb-4">
         <ActiveBanner position="homepage_hero" />
       </div>
-      
-      {/* Bannière Sidebar Homepage */}
-      <div className="max-w-7xl mx-auto px-6 pb-4">
-        <ActiveBanner position="homepage_sidebar" />
-      </div>
 
       <FeaturedAI
         aiServices={aiServices}

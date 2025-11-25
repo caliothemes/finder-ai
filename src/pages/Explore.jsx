@@ -115,11 +115,6 @@ export default function Explore() {
           </p>
         </div>
 
-        {/* Bannière Explorer - Haut de page */}
-        <div className="mb-8">
-          <ActiveBanner position="explore_top" />
-        </div>
-
         {/* Filters */}
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-12">
           <div className="flex items-center gap-3 mb-6">
@@ -211,14 +206,14 @@ export default function Explore() {
               </button>
             </div>
           </div>
-        </div>
+          </div>
 
-        {/* Bannière Explorer - Sidebar */}
-        <div className="mb-6">
-          <ActiveBanner position="explore_sidebar" />
-        </div>
+          {/* Bannière Explorer - Haut de page */}
+          <div className="mb-8">
+          <ActiveBanner position="explore_top" />
+          </div>
 
-        {/* Results count */}
+          {/* Results count */}
         <div className="mb-6">
           <p className="text-slate-600">
             <span className="font-semibold text-slate-900">{filteredServices.length}</span> {filteredServices.length > 1 ? t('explore_results_plural') : t('explore_results')}
