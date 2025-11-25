@@ -68,11 +68,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
   return (
     <div className="py-24 px-6 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        {/* Bannière Hero */}
-        <div className="mb-12">
-          <ActiveBanner position="homepage_hero" />
-        </div>
-
         <div className="flex items-center justify-between mb-12">
           <div>
             <div className="flex items-center gap-3 mb-3">
@@ -142,7 +137,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                    <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
                       <h3 className="text-xl font-bold text-slate-900 mb-1 hover:text-purple-600 transition-colors truncate">
                         {service.name}
                       </h3>
@@ -185,7 +180,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 )}
 
                 {/* Action button */}
-                <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
                   <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
                     <span>{t('home_featured_discover')}</span>
                     <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
@@ -270,7 +265,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                    <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
                       <h3 className="text-xl font-bold text-slate-900 mb-1 hover:text-purple-600 transition-colors truncate">
                         {service.name}
                       </h3>
@@ -313,7 +308,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 )}
 
                 {/* Action button */}
-                <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+                <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
                   <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group/btn">
                     <span>{t('home_featured_discover')}</span>
                     <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
