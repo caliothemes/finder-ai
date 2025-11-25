@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { useLanguage } from '@/components/LanguageProvider';
+import DefaultAILogo from '@/components/DefaultAILogo';
 
 export default function AIDetail() {
   const { language, t } = useLanguage();
@@ -293,8 +294,8 @@ export default function AIDetail() {
                   className="w-32 h-32 rounded-full object-cover border-4 border-white/20 shadow-2xl"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-5xl shadow-2xl">
-                  🤖
+                <div className="w-32 h-32 rounded-full bg-white flex items-center justify-center shadow-2xl border-4 border-white/20">
+                  <DefaultAILogo size={100} />
                 </div>
               )}
             </div>
