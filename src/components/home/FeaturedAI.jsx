@@ -66,7 +66,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
   );
 
   return (
-    <div className="py-24 px-6 bg-slate-50">
+    <div className="py-16 px-6 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div>
