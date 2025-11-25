@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, Calendar } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Calendar, Power, PowerOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminBanners() {
@@ -28,6 +28,14 @@ export default function AdminBanners() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminBanners'] });
       toast.success('Bannière rejetée');
+    },
+  });
+
+  const toggleActiveMutation = useMutation({
+    mutationFn: ({ bannerId, active }) => base44.entities.BannerReservation.update(bannerId, { active }),
+    onSuccess: (_, { active }) => {
+      queryClient.invalidateQueries({ queryKey: ['adminBanners'] });
+      toast.success(active ? 'Bannière activée' : 'Bannière désactivée');
     },
   });
 
@@ -127,10 +135,39 @@ export default function AdminBanners() {
                     {banner.position} • {(banner.reserved_dates || []).length} dates réservées
                   </p>
                 </div>
-                <Badge className="bg-green-100 text-green-800">
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Validée
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge className={banner.active ? "bg-green-100 text-green-800" : "bg-slate-100 text-slate-600"}>
+                    {banner.active ? (
+                      <>
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Active
+                      </>
+                    ) : (
+                      <>
+                        <PowerOff className="w-3 h-3 mr-1" />
+                        Désactivée
+                      </>
+                    )}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant={banner.active ? "outline" : "default"}
+                    onClick={() => toggleActiveMutation.mutate({ bannerId: banner.id, active: !banner.active })}
+                    className={banner.active ? "text-red-600 hover:bg-red-50" : "bg-green-600 hover:bg-green-700"}
+                  >
+                    {banner.active ? (
+                      <>
+                        <PowerOff className="w-4 h-4 mr-1" />
+                        Désactiver
+                      </>
+                    ) : (
+                      <>
+                        <Power className="w-4 h-4 mr-1" />
+                        Activer
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
