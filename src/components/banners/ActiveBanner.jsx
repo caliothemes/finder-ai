@@ -32,13 +32,21 @@ export default function ActiveBanner({ position }) {
 
   if (isLoading || !activeBanner) return null;
 
+  // Hauteurs selon la position
+  const heightClasses = {
+    homepage_hero: 'h-[200px] md:h-[300px]',
+    homepage_sidebar: 'h-[400px]',
+    category_top: 'h-[150px] md:h-[200px]',
+    service_detail: 'h-[250px]'
+  };
+
   return (
-    <div className="relative group overflow-hidden rounded-2xl shadow-xl">
+    <div className={`relative group overflow-hidden rounded-2xl shadow-xl ${heightClasses[position] || 'h-[200px]'}`}>
       <a 
         href={activeBanner.target_url} 
         target="_blank" 
         rel="noopener noreferrer"
-        className="block"
+        className="block w-full h-full"
       >
         <img 
           src={activeBanner.image_url} 

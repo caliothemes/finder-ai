@@ -107,7 +107,7 @@ export default function Home() {
       <HeroSection onSearch={handleSearch} />
 
       {/* Bannière Hero Homepage */}
-      <div className="max-w-7xl mx-auto px-6 -mt-8 mb-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <ActiveBanner position="homepage_hero" />
       </div>
 

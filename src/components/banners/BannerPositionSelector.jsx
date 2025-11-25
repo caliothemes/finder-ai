@@ -6,6 +6,7 @@ const positions = [
     value: 'homepage_hero',
     label: 'Page d\'accueil - Hero',
     description: 'Grande bannière visible en haut de la page d\'accueil',
+    recommendedSize: '1200 x 300 px',
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         {/* Header */}
@@ -27,6 +28,7 @@ const positions = [
     value: 'homepage_sidebar',
     label: 'Page d\'accueil - Sidebar',
     description: 'Bannière visible dans la barre latérale',
+    recommendedSize: '300 x 600 px',
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden flex gap-2">
         {/* Main content */}
@@ -49,6 +51,7 @@ const positions = [
     value: 'category_top',
     label: 'Catégories - En haut',
     description: 'Bannière en haut des pages de catégories',
+    recommendedSize: '1200 x 200 px',
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         {/* Header */}
@@ -72,6 +75,7 @@ const positions = [
     value: 'service_detail',
     label: 'Détail service',
     description: 'Bannière sur les pages de détail d\'un outil IA',
+    recommendedSize: '300 x 250 px',
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         {/* Header */}
@@ -133,9 +137,12 @@ export default function BannerPositionSelector({ value, onChange }) {
             }`}>
               {position.label}
             </h4>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 mb-2">
               {position.description}
             </p>
+            <div className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">
+              📐 Taille recommandée : {position.recommendedSize}
+            </div>
           </button>
         ))}
       </div>
