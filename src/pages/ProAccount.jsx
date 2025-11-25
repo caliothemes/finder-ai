@@ -425,31 +425,6 @@ export default function ProAccount() {
           ))}
         </div>
 
-        {/* Credit Packs */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-            {t('pro_buy_credits')}
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {creditPacks.map((pack) => (
-              <div key={pack.credits} className="bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-purple-400 transition-all">
-                <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-slate-900 mb-2">
-                    {pack.credits}
-                  </div>
-                  <div className="text-slate-600 mb-4">{t('pro_credits')}</div>
-                  <div className="text-4xl font-bold text-purple-600">
-                    {pack.price}
-                  </div>
-                </div>
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                  {t('pro_buy_now')}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Benefits */}
         <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 rounded-3xl p-12 text-white">
           <h2 className="text-3xl font-bold mb-8 text-center">
