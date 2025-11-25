@@ -23,7 +23,7 @@ import AdminLegalSections from '@/components/admin/AdminLegalSections';
 export default function Admin() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('ai-scan');
+  const [activeSection, setActiveSection] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
