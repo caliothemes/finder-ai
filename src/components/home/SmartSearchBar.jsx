@@ -124,7 +124,7 @@ export default function SmartSearchBar({ onSearch }) {
                 {filteredServices.map((service) => (
                   <Link
                     key={service.id}
-                    to={createPageUrl(`AIDetail?id=${service.id}`)}
+                    to={createPageUrl(`AIDetail?slug=${service.slug}`)}
                     onClick={() => setShowDropdown(false)}
                     className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors"
                   >
