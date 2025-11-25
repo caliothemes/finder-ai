@@ -157,7 +157,7 @@ export default function SmartSearchBar({ onSearch }) {
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}
-                      to={createPageUrl(`Category?id=${cat.id}`)}
+                      to={createPageUrl(`Category?slug=${cat.slug}`)}
                       onClick={() => setShowDropdown(false)}
                       className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 text-purple-700 rounded-xl text-sm font-medium transition-colors"
                     >
@@ -180,7 +180,7 @@ export default function SmartSearchBar({ onSearch }) {
                   {trendingServices.map((service) => (
                     <Link
                       key={service.id}
-                      to={createPageUrl(`AIDetail?id=${service.id}`)}
+                      to={createPageUrl(`AIDetail?slug=${service.slug}`)}
                       onClick={() => setShowDropdown(false)}
                       className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors"
                     >
