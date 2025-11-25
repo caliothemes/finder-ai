@@ -34,8 +34,8 @@ export default function ActiveBanner({ position }) {
 
   // Hauteurs selon la position
   const heightClasses = {
-    homepage_hero: 'h-[200px] md:h-[300px]',
-    homepage_sidebar: 'h-[400px]',
+    homepage_hero: 'h-[150px] md:h-[200px]',
+    homepage_sidebar: 'h-[200px] md:h-[250px]',
     category_top: 'h-[150px] md:h-[200px]',
     service_detail: 'h-[250px]'
   };

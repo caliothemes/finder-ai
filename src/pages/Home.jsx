@@ -107,8 +107,13 @@ export default function Home() {
       <HeroSection onSearch={handleSearch} />
 
       {/* Bannière Hero Homepage */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 pt-6 pb-2">
         <ActiveBanner position="homepage_hero" />
+      </div>
+
+      {/* Bannière Sidebar Homepage */}
+      <div className="max-w-7xl mx-auto px-6 pb-4">
+        <ActiveBanner position="homepage_sidebar" />
       </div>
 
       <FeaturedAI
