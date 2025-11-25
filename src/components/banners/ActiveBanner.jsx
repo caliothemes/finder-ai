@@ -74,8 +74,9 @@ export default function ActiveBanner({ position }) {
             href={activeBanner.target_url} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-2 px-4 rounded-lg transition-all"
+            className="inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all"
           >
+            <Sparkles className="w-4 h-4 mr-2" />
             Découvrir
           </a>
         </div>
