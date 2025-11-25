@@ -133,12 +133,16 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
               {/* Content */}
               <div className="p-6">
                 <div className="flex items-start gap-3 mb-3">
-                  {service.logo_url && (
+                  {service.logo_url ? (
                     <img
                       src={service.logo_url}
                       alt={service.name}
                       className="w-12 h-12 rounded-xl object-cover border border-slate-200"
                     />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+                      <DefaultAILogo size={40} />
+                    </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
@@ -261,12 +265,16 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
               {/* Content */}
               <div className="p-6">
                 <div className="flex items-start gap-3 mb-3">
-                  {service.logo_url && (
+                  {service.logo_url ? (
                     <img
                       src={service.logo_url}
                       alt={service.name}
                       className="w-12 h-12 rounded-xl object-cover border border-slate-200"
                     />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+                      <DefaultAILogo size={40} />
+                    </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
