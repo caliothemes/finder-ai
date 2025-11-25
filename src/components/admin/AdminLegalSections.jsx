@@ -80,19 +80,16 @@ export default function AdminLegalSections() {
   return (
     <div className="space-y-6">
       {/* Form */}
-      <Collapsible open={formOpen || editingSection} onOpenChange={setFormOpen}>
-        <Card>
-          <CollapsibleTrigger asChild>
-            <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors">
-              <CardTitle className="flex items-center justify-between">
-                <span>{editingSection ? 'Modifier la section' : 'Nouvelle section'}</span>
-                {formOpen || editingSection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </CardTitle>
-            </CardHeader>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <Card>
+        <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setFormOpen(!formOpen)}>
+          <CardTitle className="flex items-center justify-between">
+            <span>{editingSection ? 'Modifier la section' : 'Nouvelle section'}</span>
+            {formOpen || editingSection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </CardTitle>
+        </CardHeader>
+        {(formOpen || editingSection) && (
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-sm font-medium text-slate-700 mb-1 block">
                 Titre
