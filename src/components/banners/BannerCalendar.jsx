@@ -6,7 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
+// Crédits par jour selon la position
+const CREDITS_PER_DAY = {
+  homepage_hero: 3,
+  homepage_sidebar: 2,
+  explore_top: 2,
+  explore_sidebar: 1
+};
+
 export default function BannerCalendar({ bannerId, position, onReserve }) {
+  const creditsPerDay = CREDITS_PER_DAY[position] || 1;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -75,7 +84,7 @@ export default function BannerCalendar({ bannerId, position, onReserve }) {
   const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
-  const totalCredits = selectedDates.length * 1;
+  const totalCredits = selectedDates.length * creditsPerDay;
 
   return (
     <Card>
@@ -187,7 +196,7 @@ export default function BannerCalendar({ bannerId, position, onReserve }) {
         )}
 
         <div className="mt-4 text-xs text-slate-500 text-center">
-          <p>💡 Tarif: 1 crédit par jour • Les dates grisées sont déjà réservées</p>
+          <p>💡 Tarif: {creditsPerDay} crédit{creditsPerDay > 1 ? 's' : ''} par jour • Les dates grisées sont déjà réservées</p>
         </div>
       </CardContent>
     </Card>
