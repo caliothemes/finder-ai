@@ -5,6 +5,7 @@ import { Star, Heart, ExternalLink, Eye, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import DefaultAILogo from '@/components/DefaultAILogo';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite }) {
   const [pricingOpen, setPricingOpen] = useState(false);
@@ -71,12 +72,16 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
       {/* Content */}
       <div className="p-5">
         <div className="flex items-start gap-3 mb-3">
-          {service.logo_url && (
+          {service.logo_url ? (
             <img
               src={service.logo_url}
               alt={service.name}
               className="w-10 h-10 rounded-full object-cover border border-slate-200"
             />
+          ) : (
+            <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+              <DefaultAILogo size={32} />
+            </div>
           )}
           <div className="flex-1 min-w-0">
             <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
