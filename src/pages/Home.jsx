@@ -106,13 +106,9 @@ export default function Home() {
     <div className="min-h-screen">
       <HeroSection onSearch={handleSearch} />
 
-      {/* Bannière Hero Homepage */}
-      <div className="max-w-7xl mx-auto px-6 pt-6 pb-2">
+      {/* Bannières Homepage */}
+      <div className="max-w-7xl mx-auto px-6 pt-6 pb-4 space-y-4">
         <ActiveBanner position="homepage_hero" />
-      </div>
-
-      {/* Bannière Sidebar Homepage */}
-      <div className="max-w-7xl mx-auto px-6 pb-4">
         <ActiveBanner position="homepage_sidebar" />
       </div>
 
