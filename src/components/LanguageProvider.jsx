@@ -495,28 +495,6 @@ const translations = {
     submit_submit: "Submit",
     submit_submitting: "Submitting...",
     
-    // Profile
-    profile_title: "My Profile",
-    profile_member_since: "Member since",
-    profile_admin_badge: "Administrator",
-    profile_stats: "Statistics",
-    profile_favorites: "Favorites",
-    profile_contributions: "Contributions",
-    profile_reviews: "Reviews",
-    profile_my_submissions: "My Submissions",
-    profile_status_pending: "Pending",
-    profile_status_approved: "Approved",
-    profile_status_rejected: "Rejected",
-    profile_latest_reviews: "Latest Reviews",
-    
-    // Favorites
-    favorites_title: "My Favorites",
-    favorites_subtitle: "All your favorite AI tools in one place",
-    favorites_count: "favorite",
-    favorites_count_plural: "favorites",
-    favorites_empty: "No favorites yet",
-    favorites_empty_subtitle: "Start adding your favorite AI tools",
-    
     // Footer
     footer_discover: "Discover",
     footer_account: "Account",
