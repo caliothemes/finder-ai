@@ -134,29 +134,28 @@ export default function AdminLegalSections() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-                {editingSection ? 'Mettre à jour' : 'Créer'}
-              </Button>
-              {editingSection && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setEditingSection(null);
-                    setFormData({ title: '', content: '', order: sections.length, active: true });
-                    setFormOpen(false);
-                  }}
-                >
-                  Annuler
+              <div className="flex gap-2">
+                <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
+                  {editingSection ? 'Mettre à jour' : 'Créer'}
                 </Button>
-              )}
-            </div>
-          </form>
-            </CardContent>
-          </CollapsibleContent>
-        </Card>
-      </Collapsible>
+                {editingSection && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setEditingSection(null);
+                      setFormData({ title: '', content: '', order: sections.length, active: true });
+                      setFormOpen(false);
+                    }}
+                  >
+                    Annuler
+                  </Button>
+                )}
+              </div>
+            </form>
+          </CardContent>
+        )}
+      </Card>
 
       {/* List */}
       <Card>
