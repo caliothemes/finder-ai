@@ -79,7 +79,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
             />
           )}
           <div className="flex-1 min-w-0">
-            <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+            <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
               <h3 className="text-lg font-bold text-slate-900 hover:text-purple-600 transition-colors truncate">
                 {service.name}
               </h3>
@@ -125,7 +125,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
         </div>
 
         {/* Action */}
-        <Link to={createPageUrl(`AIDetail?id=${service.id}`)}>
+        <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
           <Button className="w-full bg-purple-950 hover:bg-purple-900 text-white">
             <span>Découvrir</span>
             <ExternalLink className="w-4 h-4 ml-2" />

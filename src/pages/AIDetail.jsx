@@ -15,7 +15,8 @@ import { useLanguage } from '@/components/LanguageProvider';
 export default function AIDetail() {
   const { language, t } = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
-  const serviceId = urlParams.get('id');
+  const serviceSlug = urlParams.get('slug');
+  const serviceId = urlParams.get('id'); // Fallback pour compatibilité
   const [user, setUser] = useState(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -39,19 +40,60 @@ export default function AIDetail() {
   }, []);
 
   const { data: service, isLoading } = useQuery({
-    queryKey: ['aiService', serviceId],
+    queryKey: ['aiService', serviceSlug || serviceId],
     queryFn: async () => {
-      const services = await base44.entities.AIService.filter({ id: serviceId });
+      let services;
+      if (serviceSlug) {
+        services = await base44.entities.AIService.filter({ slug: serviceSlug });
+      } else {
+        services = await base44.entities.AIService.filter({ id: serviceId });
+      }
       if (services.length > 0) {
-        await base44.entities.AIService.update(serviceId, {
+        await base44.entities.AIService.update(services[0].id, {
           views: (services[0].views || 0) + 1
         });
         return services[0];
       }
       return null;
     },
-    enabled: !!serviceId,
+    enabled: !!(serviceSlug || serviceId),
   });
+
+  // Mise à jour des meta tags pour le SEO
+  useEffect(() => {
+    if (service) {
+      document.title = `${service.name} - Finder AI`;
+      
+      // Meta description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.name = 'description';
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.content = service.tagline || service.description?.substring(0, 160);
+
+      // Open Graph
+      const ogTags = {
+        'og:title': service.name,
+        'og:description': service.tagline || service.description?.substring(0, 160),
+        'og:image': service.cover_image_url || service.logo_url,
+        'og:url': window.location.href
+      };
+      
+      Object.entries(ogTags).forEach(([property, content]) => {
+        if (content) {
+          let tag = document.querySelector(`meta[property="${property}"]`);
+          if (!tag) {
+            tag = document.createElement('meta');
+            tag.setAttribute('property', property);
+            document.head.appendChild(tag);
+          }
+          tag.content = content;
+        }
+      });
+    }
+  }, [service]);
 
   const { data: categories = [] } = useQuery({
     queryKey: ['serviceCategories', service?.categories],

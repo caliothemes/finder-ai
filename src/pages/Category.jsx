@@ -17,7 +17,8 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Category() {
   const urlParams = new URLSearchParams(window.location.search);
-  const categoryId = urlParams.get('id');
+  const categorySlug = urlParams.get('slug');
+  const categoryId = urlParams.get('id'); // Fallback pour compatibilité
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
   const { t, language } = useLanguage();
@@ -35,21 +36,43 @@ export default function Category() {
   }, []);
 
   const { data: category, isLoading: categoryLoading } = useQuery({
-    queryKey: ['category', categoryId],
+    queryKey: ['category', categorySlug || categoryId],
     queryFn: async () => {
-      const cats = await base44.entities.Category.filter({ id: categoryId });
+      let cats;
+      if (categorySlug) {
+        cats = await base44.entities.Category.filter({ slug: categorySlug });
+      } else {
+        cats = await base44.entities.Category.filter({ id: categoryId });
+      }
       return cats[0] || null;
     },
-    enabled: !!categoryId,
+    enabled: !!(categorySlug || categoryId),
   });
 
+  // Mise à jour des meta tags pour le SEO
+  useEffect(() => {
+    if (category) {
+      const categoryName = language === 'en' && category.name_en ? category.name_en : category.name;
+      document.title = `${categoryName} - Outils IA | Finder AI`;
+      
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.name = 'description';
+        document.head.appendChild(metaDesc);
+      }
+      const desc = language === 'en' && category.description_en ? category.description_en : category.description;
+      metaDesc.content = desc || `Découvrez les meilleurs outils IA de la catégorie ${categoryName}`;
+    }
+  }, [category, language]);
+
   const { data: allServices = [], isLoading: servicesLoading } = useQuery({
-    queryKey: ['categoryServices', categoryId],
+    queryKey: ['categoryServices', category?.id],
     queryFn: async () => {
       const services = await base44.entities.AIService.filter({ status: 'approved' }, '-created_date');
-      return services.filter(s => s.categories && s.categories.includes(categoryId));
+      return services.filter(s => s.categories && s.categories.includes(category.id));
     },
-    enabled: !!categoryId,
+    enabled: !!category?.id,
   });
 
   const aiServices = allServices.sort((a, b) => {
