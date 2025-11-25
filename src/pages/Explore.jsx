@@ -115,9 +115,9 @@ export default function Explore() {
           </p>
         </div>
 
-        {/* Bannière */}
+        {/* Bannière Explorer - Haut de page */}
         <div className="mb-8">
-          <ActiveBanner position="homepage_sidebar" />
+          <ActiveBanner position="explore_top" />
         </div>
 
         {/* Filters */}
@@ -211,6 +211,11 @@ export default function Explore() {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Bannière Explorer - Sidebar */}
+        <div className="mb-6">
+          <ActiveBanner position="explore_sidebar" />
         </div>
 
         {/* Results count */}
