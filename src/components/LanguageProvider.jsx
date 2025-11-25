@@ -503,7 +503,7 @@ const translations = {
     footer_powered_by: "App powered by",
     
     // Toasts
-    toast_favorite_added: "Added to favorites",
+    toast_favorite_added: "Added to favorites ❤️",
     toast_favorite_removed: "Removed from favorites",
     toast_login_required: "Please log in",
     toast_dates_reserved: "Dates reserved successfully",
