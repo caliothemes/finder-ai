@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLanguage } from '@/components/LanguageProvider';
 import ActiveBanner from '@/components/banners/ActiveBanner';
+import DefaultAILogo from '@/components/DefaultAILogo';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
   const { t } = useLanguage();
