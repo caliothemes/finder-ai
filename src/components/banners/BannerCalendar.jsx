@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 const CREDITS_PER_DAY = {
   homepage_hero: 3,
   homepage_sidebar: 2,
+  homepage_category_bottom: 1,
   explore_top: 2,
   explore_sidebar: 1
 };

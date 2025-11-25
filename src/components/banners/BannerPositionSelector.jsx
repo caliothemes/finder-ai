@@ -84,6 +84,30 @@ const positions = [
         </div>
       </div>
     )
+  },
+  {
+    value: 'homepage_category_bottom',
+    label: 'Accueil - Sous Catégories',
+    description: 'Bannière entre les catégories et le bouton Explorer',
+    recommendedSize: '1200 x 200 px',
+    creditsPerDay: 1,
+    preview: (
+      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+        <div className="grid grid-cols-4 gap-1 mb-2">
+          <div className="h-6 bg-slate-200 rounded" />
+          <div className="h-6 bg-slate-200 rounded" />
+          <div className="h-6 bg-slate-200 rounded" />
+          <div className="h-6 bg-slate-200 rounded" />
+        </div>
+        <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+          VOTRE BANNIÈRE ICI
+        </div>
+        <div className="mt-2 flex justify-center">
+          <div className="h-4 w-24 bg-slate-300 rounded" />
+        </div>
+      </div>
+    )
   }
 ];
 
