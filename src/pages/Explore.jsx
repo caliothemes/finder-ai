@@ -227,7 +227,19 @@ export default function Explore() {
           </div>
         ) : filteredServices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredServices.slice(0, 5).map((service) => (
+            {filteredServices.slice(0, 3).map((service) => (
+              <AIServiceCard
+                key={service.id}
+                service={service}
+                isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+              />
+            ))}
+
+            {/* Bannière Explorer Sidebar en format card */}
+            <ActiveBanner position="explore_sidebar" />
+
+            {filteredServices.slice(3, 5).map((service) => (
               <AIServiceCard
                 key={service.id}
                 service={service}
