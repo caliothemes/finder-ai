@@ -16,7 +16,7 @@ export default function BannerManager() {
   const [user, setUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    ai_service_id: '', title: '', image_url: '', target_url: '', position: 'homepage_hero'
+    ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero'
   });
   const [selectedDates, setSelectedDates] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -69,7 +69,7 @@ export default function BannerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myBanners'] });
       setShowForm(false);
-      setFormData({ ai_service_id: '', title: '', image_url: '', target_url: '', position: 'homepage_hero' });
+      setFormData({ ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero' });
       setSelectedDates([]);
       toast.success('Bannière soumise pour validation');
     },
@@ -177,6 +177,20 @@ export default function BannerManager() {
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
                   required
                 />
+
+                {/* Champ description pour les formats card (sidebar) */}
+                {(formData.position === 'homepage_sidebar' || formData.position === 'explore_sidebar') && (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Description (affiché sous l'image)</label>
+                    <textarea
+                      placeholder="Décrivez votre service en quelques lignes..."
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[80px]"
+                      required
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">{t('banner_image_label')}</label>
