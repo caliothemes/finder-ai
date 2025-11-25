@@ -210,28 +210,6 @@ const translations = {
     submit_submit: "Soumettre",
     submit_submitting: "Envoi en cours...",
     
-    // Profile
-    profile_title: "Mon Profil",
-    profile_member_since: "Membre depuis",
-    profile_admin_badge: "Administrateur",
-    profile_stats: "Statistiques",
-    profile_favorites: "Favoris",
-    profile_contributions: "Contributions",
-    profile_reviews: "Avis",
-    profile_my_submissions: "Mes Soumissions",
-    profile_status_pending: "En attente",
-    profile_status_approved: "Approuvé",
-    profile_status_rejected: "Rejeté",
-    profile_latest_reviews: "Derniers Avis",
-    
-    // Favorites
-    favorites_title: "Mes Favoris",
-    favorites_subtitle: "Tous vos outils IA favoris en un seul endroit",
-    favorites_count: "favori",
-    favorites_count_plural: "favoris",
-    favorites_empty: "Aucun favori pour le moment",
-    favorites_empty_subtitle: "Commencez à ajouter vos outils IA préférés",
-    
     // Footer
     footer_discover: "Découvrir",
     footer_account: "Compte",
