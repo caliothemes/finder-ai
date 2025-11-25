@@ -53,7 +53,7 @@ export default function ActiveBanner({ position }) {
           <div className="absolute top-4 left-4">
             <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
               <Sparkles className="w-3 h-3 mr-1" />
-              À l'affiche
+              Sponsorisé
             </Badge>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function ActiveBanner({ position }) {
         <div className="absolute top-4 right-4">
           <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
             <Sparkles className="w-3 h-3 mr-1" />
-            À l'affiche
+            Sponsorisé
           </Badge>
         </div>
       </a>
