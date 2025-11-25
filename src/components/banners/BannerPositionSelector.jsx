@@ -24,21 +24,21 @@ const positions = [
   },
   {
     value: 'homepage_sidebar',
-    label: 'Accueil - Sidebar',
-    description: 'Bannière visible sous le Hero en page d\'accueil',
-    recommendedSize: '1200 x 250 px',
+    label: 'Accueil - Sidebar (Card)',
+    description: 'Bannière format card parmi les outils IA en vedette',
+    recommendedSize: '400 x 300 px',
     creditsPerDay: 2,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
         <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
-        <div className="h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
-        <div className="mt-2 flex gap-1">
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
+        <div className="flex gap-1">
+          <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
+            <div className="w-6 h-4 bg-white/30 rounded mb-1" />
+            CARD
+          </div>
+          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
+          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
         </div>
       </div>
     )
@@ -66,21 +66,21 @@ const positions = [
   },
   {
     value: 'explore_sidebar',
-    label: 'Explorer - Sidebar',
-    description: 'Bannière secondaire dans la page Explorer',
-    recommendedSize: '1200 x 250 px',
+    label: 'Explorer - Sidebar (Card)',
+    description: 'Bannière format card parmi les outils IA',
+    recommendedSize: '400 x 300 px',
     creditsPerDay: 1,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
         <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
-        <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
-        <div className="mt-2 grid grid-cols-3 gap-1">
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
+        <div className="flex gap-1">
+          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
+          <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
+            <div className="w-6 h-4 bg-white/30 rounded mb-1" />
+            CARD
+          </div>
+          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
         </div>
       </div>
     )
