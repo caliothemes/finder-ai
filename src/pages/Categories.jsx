@@ -89,7 +89,7 @@ export default function Categories() {
             return (
               <Link
                 key={category.id}
-                to={createPageUrl(`Category?id=${category.id}`)}
+                to={createPageUrl(`Category?slug=${category.slug}`)}
                 className="group bg-white rounded-2xl p-8 border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity" />
