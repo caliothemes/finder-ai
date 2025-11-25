@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { PlusCircle, Upload, Sparkles, Crown } from 'lucide-react';
+import { PlusCircle, Upload, Sparkles, Crown, Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -28,6 +28,7 @@ export default function SubmitAI() {
   const [logoFile, setLogoFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -109,9 +110,12 @@ export default function SubmitAI() {
         });
       }
 
-      toast.success('Votre IA a été soumise et sera examinée prochainement ! 🎉');
+      setSubmitSuccess(true);
       
-      setFormData({
+      // Reset après 5 secondes
+      setTimeout(() => {
+        setSubmitSuccess(false);
+        setFormData({
         name: '',
         tagline: '',
         description: '',
@@ -120,9 +124,10 @@ export default function SubmitAI() {
         pricing: 'freemium',
         logo_url: '',
         cover_image_url: '',
-        features: [''],
-        tags: ['']
-      });
+          features: [''],
+          tags: ['']
+        });
+      }, 5000);
     }
   });
 
@@ -432,11 +437,25 @@ export default function SubmitAI() {
             <div className="pt-6 border-t">
               <Button
                 onClick={() => submitAIMutation.mutate()}
-                disabled={submitAIMutation.isPending}
-                className="w-full bg-purple-950 hover:bg-purple-900 text-white text-lg py-6"
+                disabled={submitAIMutation.isPending || submitSuccess}
+                className={`w-full text-white text-lg transition-all duration-500 ${
+                  submitSuccess 
+                    ? 'bg-green-500 hover:bg-green-500 py-8 scale-105' 
+                    : submitAIMutation.isPending
+                    ? 'bg-purple-700 py-8 scale-105'
+                    : 'bg-purple-950 hover:bg-purple-900 py-6'
+                }`}
               >
-                {submitAIMutation.isPending ? (
-                  'Soumission en cours...'
+                {submitSuccess ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <Check className="w-8 h-8" />
+                    <span>Votre outil IA a bien été soumis à notre équipe</span>
+                  </div>
+                ) : submitAIMutation.isPending ? (
+                  <div className="flex items-center gap-3">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                    <span>Soumission en cours...</span>
+                  </div>
                 ) : (
                   <>
                     <PlusCircle className="w-5 h-5 mr-2" />
@@ -445,9 +464,11 @@ export default function SubmitAI() {
                 )}
               </Button>
               
-              <p className="text-center text-sm text-slate-500 mt-4">
-                Votre soumission sera examinée sous 48h
-              </p>
+              {!submitSuccess && (
+                <p className="text-center text-sm text-slate-500 mt-4">
+                  Votre soumission sera examinée sous 48h
+                </p>
+              )}
             </div>
           </div>
         </div>
