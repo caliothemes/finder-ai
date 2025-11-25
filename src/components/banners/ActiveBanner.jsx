@@ -61,12 +61,12 @@ export default function ActiveBanner({ position }) {
         {/* Content */}
         <div className="p-6">
           <a href={activeBanner.target_url} target="_blank" rel="noopener noreferrer">
-            <h3 className="text-xl font-bold text-slate-900 mb-2 hover:text-purple-600 transition-colors">
+            <h3 className="text-lg font-semibold text-slate-900 mb-2 hover:text-purple-600 transition-colors">
               {activeBanner.title}
             </h3>
           </a>
           {activeBanner.description && (
-            <p className="text-slate-700 mb-4 line-clamp-3 text-sm">
+            <p className="text-slate-600 mb-4 line-clamp-3 text-sm font-normal">
               {activeBanner.description}
             </p>
           )}
