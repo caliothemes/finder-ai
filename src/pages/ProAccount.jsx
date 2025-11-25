@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Crown, Sparkles, Check, Zap, TrendingUp } from 'lucide-react';
+import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,7 +46,7 @@ export default function ProAccount() {
         user_email: user.email,
         company_name: user.full_name || user.email.split('@')[0],
         plan_type: planType,
-        credits: planType === 'starter' ? 100 : planType === 'pro' ? 500 : planType === 'enterprise' ? 2000 : 0,
+        credits: planType === 'starter' ? 20 : planType === 'pro' ? 100 : 0,
         status: 'active'
       });
       
@@ -59,7 +59,7 @@ export default function ProAccount() {
 
   const upgradePlanMutation = useMutation({
     mutationFn: async (planType) => {
-      const newCredits = planType === 'starter' ? 100 : planType === 'pro' ? 500 : planType === 'enterprise' ? 2000 : 0;
+      const newCredits = planType === 'starter' ? 20 : planType === 'pro' ? 100 : 0;
       
       await base44.entities.ProAccount.update(proAccount.id, {
         plan_type: planType,
@@ -87,6 +87,7 @@ export default function ProAccount() {
       price: '0€',
       period: t('pro_always'),
       credits: 0,
+      costPerCredit: null,
       features: [
         'Soumettre des outils IA',
         'Profil public',
@@ -97,12 +98,13 @@ export default function ProAccount() {
     },
     {
       name: 'Starter',
-      price: '9,90€',
+      price: '5€',
       period: t('pro_per_month'),
-      credits: 10,
+      credits: 20,
+      costPerCredit: '0.25€',
       features: [
         'Tout du plan Free',
-        '10 crédits publicitaires/mois',
+        '20 crédits publicitaires/mois',
         '1 crédit = 1 jour bannière',
         'Support prioritaire'
       ],
@@ -112,12 +114,13 @@ export default function ProAccount() {
     },
     {
       name: 'Pro',
-      price: '29,90€',
+      price: '20€',
       period: t('pro_per_month'),
-      credits: 50,
+      credits: 100,
+      costPerCredit: '0.20€',
       features: [
         'Tout du plan Starter',
-        '50 crédits publicitaires/mois',
+        '100 crédits publicitaires/mois',
         'Badge Pro',
         'Analytics détaillés',
         'Support premium'
@@ -129,9 +132,9 @@ export default function ProAccount() {
   ];
 
   const creditPacks = [
-    { credits: 10, price: '12,90€' },
-    { credits: 50, price: '39,90€' },
-    { credits: 100, price: '59,90€' }
+    { credits: 10, price: '5€', costPerCredit: '0.50€' },
+    { credits: 50, price: '20€', costPerCredit: '0.40€' },
+    { credits: 100, price: '30€', costPerCredit: '0.30€' }
   ];
 
   return (
@@ -186,6 +189,146 @@ export default function ProAccount() {
             </CardContent>
           </Card>
         )}
+
+        {/* How it works */}
+        <div className="mb-12 bg-white rounded-3xl p-8 border border-slate-200 shadow-lg">
+          <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center flex items-center justify-center gap-3">
+            <Sparkles className="w-8 h-8 text-purple-600" />
+            {t('pro_how_it_works')}
+          </h2>
+          <p className="text-center text-slate-600 mb-8 max-w-2xl mx-auto">
+            {t('pro_how_it_works_intro')}
+          </p>
+
+          {/* Steps */}
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl">
+              <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
+                <CreditCard className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">{t('pro_how_step1_title')}</h3>
+              <p className="text-sm text-slate-600">{t('pro_how_step1_desc')}</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+              <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
+                <Image className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">{t('pro_how_step2_title')}</h3>
+              <p className="text-sm text-slate-600">{t('pro_how_step2_desc')}</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+              <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
+                <Calendar className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">{t('pro_how_step3_title')}</h3>
+              <p className="text-sm text-slate-600">{t('pro_how_step3_desc')}</p>
+            </div>
+          </div>
+
+          {/* Positions preview */}
+          <h3 className="text-xl font-bold text-slate-900 mb-6 text-center flex items-center justify-center gap-2">
+            <LayoutGrid className="w-5 h-5 text-purple-600" />
+            {t('pro_positions_title')}
+          </h3>
+          <div className="grid md:grid-cols-4 gap-4">
+            {/* Hero */}
+            <div className="bg-slate-100 rounded-xl p-4">
+              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden">
+                <div className="absolute top-1 left-1 right-1 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
+                  HERO
+                </div>
+                <div className="absolute bottom-1 left-1 right-1 flex gap-1">
+                  <div className="h-6 flex-1 bg-slate-300 rounded" />
+                  <div className="h-6 flex-1 bg-slate-300 rounded" />
+                  <div className="h-6 flex-1 bg-slate-300 rounded" />
+                </div>
+              </div>
+              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_hero')}</h4>
+              <p className="text-xs text-slate-500">{t('pro_position_hero_desc')}</p>
+            </div>
+
+            {/* Sidebar Card */}
+            <div className="bg-slate-100 rounded-xl p-4">
+              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
+                <div className="flex gap-1 h-full">
+                  <div className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold border-2 border-purple-400">
+                    CARD
+                  </div>
+                  <div className="flex-1 bg-slate-300 rounded" />
+                  <div className="flex-1 bg-slate-300 rounded" />
+                </div>
+              </div>
+              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_sidebar')}</h4>
+              <p className="text-xs text-slate-500">{t('pro_position_sidebar_desc')}</p>
+            </div>
+
+            {/* Category bottom */}
+            <div className="bg-slate-100 rounded-xl p-4">
+              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
+                <div className="grid grid-cols-4 gap-1 mb-1">
+                  <div className="h-4 bg-slate-300 rounded" />
+                  <div className="h-4 bg-slate-300 rounded" />
+                  <div className="h-4 bg-slate-300 rounded" />
+                  <div className="h-4 bg-slate-300 rounded" />
+                </div>
+                <div className="h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
+                  BANNIÈRE
+                </div>
+                <div className="flex justify-center mt-1">
+                  <div className="h-3 w-12 bg-slate-400 rounded" />
+                </div>
+              </div>
+              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_category')}</h4>
+              <p className="text-xs text-slate-500">{t('pro_position_category_desc')}</p>
+            </div>
+
+            {/* Explore */}
+            <div className="bg-slate-100 rounded-xl p-4">
+              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
+                <div className="h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold mb-1">
+                  TOP
+                </div>
+                <div className="flex gap-1">
+                  <div className="flex-1 h-8 bg-slate-300 rounded" />
+                  <div className="flex-1 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded flex items-center justify-center text-white text-[6px] font-bold">
+                    CARD
+                  </div>
+                  <div className="flex-1 h-8 bg-slate-300 rounded" />
+                </div>
+              </div>
+              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_explore')}</h4>
+              <p className="text-xs text-slate-500">{t('pro_position_explore_desc')}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Credit Packs */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
+            {t('pro_buy_credits')}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {creditPacks.map((pack) => (
+              <div key={pack.credits} className="bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-purple-400 transition-all">
+                <div className="text-center mb-6">
+                  <div className="text-5xl font-bold text-slate-900 mb-2">
+                    {pack.credits}
+                  </div>
+                  <div className="text-slate-600 mb-4">{t('pro_credits')}</div>
+                  <div className="text-4xl font-bold text-purple-600 mb-2">
+                    {pack.price}
+                  </div>
+                  <div className="text-sm text-green-600 font-medium">
+                    {pack.costPerCredit} {t('pro_cost_per_credit')}
+                  </div>
+                </div>
+                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  {t('pro_buy_now')}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Plans */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
