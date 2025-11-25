@@ -9,6 +9,7 @@ import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock, X } from 'lucid
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import BannerCalendar from '@/components/banners/BannerCalendar';
+import BannerPositionSelector from '@/components/banners/BannerPositionSelector';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function BannerManager() {
@@ -192,16 +193,10 @@ export default function BannerManager() {
                   required
                 />
 
-                <Select value={formData.position} onValueChange={(v) => setFormData({...formData, position: v})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('banner_position')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {positions.map(p => (
-                      <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <BannerPositionSelector 
+                  value={formData.position} 
+                  onChange={(v) => setFormData({...formData, position: v})} 
+                />
 
                 <div className="flex gap-2">
                   <Button type="submit" disabled={createBannerMutation.isPending}>{t('banner_create_btn')}</Button>
