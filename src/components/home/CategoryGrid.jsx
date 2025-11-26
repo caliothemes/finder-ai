@@ -25,8 +25,30 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
     'GraduationCap': GraduationCap,
     'Heart': Heart,
     'ShoppingBag': ShoppingBag,
+    'ShoppingCart': ShoppingCart,
     'Cpu': Cpu,
-    'Box': Box
+    'Box': Box,
+    'Brain': Brain,
+    'Mic': Mic,
+    'Bot': Bot,
+    'Palette': Palette,
+    'Camera': Camera,
+    'PenTool': PenTool,
+    'Zap': Zap,
+    'Database': Database,
+    'Globe': Globe,
+    'Search': Search,
+    'Mail': Mail,
+    'Calendar': Calendar,
+    'Star': Star,
+    'Lightbulb': Lightbulb,
+    'Rocket': Rocket,
+    'Target': Target,
+    'Users': Users,
+    'Gamepad2': Gamepad2,
+    'Film': Film,
+    'Headphones': Headphones,
+    'BookOpen': BookOpen
   };
 
   const getIcon = (iconName) => {
