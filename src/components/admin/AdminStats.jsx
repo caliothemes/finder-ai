@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image } from 'lucide-react';
+import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image, Activity } from 'lucide-react';
 
 export default function AdminStats() {
   const { data: services = [] } = useQuery({
@@ -47,9 +48,17 @@ export default function AdminStats() {
 
   const totalViews = services.reduce((sum, s) => sum + (s.views || 0), 0);
   const totalLikes = services.reduce((sum, s) => sum + (s.likes || 0), 0);
-  const avgRating = services.length > 0 
-    ? (services.reduce((sum, s) => sum + (s.average_rating || 0), 0) / services.length).toFixed(1)
+  
+  const servicesWithRating = services.filter(s => s.average_rating > 0);
+  const avgRating = servicesWithRating.length > 0 
+    ? (servicesWithRating.reduce((sum, s) => sum + s.average_rating, 0) / servicesWithRating.length).toFixed(1)
     : 0;
+
+  const approvedServices = services.filter(s => s.status === 'approved').length;
+  const pendingServices = services.filter(s => s.status === 'pending').length;
+  const activeProAccounts = proAccounts.filter(p => p.plan_type !== 'free').length;
+  const validatedBanners = banners.filter(b => b.validated).length;
+  const activeStories = stories.filter(s => s.active).length;
 
   const topServices = [...services]
     .sort((a, b) => (b.views || 0) - (a.views || 0))
@@ -180,6 +189,90 @@ export default function AdminStats() {
             <div className="flex items-center gap-3">
               <Star className="w-8 h-8 text-yellow-500" />
               <span className="text-3xl font-bold">{avgRating}</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Services approuvés</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-8 h-8 text-green-500" />
+              <span className="text-3xl font-bold">{approvedServices}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Services en attente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-8 h-8 text-orange-500" />
+              <span className="text-3xl font-bold">{pendingServices}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Comptes Pro Actifs</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Crown className="w-8 h-8 text-yellow-500" />
+              <span className="text-3xl font-bold">{activeProAccounts}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Total Avis</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <MessageSquare className="w-8 h-8 text-blue-500" />
+              <span className="text-3xl font-bold">{reviews.length}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Total Favoris</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Heart className="w-8 h-8 text-red-500" />
+              <span className="text-3xl font-bold">{favorites.length}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Bannières Validées</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <Image className="w-8 h-8 text-cyan-500" />
+              <span className="text-3xl font-bold">{validatedBanners}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Histoires Actives</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <FileText className="w-8 h-8 text-lime-500" />
+              <span className="text-3xl font-bold">{activeStories}</span>
             </div>
           </CardContent>
         </Card>
