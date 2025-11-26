@@ -4,7 +4,10 @@ import { createPageUrl } from '@/utils';
 import { 
   ArrowRight, Box, Sparkles, Image, MessageSquare, 
   Video, Music, Code, FileText, Briefcase, 
-  GraduationCap, Heart, ShoppingBag, Cpu 
+  GraduationCap, Heart, ShoppingBag, Cpu, Brain, Mic, Bot,
+  Palette, Camera, PenTool, Zap, Database, Globe, Search,
+  Mail, Calendar, ShoppingCart, Star, Lightbulb, Rocket,
+  Target, Users, Gamepad2, Film, Headphones, BookOpen
 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 
