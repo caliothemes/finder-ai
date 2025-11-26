@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2 } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminServices() {
@@ -20,11 +20,12 @@ export default function AdminServices() {
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [filter, setFilter] = useState('all');
   const queryClient = useQueryClient();
 
   const { data: services = [], isLoading } = useQuery({
     queryKey: ['adminServices'],
-    queryFn: () => base44.entities.AIService.list('-created_date', 50),
+    queryFn: () => base44.entities.AIService.list('-created_date', 100),
   });
 
   const { data: categories = [] } = useQuery({
@@ -57,6 +58,104 @@ export default function AdminServices() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       toast.success('Service supprimé');
+    },
+  });
+
+  const approveRevisionMutation = useMutation({
+    mutationFn: async (service) => {
+      const revision = service.pending_revision;
+      const updateData = {
+        name: revision.name,
+        tagline: revision.tagline,
+        tagline_en: revision.tagline_en,
+        description: revision.description,
+        description_en: revision.description_en,
+        categories: revision.categories,
+        logo_url: revision.logo_url,
+        cover_image_url: revision.cover_image_url,
+        website_url: revision.website_url,
+        pricing: revision.pricing,
+        features: revision.features,
+        features_en: revision.features_en,
+        tags: revision.tags,
+        pending_revision: null
+      };
+
+      await base44.entities.AIService.update(service.id, updateData);
+
+      // Envoyer email au client
+      try {
+        await base44.integrations.Core.SendEmail({
+          to: service.submitted_by,
+          subject: `✅ Vos modifications ont été approuvées - ${service.name}`,
+          body: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #1e1b4b 100%); border-radius: 16px; overflow: hidden;">
+              <div style="padding: 40px; text-align: center; border-bottom: 1px solid rgba(139, 92, 246, 0.3);">
+                <h1 style="color: white; margin: 0; font-size: 28px;">✅ Révision approuvée</h1>
+              </div>
+              <div style="padding: 40px; background: white; margin: 20px; border-radius: 12px;">
+                <p style="color: #334155; font-size: 16px; margin-bottom: 20px;">
+                  Bonjour,
+                </p>
+                <p style="color: #334155; font-size: 16px; margin-bottom: 20px;">
+                  Vos modifications pour <strong>${service.name}</strong> ont été approuvées et sont maintenant visibles sur Finder AI !
+                </p>
+                <div style="text-align: center; margin-top: 30px;">
+                  <a href="https://finderai.com/ai/${service.slug}" style="background: linear-gradient(135deg, #9333ea, #ec4899); color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                    Voir ma page
+                  </a>
+                </div>
+              </div>
+            </div>
+          `
+        });
+      } catch (emailError) {
+        console.error('Email error:', emailError);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      toast.success('Révision approuvée !');
+    },
+  });
+
+  const rejectRevisionMutation = useMutation({
+    mutationFn: async (service) => {
+      await base44.entities.AIService.update(service.id, {
+        pending_revision: null
+      });
+
+      // Envoyer email au client
+      try {
+        await base44.integrations.Core.SendEmail({
+          to: service.submitted_by,
+          subject: `❌ Vos modifications ont été refusées - ${service.name}`,
+          body: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #1e1b4b 100%); border-radius: 16px; overflow: hidden;">
+              <div style="padding: 40px; text-align: center; border-bottom: 1px solid rgba(139, 92, 246, 0.3);">
+                <h1 style="color: white; margin: 0; font-size: 28px;">❌ Révision refusée</h1>
+              </div>
+              <div style="padding: 40px; background: white; margin: 20px; border-radius: 12px;">
+                <p style="color: #334155; font-size: 16px; margin-bottom: 20px;">
+                  Bonjour,
+                </p>
+                <p style="color: #334155; font-size: 16px; margin-bottom: 20px;">
+                  Vos modifications pour <strong>${service.name}</strong> n'ont pas pu être approuvées. La version actuelle de votre page reste inchangée.
+                </p>
+                <p style="color: #64748b; font-size: 14px;">
+                  Si vous avez des questions, n'hésitez pas à nous contacter.
+                </p>
+              </div>
+            </div>
+          `
+        });
+      } catch (emailError) {
+        console.error('Email error:', emailError);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      toast.success('Révision refusée');
     },
   });
 
@@ -133,9 +232,30 @@ export default function AdminServices() {
     updateServiceMutation.mutate({ id: service.id, data: { status: newStatus } });
   };
 
-  const pendingServices = services.filter(s => s.status === 'pending');
-  const approvedServices = services.filter(s => s.status === 'approved');
+  // Services avec révisions en attente
+  const servicesWithRevisions = services.filter(s => s.pending_revision);
+  const pendingServices = services.filter(s => s.status === 'pending' && !s.pending_revision);
+  const approvedServices = services.filter(s => s.status === 'approved' && !s.pending_revision);
   const rejectedServices = services.filter(s => s.status === 'rejected');
+
+  // Filtrage
+  let filteredServices = services;
+  if (filter === 'revisions') {
+    filteredServices = servicesWithRevisions;
+  } else if (filter === 'pending') {
+    filteredServices = pendingServices;
+  } else if (filter === 'approved') {
+    filteredServices = approvedServices;
+  } else if (filter === 'rejected') {
+    filteredServices = rejectedServices;
+  }
+
+  // Trier pour mettre les révisions en premier
+  const sortedServices = [...filteredServices].sort((a, b) => {
+    if (a.pending_revision && !b.pending_revision) return -1;
+    if (!a.pending_revision && b.pending_revision) return 1;
+    return 0;
+  });
 
   if (isLoading) {
     return (
@@ -296,7 +416,23 @@ export default function AdminServices() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className={servicesWithRevisions.length > 0 ? 'border-2 border-amber-400 bg-amber-50' : ''}>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <RefreshCw className={`w-4 h-4 ${servicesWithRevisions.length > 0 ? 'text-amber-600' : 'text-slate-400'}`} />
+              Révisions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className={`text-3xl font-bold ${servicesWithRevisions.length > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
+                {servicesWithRevisions.length}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-slate-600">En attente</CardTitle>
@@ -334,26 +470,62 @@ export default function AdminServices() {
         </Card>
       </div>
 
+      {/* Filter + Create */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex gap-2">
+          <Button
+            variant={filter === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('all')}
+          >
+            Tous ({services.length})
+          </Button>
+          <Button
+            variant={filter === 'revisions' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('revisions')}
+            className={servicesWithRevisions.length > 0 ? 'border-amber-400 text-amber-700' : ''}
+          >
+            <RefreshCw className="w-3 h-3 mr-1" />
+            Révisions ({servicesWithRevisions.length})
+          </Button>
+          <Button
+            variant={filter === 'pending' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('pending')}
+          >
+            En attente ({pendingServices.length})
+          </Button>
+          <Button
+            variant={filter === 'approved' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('approved')}
+          >
+            Approuvés ({approvedServices.length})
+          </Button>
+        </div>
+        <Button onClick={() => setShowForm(!showForm)}>
+          <Plus className="w-4 h-4 mr-2" />
+          Créer un service
+        </Button>
+      </div>
+
       {/* Services List */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Services IA soumis</CardTitle>
-              <CardDescription>Gérez les soumissions de services IA</CardDescription>
-            </div>
-            <Button onClick={() => setShowForm(!showForm)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Créer un service
-            </Button>
-          </div>
+          <CardTitle>Services IA ({filteredServices.length})</CardTitle>
+          <CardDescription>Gérez les soumissions de services IA</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {services.map((service) => (
+            {sortedServices.map((service) => (
               <div key={service.id}>
                 <div
-                  className="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                  className={`flex items-center justify-between p-4 border rounded-xl transition-colors ${
+                    service.pending_revision
+                      ? 'border-amber-400 bg-amber-50'
+                      : 'border-slate-200 hover:bg-slate-50'
+                  }`}
                 >
                   <div className="flex items-center gap-4">
                     {service.logo_url && (
@@ -364,7 +536,15 @@ export default function AdminServices() {
                       />
                     )}
                     <div>
-                      <h3 className="font-semibold text-slate-900">{service.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-slate-900">{service.name}</h3>
+                        {service.pending_revision && (
+                          <Badge className="bg-amber-500 text-white animate-pulse">
+                            <RefreshCw className="w-3 h-3 mr-1" />
+                            Nouvelle version à valider
+                          </Badge>
+                        )}
+                      </div>
                       <p className="text-sm text-slate-600">{service.tagline}</p>
                       <p className="text-xs text-slate-500 mt-1">
                         Soumis par: {service.submitted_by || 'N/A'}
@@ -372,6 +552,29 @@ export default function AdminServices() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    {service.pending_revision && (
+                      <>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => approveRevisionMutation.mutate(service)}
+                          disabled={approveRevisionMutation.isPending}
+                        >
+                          <Check className="w-4 h-4 mr-1" />
+                          Approuver
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600 border-red-300 hover:bg-red-50"
+                          onClick={() => rejectRevisionMutation.mutate(service)}
+                          disabled={rejectRevisionMutation.isPending}
+                        >
+                          <X className="w-4 h-4 mr-1" />
+                          Refuser
+                        </Button>
+                      </>
+                    )}
                     <Button
                       variant="outline"
                       size="icon"
