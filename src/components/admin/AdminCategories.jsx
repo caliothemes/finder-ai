@@ -5,7 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Trash2, Grid, Edit } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+  Plus, Trash2, Grid, Edit, Sparkles, Brain, Image, Video, Music, 
+  MessageSquare, Code, FileText, Mic, Bot, Palette, Camera, 
+  PenTool, Zap, Database, Globe, Search, Mail, Calendar, 
+  ShoppingCart, Heart, Star, Lightbulb, Rocket, Target, Users,
+  Briefcase, GraduationCap, Gamepad2, Film, Headphones, BookOpen
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminCategories() {
