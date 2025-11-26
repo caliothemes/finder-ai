@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image, Activity } from 'lucide-react';
+import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image } from 'lucide-react';
 
 export default function AdminStats() {
   const { data: services = [] } = useQuery({
