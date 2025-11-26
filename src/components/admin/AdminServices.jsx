@@ -577,8 +577,7 @@ export default function AdminServices() {
                           size="sm"
                           variant="outline"
                           className="text-red-600 border-red-300 hover:bg-red-50"
-                          onClick={() => rejectRevisionMutation.mutate(service)}
-                          disabled={rejectRevisionMutation.isPending}
+                          onClick={() => setRejectingService(service)}
                         >
                           <X className="w-4 h-4 mr-1" />
                           Refuser
