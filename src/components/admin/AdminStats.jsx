@@ -65,69 +65,19 @@ export default function AdminStats() {
 
   return (
     <div className="space-y-6">
-      {/* Visitor Stats */}
-      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-purple-600" />
-            Visiteurs en ce moment
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-bold text-purple-600">
-            {Math.floor(Math.random() * 50) + 10}
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs aujourd'hui</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Activity className="w-8 h-8 text-blue-500" />
-              <span className="text-3xl font-bold">{Math.floor(Math.random() * 500) + 200}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs 7 derniers jours</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Activity className="w-8 h-8 text-indigo-500" />
-              <span className="text-3xl font-bold">{Math.floor(Math.random() * 2000) + 1000}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Visiteurs 30 derniers jours</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Activity className="w-8 h-8 text-purple-500" />
-              <span className="text-3xl font-bold">{Math.floor(Math.random() * 8000) + 4000}</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Main Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Services IA</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-600">Services IA (Total)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Sparkles className="w-8 h-8 text-purple-500" />
-              <span className="text-3xl font-bold">{services.length}</span>
+              <div>
+                <span className="text-3xl font-bold">{services.length}</span>
+                <p className="text-xs text-slate-500">{approvedServices} approuvés • {pendingServices} en attente</p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -158,6 +108,18 @@ export default function AdminStats() {
 
         <Card>
           <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600">Avis publiés</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <MessageSquare className="w-8 h-8 text-cyan-500" />
+              <span className="text-3xl font-bold">{reviews.length}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-slate-600">Total Vues</CardTitle>
           </CardHeader>
           <CardContent>
@@ -170,12 +132,12 @@ export default function AdminStats() {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Likes</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-600">Total Favoris</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Heart className="w-8 h-8 text-pink-500" />
-              <span className="text-3xl font-bold">{totalLikes.toLocaleString()}</span>
+              <span className="text-3xl font-bold">{favorites.length}</span>
             </div>
           </CardContent>
         </Card>
@@ -187,91 +149,52 @@ export default function AdminStats() {
           <CardContent>
             <div className="flex items-center gap-3">
               <Star className="w-8 h-8 text-yellow-500" />
-              <span className="text-3xl font-bold">{avgRating}</span>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Services approuvés</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-8 h-8 text-green-500" />
-              <span className="text-3xl font-bold">{approvedServices}</span>
+              <span className="text-3xl font-bold">{avgRating}/5</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Services en attente</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-600">Comptes Pro</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <Sparkles className="w-8 h-8 text-orange-500" />
-              <span className="text-3xl font-bold">{pendingServices}</span>
+              <Crown className="w-8 h-8 text-amber-500" />
+              <div>
+                <span className="text-3xl font-bold">{proAccounts.length}</span>
+                <p className="text-xs text-slate-500">{activeProAccounts} payants</p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Comptes Pro Actifs</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-600">Bannières</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <Crown className="w-8 h-8 text-yellow-500" />
-              <span className="text-3xl font-bold">{activeProAccounts}</span>
+              <Image className="w-8 h-8 text-orange-500" />
+              <div>
+                <span className="text-3xl font-bold">{banners.length}</span>
+                <p className="text-xs text-slate-500">{validatedBanners} validées</p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Avis</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-600">Stories</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <MessageSquare className="w-8 h-8 text-blue-500" />
-              <span className="text-3xl font-bold">{reviews.length}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Favoris</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Heart className="w-8 h-8 text-red-500" />
-              <span className="text-3xl font-bold">{favorites.length}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Bannières Validées</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Image className="w-8 h-8 text-cyan-500" />
-              <span className="text-3xl font-bold">{validatedBanners}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Histoires Actives</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <FileText className="w-8 h-8 text-lime-500" />
-              <span className="text-3xl font-bold">{activeStories}</span>
+              <FileText className="w-8 h-8 text-fuchsia-500" />
+              <div>
+                <span className="text-3xl font-bold">{stories.length}</span>
+                <p className="text-xs text-slate-500">{activeStories} actives</p>
+              </div>
             </div>
           </CardContent>
         </Card>
