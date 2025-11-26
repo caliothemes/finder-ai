@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Users, Sparkles, Heart, Eye, Star, Activity } from 'lucide-react';
+import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image } from 'lucide-react';
 
 export default function AdminStats() {
   const { data: services = [] } = useQuery({
@@ -18,6 +18,31 @@ export default function AdminStats() {
   const { data: subscribers = [] } = useQuery({
     queryKey: ['subscribers'],
     queryFn: () => base44.entities.NewsletterSubscriber.list(),
+  });
+
+  const { data: reviews = [] } = useQuery({
+    queryKey: ['allReviews'],
+    queryFn: () => base44.entities.Review.list(),
+  });
+
+  const { data: favorites = [] } = useQuery({
+    queryKey: ['allFavorites'],
+    queryFn: () => base44.entities.Favorite.list(),
+  });
+
+  const { data: proAccounts = [] } = useQuery({
+    queryKey: ['allProAccounts'],
+    queryFn: () => base44.entities.ProAccount.list(),
+  });
+
+  const { data: banners = [] } = useQuery({
+    queryKey: ['allBanners'],
+    queryFn: () => base44.entities.BannerReservation.list(),
+  });
+
+  const { data: stories = [] } = useQuery({
+    queryKey: ['allStories'],
+    queryFn: () => base44.entities.Story.list(),
   });
 
   const totalViews = services.reduce((sum, s) => sum + (s.views || 0), 0);
