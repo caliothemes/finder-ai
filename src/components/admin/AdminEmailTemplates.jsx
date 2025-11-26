@@ -44,7 +44,10 @@ export default function AdminEmailTemplates() {
     { key: 'ai_approved', label: 'IA validée', vars: ['{{user_name}}', '{{service_name}}', '{{service_url}}'] },
     { key: 'ai_rejected', label: 'IA refusée', vars: ['{{user_name}}', '{{service_name}}', '{{reason}}'] },
     { key: 'banner_reserved', label: 'Bannière réservée', vars: ['{{user_name}}', '{{date}}', '{{position}}'] },
-    { key: 'banner_expiring', label: 'Bannière expire', vars: ['{{user_name}}', '{{expiry_date}}', '{{banner_title}}'] }
+    { key: 'banner_expiring', label: 'Bannière expire', vars: ['{{user_name}}', '{{expiry_date}}', '{{banner_title}}'] },
+    { key: 'ai_revision_requested', label: '🔄 Révision demandée (Admin)', vars: ['{{service_name}}', '{{user_email}}', '{{submitted_at}}'] },
+    { key: 'ai_revision_approved', label: '✅ Révision approuvée (Client)', vars: ['{{user_name}}', '{{service_name}}', '{{service_url}}'] },
+    { key: 'ai_revision_rejected', label: '❌ Révision refusée (Client)', vars: ['{{user_name}}', '{{service_name}}'] }
   ];
 
   const handleEdit = (template) => {
