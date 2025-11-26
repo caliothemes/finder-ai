@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminServices() {
@@ -23,6 +23,8 @@ export default function AdminServices() {
   const [filter, setFilter] = useState('all');
   const [rejectingService, setRejectingService] = useState(null);
   const [rejectComment, setRejectComment] = useState('');
+  const [translating, setTranslating] = useState(false);
+  const [translationProgress, setTranslationProgress] = useState({ current: 0, total: 0 });
   const queryClient = useQueryClient();
 
   const { data: services = [], isLoading } = useQuery({
@@ -240,6 +242,71 @@ export default function AdminServices() {
 
   const handleStatusChange = (service, newStatus) => {
     updateServiceMutation.mutate({ id: service.id, data: { status: newStatus } });
+  };
+
+  // Fonction de traduction automatique
+  const translateAllServices = async () => {
+    const servicesToTranslate = services.filter(s => 
+      s.status === 'approved' && 
+      (!s.tagline_en || !s.description_en || s.tagline_en.trim() === '' || s.description_en.trim() === '')
+    );
+
+    if (servicesToTranslate.length === 0) {
+      toast.info('Tous les services sont déjà traduits !');
+      return;
+    }
+
+    setTranslating(true);
+    setTranslationProgress({ current: 0, total: servicesToTranslate.length });
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < servicesToTranslate.length; i++) {
+      const service = servicesToTranslate[i];
+      setTranslationProgress({ current: i + 1, total: servicesToTranslate.length });
+
+      try {
+        const result = await base44.integrations.Core.InvokeLLM({
+          prompt: `Translate the following French AI service information to English. Keep it professional and concise.
+
+French Tagline: "${service.tagline || ''}"
+French Description: "${service.description || ''}"
+French Features: ${JSON.stringify(service.features || [])}
+
+Provide accurate English translations.`,
+          response_json_schema: {
+            type: "object",
+            properties: {
+              tagline_en: { type: "string", description: "English tagline" },
+              description_en: { type: "string", description: "English description" },
+              features_en: { type: "array", items: { type: "string" }, description: "English features" }
+            },
+            required: ["tagline_en", "description_en"]
+          }
+        });
+
+        await base44.entities.AIService.update(service.id, {
+          tagline_en: result.tagline_en,
+          description_en: result.description_en,
+          features_en: result.features_en || []
+        });
+
+        successCount++;
+      } catch (error) {
+        console.error(`Error translating ${service.name}:`, error);
+        errorCount++;
+      }
+    }
+
+    setTranslating(false);
+    queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+    
+    if (errorCount === 0) {
+      toast.success(`${successCount} services traduits avec succès !`);
+    } else {
+      toast.warning(`${successCount} traduits, ${errorCount} erreurs`);
+    }
   };
 
   // Services avec révisions en attente
@@ -521,8 +588,8 @@ export default function AdminServices() {
       </div>
 
       {/* Filter + Create */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex gap-2">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex gap-2 flex-wrap">
           <Button
             variant={filter === 'all' ? 'default' : 'outline'}
             size="sm"
@@ -554,10 +621,30 @@ export default function AdminServices() {
             Approuvés ({approvedServices.length})
           </Button>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Créer un service
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline"
+            onClick={translateAllServices}
+            disabled={translating}
+            className="bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100"
+          >
+            {translating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Traduction {translationProgress.current}/{translationProgress.total}
+              </>
+            ) : (
+              <>
+                <Languages className="w-4 h-4 mr-2" />
+                Traduire tout
+              </>
+            )}
+          </Button>
+          <Button onClick={() => setShowForm(!showForm)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Créer un service
+          </Button>
+        </div>
       </div>
 
       {/* Services List */}
