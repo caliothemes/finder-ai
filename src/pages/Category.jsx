@@ -146,7 +146,14 @@ export default function Category() {
       {/* Header */}
       <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 py-24 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-6">
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-6 border"
+            style={{ 
+              backgroundColor: category.color ? `${category.color}20` : 'rgba(147, 51, 234, 0.1)',
+              borderColor: category.color ? `${category.color}40` : 'rgba(147, 51, 234, 0.2)',
+              color: category.color || '#c4b5fd'
+            }}
+          >
             {(() => {
               const iconMap = {
                 Sparkles, Zap, Image: ImageIcon, MessageSquare, Music, Video, 

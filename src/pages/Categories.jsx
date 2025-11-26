@@ -113,9 +113,10 @@ export default function Categories() {
                 
                 <div className="relative">
                   <div 
-                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 bg-gradient-to-br from-purple-100 to-pink-100"
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                    style={{ backgroundColor: category.color ? `${category.color}20` : '#f3e8ff' }}
                   >
-                    <IconComponent className="w-7 h-7 text-purple-600" />
+                    <IconComponent className="w-7 h-7" style={{ color: category.color || '#9333ea' }} />
                   </div>
                   
                   <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors">

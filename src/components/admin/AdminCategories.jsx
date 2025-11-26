@@ -240,7 +240,11 @@ export default function AdminCategories() {
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Grid className="w-5 h-5" style={{ color: category.color || '#9333ea' }} />
+                    {(() => {
+                      const iconData = AVAILABLE_ICONS.find(i => i.name === category.icon);
+                      const IconComponent = iconData ? iconData.icon : Grid;
+                      return <IconComponent className="w-5 h-5" style={{ color: category.color || '#9333ea' }} />;
+                    })()}
                     <h3 className="font-semibold text-slate-900">{category.name}</h3>
                   </div>
                   <p className="text-sm text-slate-600 mb-1">{category.description}</p>
