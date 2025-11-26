@@ -123,8 +123,14 @@ export default function AdminAISearchScan() {
     setSelectedCategories(discovery.suggested_categories || []);
   };
 
+  const [filter, setFilter] = useState('all');
   const newCount = discoveries.filter(d => d.status === 'new').length;
   const reviewedCount = discoveries.filter(d => d.status === 'reviewed').length;
+
+  // Filtrage
+  const filteredDiscoveries = filter === 'all' 
+    ? discoveries 
+    : discoveries.filter(d => d.status === filter);
 
   if (isLoading) {
     return (
@@ -161,18 +167,57 @@ export default function AdminAISearchScan() {
         </Button>
       </div>
 
+      {/* Filter Tabs */}
+      <div className="flex gap-2">
+        <Button
+          variant={filter === 'all' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setFilter('all')}
+        >
+          Tous ({discoveries.length})
+        </Button>
+        <Button
+          variant={filter === 'new' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setFilter('new')}
+        >
+          À valider ({newCount})
+        </Button>
+        <Button
+          variant={filter === 'approved' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setFilter('approved')}
+        >
+          Services créés ({discoveries.filter(d => d.status === 'approved').length})
+        </Button>
+        <Button
+          variant={filter === 'reviewed' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setFilter('reviewed')}
+        >
+          Vus ({reviewedCount})
+        </Button>
+        <Button
+          variant={filter === 'dismissed' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setFilter('dismissed')}
+        >
+          Rejetés ({discoveries.filter(d => d.status === 'dismissed').length})
+        </Button>
+      </div>
+
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-purple-600">{newCount}</div>
-            <div className="text-sm text-slate-600">Nouveaux</div>
+            <div className="text-sm text-slate-600">À valider</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-blue-600">{reviewedCount}</div>
-            <div className="text-sm text-slate-600">En révision</div>
+            <div className="text-sm text-slate-600">Vus</div>
           </CardContent>
         </Card>
         <Card>
@@ -180,14 +225,22 @@ export default function AdminAISearchScan() {
             <div className="text-2xl font-bold text-green-600">
               {discoveries.filter(d => d.status === 'approved').length}
             </div>
-            <div className="text-sm text-slate-600">Approuvés</div>
+            <div className="text-sm text-slate-600">Services créés</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-slate-400">
+              {discoveries.filter(d => d.status === 'dismissed').length}
+            </div>
+            <div className="text-sm text-slate-600">Rejetés</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Discoveries List */}
       <div className="space-y-4">
-        {discoveries.map((discovery) => (
+        {filteredDiscoveries.map((discovery) => (
           <Card key={discovery.id} className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-slate-50 to-purple-50">
               <div className="flex items-start justify-between">
