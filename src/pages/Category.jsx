@@ -5,8 +5,9 @@ import AIServiceCard from '@/components/AIServiceCard';
 import { 
   Sparkles, Zap, Image as ImageIcon, MessageSquare, Music, Video, 
   Brain, Code, FileText, Palette, Box, Search, Bot, Database, 
-  Globe, Shield, Target, TrendingUp, Users, Workflow, Mic,
-  Camera, Mail, Heart, Settings, Grid, Layers, PenTool, Crown
+  Globe, Shield, Target, TrendingUp, Users, Mic, Camera, Mail, 
+  Heart, PenTool, Crown, Star, Lightbulb, Rocket, Briefcase,
+  GraduationCap, Gamepad2, Film, Headphones, BookOpen, ShoppingCart, Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -148,10 +149,11 @@ export default function Category() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm mb-6">
             {(() => {
               const iconMap = {
-                Sparkles, Zap, ImageIcon, MessageSquare, Music, Video, 
+                Sparkles, Zap, Image: ImageIcon, MessageSquare, Music, Video, 
                 Brain, Code, FileText, Palette, Box, Search, Bot, Database, 
-                Globe, Shield, Target, TrendingUp, Users, Workflow, Mic,
-                Camera, Mail, Heart, Settings, Grid, Layers, PenTool
+                Globe, Shield, Target, TrendingUp, Users, Mic, Camera, Mail, 
+                Heart, PenTool, Star, Lightbulb, Rocket, Briefcase,
+                GraduationCap, Gamepad2, Film, Headphones, BookOpen, ShoppingCart, Calendar
               };
               const IconComponent = iconMap[category.icon] || Box;
               return <IconComponent className="w-4 h-4" />;

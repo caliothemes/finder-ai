@@ -7,7 +7,9 @@ import {
   ArrowRight, Sparkles, MessageSquare, Video, Music, Code, 
   Palette, TrendingUp, FileText, Search, BarChart, Box,
   Camera, Mic, Terminal, Wand2, Mail, Calendar, Database,
-  Globe, Shield, Zap, Brain, Image as ImageIcon
+  Globe, Shield, Zap, Brain, Image as ImageIcon, Bot, PenTool,
+  Heart, Star, Lightbulb, Rocket, Target, Users, Briefcase,
+  GraduationCap, Gamepad2, Film, Headphones, BookOpen, ShoppingCart
 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 
@@ -47,6 +49,21 @@ export default function Categories() {
     'Zap': Zap,
     'Brain': Brain,
     'Image': ImageIcon,
+    'Bot': Bot,
+    'PenTool': PenTool,
+    'Heart': Heart,
+    'Star': Star,
+    'Lightbulb': Lightbulb,
+    'Rocket': Rocket,
+    'Target': Target,
+    'Users': Users,
+    'Briefcase': Briefcase,
+    'GraduationCap': GraduationCap,
+    'Gamepad2': Gamepad2,
+    'Film': Film,
+    'Headphones': Headphones,
+    'BookOpen': BookOpen,
+    'ShoppingCart': ShoppingCart,
   };
 
   const getIconComponent = (iconName) => {
