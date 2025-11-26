@@ -153,16 +153,53 @@ export default function AdminCategories() {
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
               />
               <div className="grid md:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Icône Lucide (ex: Sparkles)"
-                  value={formData.icon}
-                  onChange={(e) => setFormData({...formData, icon: e.target.value})}
-                />
-                <Input
-                  placeholder="Couleur (ex: #9333ea)"
-                  value={formData.color}
-                  onChange={(e) => setFormData({...formData, color: e.target.value})}
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">Icône</label>
+                  <Select
+                    value={formData.icon}
+                    onValueChange={(value) => setFormData({...formData, icon: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choisir une icône">
+                        {formData.icon && (
+                          <div className="flex items-center gap-2">
+                            {(() => {
+                              const iconData = AVAILABLE_ICONS.find(i => i.name === formData.icon);
+                              if (iconData) {
+                                const IconComponent = iconData.icon;
+                                return <IconComponent className="w-4 h-4" />;
+                              }
+                              return null;
+                            })()}
+                            <span>{formData.icon}</span>
+                          </div>
+                        )}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {AVAILABLE_ICONS.map((iconData) => {
+                        const IconComponent = iconData.icon;
+                        return (
+                          <SelectItem key={iconData.name} value={iconData.name}>
+                            <div className="flex items-center gap-2">
+                              <IconComponent className="w-4 h-4" />
+                              <span>{iconData.name}</span>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Couleur</label>
+                  <Input
+                    type="color"
+                    value={formData.color || '#9333ea'}
+                    onChange={(e) => setFormData({...formData, color: e.target.value})}
+                    className="h-10 p-1 cursor-pointer"
+                  />
+                </div>
               </div>
               <div className="flex gap-2">
                 <Button type="submit" disabled={createCategoryMutation.isPending || updateCategoryMutation.isPending}>
