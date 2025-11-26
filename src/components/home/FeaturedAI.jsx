@@ -10,7 +10,7 @@ import ActiveBanner from '@/components/banners/ActiveBanner';
 import DefaultAILogo from '@/components/DefaultAILogo';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [pricingOpen, setPricingOpen] = useState({});
   
   const isFavorite = (serviceId) => {
@@ -283,13 +283,13 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                       </h3>
                     </Link>
                     <p className="text-sm text-slate-600 line-clamp-2">
-                      {service.tagline}
+                      {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
                     </p>
                   </div>
                 </div>
 
                 <p className="text-slate-700 mb-4 line-clamp-2 text-sm">
-                  {service.description}
+                  {language === 'en' && service.description_en ? service.description_en : service.description}
                 </p>
 
                 {/* Rating and pricing */}

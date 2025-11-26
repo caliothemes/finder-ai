@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import DefaultAILogo from '@/components/DefaultAILogo';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite }) {
+  const { language } = useLanguage();
   const [pricingOpen, setPricingOpen] = useState(false);
 
   const getPricingBadge = (pricing) => {
@@ -90,13 +92,13 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
               </h3>
             </Link>
             <p className="text-xs text-slate-500 line-clamp-1">
-              {service.tagline}
+              {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
             </p>
           </div>
         </div>
 
         <p className="text-sm text-slate-700 mb-4 line-clamp-2">
-          {service.description}
+          {language === 'en' && service.description_en ? service.description_en : service.description}
         </p>
 
         {/* Meta info */}
