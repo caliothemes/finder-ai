@@ -15,6 +15,41 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const AVAILABLE_ICONS = [
+  { name: 'Sparkles', icon: Sparkles },
+  { name: 'Brain', icon: Brain },
+  { name: 'Image', icon: Image },
+  { name: 'Video', icon: Video },
+  { name: 'Music', icon: Music },
+  { name: 'MessageSquare', icon: MessageSquare },
+  { name: 'Code', icon: Code },
+  { name: 'FileText', icon: FileText },
+  { name: 'Mic', icon: Mic },
+  { name: 'Bot', icon: Bot },
+  { name: 'Palette', icon: Palette },
+  { name: 'Camera', icon: Camera },
+  { name: 'PenTool', icon: PenTool },
+  { name: 'Zap', icon: Zap },
+  { name: 'Database', icon: Database },
+  { name: 'Globe', icon: Globe },
+  { name: 'Search', icon: Search },
+  { name: 'Mail', icon: Mail },
+  { name: 'Calendar', icon: Calendar },
+  { name: 'ShoppingCart', icon: ShoppingCart },
+  { name: 'Heart', icon: Heart },
+  { name: 'Star', icon: Star },
+  { name: 'Lightbulb', icon: Lightbulb },
+  { name: 'Rocket', icon: Rocket },
+  { name: 'Target', icon: Target },
+  { name: 'Users', icon: Users },
+  { name: 'Briefcase', icon: Briefcase },
+  { name: 'GraduationCap', icon: GraduationCap },
+  { name: 'Gamepad2', icon: Gamepad2 },
+  { name: 'Film', icon: Film },
+  { name: 'Headphones', icon: Headphones },
+  { name: 'BookOpen', icon: BookOpen },
+];
+
 export default function AdminCategories() {
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
