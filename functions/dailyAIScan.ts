@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
 
     const allExistingUrls = [...new Set([...existingUrls, ...existingDiscoveryUrls])];
 
-    // Recherche massive sans filtrage par catégorie
+    // Recherche massive sans filtrage par catégorie - ÉLARGIE
     const searchQueries = [
       "complete list of all AI tools 2024 2025 with websites",
       "1000 AI tools directory complete database URLs",
@@ -30,7 +30,27 @@ Deno.serve(async (req) => {
       "best AI tools every category comprehensive list",
       "new AI products startups 2024 2025 all types",
       "AI software directory A to Z complete",
-      "topai.tools complete database all AI services"
+      "topai.tools complete database all AI services",
+      "AI writing tools copywriting content generation",
+      "AI image generation tools Midjourney alternatives",
+      "AI video creation editing tools 2024 2025",
+      "AI voice text to speech cloning tools",
+      "AI coding programming assistant tools",
+      "AI chatbot customer service tools",
+      "AI productivity automation workflow tools",
+      "AI marketing SEO social media tools",
+      "AI music audio generation tools",
+      "AI presentation slide deck tools",
+      "AI avatar virtual human tools",
+      "AI transcription meeting notes tools",
+      "AI research academic tools",
+      "AI no-code app builder tools",
+      "AI data analysis visualization tools",
+      "AI translation language tools",
+      "AI logo design branding tools",
+      "AI photo editing enhancement tools",
+      "AI 3D modeling rendering tools",
+      "AI education learning tutoring tools"
     ];
 
     const allDiscoveries = [];
@@ -46,7 +66,7 @@ Deno.serve(async (req) => {
 
 OBJECTIF: Trouver le MAXIMUM d'outils IA possibles. Pas de limite de catégorie.
 
-RETOURNE 25-50 outils IA avec:
+RETOURNE 30-60 outils IA avec:
 - name: Nom du produit
 - website_url: URL officielle (VÉRIFIE sur internet!)
 - description: 50-80 mots en français
