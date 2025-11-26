@@ -277,6 +277,46 @@ export default function AdminServices() {
 
   return (
     <div className="space-y-6">
+      {/* Modal de refus avec commentaire */}
+      {rejectingService && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Refuser la révision</h3>
+            <p className="text-slate-600 mb-4">
+              Service : <strong>{rejectingService.name}</strong>
+            </p>
+            <div className="mb-4">
+              <label className="text-sm font-medium mb-2 block">Motif du refus (optionnel)</label>
+              <Textarea
+                placeholder="Expliquez au client pourquoi sa révision est refusée..."
+                value={rejectComment}
+                onChange={(e) => setRejectComment(e.target.value)}
+                className="min-h-24"
+              />
+            </div>
+            <div className="flex gap-3">
+              <Button
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                onClick={() => rejectRevisionMutation.mutate({ service: rejectingService, comment: rejectComment })}
+                disabled={rejectRevisionMutation.isPending}
+              >
+                <X className="w-4 h-4 mr-2" />
+                Confirmer le refus
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setRejectingService(null);
+                  setRejectComment('');
+                }}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Create Form */}
       {showForm && (
         <Card>
