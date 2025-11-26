@@ -21,6 +21,8 @@ export default function AdminServices() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [rejectingService, setRejectingService] = useState(null);
+  const [rejectComment, setRejectComment] = useState('');
   const queryClient = useQueryClient();
 
   const { data: services = [], isLoading } = useQuery({
