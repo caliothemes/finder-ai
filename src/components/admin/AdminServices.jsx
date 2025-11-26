@@ -122,12 +122,12 @@ export default function AdminServices() {
   });
 
   const rejectRevisionMutation = useMutation({
-    mutationFn: async (service) => {
+    mutationFn: async ({ service, comment }) => {
       await base44.entities.AIService.update(service.id, {
         pending_revision: null
       });
 
-      // Envoyer email au client
+      // Envoyer email au client avec le commentaire
       try {
         await base44.integrations.Core.SendEmail({
           to: service.submitted_by,
@@ -144,8 +144,14 @@ export default function AdminServices() {
                 <p style="color: #334155; font-size: 16px; margin-bottom: 20px;">
                   Vos modifications pour <strong>${service.name}</strong> n'ont pas pu être approuvées. La version actuelle de votre page reste inchangée.
                 </p>
+                ${comment ? `
+                <div style="background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                  <p style="margin: 0 0 10px 0; color: #991b1b; font-weight: bold;">Motif du refus :</p>
+                  <p style="margin: 0; color: #7f1d1d;">${comment}</p>
+                </div>
+                ` : ''}
                 <p style="color: #64748b; font-size: 14px;">
-                  Si vous avez des questions, n'hésitez pas à nous contacter.
+                  Vous pouvez soumettre une nouvelle demande de modification en tenant compte de ces remarques.
                 </p>
               </div>
             </div>
@@ -157,6 +163,8 @@ export default function AdminServices() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      setRejectingService(null);
+      setRejectComment('');
       toast.success('Révision refusée');
     },
   });
