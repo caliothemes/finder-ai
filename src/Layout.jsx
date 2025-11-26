@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import StoriesViewer from '@/components/StoriesViewer';
 import Logo from '@/components/Logo';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -19,6 +20,35 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SearchModal from '@/components/SearchModal';
 import { LanguageProvider, useLanguage } from '@/components/LanguageProvider';
+
+// Composant pour le lien admin avec badge de notifications
+function AdminNavLink() {
+  const { t } = useLanguage();
+  
+  const { data: revisionCount = 0 } = useQuery({
+    queryKey: ['adminRevisionCount'],
+    queryFn: async () => {
+      const services = await base44.entities.AIService.list();
+      return services.filter(s => s.pending_revision).length;
+    },
+    refetchInterval: 30000, // Refresh toutes les 30 secondes
+  });
+
+  return (
+    <Link
+      to={createPageUrl('Admin')}
+      className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium relative"
+    >
+      <Crown className="w-4 h-4" />
+      {t('nav_admin')}
+      {revisionCount > 0 && (
+        <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse">
+          {revisionCount}
+        </span>
+      )}
+    </Link>
+  );
+}
 
 function LayoutContent({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -176,13 +206,7 @@ function LayoutContent({ children, currentPageName }) {
                   <div className="px-3 py-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Administration
                   </div>
-                  <Link
-                    to={createPageUrl('Admin')}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium"
-                  >
-                    <Crown className="w-4 h-4" />
-                    {t('nav_admin')}
-                  </Link>
+                  <AdminNavLink />
                 </>
               )}
 
