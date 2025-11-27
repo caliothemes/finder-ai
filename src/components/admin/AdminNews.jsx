@@ -53,51 +53,74 @@ export default function AdminNews() {
   };
 
   // Auto-translate
-  const handleAutoTranslate = async (type, id = null) => {
-    const translatingId = id || 'new';
+  const handleAutoTranslate = async (type) => {
+    let translatingId = 'new';
+    let textToTranslate = {};
+    
+    if (type === 'new') {
+      translatingId = 'new';
+      textToTranslate = { title: newArticle.title, summary: newArticle.summary, content: newArticle.content };
+    } else if (type === 'article') {
+      translatingId = editingId;
+      textToTranslate = { title: editData.title, summary: editData.summary, content: editData.content };
+    } else if (type === 'discovery') {
+      translatingId = editingDiscoveryId;
+      textToTranslate = { title: editDiscoveryData.title, summary: editDiscoveryData.summary };
+    }
+
+    if (!textToTranslate.title) {
+      toast.error('Veuillez remplir le titre avant de traduire');
+      return;
+    }
+
     setTranslating(translatingId);
+    
     try {
-      let textToTranslate = {};
-      
-      if (type === 'new') {
-        textToTranslate = { title: newArticle.title, summary: newArticle.summary, content: newArticle.content };
-      } else if (type === 'article') {
-        textToTranslate = { title: editData.title, summary: editData.summary, content: editData.content };
-      } else if (type === 'discovery') {
-        textToTranslate = { title: editDiscoveryData.title, summary: editDiscoveryData.summary };
-      }
-
-      console.log('Translating:', textToTranslate);
-
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `Translate the following text to English. Keep the same tone and style.
+        prompt: `You are a professional translator. Translate the following French text to English. Keep the same tone, style and meaning.
 
-Text to translate:
-- Title: "${textToTranslate.title || ''}"
-- Summary: "${textToTranslate.summary || ''}"
-${textToTranslate.content ? `- Content: "${textToTranslate.content}"` : ''}`,
+French text to translate:
+Title: "${textToTranslate.title}"
+Summary: "${textToTranslate.summary || ''}"
+${textToTranslate.content ? `Content: "${textToTranslate.content}"` : ''}
+
+Provide accurate English translations.`,
         response_json_schema: {
           type: "object",
           properties: {
-            title_en: { type: "string" },
-            summary_en: { type: "string" },
-            content_en: { type: "string" }
+            title_en: { type: "string", description: "English translation of the title" },
+            summary_en: { type: "string", description: "English translation of the summary" },
+            content_en: { type: "string", description: "English translation of the content" }
           },
           required: ["title_en", "summary_en"]
         }
       });
 
-      console.log('Translation response:', response);
-
-      if (response) {
+      if (response && response.title_en) {
         if (type === 'new') {
-          setNewArticle(prev => ({ ...prev, ...response }));
+          setNewArticle(prev => ({ 
+            ...prev, 
+            title_en: response.title_en,
+            summary_en: response.summary_en || '',
+            content_en: response.content_en || ''
+          }));
         } else if (type === 'article') {
-          setEditData(prev => ({ ...prev, ...response }));
+          setEditData(prev => ({ 
+            ...prev, 
+            title_en: response.title_en,
+            summary_en: response.summary_en || '',
+            content_en: response.content_en || ''
+          }));
         } else if (type === 'discovery') {
-          setEditDiscoveryData(prev => ({ ...prev, ...response }));
+          setEditDiscoveryData(prev => ({ 
+            ...prev, 
+            title_en: response.title_en,
+            summary_en: response.summary_en || ''
+          }));
         }
         toast.success('Traduction automatique effectuée !');
+      } else {
+        toast.error('Erreur: réponse de traduction invalide');
       }
     } catch (error) {
       console.error('Translation error:', error);
