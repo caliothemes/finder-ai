@@ -639,11 +639,11 @@ Provide accurate English translations.`,
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => handleAutoTranslate('discovery', discovery.id)}
-                        disabled={translating === discovery.id || !editDiscoveryData.title}
+                        onClick={() => handleAutoTranslate('discovery')}
+                        disabled={translating === editingDiscoveryId || !editDiscoveryData.title}
                         className="w-full"
                       >
-                        {translating === discovery.id ? (
+                        {translating === editingDiscoveryId ? (
                           <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Traduction...</>
                         ) : (
                           <><Languages className="w-4 h-4 mr-2" />Traduire en anglais</>
