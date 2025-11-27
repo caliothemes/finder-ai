@@ -443,16 +443,55 @@ Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', co
                     )}
                     <div className="flex-1">
                       {editingId === article.id ? (
-                        <div className="space-y-2">
-                          <Input
-                            value={editData.title}
-                            onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                          />
-                          <Textarea
-                            value={editData.summary}
-                            onChange={(e) => setEditData({ ...editData, summary: e.target.value })}
-                            rows={2}
-                          />
+                        <div className="space-y-3">
+                          {/* Français */}
+                          <div className="space-y-2 p-3 bg-blue-50 rounded-lg">
+                            <label className="text-sm font-medium flex items-center gap-2">🇫🇷 Français</label>
+                            <Input
+                              placeholder="Titre"
+                              value={editData.title}
+                              onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                            />
+                            <Textarea
+                              placeholder="Résumé"
+                              value={editData.summary}
+                              onChange={(e) => setEditData({ ...editData, summary: e.target.value })}
+                              rows={2}
+                            />
+                          </div>
+                          
+                          {/* Bouton traduction */}
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleAutoTranslate('article', article.id)}
+                            disabled={translating === article.id || !editData.title}
+                            className="w-full"
+                          >
+                            {translating === article.id ? (
+                              <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Traduction...</>
+                            ) : (
+                              <><Languages className="w-4 h-4 mr-2" />Traduire en anglais</>
+                            )}
+                          </Button>
+
+                          {/* Anglais */}
+                          <div className="space-y-2 p-3 bg-green-50 rounded-lg">
+                            <label className="text-sm font-medium flex items-center gap-2">🇬🇧 English</label>
+                            <Input
+                              placeholder="Title"
+                              value={editData.title_en || ''}
+                              onChange={(e) => setEditData({ ...editData, title_en: e.target.value })}
+                            />
+                            <Textarea
+                              placeholder="Summary"
+                              value={editData.summary_en || ''}
+                              onChange={(e) => setEditData({ ...editData, summary_en: e.target.value })}
+                              rows={2}
+                            />
+                          </div>
+                          
                           <div className="flex gap-2">
                             <Button size="sm" onClick={() => updateArticleMutation.mutate({ id: article.id, data: editData })}>
                               <Save className="w-4 h-4 mr-1" />Sauvegarder
