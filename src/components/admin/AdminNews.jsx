@@ -493,11 +493,11 @@ Provide accurate English translations.`,
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => handleAutoTranslate('article', article.id)}
-                            disabled={translating === article.id || !editData.title}
+                            onClick={() => handleAutoTranslate('article')}
+                            disabled={translating === editingId || !editData.title}
                             className="w-full"
                           >
-                            {translating === article.id ? (
+                            {translating === editingId ? (
                               <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Traduction...</>
                             ) : (
                               <><Languages className="w-4 h-4 mr-2" />Traduire en anglais</>
