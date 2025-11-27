@@ -260,7 +260,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
             </div>
           </div>
 
-          {aiServices.slice(4).map((service) => (
+          {displayedServices.slice(4).map((service) => (
             <div
               key={service.id}
               className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
