@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid, Loader2 } from 'lucide-react';
+import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid, Loader2, XCircle, CheckCircle } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,16 +21,18 @@ export default function ProAccount() {
   const queryClient = useQueryClient();
   const { t } = useLanguage();
 
-  // Vérifier si paiement réussi
+  const [showCanceledModal, setShowCanceledModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  // Vérifier si paiement réussi ou annulé
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
-      toast.success('Paiement réussi ! Vos crédits seront ajoutés sous peu. 🎉');
-      // Nettoyer l'URL
+      setShowSuccessModal(true);
       window.history.replaceState({}, '', window.location.pathname);
     }
     if (urlParams.get('canceled') === 'true') {
-      toast.error('Paiement annulé');
+      setShowCanceledModal(true);
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
@@ -180,6 +189,62 @@ export default function ProAccount() {
   };
 
   return (
+    <>
+      {/* Modal Paiement Annulé */}
+      <Dialog open={showCanceledModal} onOpenChange={setShowCanceledModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+              <XCircle className="w-10 h-10 text-red-600" />
+            </div>
+            <DialogTitle className="text-center text-2xl">Paiement non effectué</DialogTitle>
+            <DialogDescription className="text-center text-base">
+              Votre paiement a été annulé. Aucun montant n'a été débité de votre compte.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-4">
+            <Button 
+              onClick={() => setShowCanceledModal(false)}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              Réessayer
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => setShowCanceledModal(false)}
+            >
+              Fermer
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal Paiement Réussi */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <CheckCircle className="w-10 h-10 text-green-600" />
+            </div>
+            <DialogTitle className="text-center text-2xl">Paiement réussi ! 🎉</DialogTitle>
+            <DialogDescription className="text-center text-base">
+              Merci pour votre achat ! Vos crédits ont été ajoutés à votre compte.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <Button 
+              onClick={() => {
+                setShowSuccessModal(false);
+                queryClient.invalidateQueries({ queryKey: ['proAccount'] });
+              }}
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+            >
+              C'est parti !
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -519,5 +584,6 @@ export default function ProAccount() {
         </div>
       </div>
     </div>
+    </>
   );
 }
