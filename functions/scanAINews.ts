@@ -4,7 +4,7 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    console.log('📰 Starting MEGA AI News scan...');
+    console.log('📰 Starting AI News scan...');
 
     // Récupérer les articles existants pour éviter les doublons
     const existingNews = await base44.asServiceRole.entities.AINews.list();
@@ -17,193 +17,64 @@ Deno.serve(async (req) => {
 
     const seenUrls = new Set(existingUrls);
     const today = new Date().toISOString().split('T')[0];
-    const currentMonth = new Date().toLocaleString('en', { month: 'long' });
-    const currentYear = new Date().getFullYear();
 
-    // MEGA liste de requêtes pour ratisser large
+    // Requêtes simples et efficaces
     const newsQueries = [
-      // === RECHERCHES GÉNÉRALES GOOGLE NEWS ===
-      `artificial intelligence news ${today}`,
-      `AI news today ${currentMonth} ${currentYear}`,
-      `latest AI announcements ${currentYear}`,
-      `breaking AI news`,
-      `AI technology news this week`,
-      `machine learning news ${currentMonth} ${currentYear}`,
-      `generative AI news`,
-      `ChatGPT news update`,
-      `OpenAI announcement`,
-      `Google AI Gemini news`,
-      `Anthropic Claude news`,
-      `Meta AI news`,
-      `Microsoft Copilot news`,
-      `AI startup news funding`,
-      
-      // === SITES TECH MAJEURS ===
-      `site:techcrunch.com AI ${currentMonth} ${currentYear}`,
-      `site:theverge.com artificial intelligence`,
-      `site:wired.com AI news`,
-      `site:arstechnica.com artificial intelligence`,
-      `site:venturebeat.com AI machine learning`,
-      `site:zdnet.com AI news`,
-      `site:cnet.com artificial intelligence`,
-      `site:engadget.com AI`,
-      `site:gizmodo.com AI news`,
-      `site:thenextweb.com AI`,
-      `site:mashable.com AI`,
-      `site:techradar.com AI news`,
-      `site:tomsguide.com AI`,
-      `site:pcmag.com AI news`,
-      `site:digitaltrends.com AI`,
-      
-      // === BUSINESS & FINANCE ===
-      `site:forbes.com artificial intelligence ${currentYear}`,
-      `site:bloomberg.com AI technology`,
-      `site:reuters.com artificial intelligence`,
-      `site:wsj.com AI news`,
-      `site:ft.com artificial intelligence`,
-      `site:businessinsider.com AI`,
-      `site:cnbc.com AI technology`,
-      `site:fortune.com AI`,
-      
-      // === SITES IA SPÉCIALISÉS ===
-      `site:artificialintelligence-news.com`,
-      `site:aitrends.com`,
-      `site:unite.ai`,
-      `site:marktechpost.com`,
-      `site:syncedreview.com`,
-      `site:analyticsinsight.net AI`,
-      `site:towardsdatascience.com AI news`,
-      `site:kdnuggets.com AI news`,
-      `site:dataconomy.com AI`,
-      `site:aitimejournal.com`,
-      `site:aibusiness.com`,
-      `site:theaiedge.io`,
-      
-      // === BLOGS OFFICIELS ===
-      `site:openai.com/blog`,
-      `site:anthropic.com/news`,
-      `site:deepmind.com/blog`,
-      `site:ai.google/discover`,
-      `site:ai.meta.com/blog`,
-      `site:blogs.nvidia.com AI`,
-      `site:aws.amazon.com/blogs machine-learning`,
-      `site:cloud.google.com/blog AI`,
-      `site:azure.microsoft.com/blog AI`,
-      
-      // === SITES FRANÇAIS ===
-      `site:usine-digitale.fr intelligence artificielle`,
-      `site:lemondeinformatique.fr IA`,
-      `site:01net.com intelligence artificielle`,
-      `site:journaldunet.com IA`,
-      `site:frenchweb.fr intelligence artificielle`,
-      `site:siecledigital.fr IA`,
-      `site:blogdumoderateur.com IA`,
-      `site:numerama.com intelligence artificielle`,
-      `site:clubic.com IA`,
-      `site:presse-citron.net intelligence artificielle`,
-      `site:fredzone.org intelligence artificielle`,
-      `intelligence artificielle actualité France ${currentMonth} ${currentYear}`,
-      `IA actualité française`,
-      
-      // === REDDIT & COMMUNAUTÉS ===
-      `site:reddit.com/r/artificial news`,
-      `site:reddit.com/r/MachineLearning`,
-      `site:reddit.com/r/ChatGPT news`,
-      `site:reddit.com/r/OpenAI`,
-      `site:reddit.com/r/LocalLLaMA news`,
-      `site:news.ycombinator.com AI`,
-      
-      // === THÉMATIQUES SPÉCIFIQUES ===
-      `AI image generation news Midjourney DALL-E Stable Diffusion`,
-      `AI video generation Sora Runway Pika`,
-      `AI music generation Suno Udio`,
-      `AI voice cloning ElevenLabs`,
-      `AI coding assistant Copilot Cursor`,
-      `AI regulation law Europe US`,
-      `AI ethics news`,
-      `AI job impact news`,
-      `AI healthcare medical news`,
-      `AI autonomous vehicles self-driving`,
-      `AI robotics news`,
-      `AI chips GPU NVIDIA AMD Intel`,
-      `large language model LLM news`,
-      `AI agents autonomous`,
-      `AI safety alignment news`,
-      
-      // === AUTRES LANGUES ===
-      `KI Nachrichten Deutschland ${currentYear}`,
-      `noticias inteligencia artificial ${currentYear}`,
-      `intelligenza artificiale notizie Italia`,
-      `AI nieuws Nederland`,
-      
-      // === RECHERCHES TEMPORELLES ===
-      `AI news last 24 hours`,
-      `AI announcements this week`,
-      `AI product launch ${currentMonth}`,
-      `new AI tool released today`,
-      `AI company raises funding ${currentMonth} ${currentYear}`,
+      "OpenAI ChatGPT news today",
+      "Google Gemini AI announcement",
+      "Anthropic Claude update",
+      "AI startup funding 2024",
+      "artificial intelligence breakthrough",
+      "new AI tool launched",
+      "machine learning news",
+      "generative AI update",
+      "Midjourney Stable Diffusion news",
+      "AI regulation Europe USA",
+      "Meta AI Llama news",
+      "Microsoft Copilot update",
+      "AI video generation Sora",
+      "AI music Suno Udio news",
+      "robotics AI news",
+      "autonomous AI agents",
+      "intelligence artificielle actualité",
+      "IA générative nouveautés",
+      "ChatGPT mise à jour",
+      "outils IA tendance"
     ];
-
-    // Mélanger et prendre 40 requêtes
-    const shuffledQueries = newsQueries.sort(() => Math.random() - 0.5);
-    const searchQueries = shuffledQueries.slice(0, 40);
 
     const allDiscoveries = [];
 
-    for (const query of searchQueries) {
-      console.log(`🔎 Scanning: ${query.substring(0, 60)}...`);
+    // Scanner avec des requêtes groupées pour plus d'efficacité
+    for (let i = 0; i < newsQueries.length; i += 4) {
+      const batch = newsQueries.slice(i, i + 4);
+      const combinedQuery = batch.join(' OR ');
+      
+      console.log(`🔎 Scanning batch ${Math.floor(i/4) + 1}...`);
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `RECHERCHE D'ACTUALITÉS IA SUR INTERNET EN TEMPS RÉEL
+          prompt: `Find the latest AI news articles from the internet. Search for: ${combinedQuery}
 
-REQUÊTE: "${query}"
-DATE ACTUELLE: ${today}
+TODAY'S DATE: ${today}
 
-MISSION CRITIQUE: Tu DOIS utiliser ta capacité de recherche internet pour trouver des VRAIS articles d'actualité sur l'IA.
+TASK: Search the internet and find 20-30 REAL news articles about artificial intelligence published in the last 7 days.
 
-INSTRUCTIONS:
-1. RECHERCHE ACTIVE sur internet - utilise add_context_from_internet
-2. Trouve 15-25 articles RÉELS publiés récemment (derniers 7 jours idéalement)
-3. Vérifie que chaque URL est une URL D'ARTICLE (pas une homepage)
-4. Récupère les informations EXACTES de chaque article
+For EACH article found, provide:
+- title: The exact article title
+- summary: A 2-3 sentence summary in French
+- source_name: The publication name (TechCrunch, The Verge, Wired, etc.)
+- source_url: The DIRECT URL to the article (must be a full article URL, not a homepage)
+- published_date: Publication date in YYYY-MM-DD format
+- tags: 2-4 relevant tags
 
-CRITÈRES DE SÉLECTION - L'article doit parler de:
-- Intelligence artificielle, IA, AI
-- Machine learning, deep learning
-- ChatGPT, GPT-4, GPT-5, OpenAI
-- Claude, Anthropic
-- Gemini, Google AI, Bard
-- Midjourney, DALL-E, Stable Diffusion
-- LLM, modèles de langage
-- Génération d'images/vidéos/musique par IA
-- Startups IA, levées de fonds IA
-- Régulation IA, éthique IA
-- Robots, automatisation IA
-- Tout ce qui mentionne "IA" ou "AI" ou "artificial intelligence"
+IMPORTANT RULES:
+1. Only return REAL articles you found via internet search
+2. URLs must be direct article links (e.g., techcrunch.com/2024/11/27/article-title)
+3. Do NOT return homepage URLs or category pages
+4. Include articles from various sources: tech news, AI blogs, mainstream media
+5. Prioritize recent articles (last 48 hours if possible)
 
-FORMAT POUR CHAQUE ARTICLE:
-{
-  "title": "Titre EXACT de l'article",
-  "summary": "Résumé en français de 2-3 phrases expliquant le contenu",
-  "source_name": "Nom du site (ex: TechCrunch, The Verge, 01net)",
-  "source_url": "URL DIRECTE de l'article (pas la homepage!)",
-  "published_date": "YYYY-MM-DD",
-  "tags": ["tag1", "tag2", "tag3"]
-}
-
-URLS INTERDITES - NE PAS RETOURNER:
-- URLs de homepage (ex: techcrunch.com, theverge.com)
-- URLs de catégories (ex: techcrunch.com/category/ai)
-- URLs de recherche
-- URLs sans article spécifique
-
-EXEMPLES D'URLS VALIDES:
-- techcrunch.com/2024/11/27/openai-launches-new-feature
-- theverge.com/2024/11/26/123456/google-gemini-update
-- 01net.com/actualites/chatgpt-nouvelle-fonctionnalite
-
-IMPORTANT: Retourne UNIQUEMENT des articles RÉELS trouvés sur internet. Si tu ne trouves rien, retourne un tableau vide.`,
+VALID SOURCES: TechCrunch, The Verge, Wired, VentureBeat, Ars Technica, ZDNet, CNET, Engadget, Forbes, Bloomberg, Reuters, BBC, CNN, 01net, L'Usine Digitale, Le Monde Informatique, Numerama, OpenAI Blog, Google AI Blog, Anthropic Blog, etc.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -227,30 +98,27 @@ IMPORTANT: Retourne UNIQUEMENT des articles RÉELS trouvés sur internet. Si tu 
           }
         });
 
-        if (response && response.articles) {
-          console.log(`✅ Found ${response.articles.length} articles`);
+        if (response && response.articles && response.articles.length > 0) {
+          console.log(`✅ Found ${response.articles.length} articles in batch`);
 
           for (const article of response.articles) {
             if (!article.source_url || !article.title) continue;
+            if (article.source_url.length < 30) continue; // URL trop courte = probablement homepage
 
-            // Normaliser l'URL
             const normalizedUrl = article.source_url.toLowerCase();
             
-            // Vérifier si existe déjà
+            // Skip si déjà vu
             if (seenUrls.has(normalizedUrl)) continue;
 
-            // Exclure les URLs de homepage ou catégories
+            // Vérifier que c'est une vraie URL d'article
             try {
               const urlObj = new URL(article.source_url);
               const path = urlObj.pathname;
-              // Exclure si path trop court ou juste une catégorie
-              if (path === '/' || path === '' || path.match(/^\/(category|tag|author|page|search|topics?)\/?$/i)) {
-                continue;
-              }
-              // Exclure si le path ne contient qu'un segment simple
-              if (path.split('/').filter(Boolean).length < 2 && !path.match(/\d{4}/)) {
-                continue;
-              }
+              
+              // Rejeter les homepages et pages de catégories
+              if (path === '/' || path === '' || path.length < 10) continue;
+              if (path.match(/^\/(category|tag|author|page|search|topics?|about|contact)\/?$/i)) continue;
+              
             } catch (e) {
               continue;
             }
@@ -279,11 +147,11 @@ IMPORTANT: Retourne UNIQUEMENT des articles RÉELS trouvés sur internet. Si tu 
           }
         }
       } catch (error) {
-        console.error(`Error scanning: ${error.message}`);
+        console.error(`Error in batch: ${error.message}`);
       }
 
-      // Pause courte entre requêtes
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Petite pause entre les batches
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     // Dédupliquer par titre similaire
@@ -291,7 +159,7 @@ IMPORTANT: Retourne UNIQUEMENT des articles RÉELS trouvés sur internet. Si tu 
     const seenTitles = new Set();
     
     for (const discovery of allDiscoveries) {
-      const normalizedTitle = discovery.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 50);
+      const normalizedTitle = discovery.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 40);
       if (!seenTitles.has(normalizedTitle)) {
         seenTitles.add(normalizedTitle);
         uniqueDiscoveries.push(discovery);
@@ -302,23 +170,32 @@ IMPORTANT: Retourne UNIQUEMENT des articles RÉELS trouvés sur internet. Si tu 
     if (uniqueDiscoveries.length > 0) {
       console.log(`📝 Creating ${uniqueDiscoveries.length} news discoveries...`);
 
-      for (let i = 0; i < uniqueDiscoveries.length; i += 25) {
-        const batch = uniqueDiscoveries.slice(i, i + 25);
+      // Créer en petits batches
+      for (let i = 0; i < uniqueDiscoveries.length; i += 10) {
+        const batch = uniqueDiscoveries.slice(i, i + 10);
         try {
           await base44.asServiceRole.entities.AINewsDiscovery.bulkCreate(batch);
+          console.log(`✅ Created batch ${Math.floor(i/10) + 1}`);
         } catch (batchError) {
           console.error(`Batch error: ${batchError.message}`);
+          // Essayer un par un si le batch échoue
+          for (const item of batch) {
+            try {
+              await base44.asServiceRole.entities.AINewsDiscovery.create(item);
+            } catch (e) {
+              console.error(`Single create error: ${e.message}`);
+            }
+          }
         }
       }
     }
 
-    console.log('✅ MEGA AI News scan complete!');
+    console.log('✅ AI News scan complete!');
 
     return Response.json({
       success: true,
       discovered: uniqueDiscoveries.length,
-      queries_processed: searchQueries.length,
-      message: `Scan terminé: ${uniqueDiscoveries.length} articles découverts sur ${searchQueries.length} sources`
+      message: `Scan terminé: ${uniqueDiscoveries.length} articles découverts`
     });
 
   } catch (error) {
