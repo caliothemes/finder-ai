@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid } from 'lucide-react';
+import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,8 +10,23 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 export default function ProAccount() {
   const [user, setUser] = useState(null);
+  const [loadingCheckout, setLoadingCheckout] = useState(null);
   const queryClient = useQueryClient();
   const { t } = useLanguage();
+
+  // Vérifier si paiement réussi
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      toast.success('Paiement réussi ! Vos crédits seront ajoutés sous peu. 🎉');
+      // Nettoyer l'URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    if (urlParams.get('canceled') === 'true') {
+      toast.error('Paiement annulé');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -132,10 +147,37 @@ export default function ProAccount() {
   ];
 
   const creditPacks = [
-    { credits: 10, price: '5€', costPerCredit: '0.50€' },
-    { credits: 50, price: '20€', costPerCredit: '0.40€' },
-    { credits: 100, price: '30€', costPerCredit: '0.30€' }
+    { credits: 10, price: '5€', costPerCredit: '0.50€', priceId: 'price_1SY0XVHi2Io4SvfQtq9NBCMD' },
+    { credits: 50, price: '20€', costPerCredit: '0.40€', priceId: 'price_1SY0Y9Hi2Io4SvfQyuu2ZnfA' },
+    { credits: 100, price: '30€', costPerCredit: '0.30€', priceId: 'price_1SY0YkHi2Io4SvfQQbmdiOH7' }
   ];
+
+  // Stripe Price IDs pour les abonnements
+  const planPriceIds = {
+    starter: 'price_1SY0aKHi2Io4SvfQIoyodFt5',
+    pro: 'price_1SY0b2Hi2Io4SvfQ6jhRiZPy'
+  };
+
+  const handleCheckout = async (priceId, mode = 'payment') => {
+    setLoadingCheckout(priceId);
+    try {
+      const response = await base44.functions.invoke('createCheckout', {
+        priceId,
+        mode
+      });
+      
+      if (response.data?.url) {
+        window.location.href = response.data.url;
+      } else {
+        toast.error('Erreur lors de la création du paiement');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Erreur lors de la création du paiement');
+    } finally {
+      setLoadingCheckout(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
@@ -322,7 +364,14 @@ export default function ProAccount() {
                     {pack.costPerCredit} {t('pro_cost_per_credit')}
                   </div>
                 </div>
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                <Button 
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                  onClick={() => handleCheckout(pack.priceId, 'payment')}
+                  disabled={loadingCheckout === pack.priceId}
+                >
+                  {loadingCheckout === pack.priceId ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : null}
                   {t('pro_buy_now')}
                 </Button>
               </div>
@@ -391,20 +440,25 @@ export default function ProAccount() {
 
               <Button
                 onClick={() => {
-                  if (!proAccount) {
-                    createProAccountMutation.mutate(plan.name.toLowerCase());
-                  } else if (!plan.current) {
-                    upgradePlanMutation.mutate(plan.name.toLowerCase());
+                  const planKey = plan.name.toLowerCase();
+                  if (planKey === 'free') {
+                    if (!proAccount) {
+                      createProAccountMutation.mutate('free');
+                    }
+                  } else if (planPriceIds[planKey]) {
+                    handleCheckout(planPriceIds[planKey], 'subscription');
                   }
                 }}
-                disabled={plan.current || createProAccountMutation.isPending || upgradePlanMutation.isPending}
+                disabled={plan.current || loadingCheckout === planPriceIds[plan.name.toLowerCase()] || createProAccountMutation.isPending}
                 className={`w-full ${
                   plan.current
                     ? 'bg-green-100 text-green-700 hover:bg-green-100'
                     : `bg-gradient-to-r ${plan.color} hover:opacity-90 text-white`
                 }`}
               >
-                {plan.current ? (
+                {loadingCheckout === planPriceIds[plan.name.toLowerCase()] ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : plan.current ? (
                   <>
                     <Check className="w-4 h-4 mr-2" />
                     {t('pro_plan_active')}
