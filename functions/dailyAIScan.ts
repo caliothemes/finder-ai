@@ -456,9 +456,11 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `MEGA RECHERCHE D'OUTILS IA: "${query}"
+          prompt: `RECHERCHE APPROFONDIE SUR INTERNET: "${query}"
 
-MISSION CRITIQUE: Trouver le MAXIMUM d'outils/services IA réels et fonctionnels.
+DATE: ${new Date().toISOString().split('T')[0]}
+
+MISSION: Tu DOIS chercher sur internet en temps réel pour trouver des outils IA.
 
 IMPORTANT: On recherche 2 types de services:
 1. CRÉATEURS D'IA: Outils qui créent/génèrent du contenu avec l'IA (Midjourney, ChatGPT, etc.)
@@ -500,7 +502,13 @@ TYPES D'OUTILS À INCLURE - ÊTRE EXHAUSTIF:
 - OUTILS PRO: Productivité, Marketing, SEO, Analytics, Automation, No-code, API, Data, CRM, Email, Support client, etc.
 - NICHES: Outils pour avocats, médecins, architectes, musiciens, sportifs, streamers, influenceurs, freelances, étudiants, chercheurs, journalistes, etc.
 
-RÈGLE ABSOLUE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions. Préférer les outils moins connus mais de qualité.`,
+RÈGLE ABSOLUE: 
+- Tu DOIS utiliser ta capacité de recherche internet pour trouver des outils RÉELS
+- Uniquement des URLs VALIDES et VÉRIFIÉES sur internet
+- Pas d'inventions - seulement des outils que tu as trouvés via la recherche web
+- Si tu ne trouves rien, retourne un tableau vide plutôt que d'inventer
+- Préférer les outils moins connus mais de qualité
+- EXCLURE: ChatGPT, Claude, Midjourney, DALL-E, Stable Diffusion, Copilot (trop connus)`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
