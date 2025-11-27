@@ -263,11 +263,36 @@ export default function AdminNews() {
                 onChange={(e) => setNewArticle({ ...newArticle, source_url: e.target.value })}
               />
             </div>
-            <Input
-              placeholder="URL de l'image de couverture"
-              value={newArticle.cover_image_url}
-              onChange={(e) => setNewArticle({ ...newArticle, cover_image_url: e.target.value })}
-            />
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="URL de l'image de couverture"
+                  value={newArticle.cover_image_url}
+                  onChange={(e) => setNewArticle({ ...newArticle, cover_image_url: e.target.value })}
+                  className="flex-1"
+                />
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleImageUpload(e.target.files[0], 'new')}
+                  />
+                  <Button type="button" variant="outline" asChild disabled={uploadingImage === 'new'}>
+                    <span>
+                      {uploadingImage === 'new' ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <><Upload className="w-4 h-4 mr-1" />Upload</>
+                      )}
+                    </span>
+                  </Button>
+                </label>
+              </div>
+              {newArticle.cover_image_url && (
+                <img src={newArticle.cover_image_url} alt="Preview" className="w-32 h-20 rounded object-cover" />
+              )}
+            </div>
             <div className="flex gap-2">
               <Button
                 onClick={() => createArticleMutation.mutate(newArticle)}
