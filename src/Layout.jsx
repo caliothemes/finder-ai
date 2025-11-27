@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
@@ -51,12 +51,84 @@ function AdminNavLink() {
   );
 }
 
+// Hook pour tracker les nouveautés depuis la dernière visite
+function useNewItemsTracker() {
+  const location = useLocation();
+  
+  // Récupérer les counts actuels
+  const { data: aiServicesCount = 0 } = useQuery({
+    queryKey: ['aiServicesCount'],
+    queryFn: async () => {
+      const services = await base44.entities.AIService.filter({ status: 'approved' });
+      return services.length;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: categoriesCount = 0 } = useQuery({
+    queryKey: ['categoriesCount'],
+    queryFn: async () => {
+      const categories = await base44.entities.Category.list();
+      return categories.length;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: newsCount = 0 } = useQuery({
+    queryKey: ['newsCount'],
+    queryFn: async () => {
+      const news = await base44.entities.AINews.filter({ status: 'published' });
+      return news.length;
+    },
+    staleTime: 60000,
+  });
+
+  // Calculer les nouveautés
+  const newItems = useMemo(() => {
+    const lastVisit = JSON.parse(localStorage.getItem('lastVisitCounts') || '{}');
+    
+    return {
+      explore: lastVisit.explore !== undefined ? Math.max(0, aiServicesCount - lastVisit.explore) : 0,
+      categories: lastVisit.categories !== undefined ? Math.max(0, categoriesCount - lastVisit.categories) : 0,
+      news: lastVisit.news !== undefined ? Math.max(0, newsCount - lastVisit.news) : 0,
+    };
+  }, [aiServicesCount, categoriesCount, newsCount]);
+
+  // Mettre à jour le localStorage quand l'utilisateur visite une page
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const lastVisit = JSON.parse(localStorage.getItem('lastVisitCounts') || '{}');
+    
+    if (currentPath.includes('Explore') && aiServicesCount > 0) {
+      localStorage.setItem('lastVisitCounts', JSON.stringify({ ...lastVisit, explore: aiServicesCount }));
+    } else if (currentPath.includes('Categories') && categoriesCount > 0) {
+      localStorage.setItem('lastVisitCounts', JSON.stringify({ ...lastVisit, categories: categoriesCount }));
+    } else if (currentPath.includes('AINews') && newsCount > 0) {
+      localStorage.setItem('lastVisitCounts', JSON.stringify({ ...lastVisit, news: newsCount }));
+    }
+  }, [location.pathname, aiServicesCount, categoriesCount, newsCount]);
+
+  return newItems;
+}
+
+// Badge pour les nouveautés
+function NewItemsBadge({ count }) {
+  if (!count || count <= 0) return null;
+  
+  return (
+    <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
+      +{count > 99 ? '99+' : count}
+    </span>
+  );
+}
+
 function LayoutContent({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [storiesOpen, setStoriesOpen] = useState(false);
   const { language, changeLanguage, t } = useLanguage();
+  const newItems = useNewItemsTracker();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -161,6 +233,7 @@ function LayoutContent({ children, currentPageName }) {
           >
             <Compass className="w-4 h-4" />
             {t('nav_explore')}
+            <NewItemsBadge count={newItems.explore} />
           </Link>
           <Link
             to={createPageUrl('Categories')}
@@ -168,6 +241,7 @@ function LayoutContent({ children, currentPageName }) {
           >
             <Grid3X3 className="w-4 h-4" />
             {t('nav_categories')}
+            <NewItemsBadge count={newItems.categories} />
           </Link>
           <Link
             to={createPageUrl('AINews')}
@@ -175,6 +249,7 @@ function LayoutContent({ children, currentPageName }) {
           >
             <Newspaper className="w-4 h-4" />
             Actualités IA
+            <NewItemsBadge count={newItems.news} />
           </Link>
 
           {user && (
