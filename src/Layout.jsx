@@ -8,7 +8,8 @@ import Logo from '@/components/Logo';
 import ScrollToTop from '@/components/ScrollToTop';
 import { 
         Menu, X, User, Heart, 
-        LogOut, LogIn, PlusCircle, Crown, Search 
+        LogOut, LogIn, PlusCircle, Crown, Search,
+        Home, Compass, Grid3X3, Newspaper
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -151,28 +152,28 @@ function LayoutContent({ children, currentPageName }) {
             to={createPageUrl('Home')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-4 h-4" />
+            <Home className="w-4 h-4" />
             {t('nav_home')}
           </Link>
           <Link
             to={createPageUrl('Explore')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-4 h-4" />
+            <Compass className="w-4 h-4" />
             {t('nav_explore')}
           </Link>
           <Link
             to={createPageUrl('Categories')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-4 h-4" />
+            <Grid3X3 className="w-4 h-4" />
             {t('nav_categories')}
           </Link>
           <Link
             to={createPageUrl('AINews')}
             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
           >
-            <Search className="w-4 h-4" />
+            <Newspaper className="w-4 h-4" />
             Actualités IA
           </Link>
 
