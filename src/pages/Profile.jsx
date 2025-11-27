@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2 } from 'lucide-react';
+import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2, Pencil, Check, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -15,6 +16,9 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [editingService, setEditingService] = useState(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [savingName, setSavingName] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
