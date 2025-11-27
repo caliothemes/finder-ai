@@ -290,13 +290,127 @@ Deno.serve(async (req) => {
       "indie AI tools solo developers 2024",
     ];
 
+    // ============================================
+    // STRATÉGIE 6: SERVICES UTILISANT L'IA (pas créateurs d'IA)
+    // ============================================
+    const aiPoweredServices = [
+      // Apps/Services propulsés par IA
+      "apps powered by GPT-4 ChatGPT API 2024 2025",
+      "services using OpenAI API applications",
+      "products built with Claude Anthropic API",
+      "apps using Gemini Google AI API",
+      "businesses using AI automation 2024",
+      "SaaS products powered by artificial intelligence",
+      "startups leveraging LLM large language models",
+      "companies using AI to enhance their product",
+      
+      // E-commerce & Retail avec IA
+      "AI powered e-commerce platforms 2024",
+      "online stores using AI recommendations",
+      "AI shopping assistant apps",
+      "AI product description generators for shops",
+      "AI pricing optimization platforms",
+      "AI inventory management tools",
+      
+      // Services clients avec IA
+      "AI customer support platforms 2024 2025",
+      "AI helpdesk chatbot services",
+      "AI call center solutions",
+      "AI email response automation services",
+      
+      // Marketing & Ads avec IA
+      "AI advertising platforms 2024",
+      "AI social media management tools",
+      "AI influencer marketing platforms",
+      "AI ad creative generation services",
+      "AI audience targeting platforms",
+      
+      // Finance & Fintech avec IA
+      "AI fintech apps 2024 2025",
+      "AI investment advisor robo-advisor apps",
+      "AI expense tracking budgeting apps",
+      "AI fraud detection services",
+      "AI credit scoring platforms",
+      "AI accounting automation services",
+      
+      // Santé & Wellness avec IA
+      "AI health apps diagnosis symptoms 2024",
+      "AI fitness coaching apps",
+      "AI mental health therapy apps",
+      "AI nutrition meal planning apps",
+      "AI sleep tracking analysis apps",
+      "AI meditation mindfulness apps",
+      
+      // Éducation avec IA
+      "AI tutoring platforms 2024 2025",
+      "AI homework help apps",
+      "AI language learning apps powered by AI",
+      "AI test prep platforms",
+      "AI personalized learning platforms",
+      
+      // Immobilier avec IA
+      "AI real estate platforms 2024",
+      "AI property valuation tools",
+      "AI home design interior apps",
+      "AI virtual staging services",
+      
+      // Juridique avec IA
+      "AI legal tech platforms 2024",
+      "AI contract review services",
+      "AI legal document automation",
+      "AI compliance monitoring tools",
+      
+      // RH & Recrutement avec IA
+      "AI recruiting hiring platforms 2024",
+      "AI resume screening tools",
+      "AI interview scheduling platforms",
+      "AI employee engagement tools",
+      "AI performance review tools",
+      
+      // Voyage & Tourisme avec IA
+      "AI travel planning apps 2024",
+      "AI trip itinerary generators",
+      "AI hotel booking recommendation apps",
+      "AI flight price prediction apps",
+      
+      // Food & Restaurant avec IA
+      "AI restaurant management platforms",
+      "AI food delivery optimization",
+      "AI recipe apps personalized",
+      "AI wine recommendation apps",
+      
+      // Dating & Social avec IA
+      "AI dating apps matching 2024",
+      "AI social networking apps",
+      "AI friend matching apps",
+      
+      // Gaming avec IA
+      "AI powered games 2024 2025",
+      "AI game development tools",
+      "AI NPC character generators",
+      
+      // Autres niches avec IA
+      "AI pet care apps 2024",
+      "AI plant care gardening apps",
+      "AI car maintenance apps",
+      "AI fashion styling apps",
+      "AI gift recommendation apps",
+      "AI event planning apps",
+      "AI weather prediction apps advanced",
+      "AI sports analytics apps",
+      "AI music recommendation apps",
+      "AI podcast discovery apps",
+      "AI news aggregator personalized apps",
+    ];
+
     // Combiner toutes les requêtes
     const allSearchQueries = [
       ...aiDirectories,
       ...newsSources,
       ...categorySearches,
       ...keywordSearches,
-      ...startupSearches
+      ...startupSearches,
+      ...aiPoweredServices
     ];
 
     // Mélanger pour varier les sources
@@ -316,14 +430,19 @@ Deno.serve(async (req) => {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
           prompt: `MEGA RECHERCHE D'OUTILS IA: "${query}"
 
-MISSION CRITIQUE: Trouver le MAXIMUM d'outils IA réels et fonctionnels.
+MISSION CRITIQUE: Trouver le MAXIMUM d'outils/services IA réels et fonctionnels.
+
+IMPORTANT: On recherche 2 types de services:
+1. CRÉATEURS D'IA: Outils qui créent/génèrent du contenu avec l'IA (Midjourney, ChatGPT, etc.)
+2. SERVICES PROPULSÉS PAR IA: Apps/sites qui UTILISENT l'IA pour offrir un service (ex: app de dating avec matching IA, app fitness avec coach IA, plateforme e-commerce avec recommandations IA, etc.)
 
 INSTRUCTIONS:
-1. Recherche sur internet pour trouver des outils IA correspondant à cette requête
+1. Recherche sur internet pour trouver des outils/services IA correspondant à cette requête
 2. Pour chaque outil trouvé, VÉRIFIE que l'URL existe vraiment
 3. Retourne entre 20 et 50 outils différents
 4. Inclure des outils de TOUS les pays et langues
 5. Prioriser les outils récents (2024-2025)
+6. INCLURE les apps mobiles et web qui utilisent l'IA en backend
 
 FORMAT DE RÉPONSE pour chaque outil:
 - name: Nom exact du produit
@@ -343,7 +462,9 @@ SOURCES À EXPLORER:
 - Sites officiels des outils
 
 TYPES D'OUTILS À INCLURE:
-Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Productivité, Marketing, Design, 3D, Éducation, Santé, Finance, RH, Legal, Immobilier, E-commerce, Gaming, Réseaux sociaux, SEO, Analytics, Automation, No-code, API, Data, Recherche, Traduction, Résumé, Présentation, Email, CRM, etc.
+- GÉNÉRATEURS IA: Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Design, 3D, Présentation, etc.
+- SERVICES AVEC IA: E-commerce, Dating, Fitness, Santé, Finance, Voyage, Food, Immobilier, RH, Legal, Éducation, Gaming, Mode, Pets, etc.
+- OUTILS PRO: Productivité, Marketing, SEO, Analytics, Automation, No-code, API, Data, CRM, Email, etc.
 
 RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
           add_context_from_internet: true,
