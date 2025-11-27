@@ -115,10 +115,10 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Bannière Homepage Sidebar en format card */}
-          <ActiveBanner position="homepage_sidebar" />
+          {/* Bannière Homepage Sidebar en format card (seulement si active) */}
+          {hasPaidBanner && <ActiveBanner position="homepage_sidebar" />}
 
-          {aiServices.slice(0, 4).map((service) => (
+          {displayedServices.slice(0, 4).map((service) => (
             <div
               key={service.id}
               className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
