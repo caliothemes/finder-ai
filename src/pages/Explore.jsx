@@ -43,7 +43,7 @@ export default function Explore() {
 
   const { data: allServices = [], isLoading } = useQuery({
     queryKey: ['allServices'],
-    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 200),
+    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 1000),
   });
 
   const { data: favorites = [] } = useQuery({
@@ -111,7 +111,7 @@ export default function Explore() {
             {t('explore_title')}
           </h1>
           <p className="text-xl text-slate-600">
-            {t('explore_subtitle')} {allServices.length} {t('explore_subtitle_suffix')}
+            {t('explore_subtitle')} <span className="font-semibold text-purple-600">{allServices.length}</span> {t('explore_subtitle_suffix')}
           </p>
         </div>
 
