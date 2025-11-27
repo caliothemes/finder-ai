@@ -514,30 +514,24 @@ URLS INTERDITES (retourner l'URL officielle de l'outil à la place):
 - aixploria.com/... (retourner l'URL officielle de l'outil, pas celle d'aixploria)
 Exemple: Si tu trouves "Notion AI" sur futurepedia, retourne "https://notion.so" pas "https://futurepedia.io/tool/notion-ai"
 
-SOURCES À EXPLORER EN PROFONDEUR:
-- Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi, AI Valley, Easy with AI, AI Collection, SaaS Hub, G2, Capterra, AlternativeTo
-- AIXPLORIA (aixploria.com): Annuaire avec 8000+ outils IA classés par catégories (Image, Video, Audio, ChatBots, Code, Marketing, etc.)
-- Lancements: Product Hunt (daily/weekly), BetaList, Crunchbase, AngelList, Indie Hackers
-- Tech news: TechCrunch, TheVerge, VentureBeat, Wired, Ars Technica, The Information, Sifted
-- Communautés: Reddit (r/artificial, r/MachineLearning, r/SideProject), Twitter/X, Hacker News, Discord servers
-- GitHub trending repositories AI
-- App stores: iOS App Store, Google Play - section AI
-- Chrome Web Store extensions AI
+SOURCES À EXPLORER:
+- Annuaires IA: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi, AIXPLORIA
+- Lancements: Product Hunt, BetaList, Indie Hackers
+- Tech news: TechCrunch, TheVerge, VentureBeat
+- GitHub trending AI
+- App stores AI sections
 
-TYPES D'OUTILS À INCLURE - ÊTRE EXHAUSTIF:
-- GÉNÉRATEURS IA: Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Design, 3D, Présentation, Avatar, Logo, Meme, Comic, etc.
-- SERVICES B2C AVEC IA: Dating, Fitness, Santé mentale, Nutrition, Sommeil, Méditation, Voyage, Food delivery, Mode, Beauté, Pets, Jardinage, Voiture, Maison, Enfants, Seniors, etc.
-- SERVICES B2B AVEC IA: E-commerce, Immobilier, RH, Legal, Comptabilité, Assurance, Banque, Logistique, Manufacturing, Agriculture, etc.
-- OUTILS PRO: Productivité, Marketing, SEO, Analytics, Automation, No-code, API, Data, CRM, Email, Support client, etc.
-- NICHES: Outils pour avocats, médecins, architectes, musiciens, sportifs, streamers, influenceurs, freelances, étudiants, chercheurs, journalistes, etc.
+CATÉGORIES D'OUTILS:
+- Génération: Image, Vidéo, Audio, Texte, Code, 3D
+- Services: Marketing, Productivité, Education, Santé, Finance
+- Niches: Legal, RH, Immobilier, E-commerce
 
-RÈGLE ABSOLUE: 
-- Tu DOIS utiliser ta capacité de recherche internet pour trouver des outils RÉELS
-- Uniquement des URLs VALIDES et VÉRIFIÉES sur internet
-- Pas d'inventions - seulement des outils que tu as trouvés via la recherche web
-- Si tu ne trouves rien, retourne un tableau vide plutôt que d'inventer
-- Préférer les outils moins connus mais de qualité
-- EXCLURE: ChatGPT, Claude, Midjourney, DALL-E, Stable Diffusion, Copilot (trop connus)`,
+RÈGLES ABSOLUES:
+- RECHERCHE WEB OBLIGATOIRE - utilise ta capacité de recherche internet
+- Retourne UNIQUEMENT des outils trouvés via recherche web réelle
+- URLs valides et vérifiées uniquement
+- Si rien trouvé, retourne tableau vide (PAS d'invention)
+- EXCLURE: ChatGPT, Claude, Midjourney, DALL-E, Copilot, Gemini`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
