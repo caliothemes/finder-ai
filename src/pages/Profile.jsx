@@ -132,22 +132,24 @@ export default function Profile() {
 
         {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-purple-700">
-                <Heart className="w-5 h-5" />
-                {t('profile_favorites')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-purple-600">
-                {favorites.length}
-              </div>
-              <p className="text-sm text-slate-600 mt-1">
-                {t('profile_favorite_tools')}
-              </p>
-            </CardContent>
-          </Card>
+          <Link to={createPageUrl('Favorites')}>
+            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-purple-700">
+                  <Heart className="w-5 h-5" />
+                  {t('profile_favorites')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold text-purple-600">
+                  {favorites.length}
+                </div>
+                <p className="text-sm text-slate-600 mt-1">
+                  {t('profile_favorite_tools')}
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
 
           <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
             <CardHeader>
