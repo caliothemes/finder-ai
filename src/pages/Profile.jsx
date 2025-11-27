@@ -78,8 +78,32 @@ export default function Profile() {
         {/* Header */}
         <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 rounded-3xl p-12 mb-8 text-white">
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-400 rounded-3xl flex items-center justify-center text-4xl font-bold">
-              {user.full_name ? user.full_name[0].toUpperCase() : user.email[0].toUpperCase()}
+            <div className="relative group">
+              {user.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt="Avatar"
+                  className="w-24 h-24 rounded-3xl object-cover"
+                />
+              ) : (
+                <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-400 rounded-3xl flex items-center justify-center text-4xl font-bold">
+                  {user.full_name ? user.full_name[0].toUpperCase() : user.email[0].toUpperCase()}
+                </div>
+              )}
+              <label className="absolute inset-0 bg-black/50 rounded-3xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                {uploadingAvatar ? (
+                  <Loader2 className="w-8 h-8 text-white animate-spin" />
+                ) : (
+                  <Camera className="w-8 h-8 text-white" />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                  disabled={uploadingAvatar}
+                />
+              </label>
             </div>
             
             <div className="flex-1">
