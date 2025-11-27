@@ -658,59 +658,55 @@ RÈGLE ABSOLUE:
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-    // Créer les découvertes en batch
+    // Créer les découvertes en batch avec images
     if (allDiscoveries.length > 0) {
-      console.log(`📝 Creating ${allDiscoveries.length} new discoveries...`);
+      console.log(`📝 Creating ${allDiscoveries.length} new discoveries with images...`);
       
+      // Générer les images AVANT de créer les découvertes
+      for (let i = 0; i < allDiscoveries.length; i++) {
+        const discovery = allDiscoveries[i];
+        
+        // Générer une image pour chaque découverte
+        try {
+          const imagePrompt = `Professional modern banner for AI tool called "${discovery.name}". ${discovery.tagline || discovery.description?.substring(0, 100) || 'AI technology tool'}. Abstract futuristic design, gradient colors purple pink blue, neural network patterns, technology aesthetic, clean minimal, no text, no logos, high quality digital art.`;
+          
+          const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+            prompt: imagePrompt
+          });
+          
+          if (imageResult && imageResult.url) {
+            allDiscoveries[i].cover_image_url = imageResult.url;
+            console.log(`✅ Image generated: ${discovery.name}`);
+          }
+        } catch (imgError) {
+          console.log(`⚠️ Image gen failed for ${discovery.name}: ${imgError.message}`);
+          // Utiliser une image placeholder gradient
+          allDiscoveries[i].cover_image_url = '';
+        }
+        
+        // Petite pause entre les générations d'images (éviter rate limit)
+        if (i % 5 === 4) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+      
+      // Maintenant créer les découvertes avec les images
       for (let i = 0; i < allDiscoveries.length; i += 25) {
         const batch = allDiscoveries.slice(i, i + 25);
         
         try {
-          const createdDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
-          
-          // Générer images en parallèle (limité à 5 simultanées)
-          const imagePromises = createdDiscoveries.slice(0, 5).map(async (discovery) => {
-            try {
-              // Essayer de capturer un screenshot du site
-              const screenshotUrl = `https://api.screenshotone.com/take?access_key=nLFJt8mJUUt2uw&url=${encodeURIComponent(discovery.website_url)}&format=jpg&image_quality=80&viewport_width=1200&viewport_height=630&full_page=false&cache=true`;
-              
-              const screenshotResponse = await fetch(screenshotUrl);
-              
-              if (screenshotResponse.ok) {
-                const imageBlob = await screenshotResponse.blob();
-                const file = new File([imageBlob], `${discovery.name.replace(/[^a-z0-9]/gi, '-')}-cover.jpg`, { type: 'image/jpeg' });
-                const { file_url } = await base44.asServiceRole.integrations.Core.UploadFile({ file });
-                
-                await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
-                  cover_image_url: file_url
-                });
-                console.log(`✅ Screenshot: ${discovery.name}`);
-              } else {
-                throw new Error('Screenshot failed');
-              }
-            } catch (error) {
-              // Fallback: générer une image IA pour le header
-              try {
-                const imagePrompt = `Modern professional banner for AI tool "${discovery.name}". Abstract technology background with purple and pink gradient, futuristic design, neural network patterns, clean minimalist style. No text, no logos.`;
-                const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-                  prompt: imagePrompt
-                });
-                
-                if (imageResult.url) {
-                  await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
-                    cover_image_url: imageResult.url
-                  });
-                  console.log(`✅ AI image: ${discovery.name}`);
-                }
-              } catch (genError) {
-                console.log(`❌ No image: ${discovery.name}`);
-              }
-            }
-          });
-          
-          await Promise.all(imagePromises);
+          await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
+          console.log(`✅ Batch ${Math.floor(i/25) + 1} created (${batch.length} items)`);
         } catch (batchError) {
           console.error(`Batch error: ${batchError.message}`);
+          // Essayer un par un en cas d'erreur batch
+          for (const item of batch) {
+            try {
+              await base44.asServiceRole.entities.AIServiceDiscovery.create(item);
+            } catch (e) {
+              console.log(`Skip: ${item.name}`);
+            }
+          }
         }
       }
     }
