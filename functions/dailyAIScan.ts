@@ -4,87 +4,348 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    console.log('🔍 Starting AI scan...');
+    console.log('🔍 Starting MEGA AI scan...');
 
     // Récupérer les services existants pour éviter les doublons
     const existingServices = await base44.asServiceRole.entities.AIService.list();
     const existingUrls = existingServices.map(s => 
-      s.website_url?.toLowerCase().replace(/\/$/, '')
+      s.website_url?.toLowerCase().replace(/\/$/, '').replace(/^https?:\/\/(www\.)?/, '')
     ).filter(Boolean);
 
     const existingDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.list();
     const existingDiscoveryUrls = existingDiscoveries.map(d => 
-      d.website_url?.toLowerCase().replace(/\/$/, '')
+      d.website_url?.toLowerCase().replace(/\/$/, '').replace(/^https?:\/\/(www\.)?/, '')
     ).filter(Boolean);
 
     const allExistingUrls = [...new Set([...existingUrls, ...existingDiscoveryUrls])];
+    const categories = await base44.asServiceRole.entities.Category.list();
 
-    // Recherche massive sans filtrage par catégorie - ÉLARGIE
-    const searchQueries = [
-      "complete list of all AI tools 2024 2025 with websites",
-      "1000 AI tools directory complete database URLs",
-      "futurepedia AI tools list all categories",
-      "there's an AI for that complete database",
-      "product hunt AI tools launched 2024 2025 all",
-      "AI tool aggregator sites complete lists",
-      "best AI tools every category comprehensive list",
-      "new AI products startups 2024 2025 all types",
-      "AI software directory A to Z complete",
-      "topai.tools complete database all AI services",
-      "AI writing tools copywriting content generation",
-      "AI image generation tools Midjourney alternatives",
-      "AI video creation editing tools 2024 2025",
-      "AI voice text to speech cloning tools",
-      "AI coding programming assistant tools",
-      "AI chatbot customer service tools",
-      "AI productivity automation workflow tools",
-      "AI marketing SEO social media tools",
-      "AI music audio generation tools",
-      "AI presentation slide deck tools",
-      "AI avatar virtual human tools",
-      "AI transcription meeting notes tools",
-      "AI research academic tools",
-      "AI no-code app builder tools",
-      "AI data analysis visualization tools",
-      "AI translation language tools",
-      "AI logo design branding tools",
-      "AI photo editing enhancement tools",
-      "AI 3D modeling rendering tools",
-      "AI education learning tutoring tools"
+    // ============================================
+    // STRATÉGIE 1: ANNUAIRES IA MONDIAUX
+    // ============================================
+    const aiDirectories = [
+      // Annuaires majeurs EN
+      "site:futurepedia.io new AI tools 2024 2025",
+      "site:theresanaiforthat.com AI tools list",
+      "site:topai.tools AI directory",
+      "site:aitoolhunt.com latest AI tools",
+      "site:toolify.ai AI tools directory",
+      "site:aitools.fyi complete list",
+      "site:insidr.ai AI tools database",
+      "site:aicollection.org AI tools",
+      "site:supertools.therundown.ai AI directory",
+      "site:gptstore.ai GPT apps directory",
+      "site:aimodels.fyi AI models list",
+      "site:easywithai.com AI tools",
+      "site:faind.ai AI directory",
+      "site:aivalley.ai tools list",
+      "site:domore.ai AI tools",
+      
+      // Annuaires FR
+      "site:ia-directory.fr outils IA",
+      "site:aitools.fr annuaire IA français",
+      "meilleurs outils intelligence artificielle français 2024 2025",
+      "annuaire outils IA France liste complète",
+      
+      // Annuaires DE
+      "KI-Tools Verzeichnis Deutschland 2024 2025",
+      "beste KI Werkzeuge Liste komplett",
+      "AI tools directory Germany Austria Switzerland",
+      
+      // Annuaires ES
+      "directorio herramientas IA español 2024 2025",
+      "mejores herramientas inteligencia artificial lista",
+      "herramientas IA España Latinoamérica",
+      
+      // Annuaires IT
+      "strumenti intelligenza artificiale Italia 2024",
+      "directory AI tools italiano",
+      
+      // Annuaires PT
+      "ferramentas IA Portugal Brasil 2024 2025",
+      "diretório inteligência artificial lista",
+      
+      // Annuaires NL
+      "AI tools directory Nederland België 2024",
+      
+      // Annuaires PL
+      "narzędzia AI Polska 2024 lista",
+      
+      // Annuaires RU
+      "каталог инструментов ИИ 2024 2025",
+      "список нейросетей и AI сервисов",
+      
+      // Annuaires JP
+      "AIツール一覧 日本 2024 2025",
+      "人工知能ツールディレクトリ",
+      
+      // Annuaires KR
+      "AI 도구 목록 한국 2024 2025",
+      
+      // Annuaires CN
+      "AI工具大全 中国 2024 2025",
+      "人工智能工具目录列表",
+      
+      // Annuaires AR
+      "أدوات الذكاء الاصطناعي 2024 2025",
+      
+      // Annuaires IN
+      "AI tools directory India 2024 2025 list",
     ];
 
+    // ============================================
+    // STRATÉGIE 2: SOURCES DE NOUVEAUTÉS
+    // ============================================
+    const newsSources = [
+      // Product Hunt & lancements
+      "site:producthunt.com AI artificial intelligence launched 2024 2025",
+      "site:producthunt.com product of the day AI",
+      "site:betalist.com AI startups beta",
+      "site:startupbase.io AI tools startups",
+      "site:crunchbase.com AI startups funding 2024 2025",
+      
+      // Tech news
+      "site:techcrunch.com new AI tools launched 2024 2025",
+      "site:theverge.com AI tools apps announced",
+      "site:wired.com AI software tools new",
+      "site:venturebeat.com AI tools startups 2024",
+      "site:ycombinator.com/companies AI tools",
+      
+      // Reddit & communautés
+      "site:reddit.com/r/artificial best AI tools 2024 2025",
+      "site:reddit.com/r/ChatGPT alternatives tools",
+      "site:reddit.com/r/midjourney alternatives AI image",
+      "site:reddit.com/r/SideProject AI tools launched",
+      "site:reddit.com/r/startups AI product launched",
+      
+      // Twitter/X trending
+      "AI tools trending twitter 2024 2025 new launch",
+      "new AI startup launched viral tool",
+    ];
+
+    // ============================================
+    // STRATÉGIE 3: CATÉGORIES EXHAUSTIVES
+    // ============================================
+    const categorySearches = [
+      // Génération d'images
+      "AI image generation tools 2024 2025 complete list Midjourney DALL-E alternatives",
+      "text to image AI generators all options",
+      "AI art generators tools directory",
+      "AI photo editing enhancement tools all",
+      "AI logo generator brand design tools",
+      "AI avatar creator tools list",
+      "AI background remover tools",
+      "AI image upscaler enhancer tools",
+      
+      // Vidéo
+      "AI video generation tools 2024 2025 Runway Pika Luma alternatives",
+      "text to video AI generators all",
+      "AI video editing tools automatic",
+      "AI animation tools 2D 3D",
+      "AI lip sync deepfake tools",
+      "AI video transcription subtitle tools",
+      "AI short form video creator tools",
+      
+      // Audio & Voix
+      "AI voice generator text to speech 2024 2025 all tools",
+      "AI voice cloning tools ElevenLabs alternatives",
+      "AI music generation Suno Udio alternatives all",
+      "AI audio editing podcast tools",
+      "AI transcription tools automatic",
+      "AI noise removal audio tools",
+      "AI sound effect generator tools",
+      
+      // Écriture & Contenu
+      "AI writing assistant tools 2024 2025 all Jasper alternatives",
+      "AI copywriting marketing tools",
+      "AI blog content generator tools",
+      "AI email writer tools",
+      "AI grammar checker tools Grammarly alternatives",
+      "AI story fiction writer tools",
+      "AI academic research writing tools",
+      "AI SEO content optimization tools",
+      "AI social media post generator tools",
+      
+      // Code & Dev
+      "AI coding assistant 2024 2025 Copilot Cursor alternatives all",
+      "AI code generation tools",
+      "AI debugging tools automatic",
+      "AI code review tools",
+      "AI no-code app builder tools all",
+      "AI website builder tools",
+      "AI API development tools",
+      "AI SQL database query tools",
+      
+      // Chatbots & Assistants
+      "AI chatbot platforms 2024 2025 all ChatGPT alternatives",
+      "AI customer service chatbot tools",
+      "AI personal assistant tools",
+      "AI knowledge base chatbot tools",
+      "custom GPT builders platforms all",
+      "AI agent automation tools",
+      
+      // Productivité
+      "AI productivity tools 2024 2025 complete list",
+      "AI meeting notes transcription tools",
+      "AI calendar scheduling assistant tools",
+      "AI task management automation tools",
+      "AI document processing tools",
+      "AI spreadsheet automation tools",
+      "AI workflow automation Zapier alternatives",
+      "AI presentation generator Gamma alternatives all",
+      
+      // Business & Marketing
+      "AI marketing tools 2024 2025 all",
+      "AI sales automation tools",
+      "AI lead generation tools",
+      "AI CRM tools automatic",
+      "AI analytics business intelligence tools",
+      "AI market research tools",
+      "AI competitive analysis tools",
+      "AI pricing optimization tools",
+      
+      // Design & Créatif
+      "AI design tools 2024 2025 Canva alternatives all",
+      "AI UX UI design tools",
+      "AI wireframe prototype tools",
+      "AI 3D modeling tools",
+      "AI interior design tools",
+      "AI fashion design tools",
+      "AI font generator tools",
+      
+      // Éducation
+      "AI education learning tools 2024 2025 all",
+      "AI tutoring tools personalized",
+      "AI language learning tools",
+      "AI quiz generator tools",
+      "AI flashcard study tools",
+      "AI course creator tools",
+      
+      // Santé & Bien-être
+      "AI health wellness tools 2024 2025",
+      "AI fitness workout generator tools",
+      "AI nutrition diet planning tools",
+      "AI mental health therapy tools",
+      "AI medical diagnosis tools",
+      
+      // Finance
+      "AI finance investment tools 2024 2025",
+      "AI trading bot tools",
+      "AI accounting bookkeeping tools",
+      "AI expense tracking tools",
+      "AI financial planning tools",
+      
+      // Autres niches
+      "AI resume builder tools 2024 2025",
+      "AI legal document tools",
+      "AI real estate tools",
+      "AI travel planning tools",
+      "AI recipe meal planning tools",
+      "AI gaming AI tools",
+      "AI dating profile tools",
+      "AI pet AI tools",
+      "AI gardening tools",
+      "AI car automotive tools",
+    ];
+
+    // ============================================
+    // STRATÉGIE 4: DÉTECTION PAR MOTS-CLÉS
+    // ============================================
+    const keywordSearches = [
+      // Termes techniques
+      "GPT-4 powered tools applications 2024",
+      "Claude AI Anthropic powered tools apps",
+      "Gemini Google AI powered applications",
+      "LLM based tools applications SaaS",
+      "generative AI tools new 2024 2025",
+      "foundation model powered apps",
+      "transformer based AI tools",
+      "diffusion model AI tools apps",
+      
+      // Suffixes populaires
+      "*.ai new AI tools SaaS launched 2024 2025",
+      "AI SaaS tools with .ai domain",
+      "new .ai domain AI startups tools",
+      
+      // Patterns de noms
+      "AI tool ending in -fy 2024",
+      "AI tool ending in -ly 2024",
+      "AI tool ending in -io 2024",
+      "AI tool with -AI suffix 2024",
+      "AI tool with Auto- prefix 2024",
+      "AI tool with Smart- prefix 2024",
+    ];
+
+    // ============================================
+    // STRATÉGIE 5: STARTUPS & FINANCEMENTS
+    // ============================================
+    const startupSearches = [
+      "AI startups raised funding 2024 2025 seed series A",
+      "YC Y Combinator AI startups 2024 2025 batch",
+      "Techstars AI startups 2024",
+      "AI unicorn startups list 2024 2025",
+      "emerging AI companies tools 2024",
+      "stealth AI startups launched 2024 2025",
+      "bootstrap AI tools profitable 2024",
+      "indie AI tools solo developers 2024",
+    ];
+
+    // Combiner toutes les requêtes
+    const allSearchQueries = [
+      ...aiDirectories,
+      ...newsSources,
+      ...categorySearches,
+      ...keywordSearches,
+      ...startupSearches
+    ];
+
+    // Mélanger pour varier les sources
+    const shuffledQueries = allSearchQueries.sort(() => Math.random() - 0.5);
+    
+    // Limiter pour éviter timeout (prendre les 40 premières)
+    const searchQueries = shuffledQueries.slice(0, 40);
+
     const allDiscoveries = [];
-    const categories = await base44.asServiceRole.entities.Category.list();
+    const seenUrls = new Set(allExistingUrls);
 
     // Scanner chaque source
     for (const query of searchQueries) {
-      console.log(`🔎 Searching: ${query}`);
+      console.log(`🔎 Searching: ${query.substring(0, 60)}...`);
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `RECHERCHE MASSIVE D'OUTILS IA: "${query}"
+          prompt: `MEGA RECHERCHE D'OUTILS IA: "${query}"
 
-OBJECTIF: Trouver le MAXIMUM d'outils IA possibles. Pas de limite de catégorie.
+MISSION CRITIQUE: Trouver le MAXIMUM d'outils IA réels et fonctionnels.
 
-RETOURNE 30-60 outils IA avec:
-- name: Nom du produit
-- website_url: URL officielle (VÉRIFIE sur internet!)
-- description: 50-80 mots en français
-- tagline: Phrase courte français
-- features: 3-4 fonctionnalités
-- pricing: "gratuit"/"freemium"/"payant"/"abonnement"
+INSTRUCTIONS:
+1. Recherche sur internet pour trouver des outils IA correspondant à cette requête
+2. Pour chaque outil trouvé, VÉRIFIE que l'URL existe vraiment
+3. Retourne entre 20 et 50 outils différents
+4. Inclure des outils de TOUS les pays et langues
+5. Prioriser les outils récents (2024-2025)
 
-INCLURE TOUS TYPES: chatbots, image, vidéo, audio, code, écriture, productivité, marketing, design, recherche, transcription, avatars, voix, musique, 3D, données, automation, SEO, réseaux sociaux, email, présentations, no-code, traduction, résumé, etc.
+FORMAT DE RÉPONSE pour chaque outil:
+- name: Nom exact du produit
+- website_url: URL officielle VÉRIFIÉE (https://...)
+- description: 50-100 mots en français décrivant l'outil
+- tagline: Phrase d'accroche courte en français
+- features: Liste de 3-5 fonctionnalités principales
+- pricing: "gratuit" / "freemium" / "payant" / "abonnement"
+- country: Pays d'origine si connu
+- language: Langue principale du site
 
 SOURCES À EXPLORER:
-- Futurepedia, There's an AI for that, TopAI.tools
-- Product Hunt AI, AI Tool Hunt
+- Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi
+- Product Hunt, BetaList, Crunchbase
+- Sites tech: TechCrunch, TheVerge, VentureBeat
+- Reddit, Twitter/X tendances
 - Sites officiels des outils
 
-OUTILS MAJEURS (vérifier s'ils ne sont pas déjà listés):
-ChatGPT, Claude, Gemini, Perplexity, Copilot, Midjourney, DALL-E 3, Stable Diffusion, Leonardo, Ideogram, Flux, Runway, Pika, Luma, Kling, HeyGen, Synthesia, D-ID, ElevenLabs, Murf, Suno, Udio, Jasper, Copy.ai, Writesonic, Rytr, Notion AI, Gamma, Tome, Canva AI, Remove.bg, Photoroom, Remini, Topaz, Otter, Descript, Fireflies, Krisp, Cursor, Codeium, Tabnine, Replit, v0.dev, Bolt, Lovable, Zapier AI, Make, n8n
+TYPES D'OUTILS À INCLURE:
+Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Productivité, Marketing, Design, 3D, Éducation, Santé, Finance, RH, Legal, Immobilier, E-commerce, Gaming, Réseaux sociaux, SEO, Analytics, Automation, No-code, API, Data, Recherche, Traduction, Résumé, Présentation, Email, CRM, etc.
 
-RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via recherche web.`,
+RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -105,7 +366,9 @@ RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via rech
                     pricing: { 
                       type: "string",
                       enum: ["gratuit", "freemium", "payant", "abonnement"]
-                    }
+                    },
+                    country: { type: "string" },
+                    language: { type: "string" }
                   },
                   required: ["name", "website_url"]
                 }
@@ -115,16 +378,22 @@ RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via rech
         });
 
         if (response && response.services) {
-          console.log(`✅ Found ${response.services.length} services for: ${query}`);
+          console.log(`✅ Found ${response.services.length} services`);
           
-          // Filtrer et ajouter les découvertes
           for (const service of response.services) {
             if (!service.website_url || !service.name) continue;
 
-            const normalizedUrl = service.website_url.toLowerCase().replace(/\/$/, '');
+            // Normaliser l'URL
+            let normalizedUrl;
+            try {
+              const urlObj = new URL(service.website_url);
+              normalizedUrl = urlObj.hostname.replace(/^www\./, '') + urlObj.pathname.replace(/\/$/, '');
+            } catch {
+              continue;
+            }
             
             // Vérifier si existe déjà
-            if (allExistingUrls.includes(normalizedUrl)) {
+            if (seenUrls.has(normalizedUrl)) {
               continue;
             }
 
@@ -132,35 +401,41 @@ RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via rech
             const suggestedCategories = [];
             const desc = (service.description || '').toLowerCase();
             const name = service.name.toLowerCase();
+            const allText = `${name} ${desc} ${(service.features || []).join(' ')}`.toLowerCase();
             
-            if (desc.includes('image') || desc.includes('photo') || desc.includes('design') || desc.includes('visual')) {
-              const imageCat = categories.find(c => c.slug === 'image-generation');
-              if (imageCat) suggestedCategories.push(imageCat.id);
-            }
-            if (desc.includes('video') || desc.includes('film')) {
-              const videoCat = categories.find(c => c.slug === 'video');
-              if (videoCat) suggestedCategories.push(videoCat.id);
-            }
-            if (desc.includes('chat') || desc.includes('conversation') || desc.includes('assistant')) {
-              const chatCat = categories.find(c => c.slug === 'chatbots');
-              if (chatCat) suggestedCategories.push(chatCat.id);
-            }
-            if (desc.includes('write') || desc.includes('writing') || desc.includes('content') || desc.includes('text')) {
-              const writeCat = categories.find(c => c.slug === 'writing');
-              if (writeCat) suggestedCategories.push(writeCat.id);
-            }
-            if (desc.includes('code') || desc.includes('programming') || desc.includes('developer')) {
-              const codeCat = categories.find(c => c.slug === 'code-assistant');
-              if (codeCat) suggestedCategories.push(codeCat.id);
+            // Mapping catégories
+            const categoryMappings = [
+              { keywords: ['image', 'photo', 'picture', 'visual', 'art', 'design', 'logo', 'avatar', 'illustration'], slug: 'image-generation' },
+              { keywords: ['video', 'film', 'animation', 'motion', 'clip'], slug: 'video' },
+              { keywords: ['audio', 'music', 'musique', 'sound', 'son', 'voice', 'voix', 'speech', 'podcast'], slug: 'audio' },
+              { keywords: ['chat', 'conversation', 'assistant', 'bot', 'gpt'], slug: 'chatbots' },
+              { keywords: ['write', 'writing', 'text', 'content', 'copy', 'blog', 'article', 'rédaction', 'écriture'], slug: 'writing' },
+              { keywords: ['code', 'programming', 'developer', 'dev', 'coding', 'software'], slug: 'code-assistant' },
+              { keywords: ['productivity', 'productivité', 'workflow', 'automation', 'task', 'calendar', 'meeting'], slug: 'productivity' },
+              { keywords: ['marketing', 'seo', 'ads', 'social media', 'email', 'campaign'], slug: 'marketing' },
+              { keywords: ['education', 'learning', 'study', 'tutor', 'course', 'quiz'], slug: 'education' },
+              { keywords: ['business', 'finance', 'sales', 'crm', 'analytics', 'data'], slug: 'business' },
+              { keywords: ['3d', 'modeling', 'render', 'cad', 'architecture'], slug: '3d' },
+              { keywords: ['translation', 'translate', 'language', 'traduction'], slug: 'translation' },
+              { keywords: ['research', 'recherche', 'academic', 'science', 'paper'], slug: 'research' },
+            ];
+
+            for (const mapping of categoryMappings) {
+              if (mapping.keywords.some(kw => allText.includes(kw))) {
+                const cat = categories.find(c => c.slug === mapping.slug);
+                if (cat && !suggestedCategories.includes(cat.id)) {
+                  suggestedCategories.push(cat.id);
+                }
+              }
             }
 
-            // Extraire le domaine pour récupérer le favicon
+            // Extraire le logo via favicon
             let logoUrl = '';
             try {
               const url = new URL(service.website_url);
               logoUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
             } catch (error) {
-              console.log(`Invalid URL for ${service.name}`);
+              // Ignore
             }
 
             allDiscoveries.push({
@@ -174,86 +449,68 @@ RÈGLE ABSOLUE: Ne retourne QUE des outils RÉELS avec URLs VÉRIFIÉES via rech
               cover_image_url: '',
               logo_url: logoUrl,
               status: 'new',
-              source: `Auto scan: ${query}`
+              source: `Mega scan: ${query.substring(0, 50)}`,
+              tags: [service.country, service.language].filter(Boolean)
             });
 
-            // Ajouter à la liste des URLs existantes pour éviter doublons dans ce scan
-            allExistingUrls.push(normalizedUrl);
+            seenUrls.add(normalizedUrl);
           }
         }
       } catch (error) {
-        console.error(`Error scanning ${query}:`, error.message);
+        console.error(`Error scanning: ${error.message}`);
       }
 
-      // Petite pause entre les requêtes
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Pause entre requêtes
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    // Créer les découvertes en batch et générer les images en parallèle
+    // Créer les découvertes en batch
     if (allDiscoveries.length > 0) {
       console.log(`📝 Creating ${allDiscoveries.length} new discoveries...`);
       
-      // Créer par batch de 20 pour éviter timeout
-      for (let i = 0; i < allDiscoveries.length; i += 20) {
-        const batch = allDiscoveries.slice(i, i + 20);
+      for (let i = 0; i < allDiscoveries.length; i += 25) {
+        const batch = allDiscoveries.slice(i, i + 25);
         
-        // Créer les discoveries
-        const createdDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
-        
-        // Récupérer screenshots ou générer images en parallèle pour ce batch
-        const imagePromises = createdDiscoveries.map(async (discovery) => {
-          try {
-            // Essayer de prendre un screenshot du site web
-            const screenshotUrl = `https://api.screenshotone.com/take?access_key=nLFJt8mJUUt2uw&url=${encodeURIComponent(discovery.website_url)}&format=jpg&image_quality=80&viewport_width=1200&viewport_height=630&full_page=false&device_scale_factor=1&cache=true`;
-            
-            const screenshotResponse = await fetch(screenshotUrl);
-            
-            if (screenshotResponse.ok) {
-              const imageBlob = await screenshotResponse.blob();
-              const file = new File([imageBlob], `${discovery.name.replace(/[^a-z0-9]/gi, '-')}-cover.jpg`, { type: 'image/jpeg' });
-              
-              // Upload l'image
-              const { file_url } = await base44.asServiceRole.integrations.Core.UploadFile({ file });
-              
-              await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
-                cover_image_url: file_url
-              });
-              
-              console.log(`✅ Screenshot captured for ${discovery.name}`);
-            } else {
-              throw new Error('Screenshot failed, using AI generation');
-            }
-          } catch (error) {
-            // Fallback: générer une image IA
+        try {
+          const createdDiscoveries = await base44.asServiceRole.entities.AIServiceDiscovery.bulkCreate(batch);
+          
+          // Générer images en parallèle (limité à 5 simultanées)
+          const imagePromises = createdDiscoveries.slice(0, 5).map(async (discovery) => {
             try {
-              const imagePrompt = `Modern professional banner image for ${discovery.name} - ${discovery.tagline}. Technology, AI theme, vibrant purple and pink gradient, minimalist design, futuristic. No text overlay.`;
-              const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: imagePrompt
-              });
+              const screenshotUrl = `https://api.screenshotone.com/take?access_key=nLFJt8mJUUt2uw&url=${encodeURIComponent(discovery.website_url)}&format=jpg&image_quality=80&viewport_width=1200&viewport_height=630&full_page=false&cache=true`;
               
-              await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
-                cover_image_url: imageResult.url
-              });
+              const screenshotResponse = await fetch(screenshotUrl);
               
-              console.log(`✅ AI image generated for ${discovery.name}`);
-            } catch (genError) {
-              console.log(`❌ Could not get image for ${discovery.name}:`, genError.message);
+              if (screenshotResponse.ok) {
+                const imageBlob = await screenshotResponse.blob();
+                const file = new File([imageBlob], `${discovery.name.replace(/[^a-z0-9]/gi, '-')}-cover.jpg`, { type: 'image/jpeg' });
+                const { file_url } = await base44.asServiceRole.integrations.Core.UploadFile({ file });
+                
+                await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
+                  cover_image_url: file_url
+                });
+                console.log(`✅ Screenshot: ${discovery.name}`);
+              }
+            } catch (error) {
+              console.log(`❌ No image: ${discovery.name}`);
             }
-          }
-        });
-        
-        // Attendre que toutes les images du batch soient générées
-        await Promise.all(imagePromises);
+          });
+          
+          await Promise.all(imagePromises);
+        } catch (batchError) {
+          console.error(`Batch error: ${batchError.message}`);
+        }
       }
     }
 
-    console.log('✅ Scan complete!');
+    console.log('✅ MEGA Scan complete!');
     
     return Response.json({
       success: true,
       discovered: allDiscoveries.length,
+      queries_processed: searchQueries.length,
       total_discoveries: existingDiscoveries.length + allDiscoveries.length,
-      message: `Scan completed: ${allDiscoveries.length} new AI services discovered`
+      message: `MEGA Scan completed: ${allDiscoveries.length} new AI services discovered from ${searchQueries.length} sources`
     });
 
   } catch (error) {
