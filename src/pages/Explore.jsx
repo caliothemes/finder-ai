@@ -22,9 +22,28 @@ export default function Explore() {
   const [selectedPricing, setSelectedPricing] = useState('all');
   const [sortBy, setSortBy] = useState('-created_date');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 24;
   const queryClient = useQueryClient();
   const { t } = useLanguage();
+
+  // Vérifier s'il y a une bannière sidebar active
+  const { data: hasSidebarBanner = false } = useQuery({
+    queryKey: ['exploreSidebarBanner'],
+    queryFn: async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const banners = await base44.entities.BannerReservation.filter({
+        position: 'explore_sidebar',
+        active: true,
+        validated: true
+      });
+      return banners.some(b => b.reserved_dates?.includes(today));
+    },
+    staleTime: 60000,
+  });
+
+  // Sur la page 1: promo card (1) + bannière sidebar si active (1) + services IA
+  // Total doit être multiple de 3 = 24 items
+  // Donc: 24 - 1 (promo) - 1 (bannière si présente) = 22 ou 23 services
+  const itemsPerPage = currentPage === 1 ? (hasSidebarBanner ? 22 : 23) : 24;
 
   useEffect(() => {
     const loadUser = async () => {
