@@ -50,6 +50,35 @@ export default function Profile() {
     }
   };
 
+  const handleNameEdit = () => {
+    setNewName(user.full_name || '');
+    setEditingName(true);
+  };
+
+  const handleNameSave = async () => {
+    if (!newName.trim()) {
+      toast.error('Le nom ne peut pas être vide');
+      return;
+    }
+    
+    setSavingName(true);
+    try {
+      await base44.auth.updateMe({ full_name: newName.trim() });
+      setUser({ ...user, full_name: newName.trim() });
+      setEditingName(false);
+      toast.success('Nom mis à jour !');
+    } catch (error) {
+      toast.error('Erreur lors de la mise à jour');
+    } finally {
+      setSavingName(false);
+    }
+  };
+
+  const handleNameCancel = () => {
+    setEditingName(false);
+    setNewName('');
+  };
+
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
     queryFn: () => base44.entities.Favorite.filter({ user_email: user.email }),
