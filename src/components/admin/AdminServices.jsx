@@ -25,11 +25,13 @@ export default function AdminServices() {
   const [rejectComment, setRejectComment] = useState('');
   const [translating, setTranslating] = useState(false);
   const [translationProgress, setTranslationProgress] = useState({ current: 0, total: 0 });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
   const queryClient = useQueryClient();
 
   const { data: services = [], isLoading } = useQuery({
     queryKey: ['adminServices'],
-    queryFn: () => base44.entities.AIService.list('-created_date', 100),
+    queryFn: () => base44.entities.AIService.list('-created_date', 5000),
   });
 
   const { data: categories = [] } = useQuery({
@@ -333,6 +335,18 @@ Provide accurate English translations.`,
     if (!a.pending_revision && b.pending_revision) return 1;
     return 0;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(sortedServices.length / itemsPerPage);
+  const paginatedServices = sortedServices.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset page when filter changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
 
   if (isLoading) {
     return (
@@ -651,11 +665,13 @@ Provide accurate English translations.`,
       <Card>
         <CardHeader>
           <CardTitle>Services IA ({filteredServices.length})</CardTitle>
-          <CardDescription>Gérez les soumissions de services IA</CardDescription>
+          <CardDescription>
+            Gérez les soumissions de services IA • Page {currentPage} sur {totalPages}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {sortedServices.map((service) => (
+            {paginatedServices.map((service) => (
               <div key={service.id}>
                 <div
                   className={`flex items-center justify-between p-4 border rounded-xl transition-colors ${
@@ -884,6 +900,75 @@ Provide accurate English translations.`,
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6 pt-6 border-t">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+              >
+                «
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                ‹
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className="w-10"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+              >
+                ›
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                »
+              </Button>
+              
+              <span className="text-sm text-slate-500 ml-4">
+                {filteredServices.length} services au total
+              </span>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
