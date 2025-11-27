@@ -29,6 +29,23 @@ export default function Profile() {
     loadUser();
   }, []);
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setUploadingAvatar(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.auth.updateMe({ avatar_url: file_url });
+      setUser({ ...user, avatar_url: file_url });
+      toast.success('Photo de profil mise à jour !');
+    } catch (error) {
+      toast.error('Erreur lors du téléchargement');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
     queryFn: () => base44.entities.Favorite.filter({ user_email: user.email }),
