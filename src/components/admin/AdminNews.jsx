@@ -287,23 +287,64 @@ Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', co
             <CardTitle>Créer un article</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Input
-              placeholder="Titre de l'article"
-              value={newArticle.title}
-              onChange={(e) => setNewArticle({ ...newArticle, title: e.target.value })}
-            />
-            <Textarea
-              placeholder="Résumé (2-3 phrases)"
-              value={newArticle.summary}
-              onChange={(e) => setNewArticle({ ...newArticle, summary: e.target.value })}
-              rows={2}
-            />
-            <Textarea
-              placeholder="Contenu complet (optionnel)"
-              value={newArticle.content}
-              onChange={(e) => setNewArticle({ ...newArticle, content: e.target.value })}
-              rows={4}
-            />
+            {/* Français */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">🇫🇷 Français</label>
+              <Input
+                placeholder="Titre de l'article"
+                value={newArticle.title}
+                onChange={(e) => setNewArticle({ ...newArticle, title: e.target.value })}
+              />
+              <Textarea
+                placeholder="Résumé (2-3 phrases)"
+                value={newArticle.summary}
+                onChange={(e) => setNewArticle({ ...newArticle, summary: e.target.value })}
+                rows={2}
+              />
+              <Textarea
+                placeholder="Contenu complet (optionnel)"
+                value={newArticle.content}
+                onChange={(e) => setNewArticle({ ...newArticle, content: e.target.value })}
+                rows={3}
+              />
+            </div>
+            
+            {/* Bouton traduction auto */}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleAutoTranslate('new')}
+              disabled={translating === 'new' || !newArticle.title}
+              className="w-full"
+            >
+              {translating === 'new' ? (
+                <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Traduction en cours...</>
+              ) : (
+                <><Languages className="w-4 h-4 mr-2" />Traduire automatiquement en anglais</>
+              )}
+            </Button>
+
+            {/* Anglais */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">🇬🇧 English</label>
+              <Input
+                placeholder="Article title"
+                value={newArticle.title_en}
+                onChange={(e) => setNewArticle({ ...newArticle, title_en: e.target.value })}
+              />
+              <Textarea
+                placeholder="Summary (2-3 sentences)"
+                value={newArticle.summary_en}
+                onChange={(e) => setNewArticle({ ...newArticle, summary_en: e.target.value })}
+                rows={2}
+              />
+              <Textarea
+                placeholder="Full content (optional)"
+                value={newArticle.content_en}
+                onChange={(e) => setNewArticle({ ...newArticle, content_en: e.target.value })}
+                rows={3}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <Input
                 placeholder="Nom de la source (ex: TechCrunch)"
