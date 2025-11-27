@@ -25,6 +25,8 @@ export default function AdminServices() {
   const [rejectComment, setRejectComment] = useState('');
   const [translating, setTranslating] = useState(false);
   const [translationProgress, setTranslationProgress] = useState({ current: 0, total: 0 });
+  const [generatingCovers, setGeneratingCovers] = useState(false);
+  const [coverProgress, setCoverProgress] = useState({ current: 0, total: 0 });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const queryClient = useQueryClient();
