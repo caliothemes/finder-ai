@@ -52,6 +52,56 @@ export default function AdminNews() {
     }
   };
 
+  // Auto-translate
+  const handleAutoTranslate = async (type, id = null) => {
+    setTranslating(id || 'new');
+    try {
+      let textToTranslate = {};
+      
+      if (type === 'new') {
+        textToTranslate = { title: newArticle.title, summary: newArticle.summary, content: newArticle.content };
+      } else if (type === 'article' && editingId) {
+        textToTranslate = { title: editData.title, summary: editData.summary, content: editData.content };
+      } else if (type === 'discovery' && editingDiscoveryId) {
+        textToTranslate = { title: editDiscoveryData.title, summary: editDiscoveryData.summary };
+      }
+
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Translate the following French text to English. Keep the same tone and style. Return ONLY the JSON object with translated fields.
+
+French text to translate:
+- Title: "${textToTranslate.title || ''}"
+- Summary: "${textToTranslate.summary || ''}"
+${textToTranslate.content ? `- Content: "${textToTranslate.content}"` : ''}
+
+Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', content_en' : ''}`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title_en: { type: "string" },
+            summary_en: { type: "string" },
+            content_en: { type: "string" }
+          }
+        }
+      });
+
+      if (response) {
+        if (type === 'new') {
+          setNewArticle({ ...newArticle, ...response });
+        } else if (type === 'article' && editingId) {
+          setEditData({ ...editData, ...response });
+        } else if (type === 'discovery' && editingDiscoveryId) {
+          setEditDiscoveryData({ ...editDiscoveryData, ...response });
+        }
+        toast.success('Traduction automatique effectuée !');
+      }
+    } catch (error) {
+      toast.error('Erreur traduction: ' + error.message);
+    } finally {
+      setTranslating(null);
+    }
+  };
+
   // Fetch articles
   const { data: articles = [], isLoading: loadingArticles } = useQuery({
     queryKey: ['adminNews'],
