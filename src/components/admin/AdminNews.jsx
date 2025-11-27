@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Search, Check, X, Eye, ExternalLink, Loader2, Pencil, Save, 
-  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles, Upload, Image
+  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles, Upload, Image, Languages
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -21,10 +21,11 @@ export default function AdminNews() {
   const [editingDiscoveryId, setEditingDiscoveryId] = useState(null);
   const [editDiscoveryData, setEditDiscoveryData] = useState({});
   const [uploadingImage, setUploadingImage] = useState(null);
+  const [translating, setTranslating] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newArticle, setNewArticle] = useState({
-    title: '', summary: '', content: '', source_name: '', source_url: '',
-    cover_image_url: '', tags: [], status: 'published'
+    title: '', title_en: '', summary: '', summary_en: '', content: '', content_en: '',
+    source_name: '', source_url: '', cover_image_url: '', tags: [], status: 'published'
   });
   const queryClient = useQueryClient();
 
