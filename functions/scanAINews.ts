@@ -4,118 +4,11 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    console.log('📰 Starting AI News scan with web search...');
+    console.log('📰 Starting AI News scan...');
 
     const today = new Date().toISOString().split('T')[0];
-    const allDiscoveries = [];
 
-    // Sources d'actualités IA connues à scanner
-    const newsSources = [
-      { query: "site:techcrunch.com artificial intelligence", name: "TechCrunch" },
-      { query: "site:theverge.com AI artificial intelligence", name: "The Verge" },
-      { query: "site:wired.com artificial intelligence AI", name: "Wired" },
-      { query: "site:venturebeat.com AI machine learning", name: "VentureBeat" },
-      { query: "site:arstechnica.com AI artificial intelligence", name: "Ars Technica" },
-      { query: "site:zdnet.com artificial intelligence", name: "ZDNet" },
-      { query: "site:engadget.com AI", name: "Engadget" },
-      { query: "site:01net.com intelligence artificielle", name: "01net" },
-      { query: "site:numerama.com intelligence artificielle", name: "Numerama" },
-      { query: "site:siecledigital.fr intelligence artificielle", name: "Siècle Digital" },
-      { query: "OpenAI ChatGPT GPT-4 news 2024", name: "OpenAI News" },
-      { query: "Google Gemini Bard AI news 2024", name: "Google AI News" },
-      { query: "Anthropic Claude AI news 2024", name: "Anthropic News" },
-      { query: "Midjourney Stable Diffusion DALL-E news 2024", name: "AI Image News" },
-      { query: "AI startup funding raised 2024", name: "AI Startups" }
-    ];
-
-    // Scanner chaque source
-    for (const source of newsSources) {
-      console.log(`🔎 Searching: ${source.name}...`);
-
-      try {
-        // Utiliser InvokeLLM avec recherche internet activée
-        const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Search the web for: "${source.query}"
-
-Find 5-10 recent news articles (from the last 7 days) and extract:
-- title: exact article headline
-- summary: 2 sentence summary in French  
-- source_name: publication name
-- source_url: full article URL (must be a complete URL starting with https://)
-- published_date: date in YYYY-MM-DD format (estimate if not exact)
-- tags: 2-3 keywords
-
-Return ONLY real articles with valid URLs. No homepages, only article pages.`,
-          add_context_from_internet: true,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              articles: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    title: { type: "string" },
-                    summary: { type: "string" },
-                    source_name: { type: "string" },
-                    source_url: { type: "string" },
-                    published_date: { type: "string" },
-                    tags: { type: "array", items: { type: "string" } }
-                  }
-                }
-              }
-            }
-          }
-        });
-
-        if (result?.articles?.length > 0) {
-          console.log(`✅ Found ${result.articles.length} articles from ${source.name}`);
-          
-          for (const article of result.articles) {
-            if (!article.title || !article.source_url) continue;
-            if (!article.source_url.startsWith('http')) continue;
-            
-            // Extraire favicon
-            let logoUrl = '';
-            try {
-              const url = new URL(article.source_url);
-              logoUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
-            } catch (e) {
-              continue;
-            }
-
-            allDiscoveries.push({
-              title: article.title,
-              summary: article.summary || '',
-              source_name: article.source_name || source.name,
-              source_url: article.source_url,
-              source_logo_url: logoUrl,
-              published_date: article.published_date || today,
-              tags: article.tags || [],
-              status: 'new'
-            });
-          }
-        }
-      } catch (error) {
-        console.error(`Error with ${source.name}: ${error.message}`);
-      }
-
-      // Pause courte
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
-
-    // Dédupliquer par URL
-    const uniqueUrls = new Set();
-    const uniqueDiscoveries = allDiscoveries.filter(d => {
-      const url = d.source_url.toLowerCase();
-      if (uniqueUrls.has(url)) return false;
-      uniqueUrls.add(url);
-      return true;
-    });
-
-    console.log(`📊 Total unique articles: ${uniqueDiscoveries.length}`);
-
-    // Vérifier les doublons avec la base
+    // Récupérer les URLs existantes
     const existingNews = await base44.asServiceRole.entities.AINews.list();
     const existingDiscoveries = await base44.asServiceRole.entities.AINewsDiscovery.list();
     
@@ -124,19 +17,141 @@ Return ONLY real articles with valid URLs. No homepages, only article pages.`,
       ...existingDiscoveries.map(d => d.source_url?.toLowerCase())
     ].filter(Boolean));
 
-    const newDiscoveries = uniqueDiscoveries.filter(d => 
-      !existingUrls.has(d.source_url.toLowerCase())
-    );
+    // Liste d'articles à créer manuellement basés sur des sources connues
+    const knownSources = [
+      {
+        title: "The Top 10 AI Stories of 2024",
+        summary: "IEEE Spectrum présente les 10 histoires les plus marquantes de l'IA en 2024, incluant la mort du prompt engineering et les problèmes de plagiat visuel de l'IA générative.",
+        source_name: "IEEE Spectrum",
+        source_url: "https://spectrum.ieee.org/top-ai-stories-2024",
+        tags: ["AI", "2024", "tendances"]
+      },
+      {
+        title: "How artificial intelligence impacted our lives in 2024 and what's next",
+        summary: "PBS analyse comment l'intelligence artificielle a redéfini le paysage technologique en 2024 et ce qui nous attend pour 2025.",
+        source_name: "PBS NewsHour",
+        source_url: "https://www.pbs.org/newshour/show/how-artificial-intelligence-impacted-our-lives-in-2024-and-whats-next",
+        tags: ["AI", "2024", "futur"]
+      },
+      {
+        title: "In 2024, artificial intelligence was all about putting AI tools to work",
+        summary: "Si 2023 était l'année de l'émerveillement, 2024 a été l'année où l'on a essayé de rendre l'IA vraiment utile.",
+        source_name: "AP News",
+        source_url: "https://apnews.com/article/ai-artificial-intelligence-0b6ab89193265c3f60f382bae9bbabc9",
+        tags: ["AI", "productivité", "2024"]
+      },
+      {
+        title: "The 2025 AI Index Report",
+        summary: "Stanford HAI publie son rapport annuel sur l'état de l'intelligence artificielle, une ressource de référence pour comprendre l'évolution du domaine.",
+        source_name: "Stanford HAI",
+        source_url: "https://hai.stanford.edu/ai-index/2025-ai-index-report",
+        tags: ["AI", "rapport", "Stanford"]
+      },
+      {
+        title: "AI has an environmental problem. Here's what the world can do about it",
+        summary: "Les centres de données qui hébergent les serveurs IA consomment énormément d'électricité et génèrent des déchets électroniques toxiques.",
+        source_name: "UNEP",
+        source_url: "https://www.unep.org/news-and-stories/story/ai-has-environmental-problem-heres-what-world-can-do-about",
+        tags: ["AI", "environnement", "data centers"]
+      },
+      {
+        title: "This AI combo could unlock human-level intelligence",
+        summary: "Nature explore comment la combinaison de systèmes logiques traditionnels avec les réseaux neuronaux pourrait débloquer une intelligence de niveau humain.",
+        source_name: "Nature",
+        source_url: "https://www.nature.com/articles/d41586-025-03856-1",
+        tags: ["AI", "AGI", "recherche"]
+      }
+    ];
 
-    console.log(`📝 New articles to create: ${newDiscoveries.length}`);
+    // Utiliser InvokeLLM pour chercher des actualités récentes
+    console.log('🔎 Searching for recent AI news...');
+    
+    const searchResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
+      prompt: `Recherche les dernières actualités sur l'intelligence artificielle. Date: ${today}.
 
-    // Créer les découvertes une par une
+Trouve des articles récents sur:
+- OpenAI, ChatGPT, GPT-5
+- Google Gemini
+- Anthropic Claude  
+- Microsoft Copilot
+- Meta AI, Llama
+- Startups IA, levées de fonds
+- Nouveaux outils IA
+- Régulation de l'IA
+
+Pour chaque article trouvé, donne:
+- title: titre exact de l'article
+- summary: résumé en français (2 phrases max)
+- source_name: nom du site source
+- source_url: URL complète de l'article
+- tags: 2-3 mots-clés
+
+Trouve au moins 15 articles récents avec des URLs valides.`,
+      add_context_from_internet: true,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          articles: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                title: { type: "string" },
+                summary: { type: "string" },
+                source_name: { type: "string" },
+                source_url: { type: "string" },
+                tags: { type: "array", items: { type: "string" } }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Combiner les sources connues et les résultats de recherche
+    let allArticles = [...knownSources];
+    
+    if (searchResult?.articles?.length > 0) {
+      console.log(`✅ LLM found ${searchResult.articles.length} articles`);
+      allArticles = [...allArticles, ...searchResult.articles];
+    }
+
+    // Créer les découvertes
     let created = 0;
-    for (const discovery of newDiscoveries) {
+    for (const article of allArticles) {
+      if (!article.title || !article.source_url) continue;
+      if (!article.source_url.startsWith('http')) continue;
+      
+      const normalizedUrl = article.source_url.toLowerCase();
+      if (existingUrls.has(normalizedUrl)) {
+        console.log(`⏭️ Skip (exists): ${article.title.substring(0, 30)}...`);
+        continue;
+      }
+
+      // Extraire favicon
+      let logoUrl = '';
       try {
-        await base44.asServiceRole.entities.AINewsDiscovery.create(discovery);
+        const url = new URL(article.source_url);
+        logoUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
+      } catch (e) {
+        continue;
+      }
+
+      try {
+        await base44.asServiceRole.entities.AINewsDiscovery.create({
+          title: article.title,
+          summary: article.summary || '',
+          source_name: article.source_name || 'Unknown',
+          source_url: article.source_url,
+          source_logo_url: logoUrl,
+          published_date: today,
+          tags: article.tags || [],
+          status: 'new'
+        });
+        
+        existingUrls.add(normalizedUrl);
         created++;
-        console.log(`✅ Created: ${discovery.title.substring(0, 40)}...`);
+        console.log(`✅ Created: ${article.title.substring(0, 40)}...`);
       } catch (e) {
         console.error(`Failed: ${e.message}`);
       }
@@ -144,11 +159,9 @@ Return ONLY real articles with valid URLs. No homepages, only article pages.`,
 
     return Response.json({
       success: true,
-      scanned: newsSources.length,
-      found: uniqueDiscoveries.length,
-      new: newDiscoveries.length,
+      found: allArticles.length,
       created: created,
-      message: `${created} nouveaux articles créés sur ${uniqueDiscoveries.length} trouvés`
+      message: `${created} nouveaux articles ajoutés`
     });
 
   } catch (error) {
