@@ -118,6 +118,173 @@ export default function AdminStats() {
 
   return (
     <div className="space-y-6">
+      {/* Visiteurs en temps réel */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-green-500" />
+              En ce moment
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-3xl font-bold text-green-600">{visitorsNow}</span>
+              <span className="text-sm text-slate-500">visiteurs actifs</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">Dernières 5 minutes</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-blue-500" />
+              Aujourd'hui
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-blue-600">{visitorsToday}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsToday} pages vues</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-purple-500" />
+              Cette semaine
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-purple-600">{visitorsWeek}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsWeek} pages vues</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-orange-500" />
+              Ce mois
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-orange-600">{visitorsMonth}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsMonth} pages vues</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Pages populaires et Appareils */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Pages populaires aujourd'hui</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {topPages.length > 0 ? (
+              <div className="space-y-3">
+                {topPages.map(([page, count], idx) => (
+                  <div key={page} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-bold text-slate-400">#{idx + 1}</span>
+                      <span className="text-sm font-medium text-slate-700">{page}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-purple-600">{count} vues</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-500">Aucune donnée aujourd'hui</p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Répartition des appareils</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>🖥️ Desktop</span>
+                  <span className="font-semibold">{Math.round((deviceStats.desktop / totalDevices) * 100)}%</span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${(deviceStats.desktop / totalDevices) * 100}%` }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>📱 Mobile</span>
+                  <span className="font-semibold">{Math.round((deviceStats.mobile / totalDevices) * 100)}%</span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: `${(deviceStats.mobile / totalDevices) * 100}%` }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>📟 Tablet</span>
+                  <span className="font-semibold">{Math.round((deviceStats.tablet / totalDevices) * 100)}%</span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${(deviceStats.tablet / totalDevices) * 100}%` }} />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Utilisateurs inscrits */}
+      <Card className="bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <UserCheck className="w-4 h-4 text-cyan-500" />
+            Utilisateurs inscrits
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-6">
+            <div>
+              <span className="text-3xl font-bold text-cyan-600">{users.length}</span>
+              <p className="text-xs text-slate-500">Total</p>
+            </div>
+            <div>
+              <span className="text-2xl font-bold text-slate-600">
+                {users.filter(u => new Date(u.created_date) >= todayStart).length}
+              </span>
+              <p className="text-xs text-slate-500">Aujourd'hui</p>
+            </div>
+            <div>
+              <span className="text-2xl font-bold text-slate-600">
+                {users.filter(u => new Date(u.created_date) >= weekStart).length}
+              </span>
+              <p className="text-xs text-slate-500">Cette semaine</p>
+            </div>
+            <div>
+              <span className="text-2xl font-bold text-slate-600">
+                {users.filter(u => new Date(u.created_date) >= monthStart).length}
+              </span>
+              <p className="text-xs text-slate-500">Ce mois</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
