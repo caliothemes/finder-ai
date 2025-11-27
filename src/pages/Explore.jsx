@@ -270,8 +270,8 @@ export default function Explore() {
                 />
               ))}
 
-              {/* Bannière Explorer Sidebar en format card - seulement page 1 */}
-              {currentPage === 1 && <ActiveBanner position="explore_sidebar" />}
+              {/* Bannière Explorer Sidebar en format card - seulement page 1 et si active */}
+              {currentPage === 1 && hasSidebarBanner && <ActiveBanner position="explore_sidebar" />}
 
               {currentPage === 1 && paginatedServices.slice(3, 5).map((service) => (
                 <AIServiceCard
