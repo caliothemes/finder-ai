@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 export default function AINews() {
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['publicNews'],
-    queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-published_date', 50),
+    queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 50),
   });
 
   if (isLoading) {
