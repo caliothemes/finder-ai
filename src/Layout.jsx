@@ -427,6 +427,16 @@ function LayoutContent({ children, currentPageName }) {
 
             {/* Right Actions */}
             <div className="hidden lg:flex items-center gap-4">
+              {/* Search Button with Animation */}
+              <button
+                onClick={() => setSearchModalOpen(true)}
+                className="group relative p-2.5 bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 rounded-xl transition-all duration-300 hover:shadow-md hover:scale-105"
+              >
+                <Search className="w-5 h-5 text-purple-600 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full animate-ping" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full" />
+              </button>
+
               {/* Language Selector */}
               <div className="flex items-center gap-2 border border-slate-200 rounded-lg p-1">
                 <button
@@ -448,12 +458,6 @@ function LayoutContent({ children, currentPageName }) {
                   🇬🇧
                 </button>
               </div>
-              <button
-                onClick={() => setSearchModalOpen(true)}
-                className="p-2 text-slate-700 hover:text-purple-600 transition-colors"
-              >
-                <Search className="w-5 h-5" />
-              </button>
               
               {user && (
                 <DropdownMenu>
