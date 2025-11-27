@@ -474,25 +474,24 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `RECHERCHE APPROFONDIE SUR INTERNET: "${query}"
+          prompt: `RECHERCHE WEB OBLIGATOIRE: "${query}"
 
-DATE: ${new Date().toISOString().split('T')[0]}
+DATE ACTUELLE: ${new Date().toISOString().split('T')[0]}
 
-MISSION: Tu DOIS chercher sur internet en temps réel pour trouver des outils IA.
+MISSION CRITIQUE: Tu DOIS effectuer une recherche web en temps réel pour trouver des outils IA.
 
-IMPORTANT: On recherche 2 types de services:
-1. CRÉATEURS D'IA: Outils qui créent/génèrent du contenu avec l'IA (Midjourney, ChatGPT, etc.)
-2. SERVICES PROPULSÉS PAR IA: Apps/sites qui UTILISENT l'IA pour offrir un service (ex: app de dating avec matching IA, app fitness avec coach IA, plateforme e-commerce avec recommandations IA, etc.)
+IMPORTANT - 2 types de services recherchés:
+1. CRÉATEURS D'IA: Outils qui créent/génèrent du contenu (génération images, vidéos, texte, code, etc.)
+2. SERVICES UTILISANT L'IA: Apps/sites qui utilisent l'IA en backend (dating, fitness, e-commerce, santé, etc.)
 
-INSTRUCTIONS:
-1. Recherche APPROFONDIE sur internet pour trouver des outils/services IA
-2. Pour chaque outil trouvé, VÉRIFIE que l'URL existe vraiment
-3. Retourne entre 30 et 100 outils différents - SOIS EXHAUSTIF
-4. Inclure des outils de TOUS les pays et langues
-5. Prioriser les outils récents (2024-2025) mais inclure aussi les outils établis moins connus
-6. INCLURE les apps mobiles et web qui utilisent l'IA en backend
-7. NE PAS inclure les outils très connus (ChatGPT, Midjourney, DALL-E, Claude, etc.) - chercher des alternatives moins connues
-8. Explorer les niches: outils IA pour avocats, médecins, architectes, musiciens, sportifs, gamers, etc.
+INSTRUCTIONS STRICTES:
+1. EFFECTUE une recherche internet MAINTENANT avec cette requête
+2. NE RETOURNE QUE des outils que tu as RÉELLEMENT trouvés via ta recherche web
+3. Vérifie que chaque URL est VALIDE et accessible
+4. Retourne 10-50 outils RÉELS et UNIQUES
+5. EXCLUS les très connus: ChatGPT, Claude, Midjourney, DALL-E, Copilot, Gemini
+6. Privilégie les outils récents 2024-2025 et les alternatives moins connues
+7. Inclure des outils de tous pays/langues
 
 FORMAT DE RÉPONSE pour chaque outil:
 - name: Nom exact du produit
