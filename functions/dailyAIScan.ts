@@ -462,8 +462,8 @@ Deno.serve(async (req) => {
     // Mélanger pour varier les sources
     const shuffledQueries = allQueriesWithDynamic.sort(() => Math.random() - 0.5);
     
-    // Augmenter le nombre de requêtes (60 au lieu de 40)
-    const searchQueries = shuffledQueries.slice(0, 60);
+    // Réduire le nombre de requêtes mais les rendre plus efficaces
+    const searchQueries = shuffledQueries.slice(0, 30);
 
     const allDiscoveries = [];
     const seenUrls = new Set(allExistingUrls);
