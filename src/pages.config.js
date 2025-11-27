@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import BannerManager from './pages/BannerManager';
 import LegalMentions from './pages/LegalMentions';
+import AINews from './pages/AINews';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Admin": Admin,
     "BannerManager": BannerManager,
     "LegalMentions": LegalMentions,
+    "AINews": AINews,
 }
 
 export const pagesConfig = {
