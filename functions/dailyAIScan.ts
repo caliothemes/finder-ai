@@ -647,8 +647,8 @@ RÈGLES ABSOLUES:
         console.error(`Error scanning: ${error.message}`);
       }
 
-      // Pause entre requêtes (réduit pour traiter plus)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Pause entre requêtes
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // Créer les découvertes en batch avec images
