@@ -8,10 +8,32 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useLanguage } from '@/components/LanguageProvider';
 import ActiveBanner from '@/components/banners/ActiveBanner';
 import DefaultAILogo from '@/components/DefaultAILogo';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
   const { t, language } = useLanguage();
   const [pricingOpen, setPricingOpen] = useState({});
+  
+  // Vérifier s'il y a une bannière payante active
+  const { data: hasPaidBanner = false } = useQuery({
+    queryKey: ['homepageSidebarBanner'],
+    queryFn: async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const banners = await base44.entities.BannerReservation.filter({
+        position: 'homepage_sidebar',
+        active: true,
+        validated: true
+      });
+      return banners.some(b => b.reserved_dates?.includes(today));
+    },
+    staleTime: 60000,
+  });
+  
+  // Toujours 15 cards max: promo card + bannière payante (si présente) + services IA
+  // 2 slots réservés: 1 pour promo card, 1 pour bannière payante (ou service IA si pas de bannière)
+  const maxServices = hasPaidBanner ? 13 : 14; // 15 - 1 promo - (1 bannière si présente)
+  const displayedServices = aiServices.slice(0, maxServices);
   
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
