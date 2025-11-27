@@ -45,6 +45,59 @@ export default function AdminStats() {
     queryFn: () => base44.entities.Story.list(),
   });
 
+  const { data: pageViews = [] } = useQuery({
+    queryKey: ['allPageViews'],
+    queryFn: () => base44.entities.PageView.list('-created_date', 10000),
+  });
+
+  const { data: users = [] } = useQuery({
+    queryKey: ['allUsers'],
+    queryFn: () => base44.entities.User.list(),
+  });
+
+  // Calculs des visiteurs par période
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekStart = new Date(todayStart);
+  weekStart.setDate(weekStart.getDate() - 7);
+  const monthStart = new Date(todayStart);
+  monthStart.setDate(monthStart.getDate() - 30);
+  const last5Minutes = new Date(now.getTime() - 5 * 60 * 1000);
+
+  // Visiteurs uniques par période
+  const getUniqueVisitors = (views, since) => {
+    const filtered = views.filter(v => new Date(v.created_date) >= since);
+    return new Set(filtered.map(v => v.visitor_id)).size;
+  };
+
+  const visitorsToday = getUniqueVisitors(pageViews, todayStart);
+  const visitorsWeek = getUniqueVisitors(pageViews, weekStart);
+  const visitorsMonth = getUniqueVisitors(pageViews, monthStart);
+  const visitorsNow = getUniqueVisitors(pageViews, last5Minutes);
+
+  // Pages vues par période
+  const viewsToday = pageViews.filter(v => new Date(v.created_date) >= todayStart).length;
+  const viewsWeek = pageViews.filter(v => new Date(v.created_date) >= weekStart).length;
+  const viewsMonth = pageViews.filter(v => new Date(v.created_date) >= monthStart).length;
+
+  // Top pages visitées aujourd'hui
+  const todayViews = pageViews.filter(v => new Date(v.created_date) >= todayStart);
+  const pageCountMap = {};
+  todayViews.forEach(v => {
+    pageCountMap[v.page] = (pageCountMap[v.page] || 0) + 1;
+  });
+  const topPages = Object.entries(pageCountMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  // Répartition des appareils
+  const deviceStats = {
+    desktop: pageViews.filter(v => v.device === 'desktop').length,
+    mobile: pageViews.filter(v => v.device === 'mobile').length,
+    tablet: pageViews.filter(v => v.device === 'tablet').length,
+  };
+  const totalDevices = deviceStats.desktop + deviceStats.mobile + deviceStats.tablet || 1;
+
   const totalViews = services.reduce((sum, s) => sum + (s.views || 0), 0);
   const totalLikes = services.reduce((sum, s) => sum + (s.likes || 0), 0);
   
