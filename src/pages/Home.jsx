@@ -5,6 +5,7 @@ import HeroSection from '@/components/home/HeroSection';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import FeaturedAI from '@/components/home/FeaturedAI';
 import NewsletterSection from '@/components/home/NewsletterSection';
+import LatestNews from '@/components/home/LatestNews';
 import { Loader2, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -116,6 +117,9 @@ export default function Home() {
         favorites={favorites}
         onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
       />
+
+      {/* Latest AI News */}
+      <LatestNews />
 
       <CategoryGrid categories={categories} aiServices={aiServices} />
 

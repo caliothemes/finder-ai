@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Settings, FileText, Mail, Image, 
   BarChart3, Users, Sparkles, Shield, Search,
-  ChevronRight
+  ChevronRight, Newspaper
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLogo from '@/components/admin/AdminLogo';
@@ -19,6 +19,7 @@ import AdminStories from '@/components/admin/AdminStories';
 import AdminAISearchScan from '@/components/admin/AdminAISearchScan';
 import AdminOwnershipClaims from '@/components/admin/AdminOwnershipClaims';
 import AdminLegalSections from '@/components/admin/AdminLegalSections';
+import AdminNews from '@/components/admin/AdminNews';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -56,6 +57,7 @@ export default function Admin() {
 
   const adminSections = [
     { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600' },
+    { id: 'news', label: 'Actualités IA', icon: Newspaper, description: 'Gérer les actualités IA', color: 'from-rose-600 to-orange-600' },
     { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
     { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
     { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
@@ -72,6 +74,7 @@ export default function Admin() {
   const renderSection = () => {
     switch (activeSection) {
       case 'ai-scan': return <AdminAISearchScan />;
+      case 'news': return <AdminNews />;
       case 'stats': return <AdminStats />;
       case 'services': return <AdminServices />;
       case 'stories': return <AdminStories />;
