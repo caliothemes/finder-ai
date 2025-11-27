@@ -57,17 +57,17 @@ export default function Admin() {
 
   const adminSections = [
     { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600' },
-    { id: 'news', label: 'Actualités IA', icon: Newspaper, description: 'Gérer les actualités IA', color: 'from-rose-600 to-orange-600' },
-    { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
     { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
-    { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
+    { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600' },
+    { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
+    { id: 'news', label: 'Actualités IA', icon: Newspaper, description: 'Gérer les actualités IA', color: 'from-rose-600 to-orange-600' },
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
+    { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
     { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
     { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600' },
     { id: 'emails', label: 'Templates Email', icon: Mail, description: 'Gérer les emails', color: 'from-red-600 to-pink-600' },
     { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
     { id: 'logo', label: 'Logo', icon: Image, description: 'Personnaliser le logo', color: 'from-slate-600 to-gray-600' },
-    { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600' },
     { id: 'legal', label: 'Mentions Légales', icon: FileText, description: 'Gérer les mentions légales', color: 'from-slate-600 to-zinc-600' },
   ];
 
