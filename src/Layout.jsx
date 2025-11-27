@@ -168,7 +168,14 @@ function LayoutContent({ children, currentPageName }) {
             <Search className="w-4 h-4" />
             {t('nav_categories')}
           </Link>
-          
+          <Link
+            to={createPageUrl('AINews')}
+            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+          >
+            <Search className="w-4 h-4" />
+            Actualités IA
+          </Link>
+
           {user && (
             <>
               <Link
