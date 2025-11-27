@@ -41,6 +41,24 @@ Deno.serve(async (req) => {
       "site:aivalley.ai tools list",
       "site:domore.ai AI tools",
       
+      // AIXPLORIA - Annuaire FR/EN avec 8000+ outils
+      "site:aixploria.com/en AI tools",
+      "site:aixploria.com ultimate-list-ai",
+      "site:aixploria.com last-ai new AI tools",
+      "site:aixploria.com free-ai free tools",
+      "site:aixploria.com categories-ai",
+      "site:aixploria.com Image Generators AI",
+      "site:aixploria.com Video Generators AI",
+      "site:aixploria.com ChatBots AI",
+      "site:aixploria.com Text Generators AI",
+      "site:aixploria.com Music AI",
+      "site:aixploria.com Voice Cloning AI",
+      "site:aixploria.com Productivity AI",
+      "site:aixploria.com Marketing AI",
+      "site:aixploria.com Developer Tools AI",
+      "site:aixploria.com Education AI",
+      "site:aixploria.com Business AI",
+      
       // Annuaires FR
       "site:ia-directory.fr outils IA",
       "site:aitools.fr annuaire IA français",
@@ -494,10 +512,12 @@ URLS INTERDITES (retourner l'URL officielle de l'outil à la place):
 - aitools.fyi/...
 - producthunt.com/...
 - alternativeto.net/...
+- aixploria.com/... (retourner l'URL officielle de l'outil, pas celle d'aixploria)
 Exemple: Si tu trouves "Notion AI" sur futurepedia, retourne "https://notion.so" pas "https://futurepedia.io/tool/notion-ai"
 
 SOURCES À EXPLORER EN PROFONDEUR:
 - Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi, AI Valley, Easy with AI, AI Collection, SaaS Hub, G2, Capterra, AlternativeTo
+- AIXPLORIA (aixploria.com): Annuaire avec 8000+ outils IA classés par catégories (Image, Video, Audio, ChatBots, Code, Marketing, etc.)
 - Lancements: Product Hunt (daily/weekly), BetaList, Crunchbase, AngelList, Indie Hackers
 - Tech news: TechCrunch, TheVerge, VentureBeat, Wired, Ars Technica, The Information, Sifted
 - Communautés: Reddit (r/artificial, r/MachineLearning, r/SideProject), Twitter/X, Hacker News, Discord servers
