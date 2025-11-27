@@ -54,48 +54,53 @@ export default function AdminNews() {
 
   // Auto-translate
   const handleAutoTranslate = async (type, id = null) => {
-    setTranslating(id || 'new');
+    const translatingId = id || 'new';
+    setTranslating(translatingId);
     try {
       let textToTranslate = {};
       
       if (type === 'new') {
         textToTranslate = { title: newArticle.title, summary: newArticle.summary, content: newArticle.content };
-      } else if (type === 'article' && editingId) {
+      } else if (type === 'article') {
         textToTranslate = { title: editData.title, summary: editData.summary, content: editData.content };
-      } else if (type === 'discovery' && editingDiscoveryId) {
+      } else if (type === 'discovery') {
         textToTranslate = { title: editDiscoveryData.title, summary: editDiscoveryData.summary };
       }
 
-      const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `Translate the following French text to English. Keep the same tone and style. Return ONLY the JSON object with translated fields.
+      console.log('Translating:', textToTranslate);
 
-French text to translate:
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Translate the following text to English. Keep the same tone and style.
+
+Text to translate:
 - Title: "${textToTranslate.title || ''}"
 - Summary: "${textToTranslate.summary || ''}"
-${textToTranslate.content ? `- Content: "${textToTranslate.content}"` : ''}
-
-Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', content_en' : ''}`,
+${textToTranslate.content ? `- Content: "${textToTranslate.content}"` : ''}`,
         response_json_schema: {
           type: "object",
           properties: {
             title_en: { type: "string" },
             summary_en: { type: "string" },
             content_en: { type: "string" }
-          }
+          },
+          required: ["title_en", "summary_en"]
         }
       });
 
+      console.log('Translation response:', response);
+
       if (response) {
         if (type === 'new') {
-          setNewArticle({ ...newArticle, ...response });
-        } else if (type === 'article' && editingId) {
-          setEditData({ ...editData, ...response });
-        } else if (type === 'discovery' && editingDiscoveryId) {
-          setEditDiscoveryData({ ...editDiscoveryData, ...response });
+          setNewArticle(prev => ({ ...prev, ...response }));
+        } else if (type === 'article') {
+          setEditData(prev => ({ ...prev, ...response }));
+        } else if (type === 'discovery') {
+          setEditDiscoveryData(prev => ({ ...prev, ...response }));
         }
         toast.success('Traduction automatique effectuée !');
       }
     } catch (error) {
+      console.error('Translation error:', error);
       toast.error('Erreur traduction: ' + error.message);
     } finally {
       setTranslating(null);
