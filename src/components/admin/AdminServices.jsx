@@ -693,7 +693,25 @@ Provide accurate English translations.`,
             Approuvés ({approvedServices.length})
           </Button>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          <Button 
+            variant="outline"
+            onClick={generateMissingCovers}
+            disabled={generatingCovers}
+            className="bg-pink-50 border-pink-300 text-pink-700 hover:bg-pink-100"
+          >
+            {generatingCovers ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Images {coverProgress.current}/{coverProgress.total}
+              </>
+            ) : (
+              <>
+                <ImageIcon className="w-4 h-4 mr-2" />
+                Générer images manquantes ({services.filter(s => s.status === 'approved' && (!s.cover_image_url || s.cover_image_url.trim() === '')).length})
+              </>
+            )}
+          </Button>
           <Button 
             variant="outline"
             onClick={translateAllServices}
