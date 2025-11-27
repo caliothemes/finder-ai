@@ -94,6 +94,15 @@ export default function AdminNews() {
     },
   });
 
+  const updateDiscoveryMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.AINewsDiscovery.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['newsDiscoveries'] });
+      setEditingDiscoveryId(null);
+      toast.success('Découverte mise à jour');
+    },
+  });
+
   const approveDiscoveryMutation = useMutation({
     mutationFn: async (discovery) => {
       const slug = discovery.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -122,6 +131,7 @@ export default function AdminNews() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminNews'] });
       queryClient.invalidateQueries({ queryKey: ['newsDiscoveries'] });
+      setEditingDiscoveryId(null);
       toast.success('Article publié !');
     },
   });
