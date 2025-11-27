@@ -313,6 +313,62 @@ Provide accurate English translations.`,
     }
   };
 
+  // Fonction de génération d'images de couverture
+  const generateMissingCovers = async () => {
+    const servicesWithoutCover = services.filter(s => 
+      s.status === 'approved' && 
+      (!s.cover_image_url || s.cover_image_url.trim() === '')
+    );
+
+    if (servicesWithoutCover.length === 0) {
+      toast.info('Tous les services ont déjà une image de couverture !');
+      return;
+    }
+
+    setGeneratingCovers(true);
+    setCoverProgress({ current: 0, total: servicesWithoutCover.length });
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < servicesWithoutCover.length; i++) {
+      const service = servicesWithoutCover[i];
+      setCoverProgress({ current: i + 1, total: servicesWithoutCover.length });
+
+      try {
+        const imagePrompt = `Professional modern banner for AI tool "${service.name}". ${service.tagline || 'Innovative AI technology'}. Abstract futuristic design with gradient colors (purple, pink, blue, cyan), neural network patterns, geometric shapes, technology aesthetic, clean minimal style, high quality digital art. No text, no logos, no words.`;
+        
+        const imageResult = await base44.integrations.Core.GenerateImage({
+          prompt: imagePrompt
+        });
+        
+        if (imageResult && imageResult.url) {
+          await base44.entities.AIService.update(service.id, {
+            cover_image_url: imageResult.url
+          });
+          successCount++;
+        } else {
+          errorCount++;
+        }
+      } catch (error) {
+        console.error(`Error generating cover for ${service.name}:`, error);
+        errorCount++;
+      }
+
+      // Pause pour éviter le rate limiting
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    setGeneratingCovers(false);
+    queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+    
+    if (errorCount === 0) {
+      toast.success(`${successCount} images générées avec succès !`);
+    } else {
+      toast.warning(`${successCount} générées, ${errorCount} erreurs`);
+    }
+  };
+
   // Services avec révisions en attente
   const servicesWithRevisions = services.filter(s => s.pending_revision);
   const pendingServices = services.filter(s => s.status === 'pending' && !s.pending_revision);
