@@ -454,60 +454,177 @@ export default function AdminNews() {
             discoveries.filter(d => d.status === 'new').map((discovery) => (
               <Card key={discovery.id} className="border-orange-200 bg-orange-50/30">
                 <CardContent className="pt-6">
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h3 className="font-semibold text-slate-900">{discovery.title}</h3>
-                          <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
-                            {discovery.source_logo_url && (
-                              <img src={discovery.source_logo_url} alt="" className="w-4 h-4" />
-                            )}
-                            <Globe className="w-4 h-4" />
-                            <span>{discovery.source_name}</span>
-                            {discovery.published_date && (
-                              <>
-                                <span>•</span>
-                                <Calendar className="w-4 h-4" />
-                                <span>{discovery.published_date}</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        <Badge variant="outline" className="bg-orange-100">Nouveau</Badge>
+                  {editingDiscoveryId === discovery.id ? (
+                    /* Mode édition */
+                    <div className="space-y-4">
+                      <Input
+                        placeholder="Titre"
+                        value={editDiscoveryData.title}
+                        onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, title: e.target.value })}
+                      />
+                      <Textarea
+                        placeholder="Résumé"
+                        value={editDiscoveryData.summary}
+                        onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, summary: e.target.value })}
+                        rows={3}
+                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <Input
+                          placeholder="Nom de la source"
+                          value={editDiscoveryData.source_name}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, source_name: e.target.value })}
+                        />
+                        <Input
+                          placeholder="URL source"
+                          value={editDiscoveryData.source_url}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, source_url: e.target.value })}
+                        />
                       </div>
-                      <p className="text-sm text-slate-600 mt-2">{discovery.summary}</p>
-                      {discovery.tags?.length > 0 && (
-                        <div className="flex gap-1 mt-2">
-                          {discovery.tags.map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">{tag}</Badge>
-                          ))}
+                      
+                      {/* Image de couverture */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                          <Image className="w-4 h-4" />
+                          Image de couverture
+                        </label>
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder="URL de l'image"
+                            value={editDiscoveryData.cover_image_url || ''}
+                            onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, cover_image_url: e.target.value })}
+                            className="flex-1"
+                          />
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => handleImageUpload(e.target.files[0], 'discovery', discovery.id)}
+                            />
+                            <Button type="button" variant="outline" asChild disabled={uploadingImage === discovery.id}>
+                              <span>
+                                {uploadingImage === discovery.id ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <><Upload className="w-4 h-4 mr-1" />Upload</>
+                                )}
+                              </span>
+                            </Button>
+                          </label>
                         </div>
-                      )}
-                      <div className="flex gap-2 mt-3">
+                        {editDiscoveryData.cover_image_url && (
+                          <img 
+                            src={editDiscoveryData.cover_image_url} 
+                            alt="Preview" 
+                            className="w-48 h-28 rounded-lg object-cover border"
+                          />
+                        )}
+                      </div>
+
+                      <Input
+                        placeholder="Tags (séparés par des virgules)"
+                        value={(editDiscoveryData.tags || []).join(', ')}
+                        onChange={(e) => setEditDiscoveryData({ 
+                          ...editDiscoveryData, 
+                          tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) 
+                        })}
+                      />
+                      
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            updateDiscoveryMutation.mutate({ id: discovery.id, data: editDiscoveryData });
+                          }}
+                        >
+                          <Save className="w-4 h-4 mr-1" />Sauvegarder
+                        </Button>
                         <Button
                           size="sm"
                           className="bg-green-600 hover:bg-green-700"
-                          onClick={() => approveDiscoveryMutation.mutate(discovery)}
+                          onClick={() => approveDiscoveryMutation.mutate(editDiscoveryData)}
                         >
-                          <Check className="w-4 h-4 mr-1" />Publier
+                          <Check className="w-4 h-4 mr-1" />Sauvegarder & Publier
                         </Button>
-                        <a href={discovery.source_url} target="_blank" rel="noopener noreferrer">
-                          <Button size="sm" variant="outline">
-                            <ExternalLink className="w-4 h-4 mr-1" />Voir l'article
-                          </Button>
-                        </a>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-red-600"
-                          onClick={() => dismissDiscoveryMutation.mutate(discovery.id)}
-                        >
-                          <X className="w-4 h-4 mr-1" />Rejeter
+                        <Button size="sm" variant="outline" onClick={() => setEditingDiscoveryId(null)}>
+                          Annuler
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* Mode affichage */
+                    <div className="flex gap-4">
+                      {discovery.cover_image_url && (
+                        <img
+                          src={discovery.cover_image_url}
+                          alt={discovery.title}
+                          className="w-32 h-20 rounded-lg object-cover flex-shrink-0"
+                        />
+                      )}
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h3 className="font-semibold text-slate-900">{discovery.title}</h3>
+                            <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
+                              {discovery.source_logo_url && (
+                                <img src={discovery.source_logo_url} alt="" className="w-4 h-4" />
+                              )}
+                              <Globe className="w-4 h-4" />
+                              <span>{discovery.source_name}</span>
+                              {discovery.published_date && (
+                                <>
+                                  <span>•</span>
+                                  <Calendar className="w-4 h-4" />
+                                  <span>{discovery.published_date}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <Badge variant="outline" className="bg-orange-100">Nouveau</Badge>
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2">{discovery.summary}</p>
+                        {discovery.tags?.length > 0 && (
+                          <div className="flex gap-1 mt-2">
+                            {discovery.tags.map((tag, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">{tag}</Badge>
+                            ))}
+                          </div>
+                        )}
+                        <div className="flex gap-2 mt-3">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingDiscoveryId(discovery.id);
+                              setEditDiscoveryData({ ...discovery });
+                            }}
+                          >
+                            <Pencil className="w-4 h-4 mr-1" />Modifier
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700"
+                            onClick={() => approveDiscoveryMutation.mutate(discovery)}
+                          >
+                            <Check className="w-4 h-4 mr-1" />Publier
+                          </Button>
+                          <a href={discovery.source_url} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" variant="outline">
+                              <ExternalLink className="w-4 h-4 mr-1" />Voir
+                            </Button>
+                          </a>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600"
+                            onClick={() => dismissDiscoveryMutation.mutate(discovery.id)}
+                          >
+                            <X className="w-4 h-4 mr-1" />Rejeter
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))
