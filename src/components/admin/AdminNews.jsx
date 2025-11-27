@@ -160,8 +160,10 @@ Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', co
       
       const articleData = {
         title: discovery.title,
+        title_en: discovery.title_en || '',
         slug,
         summary: discovery.summary || '',
+        summary_en: discovery.summary_en || '',
         source_name: discovery.source_name,
         source_url: discovery.source_url,
         source_logo_url: discovery.source_logo_url || '',
