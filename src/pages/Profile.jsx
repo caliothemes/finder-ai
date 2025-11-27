@@ -140,9 +140,51 @@ export default function Profile() {
             </div>
             
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-2">
-                {user.full_name || t('profile_user')}
-              </h1>
+              {editingName ? (
+                <div className="flex items-center gap-3 mb-2">
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="text-2xl font-bold bg-white/10 border-white/30 text-white placeholder:text-white/50 max-w-md"
+                    placeholder="Votre nom"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleNameSave();
+                      if (e.key === 'Escape') handleNameCancel();
+                    }}
+                  />
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={handleNameSave}
+                    disabled={savingName}
+                    className="text-white hover:bg-white/20"
+                  >
+                    {savingName ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={handleNameCancel}
+                    className="text-white hover:bg-white/20"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 mb-2 group">
+                  <h1 className="text-4xl font-bold">
+                    {user.full_name || t('profile_user')}
+                  </h1>
+                  <button
+                    onClick={handleNameEdit}
+                    className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-white/20 transition-all"
+                    title="Modifier le nom"
+                  >
+                    <Pencil className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
               <div className="flex items-center gap-4 text-slate-300">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
