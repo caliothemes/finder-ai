@@ -478,13 +478,23 @@ INSTRUCTIONS:
 
 FORMAT DE RÉPONSE pour chaque outil:
 - name: Nom exact du produit
-- website_url: URL officielle VÉRIFIÉE (https://...)
+- website_url: URL DIRECTE du site officiel de l'outil (PAS l'URL d'un annuaire comme topai.tools, futurepedia.io, etc.)
 - description: 50-100 mots en français décrivant l'outil
 - tagline: Phrase d'accroche courte en français
 - features: Liste de 3-5 fonctionnalités principales
 - pricing: "gratuit" / "freemium" / "payant" / "abonnement"
 - country: Pays d'origine si connu
 - language: Langue principale du site
+
+URLS INTERDITES (retourner l'URL officielle de l'outil à la place):
+- topai.tools/...
+- futurepedia.io/...
+- theresanaiforthat.com/...
+- toolify.ai/...
+- aitools.fyi/...
+- producthunt.com/...
+- alternativeto.net/...
+Exemple: Si tu trouves "Notion AI" sur futurepedia, retourne "https://notion.so" pas "https://futurepedia.io/tool/notion-ai"
 
 SOURCES À EXPLORER EN PROFONDEUR:
 - Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi, AI Valley, Easy with AI, AI Collection, SaaS Hub, G2, Capterra, AlternativeTo
