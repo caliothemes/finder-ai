@@ -123,27 +123,61 @@ function NewItemsBadge({ count }) {
 }
 
 function LayoutContent({ children, currentPageName }) {
-  const [user, setUser] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [storiesOpen, setStoriesOpen] = useState(false);
-  const { language, changeLanguage, t } = useLanguage();
-  const newItems = useNewItemsTracker();
+    const [user, setUser] = useState(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
+    const [storiesOpen, setStoriesOpen] = useState(false);
+    const { language, changeLanguage, t } = useLanguage();
+    const newItems = useNewItemsTracker();
+    const location = useLocation();
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const isAuth = await base44.auth.isAuthenticated();
-        if (isAuth) {
-          const currentUser = await base44.auth.me();
-          setUser(currentUser);
+    useEffect(() => {
+      const loadUser = async () => {
+        try {
+          const isAuth = await base44.auth.isAuthenticated();
+          if (isAuth) {
+            const currentUser = await base44.auth.me();
+            setUser(currentUser);
+          }
+        } catch (error) {
+          setUser(null);
         }
-      } catch (error) {
-        setUser(null);
-      }
-    };
-    loadUser();
-  }, []);
+      };
+      loadUser();
+    }, []);
+
+    // Tracking des visites
+    useEffect(() => {
+      const trackPageView = async () => {
+        // Générer ou récupérer un ID visiteur unique
+        let visitorId = localStorage.getItem('visitor_id');
+        if (!visitorId) {
+          visitorId = 'v_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+          localStorage.setItem('visitor_id', visitorId);
+        }
+
+        // Détecter l'appareil
+        const width = window.innerWidth;
+        let device = 'desktop';
+        if (width < 768) device = 'mobile';
+        else if (width < 1024) device = 'tablet';
+
+        // Enregistrer la visite
+        try {
+          await base44.entities.PageView.create({
+            page: currentPageName || location.pathname,
+            visitor_id: visitorId,
+            user_email: user?.email || null,
+            referrer: document.referrer || null,
+            device: device
+          });
+        } catch (e) {
+          // Silently fail
+        }
+      };
+
+      trackPageView();
+    }, [location.pathname, currentPageName]);
 
   const handleLogout = async () => {
     await base44.auth.logout();
