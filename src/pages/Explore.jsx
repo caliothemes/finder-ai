@@ -21,6 +21,8 @@ export default function Explore() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPricing, setSelectedPricing] = useState('all');
   const [sortBy, setSortBy] = useState('-created_date');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 24;
   const queryClient = useQueryClient();
   const { t } = useLanguage();
 
@@ -43,8 +45,13 @@ export default function Explore() {
 
   const { data: allServices = [], isLoading } = useQuery({
     queryKey: ['allServices'],
-    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 1000),
+    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date', 5000),
   });
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedPricing, sortBy]);
 
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
@@ -101,6 +108,13 @@ export default function Explore() {
     if (sortBy === '-average_rating') return (b.average_rating || 0) - (a.average_rating || 0);
     return 0;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
+  const paginatedServices = filteredServices.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
@@ -226,58 +240,138 @@ export default function Explore() {
             <div className="animate-spin w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full" />
           </div>
         ) : filteredServices.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredServices.slice(0, 3).map((service) => (
-              <AIServiceCard
-                key={service.id}
-                service={service}
-                isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-              />
-            ))}
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {currentPage === 1 && paginatedServices.slice(0, 3).map((service) => (
+                <AIServiceCard
+                  key={service.id}
+                  service={service}
+                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                />
+              ))}
 
-            {/* Bannière Explorer Sidebar en format card */}
-            <ActiveBanner position="explore_sidebar" />
+              {/* Bannière Explorer Sidebar en format card - seulement page 1 */}
+              {currentPage === 1 && <ActiveBanner position="explore_sidebar" />}
 
-            {filteredServices.slice(3, 5).map((service) => (
-              <AIServiceCard
-                key={service.id}
-                service={service}
-                isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-              />
-            ))}
+              {currentPage === 1 && paginatedServices.slice(3, 5).map((service) => (
+                <AIServiceCard
+                  key={service.id}
+                  service={service}
+                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                />
+              ))}
 
-            {/* Promo Card */}
-            <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="w-8 h-8 text-white" />
+              {/* Promo Card - seulement page 1 */}
+              {currentPage === 1 && (
+                <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      {t('promo_your_service')}
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-4">
+                      {t('promo_increase_visibility')}
+                    </p>
+                    <Link to={createPageUrl('ProAccount')}>
+                      <Button className="bg-purple-950 hover:bg-purple-900 text-white">
+                        <Crown className="w-4 h-4 mr-2" />
+                        {t('promo_become_pro')}
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  {t('promo_your_service')}
-                </h3>
-                <p className="text-sm text-slate-600 mb-4">
-                  {t('promo_increase_visibility')}
-                </p>
-                <Link to={createPageUrl('ProAccount')}>
-                  <Button className="bg-purple-950 hover:bg-purple-900 text-white">
-                    <Crown className="w-4 h-4 mr-2" />
-                    {t('promo_become_pro')}
-                  </Button>
-                </Link>
-              </div>
+              )}
+
+              {currentPage === 1 ? paginatedServices.slice(5).map((service) => (
+                <AIServiceCard
+                  key={service.id}
+                  service={service}
+                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                />
+              )) : paginatedServices.map((service) => (
+                <AIServiceCard
+                  key={service.id}
+                  service={service}
+                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                />
+              ))}
             </div>
 
-            {filteredServices.slice(5).map((service) => (
-              <AIServiceCard
-                key={service.id}
-                service={service}
-                isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-              />
-            ))}
-          </div>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(1); window.scrollTo(0, 0); }}
+                  disabled={currentPage === 1}
+                >
+                  «
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo(0, 0); }}
+                  disabled={currentPage === 1}
+                >
+                  ‹
+                </Button>
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => { setCurrentPage(pageNum); window.scrollTo(0, 0); }}
+                        className="w-10"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo(0, 0); }}
+                  disabled={currentPage === totalPages}
+                >
+                  ›
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(totalPages); window.scrollTo(0, 0); }}
+                  disabled={currentPage === totalPages}
+                >
+                  »
+                </Button>
+                
+                <span className="text-sm text-slate-500 ml-4">
+                  Page {currentPage} sur {totalPages}
+                </span>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
