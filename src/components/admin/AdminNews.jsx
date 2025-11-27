@@ -519,6 +519,42 @@ Provide accurate English translations.`,
                               rows={2}
                             />
                           </div>
+
+                          {/* Image de couverture */}
+                          <div className="space-y-2 p-3 bg-slate-50 rounded-lg">
+                            <label className="text-sm font-medium flex items-center gap-2">
+                              <Image className="w-4 h-4" />
+                              Image de couverture
+                            </label>
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="URL de l'image"
+                                value={editData.cover_image_url || ''}
+                                onChange={(e) => setEditData({ ...editData, cover_image_url: e.target.value })}
+                                className="flex-1"
+                              />
+                              <label className="cursor-pointer">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => handleImageUpload(e.target.files[0], 'article', editingId)}
+                                />
+                                <Button type="button" variant="outline" asChild disabled={uploadingImage === editingId}>
+                                  <span>
+                                    {uploadingImage === editingId ? (
+                                      <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                      <><Upload className="w-4 h-4 mr-1" />Upload</>
+                                    )}
+                                  </span>
+                                </Button>
+                              </label>
+                            </div>
+                            {editData.cover_image_url && (
+                              <img src={editData.cover_image_url} alt="Preview" className="w-48 h-28 rounded-lg object-cover border" />
+                            )}
+                          </div>
                           
                           <div className="flex gap-2">
                             <Button size="sm" onClick={() => updateArticleMutation.mutate({ id: article.id, data: editData })}>
