@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Search, Check, X, Eye, ExternalLink, Loader2, Pencil, Save, 
-  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles
+  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles, Upload, Image
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -18,12 +18,38 @@ export default function AdminNews() {
   const [isScanning, setIsScanning] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [editingDiscoveryId, setEditingDiscoveryId] = useState(null);
+  const [editDiscoveryData, setEditDiscoveryData] = useState({});
+  const [uploadingImage, setUploadingImage] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newArticle, setNewArticle] = useState({
     title: '', summary: '', content: '', source_name: '', source_url: '',
     cover_image_url: '', tags: [], status: 'published'
   });
   const queryClient = useQueryClient();
+
+  // Upload image
+  const handleImageUpload = async (file, type, id = null) => {
+    if (!file) return;
+    setUploadingImage(id || 'new');
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      
+      if (type === 'article' && editingId) {
+        setEditData({ ...editData, cover_image_url: file_url });
+      } else if (type === 'discovery' && editingDiscoveryId) {
+        setEditDiscoveryData({ ...editDiscoveryData, cover_image_url: file_url });
+      } else if (type === 'new') {
+        setNewArticle({ ...newArticle, cover_image_url: file_url });
+      }
+      
+      toast.success('Image uploadée !');
+    } catch (error) {
+      toast.error('Erreur upload: ' + error.message);
+    } finally {
+      setUploadingImage(null);
+    }
+  };
 
   // Fetch articles
   const { data: articles = [], isLoading: loadingArticles } = useQuery({
