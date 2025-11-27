@@ -429,13 +429,14 @@ RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
               }
             }
 
-            // Extraire le logo via favicon
+            // Extraire le logo via favicon - sinon logo FinderAI par défaut
             let logoUrl = '';
             try {
               const url = new URL(service.website_url);
               logoUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
             } catch (error) {
-              // Ignore
+              // Logo FinderAI par défaut
+              logoUrl = 'https://finderai.base44.app/logo.svg';
             }
 
             allDiscoveries.push({
@@ -477,6 +478,7 @@ RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
           // Générer images en parallèle (limité à 5 simultanées)
           const imagePromises = createdDiscoveries.slice(0, 5).map(async (discovery) => {
             try {
+              // Essayer de capturer un screenshot du site
               const screenshotUrl = `https://api.screenshotone.com/take?access_key=nLFJt8mJUUt2uw&url=${encodeURIComponent(discovery.website_url)}&format=jpg&image_quality=80&viewport_width=1200&viewport_height=630&full_page=false&cache=true`;
               
               const screenshotResponse = await fetch(screenshotUrl);
@@ -490,9 +492,26 @@ RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
                   cover_image_url: file_url
                 });
                 console.log(`✅ Screenshot: ${discovery.name}`);
+              } else {
+                throw new Error('Screenshot failed');
               }
             } catch (error) {
-              console.log(`❌ No image: ${discovery.name}`);
+              // Fallback: générer une image IA pour le header
+              try {
+                const imagePrompt = `Modern professional banner for AI tool "${discovery.name}". Abstract technology background with purple and pink gradient, futuristic design, neural network patterns, clean minimalist style. No text, no logos.`;
+                const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+                  prompt: imagePrompt
+                });
+                
+                if (imageResult.url) {
+                  await base44.asServiceRole.entities.AIServiceDiscovery.update(discovery.id, {
+                    cover_image_url: imageResult.url
+                  });
+                  console.log(`✅ AI image: ${discovery.name}`);
+                }
+              } catch (genError) {
+                console.log(`❌ No image: ${discovery.name}`);
+              }
             }
           });
           

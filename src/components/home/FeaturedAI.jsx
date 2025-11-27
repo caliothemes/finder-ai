@@ -17,6 +17,15 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     return favorites.some(fav => fav.ai_service_id === serviceId);
   };
 
+  // Vérifier si le service est nouveau (moins de 7 jours)
+  const isNew = (service) => {
+    if (!service.created_date) return false;
+    const createdDate = new Date(service.created_date);
+    const now = new Date();
+    const diffDays = (now - createdDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= 7;
+  };
+
   const getPricingBadge = (pricing) => {
     const colors = {
       gratuit: 'bg-green-100 text-green-800 border-green-200',
@@ -125,6 +134,16 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
                       <TrendingUp className="w-3 h-3 mr-1" />
                       En vedette
+                    </Badge>
+                  </div>
+                )}
+
+                {/* Badge Nouveau */}
+                {isNew(service) && !service.featured && (
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      {language === 'en' ? 'New' : 'Nouveau'}
                     </Badge>
                   </div>
                 )}
@@ -257,6 +276,16 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
                       <TrendingUp className="w-3 h-3 mr-1" />
                       {t('home_featured_badge')}
+                    </Badge>
+                  </div>
+                )}
+
+                {/* Badge Nouveau */}
+                {isNew(service) && !service.featured && (
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      {language === 'en' ? 'New' : 'Nouveau'}
                     </Badge>
                   </div>
                 )}
