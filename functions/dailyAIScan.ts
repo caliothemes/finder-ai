@@ -413,11 +413,39 @@ Deno.serve(async (req) => {
       ...aiPoweredServices
     ];
 
-    // Mélanger pour varier les sources
-    const shuffledQueries = allSearchQueries.sort(() => Math.random() - 0.5);
+    // Ajouter des requêtes dynamiques basées sur la date actuelle
+    const currentMonth = new Date().toLocaleString('en', { month: 'long' });
+    const currentYear = new Date().getFullYear();
+    const dynamicQueries = [
+      `new AI tools launched ${currentMonth} ${currentYear}`,
+      `AI startups ${currentMonth} ${currentYear} Product Hunt`,
+      `trending AI apps ${currentMonth} ${currentYear}`,
+      `latest AI tools released this week`,
+      `AI tools going viral ${currentYear}`,
+      `best new AI apps november december 2024 2025`,
+      `AI tools ProductHunt upvoted this month`,
+      `new ChatGPT alternatives ${currentYear}`,
+      `new Midjourney alternatives ${currentYear}`,
+      `AI tools launched on Twitter X trending`,
+      `indie hackers AI tools launched recently`,
+      `AI micro SaaS tools 2024 2025 new`,
+      `AI chrome extensions new 2024 2025`,
+      `AI mobile apps iOS Android new 2024 2025`,
+      `AI Slack Discord bots new tools`,
+      `AI Notion integrations tools new`,
+      `AI Figma plugins new 2024`,
+      `AI VS Code extensions new`,
+      `free AI tools no signup 2024`,
+      `open source AI tools GitHub trending`,
+    ];
+
+    const allQueriesWithDynamic = [...allSearchQueries, ...dynamicQueries];
     
-    // Limiter pour éviter timeout (prendre les 40 premières)
-    const searchQueries = shuffledQueries.slice(0, 40);
+    // Mélanger pour varier les sources
+    const shuffledQueries = allQueriesWithDynamic.sort(() => Math.random() - 0.5);
+    
+    // Augmenter le nombre de requêtes (60 au lieu de 40)
+    const searchQueries = shuffledQueries.slice(0, 60);
 
     const allDiscoveries = [];
     const seenUrls = new Set(allExistingUrls);
@@ -437,12 +465,14 @@ IMPORTANT: On recherche 2 types de services:
 2. SERVICES PROPULSÉS PAR IA: Apps/sites qui UTILISENT l'IA pour offrir un service (ex: app de dating avec matching IA, app fitness avec coach IA, plateforme e-commerce avec recommandations IA, etc.)
 
 INSTRUCTIONS:
-1. Recherche sur internet pour trouver des outils/services IA correspondant à cette requête
+1. Recherche APPROFONDIE sur internet pour trouver des outils/services IA
 2. Pour chaque outil trouvé, VÉRIFIE que l'URL existe vraiment
-3. Retourne entre 20 et 50 outils différents
+3. Retourne entre 30 et 100 outils différents - SOIS EXHAUSTIF
 4. Inclure des outils de TOUS les pays et langues
-5. Prioriser les outils récents (2024-2025)
+5. Prioriser les outils récents (2024-2025) mais inclure aussi les outils établis moins connus
 6. INCLURE les apps mobiles et web qui utilisent l'IA en backend
+7. NE PAS inclure les outils très connus (ChatGPT, Midjourney, DALL-E, Claude, etc.) - chercher des alternatives moins connues
+8. Explorer les niches: outils IA pour avocats, médecins, architectes, musiciens, sportifs, gamers, etc.
 
 FORMAT DE RÉPONSE pour chaque outil:
 - name: Nom exact du produit
@@ -454,19 +484,23 @@ FORMAT DE RÉPONSE pour chaque outil:
 - country: Pays d'origine si connu
 - language: Langue principale du site
 
-SOURCES À EXPLORER:
-- Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi
-- Product Hunt, BetaList, Crunchbase
-- Sites tech: TechCrunch, TheVerge, VentureBeat
-- Reddit, Twitter/X tendances
-- Sites officiels des outils
+SOURCES À EXPLORER EN PROFONDEUR:
+- Annuaires: Futurepedia, There's an AI, TopAI, Toolify, AITools.fyi, AI Valley, Easy with AI, AI Collection, SaaS Hub, G2, Capterra, AlternativeTo
+- Lancements: Product Hunt (daily/weekly), BetaList, Crunchbase, AngelList, Indie Hackers
+- Tech news: TechCrunch, TheVerge, VentureBeat, Wired, Ars Technica, The Information, Sifted
+- Communautés: Reddit (r/artificial, r/MachineLearning, r/SideProject), Twitter/X, Hacker News, Discord servers
+- GitHub trending repositories AI
+- App stores: iOS App Store, Google Play - section AI
+- Chrome Web Store extensions AI
 
-TYPES D'OUTILS À INCLURE:
-- GÉNÉRATEURS IA: Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Design, 3D, Présentation, etc.
-- SERVICES AVEC IA: E-commerce, Dating, Fitness, Santé, Finance, Voyage, Food, Immobilier, RH, Legal, Éducation, Gaming, Mode, Pets, etc.
-- OUTILS PRO: Productivité, Marketing, SEO, Analytics, Automation, No-code, API, Data, CRM, Email, etc.
+TYPES D'OUTILS À INCLURE - ÊTRE EXHAUSTIF:
+- GÉNÉRATEURS IA: Image, Vidéo, Audio, Musique, Voix, Écriture, Code, Chatbot, Design, 3D, Présentation, Avatar, Logo, Meme, Comic, etc.
+- SERVICES B2C AVEC IA: Dating, Fitness, Santé mentale, Nutrition, Sommeil, Méditation, Voyage, Food delivery, Mode, Beauté, Pets, Jardinage, Voiture, Maison, Enfants, Seniors, etc.
+- SERVICES B2B AVEC IA: E-commerce, Immobilier, RH, Legal, Comptabilité, Assurance, Banque, Logistique, Manufacturing, Agriculture, etc.
+- OUTILS PRO: Productivité, Marketing, SEO, Analytics, Automation, No-code, API, Data, CRM, Email, Support client, etc.
+- NICHES: Outils pour avocats, médecins, architectes, musiciens, sportifs, streamers, influenceurs, freelances, étudiants, chercheurs, journalistes, etc.
 
-RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
+RÈGLE ABSOLUE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions. Préférer les outils moins connus mais de qualité.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -582,8 +616,8 @@ RÈGLE: Uniquement des outils RÉELS avec URLs VALIDES. Pas d'inventions.`,
         console.error(`Error scanning: ${error.message}`);
       }
 
-      // Pause entre requêtes
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Pause entre requêtes (réduit pour traiter plus)
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     // Créer les découvertes en batch
