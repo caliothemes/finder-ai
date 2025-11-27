@@ -14,14 +14,14 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 const quickFilters = [
-  { label: 'Images', icon: Image, query: 'image génération', color: 'from-pink-500 to-rose-500' },
-  { label: 'Chatbots', icon: MessageSquare, query: 'chatbot assistant', color: 'from-blue-500 to-cyan-500' },
-  { label: 'Code', icon: Code, query: 'code développement', color: 'from-green-500 to-emerald-500' },
-  { label: 'Vidéo', icon: Video, query: 'vidéo génération', color: 'from-purple-500 to-violet-500' },
-  { label: 'Rédaction', icon: PenTool, query: 'rédaction texte', color: 'from-orange-500 to-amber-500' },
-  { label: 'Audio', icon: Mic, query: 'audio musique voix', color: 'from-red-500 to-pink-500' },
-  { label: 'Analytics', icon: BarChart3, query: 'analytics données', color: 'from-indigo-500 to-blue-500' },
-  { label: 'Productivité', icon: Brain, query: 'productivité automation', color: 'from-teal-500 to-cyan-500' },
+  { label: 'Images', icon: Image, query: 'images', color: 'from-pink-500 to-rose-500' },
+  { label: 'Chatbots', icon: MessageSquare, query: 'chatbot', color: 'from-blue-500 to-cyan-500' },
+  { label: 'Code', icon: Code, query: 'code', color: 'from-green-500 to-emerald-500' },
+  { label: 'Vidéo', icon: Video, query: 'vidéo', color: 'from-purple-500 to-violet-500' },
+  { label: 'Rédaction', icon: PenTool, query: 'rédaction', color: 'from-orange-500 to-amber-500' },
+  { label: 'Audio', icon: Mic, query: 'audio', color: 'from-red-500 to-pink-500' },
+  { label: 'Analytics', icon: BarChart3, query: 'analytics', color: 'from-indigo-500 to-blue-500' },
+  { label: 'Productivité', icon: Brain, query: 'productivité', color: 'from-teal-500 to-cyan-500' },
 ];
 
 const pricingFilters = [
