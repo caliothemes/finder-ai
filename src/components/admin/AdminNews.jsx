@@ -123,7 +123,7 @@ Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', co
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminNews'] });
       setShowCreateForm(false);
-      setNewArticle({ title: '', summary: '', content: '', source_name: '', source_url: '', cover_image_url: '', tags: [], status: 'published' });
+      setNewArticle({ title: '', title_en: '', summary: '', summary_en: '', content: '', content_en: '', source_name: '', source_url: '', cover_image_url: '', tags: [], status: 'published' });
       toast.success('Article créé !');
     },
   });
