@@ -551,17 +551,53 @@ Return a JSON object with: title_en, summary_en${textToTranslate.content ? ', co
                   {editingDiscoveryId === discovery.id ? (
                     /* Mode édition */
                     <div className="space-y-4">
-                      <Input
-                        placeholder="Titre"
-                        value={editDiscoveryData.title}
-                        onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, title: e.target.value })}
-                      />
-                      <Textarea
-                        placeholder="Résumé"
-                        value={editDiscoveryData.summary}
-                        onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, summary: e.target.value })}
-                        rows={3}
-                      />
+                      {/* Français */}
+                      <div className="space-y-2 p-3 bg-blue-50 rounded-lg">
+                        <label className="text-sm font-medium flex items-center gap-2">🇫🇷 Français</label>
+                        <Input
+                          placeholder="Titre"
+                          value={editDiscoveryData.title}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, title: e.target.value })}
+                        />
+                        <Textarea
+                          placeholder="Résumé"
+                          value={editDiscoveryData.summary}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, summary: e.target.value })}
+                          rows={2}
+                        />
+                      </div>
+                      
+                      {/* Bouton traduction auto */}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAutoTranslate('discovery', discovery.id)}
+                        disabled={translating === discovery.id || !editDiscoveryData.title}
+                        className="w-full"
+                      >
+                        {translating === discovery.id ? (
+                          <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Traduction...</>
+                        ) : (
+                          <><Languages className="w-4 h-4 mr-2" />Traduire en anglais</>
+                        )}
+                      </Button>
+
+                      {/* Anglais */}
+                      <div className="space-y-2 p-3 bg-green-50 rounded-lg">
+                        <label className="text-sm font-medium flex items-center gap-2">🇬🇧 English</label>
+                        <Input
+                          placeholder="Title"
+                          value={editDiscoveryData.title_en || ''}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, title_en: e.target.value })}
+                        />
+                        <Textarea
+                          placeholder="Summary"
+                          value={editDiscoveryData.summary_en || ''}
+                          onChange={(e) => setEditDiscoveryData({ ...editDiscoveryData, summary_en: e.target.value })}
+                          rows={2}
+                        />
+                      </div>
                       <div className="grid grid-cols-2 gap-4">
                         <Input
                           placeholder="Nom de la source"
