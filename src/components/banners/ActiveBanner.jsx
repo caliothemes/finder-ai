@@ -2,7 +2,10 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function ActiveBanner({ position }) {
   const today = new Date().toISOString().split('T')[0];
@@ -49,12 +52,25 @@ export default function ActiveBanner({ position }) {
             />
           </a>
           
-          {/* Badge "À l'affiche" */}
+          {/* Badge "Sponsorisé" avec tooltip */}
           <div className="absolute top-4 left-4">
-            <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Sponsorisé
-            </Badge>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    Sponsorisé
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3">
+                  <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
+                  <p className="text-xs text-slate-600">Boostez la visibilité de votre outil IA avec un compte Pro et atteignez des milliers d'utilisateurs.</p>
+                  <Link to={createPageUrl('ProAccount')} className="text-xs text-purple-600 font-medium hover:underline mt-1 inline-block">
+                    Découvrir les plans Pro →
+                  </Link>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
 
@@ -106,12 +122,25 @@ export default function ActiveBanner({ position }) {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         
-        {/* Badge "À l'affiche" */}
-        <div className="absolute top-4 right-4">
-          <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
-            <Sparkles className="w-3 h-3 mr-1" />
-            Sponsorisé
-          </Badge>
+        {/* Badge "Sponsorisé" avec tooltip */}
+        <div className="absolute top-4 right-4 z-10">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Sponsorisé
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3">
+                <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
+                <p className="text-xs text-slate-600">Boostez la visibilité de votre outil IA avec un compte Pro et atteignez des milliers d'utilisateurs.</p>
+                <Link to={createPageUrl('ProAccount')} className="text-xs text-purple-600 font-medium hover:underline mt-1 inline-block">
+                  Découvrir les plans Pro →
+                </Link>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </a>
     </div>
