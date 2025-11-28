@@ -162,6 +162,11 @@ function LayoutContent({ children, currentPageName }) {
     const newItems = useNewItemsTracker();
     const location = useLocation();
 
+    // Scroll to top on route change
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
+
     const { data: favoritesCount = 0 } = useQuery({
       queryKey: ['favoritesCount', user?.email],
       queryFn: async () => {
