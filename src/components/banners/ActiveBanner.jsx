@@ -53,16 +53,16 @@ export default function ActiveBanner({ position }) {
           </a>
           
           {/* Badge "Sponsorisé" avec tooltip */}
-          <div className="absolute top-4 left-4">
-            <TooltipProvider>
+          <div className="absolute top-4 left-4 z-10" onClick={(e) => e.stopPropagation()}>
+            <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer hover:opacity-90">
                     <Sparkles className="w-3 h-3 mr-1" />
                     Sponsorisé
                   </Badge>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3">
+                <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3 z-50">
                   <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
                   <p className="text-xs text-slate-600">Boostez la visibilité de votre outil IA avec un compte Pro et atteignez des milliers d'utilisateurs.</p>
                   <Link to={createPageUrl('ProAccount')} className="text-xs text-purple-600 font-medium hover:underline mt-1 inline-block">
@@ -121,28 +121,28 @@ export default function ActiveBanner({ position }) {
           alt={activeBanner.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        
-        {/* Badge "Sponsorisé" avec tooltip */}
-        <div className="absolute top-4 right-4 z-10">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  Sponsorisé
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3">
-                <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
-                <p className="text-xs text-slate-600">Boostez la visibilité de votre outil IA avec un compte Pro et atteignez des milliers d'utilisateurs.</p>
-                <Link to={createPageUrl('ProAccount')} className="text-xs text-purple-600 font-medium hover:underline mt-1 inline-block">
-                  Découvrir les plans Pro →
-                </Link>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
       </a>
+      
+      {/* Badge "Sponsorisé" avec tooltip - en dehors du lien */}
+      <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer hover:opacity-90">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Sponsorisé
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3 z-50">
+              <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
+              <p className="text-xs text-slate-600">Boostez la visibilité de votre outil IA avec un compte Pro et atteignez des milliers d'utilisateurs.</p>
+              <Link to={createPageUrl('ProAccount')} className="text-xs text-purple-600 font-medium hover:underline mt-1 inline-block">
+                Découvrir les plans Pro →
+              </Link>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
   );
 }
