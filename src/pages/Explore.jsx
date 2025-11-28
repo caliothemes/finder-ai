@@ -78,6 +78,15 @@ export default function Explore() {
     enabled: !!user,
   });
 
+  const { data: finderReviews = [] } = useQuery({
+    queryKey: ['finderReviewsExplore'],
+    queryFn: () => base44.entities.FinderAIReview.filter({ active: true }),
+  });
+
+  const getFinderReview = (serviceId) => {
+    return finderReviews.find(r => r.ai_service_id === serviceId);
+  };
+
   const toggleFavoriteMutation = useMutation({
     mutationFn: async (serviceId) => {
       if (!user) {
@@ -252,25 +261,29 @@ export default function Explore() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {currentPage === 1 && paginatedServices.slice(0, 3).map((service) => (
-                <AIServiceCard
-                  key={service.id}
-                  service={service}
-                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-                />
-              ))}
+                                    <AIServiceCard
+                                      key={service.id}
+                                      service={service}
+                                      isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                                      onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                                      hasFinderReview={!!getFinderReview(service.id)}
+                                      finderReviewRating={getFinderReview(service.id)?.rating}
+                                    />
+                                  ))}
 
               {/* Bannière Explorer Sidebar en format card - seulement page 1 et si active */}
               {currentPage === 1 && hasSidebarBanner && <ActiveBanner position="explore_sidebar" />}
 
               {currentPage === 1 && paginatedServices.slice(3, 5).map((service) => (
-                <AIServiceCard
-                  key={service.id}
-                  service={service}
-                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-                />
-              ))}
+                                    <AIServiceCard
+                                      key={service.id}
+                                      service={service}
+                                      isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                                      onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                                      hasFinderReview={!!getFinderReview(service.id)}
+                                      finderReviewRating={getFinderReview(service.id)?.rating}
+                                    />
+                                  ))}
 
               {/* Promo Card - seulement page 1 */}
               {currentPage === 1 && (
@@ -296,20 +309,24 @@ export default function Explore() {
               )}
 
               {currentPage === 1 ? paginatedServices.slice(5).map((service) => (
-                <AIServiceCard
-                  key={service.id}
-                  service={service}
-                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-                />
-              )) : paginatedServices.map((service) => (
-                <AIServiceCard
-                  key={service.id}
-                  service={service}
-                  isFavorite={favorites.some(f => f.ai_service_id === service.id)}
-                  onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-                />
-              ))}
+                                    <AIServiceCard
+                                      key={service.id}
+                                      service={service}
+                                      isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                                      onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                                      hasFinderReview={!!getFinderReview(service.id)}
+                                      finderReviewRating={getFinderReview(service.id)?.rating}
+                                    />
+                                  )) : paginatedServices.map((service) => (
+                                    <AIServiceCard
+                                      key={service.id}
+                                      service={service}
+                                      isFavorite={favorites.some(f => f.ai_service_id === service.id)}
+                                      onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+                                      hasFinderReview={!!getFinderReview(service.id)}
+                                      finderReviewRating={getFinderReview(service.id)?.rating}
+                                    />
+                                  ))}
             </div>
 
             {/* Pagination */}
