@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, TrendingUp, ExternalLink, Heart, Sparkles, Crown, Info } from 'lucide-react';
+import { ExternalLink, Heart, Sparkles, Crown, Info, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
