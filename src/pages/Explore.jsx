@@ -114,22 +114,15 @@ export default function Explore() {
 
     return matchesSearch && matchesCategory && matchesPricing;
   }).sort((a, b) => {
-    // Prioriser les services "à l'affiche"
+    // Les "à l'affiche" en premier, toujours
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
     
-    // Prioriser les IA avec image de couverture ou logo
-    const aHasImage = a.cover_image_url || a.logo_url;
-    const bHasImage = b.cover_image_url || b.logo_url;
-    
-    if (aHasImage && !bHasImage) return -1;
-    if (!aHasImage && bHasImage) return 1;
-    
-    // Si même statut d'image, trier selon critère sélectionné
+    // Pour les non-featured, trier selon critère sélectionné
     if (sortBy === '-created_date') return new Date(b.created_date) - new Date(a.created_date);
     if (sortBy === '-views') return (b.views || 0) - (a.views || 0);
     if (sortBy === '-average_rating') return (b.average_rating || 0) - (a.average_rating || 0);
-    return 0;
+    return new Date(b.created_date) - new Date(a.created_date);
   });
 
   // Pagination

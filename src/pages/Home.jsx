@@ -48,15 +48,16 @@ export default function Home() {
     },
   });
 
-  const aiServices = [...rawAIServices].sort((a, b) => {
-    const aHasImage = !!a.cover_image_url;
-    const bHasImage = !!b.cover_image_url;
-    
-    if (aHasImage && !bHasImage) return -1;
-    if (!aHasImage && bHasImage) return 1;
-    
-    return new Date(b.created_date) - new Date(a.created_date);
-  }).filter(s => s.cover_image_url).slice(0, 15);
+  const aiServices = [...rawAIServices]
+    .filter(s => s.cover_image_url)
+    .sort((a, b) => {
+      // Les "à l'affiche" en premier
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      // Puis par date de publication (les plus récents d'abord)
+      return new Date(b.created_date) - new Date(a.created_date);
+    })
+    .slice(0, 15);
 
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
