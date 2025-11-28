@@ -28,6 +28,17 @@ export default function Admin() {
   const [activeSection, setActiveSection] = useState(null);
   const navigate = useNavigate();
 
+  // Compter les bannières en attente de validation - hook AVANT les returns conditionnels
+  const { data: pendingBannersCount = 0 } = useQuery({
+    queryKey: ['pendingBannersCount'],
+    queryFn: async () => {
+      const banners = await base44.entities.BannerReservation.list();
+      return banners.filter(b => !b.validated && b.active).length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
@@ -53,17 +64,6 @@ export default function Admin() {
       </div>
     );
   }
-
-  // Compter les bannières en attente de validation
-  const { data: pendingBannersCount = 0 } = useQuery({
-    queryKey: ['pendingBannersCount'],
-    queryFn: async () => {
-      const banners = await base44.entities.BannerReservation.list();
-      return banners.filter(b => !b.validated && b.active).length;
-    },
-    enabled: !!user,
-    refetchInterval: 30000,
-  });
 
   if (!user) return null;
 
