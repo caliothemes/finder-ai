@@ -48,7 +48,8 @@ Deno.serve(async (req) => {
       <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
         ${news.cover_image_url ? `<img src="${news.cover_image_url}" alt="${news.title}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;" />` : ''}
         <h3 style="margin: 0 0 8px 0; color: #1a1a2e; font-size: 16px;">${news.title}</h3>
-        <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">${(news.summary || '').substring(0, 120)}...</p>
+        <p style="margin: 0 0 10px 0; color: #666; font-size: 14px; line-height: 1.5;">${(news.summary || '').substring(0, 120)}...</p>
+        <a href="https://finderai.app.base44.dev/AINewsDetail?slug=${news.slug}" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600;">Lire l'article →</a>
       </div>
     `).join('');
 
@@ -56,7 +57,8 @@ Deno.serve(async (req) => {
       <div style="display: inline-block; width: 30%; margin: 1%; padding: 15px; background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%); border-radius: 10px; vertical-align: top; box-sizing: border-box;">
         ${service.logo_url ? `<img src="${service.logo_url}" alt="${service.name}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;" />` : ''}
         <h4 style="margin: 0 0 5px 0; color: #1a1a2e; font-size: 14px;">${service.name}</h4>
-        <p style="margin: 0; color: #666; font-size: 12px;">${(service.tagline || '').substring(0, 60)}...</p>
+        <p style="margin: 0 0 8px 0; color: #666; font-size: 12px;">${(service.tagline || '').substring(0, 60)}...</p>
+        <a href="https://finderai.app.base44.dev/AIDetail?slug=${service.slug}" style="display: inline-block; padding: 6px 12px; background: #9333ea; color: white; text-decoration: none; border-radius: 15px; font-size: 11px; font-weight: 600;">Découvrir →</a>
       </div>
     `).join('');
 
