@@ -79,18 +79,8 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
           />
         </button>
 
-        {/* Badge À l'affiche */}
-        {service.featured && (
-          <div className="absolute top-3 left-3">
-            <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
-              <Star className="w-3 h-3 mr-1 fill-white" />
-              À l'affiche
-            </Badge>
-          </div>
-        )}
-
         {/* Badge Nouveau */}
-        {isNew() && !service.featured && (
+        {isNew() && (
           <div className="absolute top-3 left-3">
             <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
               <Sparkles className="w-3 h-3 mr-1" />

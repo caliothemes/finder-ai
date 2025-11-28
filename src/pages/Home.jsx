@@ -50,13 +50,7 @@ export default function Home() {
 
   const aiServices = [...rawAIServices]
     .filter(s => s.cover_image_url)
-    .sort((a, b) => {
-      // Les "à l'affiche" en premier
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      // Puis par date de publication (les plus récents d'abord)
-      return new Date(b.created_date) - new Date(a.created_date);
-    })
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
     .slice(0, 15);
 
   const { data: favorites = [] } = useQuery({
