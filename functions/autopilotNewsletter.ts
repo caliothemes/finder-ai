@@ -36,8 +36,8 @@ Deno.serve(async (req) => {
     }
 
     // Get latest content
-    const latestNews = await base44.asServiceRole.entities.AINews.filter({ status: 'published' }, '-created_date', 4);
-    const latestServices = await base44.asServiceRole.entities.AIService.filter({ status: 'approved' }, '-created_date', 6);
+    const latestNews = await base44.asServiceRole.entities.AINews.filter({ status: 'published' }, '-created_date', 8);
+    const latestServices = await base44.asServiceRole.entities.AIService.filter({ status: 'approved' }, '-created_date', 8);
     const allCategories = await base44.asServiceRole.entities.Category.list();
     const randomCategories = allCategories.sort(() => Math.random() - 0.5).slice(0, 3);
 
@@ -66,17 +66,17 @@ Deno.serve(async (req) => {
       <span style="display: inline-block; padding: 8px 16px; margin: 5px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; border-radius: 20px; font-size: 13px;">${cat.name}</span>
     `).join('');
 
-    // Build the generated content block
+    // Build the generated content block - Services first, then News
     const generatedContent = `
-      <div style="margin-top: 30px;">
-        <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
-        ${newsHtml || '<p style="color: #666;">Aucune actualité cette semaine.</p>'}
-      </div>
       <div style="margin-top: 30px;">
         <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
         <div style="text-align: center;">
           ${servicesHtml || '<p style="color: #666;">Aucun nouveau service cette semaine.</p>'}
         </div>
+      </div>
+      <div style="margin-top: 30px;">
+        <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
+        ${newsHtml || '<p style="color: #666;">Aucune actualité cette semaine.</p>'}
       </div>
       <div style="margin-top: 30px; text-align: center;">
         <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
