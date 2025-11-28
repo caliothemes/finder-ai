@@ -39,6 +39,17 @@ export default function Admin() {
     refetchInterval: 30000,
   });
 
+  // Compter les revendications en attente
+  const { data: pendingClaimsCount = 0 } = useQuery({
+    queryKey: ['pendingClaimsCount'],
+    queryFn: async () => {
+      const claims = await base44.entities.AIOwnershipClaim.filter({ status: 'pending' });
+      return claims.length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
@@ -70,7 +81,7 @@ export default function Admin() {
   const adminSections = [
     { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600' },
     { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
-    { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600' },
+    { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600', badge: pendingClaimsCount },
     { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
     { id: 'news', label: 'Actualités IA', icon: Newspaper, description: 'Gérer les actualités IA', color: 'from-rose-600 to-orange-600' },
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },

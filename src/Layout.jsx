@@ -44,7 +44,16 @@ function AdminNavLink() {
     refetchInterval: 30000,
   });
 
-  const totalNotifications = revisionCount + pendingBannersCount;
+  const { data: pendingClaimsCount = 0 } = useQuery({
+    queryKey: ['pendingClaimsCount'],
+    queryFn: async () => {
+      const claims = await base44.entities.AIOwnershipClaim.filter({ status: 'pending' });
+      return claims.length;
+    },
+    refetchInterval: 30000,
+  });
+
+  const totalNotifications = revisionCount + pendingBannersCount + pendingClaimsCount;
 
   return (
     <Link
