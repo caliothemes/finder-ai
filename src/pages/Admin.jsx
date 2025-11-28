@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, FileText, Mail, Image, 
   BarChart3, Users, Sparkles, Shield, Search,
-  ChevronRight, Newspaper
+  ChevronRight, Newspaper, Award
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLogo from '@/components/admin/AdminLogo';
@@ -21,6 +21,7 @@ import AdminAISearchScan from '@/components/admin/AdminAISearchScan';
 import AdminOwnershipClaims from '@/components/admin/AdminOwnershipClaims';
 import AdminLegalSections from '@/components/admin/AdminLegalSections';
 import AdminNews from '@/components/admin/AdminNews';
+import AdminFinderAIReviews from '@/components/admin/AdminFinderAIReviews';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -87,6 +88,7 @@ export default function Admin() {
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
     { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
     { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
+    { id: 'finder-reviews', label: 'Avis Finder AI', icon: Award, description: 'Avis officiels Finder AI', color: 'from-purple-600 to-pink-600' },
     { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600', badge: pendingBannersCount },
     { id: 'emails', label: 'Templates Email', icon: Mail, description: 'Gérer les emails', color: 'from-red-600 to-pink-600' },
     { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
@@ -103,6 +105,7 @@ export default function Admin() {
       case 'stories': return <AdminStories />;
       case 'categories': return <AdminCategories />;
       case 'reviews': return <AdminReviews />;
+      case 'finder-reviews': return <AdminFinderAIReviews />;
       case 'banners': return <AdminBanners />;
       case 'emails': return <AdminEmailTemplates />;
       case 'newsletter': return <AdminNewsletter />;

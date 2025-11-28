@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, Heart, ExternalLink, Eye, Info, Sparkles } from 'lucide-react';
+import { Star, Heart, ExternalLink, Eye, Info, Sparkles, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DefaultAILogo from '@/components/DefaultAILogo';
 import { useLanguage } from '@/components/LanguageProvider';
 
-export default function AIServiceCard({ service, onToggleFavorite, isFavorite }) {
+export default function AIServiceCard({ service, onToggleFavorite, isFavorite, hasFinderReview = false, finderReviewRating = null }) {
   const { language, t } = useLanguage();
   const [pricingOpen, setPricingOpen] = useState(false);
 
@@ -79,15 +80,36 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
           />
         </button>
 
-        {/* Badge Nouveau */}
-        {isNew() && (
-          <div className="absolute top-3 left-3">
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {isNew() && (
             <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
               <Sparkles className="w-3 h-3 mr-1" />
               {language === 'en' ? 'New' : 'Nouveau'}
             </Badge>
-          </div>
-        )}
+          )}
+          {hasFinderReview && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                    <Award className="w-3 h-3 mr-1" />
+                    Finder AI
+                    {finderReviewRating && (
+                      <span className="ml-1 flex items-center">
+                        <Star className="w-3 h-3 fill-white" />
+                        {finderReviewRating}
+                      </span>
+                    )}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="bg-white text-slate-800 border shadow-lg">
+                  <p className="text-sm">{language === 'en' ? 'Reviewed by Finder AI team' : 'Testé par l\'équipe Finder AI'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       </Link>
 
       {/* Content */}

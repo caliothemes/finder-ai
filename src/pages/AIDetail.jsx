@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   ExternalLink, Star, Heart, Eye, Share2, 
-  Check, DollarSign, Sparkles, MessageSquare 
+  Check, DollarSign, Sparkles, MessageSquare, Award, CreditCard, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { useLanguage } from '@/components/LanguageProvider';
 import DefaultAILogo from '@/components/DefaultAILogo';
+import FinderAIReviewBlock from '@/components/FinderAIReviewBlock';
+import FinderAIReviewBadge from '@/components/FinderAIReviewBadge';
 
 export default function AIDetail() {
   const { language, t } = useLanguage();
@@ -119,6 +121,68 @@ export default function AIDetail() {
   });
 
   const isFavorite = favorites.some(f => f.ai_service_id === serviceId);
+
+  // Avis Finder AI
+  const { data: finderReview } = useQuery({
+    queryKey: ['finderAIReview', service?.id],
+    queryFn: async () => {
+      const reviews = await base44.entities.FinderAIReview.filter({ 
+        ai_service_id: service.id,
+        active: true 
+      });
+      return reviews[0] || null;
+    },
+    enabled: !!service?.id,
+  });
+
+  // Compte Pro et demande d'avis
+  const { data: proAccount } = useQuery({
+    queryKey: ['proAccountForReview', user?.email],
+    queryFn: async () => {
+      const accounts = await base44.entities.ProAccount.filter({ user_email: user.email });
+      return accounts[0] || null;
+    },
+    enabled: !!user,
+  });
+
+  const { data: existingReviewRequest } = useQuery({
+    queryKey: ['reviewRequest', service?.id, user?.email],
+    queryFn: async () => {
+      const requests = await base44.entities.FinderAIReviewRequest.filter({
+        ai_service_id: service.id,
+        user_email: user.email
+      });
+      return requests[0] || null;
+    },
+    enabled: !!user && !!service?.id,
+  });
+
+  const requestReviewMutation = useMutation({
+    mutationFn: async () => {
+      if (!proAccount || proAccount.credits < 3) {
+        toast.error('Vous avez besoin de 3 crédits pour demander un avis Finder AI');
+        return;
+      }
+
+      await base44.entities.FinderAIReviewRequest.create({
+        ai_service_id: service.id,
+        user_email: user.email,
+        pro_account_id: proAccount.id,
+        status: 'pending',
+        credits_used: 3
+      });
+
+      await base44.entities.ProAccount.update(proAccount.id, {
+        credits: proAccount.credits - 3
+      });
+
+      toast.success('Demande d\'avis Finder AI envoyée ! (3 crédits utilisés)');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviewRequest'] });
+      queryClient.invalidateQueries({ queryKey: ['proAccountForReview'] });
+    },
+  });
 
   const toggleFavoriteMutation = useMutation({
     mutationFn: async () => {
@@ -313,9 +377,12 @@ export default function AIDetail() {
                   </div>
                 )}
 
-                <h1 className="text-5xl font-bold text-white mb-4">
-                  {service.name}
-                </h1>
+                <div className="flex items-center gap-3 mb-4">
+                  <h1 className="text-5xl font-bold text-white">
+                    {service.name}
+                  </h1>
+                  {finderReview && <FinderAIReviewBadge rating={finderReview.rating} />}
+                </div>
 
                 <p className="text-2xl text-slate-300 mb-6">
                   {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
@@ -490,19 +557,73 @@ export default function AIDetail() {
 
             {/* Features */}
             {service.features && service.features.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 shadow-xl">
+              <div className="bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-3xl p-8 shadow-xl border border-purple-100">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                   <Sparkles className="w-6 h-6 text-purple-600" />
-                  Fonctionnalités principales
+                  {language === 'en' ? 'Key Features' : 'Fonctionnalités principales'}
                 </h2>
                 <ul className="space-y-3">
                   {(language === 'en' && service.features_en ? service.features_en : service.features).map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
+                    <li key={idx} className="flex items-start gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3">
                       <Check className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
                       <span className="text-slate-700 text-lg">{feature}</span>
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Avis Finder AI */}
+            {finderReview && <FinderAIReviewBlock review={finderReview} />}
+
+            {/* Demander un avis Finder AI - seulement si propriétaire et pas d'avis existant */}
+            {user && existingClaim?.status === 'approved' && !finderReview && !existingReviewRequest && proAccount && (
+              <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-3xl p-6 border-2 border-dashed border-purple-300">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
+                    <Award className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-900 text-lg">
+                      {language === 'en' ? 'Request a Finder AI Review' : 'Demander un Avis Finder AI'}
+                    </h3>
+                    <p className="text-slate-600 text-sm">
+                      {language === 'en' 
+                        ? 'Get an official review from our team to boost your credibility (3 credits)'
+                        : 'Obtenez un avis officiel de notre équipe pour renforcer votre crédibilité (3 crédits)'}
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => requestReviewMutation.mutate()}
+                    disabled={requestReviewMutation.isPending || proAccount.credits < 3}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                  >
+                    {requestReviewMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    ) : (
+                      <CreditCard className="w-4 h-4 mr-2" />
+                    )}
+                    3 crédits
+                  </Button>
+                </div>
+                {proAccount.credits < 3 && (
+                  <p className="text-sm text-red-600 mt-2">
+                    {language === 'en' ? 'Insufficient credits' : 'Crédits insuffisants'} ({proAccount.credits}/3)
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Status de la demande d'avis */}
+            {existingReviewRequest && !finderReview && (
+              <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200">
+                <div className="flex items-center gap-3">
+                  <Award className="w-5 h-5 text-amber-600" />
+                  <span className="text-amber-800 font-medium">
+                    {existingReviewRequest.status === 'pending' && (language === 'en' ? 'Review request pending...' : 'Demande d\'avis en attente...')}
+                    {existingReviewRequest.status === 'in_progress' && (language === 'en' ? 'Review in progress...' : 'Avis en cours de rédaction...')}
+                  </span>
+                </div>
               </div>
             )}
 
