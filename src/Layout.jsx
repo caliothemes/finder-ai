@@ -53,7 +53,16 @@ function AdminNavLink() {
     refetchInterval: 30000,
   });
 
-  const totalNotifications = revisionCount + pendingBannersCount + pendingClaimsCount;
+  const { data: pendingFinderReviewsCount = 0 } = useQuery({
+    queryKey: ['pendingFinderReviewsCount'],
+    queryFn: async () => {
+      const requests = await base44.entities.FinderAIReviewRequest.filter({ status: 'pending' });
+      return requests.length;
+    },
+    refetchInterval: 30000,
+  });
+
+  const totalNotifications = revisionCount + pendingBannersCount + pendingClaimsCount + pendingFinderReviewsCount;
 
   return (
     <Link

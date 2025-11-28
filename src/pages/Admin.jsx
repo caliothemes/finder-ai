@@ -51,6 +51,17 @@ export default function Admin() {
     refetchInterval: 30000,
   });
 
+  // Compter les demandes d'avis Finder AI en attente
+  const { data: pendingFinderReviewsCount = 0 } = useQuery({
+    queryKey: ['pendingFinderReviewsCount'],
+    queryFn: async () => {
+      const requests = await base44.entities.FinderAIReviewRequest.filter({ status: 'pending' });
+      return requests.length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
@@ -88,7 +99,7 @@ export default function Admin() {
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
     { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
     { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
-    { id: 'finder-reviews', label: 'Avis Finder AI', icon: Award, description: 'Avis officiels Finder AI', color: 'from-purple-600 to-pink-600' },
+    { id: 'finder-reviews', label: 'Avis Finder AI', icon: Award, description: 'Avis officiels Finder AI', color: 'from-purple-600 to-pink-600', badge: pendingFinderReviewsCount },
     { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600', badge: pendingBannersCount },
     { id: 'emails', label: 'Templates Email', icon: Mail, description: 'Gérer les emails', color: 'from-red-600 to-pink-600' },
     { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
