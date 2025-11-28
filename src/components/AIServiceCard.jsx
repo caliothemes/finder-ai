@@ -54,7 +54,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
   return (
     <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl">
       {/* Image section */}
-      <div className="relative h-40 bg-gradient-to-br from-purple-100 to-pink-100">
+      <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)} className="block relative h-40 bg-gradient-to-br from-purple-100 to-pink-100 cursor-pointer">
         {service.cover_image_url ? (
           <img
             src={service.cover_image_url}
@@ -88,7 +88,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
             </Badge>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-5">

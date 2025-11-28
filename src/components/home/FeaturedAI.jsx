@@ -121,10 +121,10 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
           {displayedServices.slice(0, 4).map((service) => (
             <div
               key={service.id}
-              className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+              className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 relative"
             >
               {/* Image */}
-              <div className="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden">
+              <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)} className="block relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden cursor-pointer">
                 {service.cover_image_url ? (
                   <img
                     src={service.cover_image_url}
@@ -137,19 +137,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   </div>
                 )}
                 
-                {/* Favorite button */}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onToggleFavorite(service.id);
-                  }}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110"
-                >
-                  <Heart
-                    className={`w-5 h-5 ${isFavorite(service.id) ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
-                  />
-                </button>
-
                 {/* Featured badge */}
                 {service.featured && (
                   <div className="absolute top-4 left-4">
@@ -169,7 +156,21 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     </Badge>
                   </div>
                 )}
-              </div>
+              </Link>
+              
+              {/* Favorite button - outside Link */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleFavorite(service.id);
+                }}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110 z-10"
+              >
+                <Heart
+                  className={`w-5 h-5 ${isFavorite(service.id) ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
+                />
+              </button>
 
               {/* Content */}
               <div className="p-6">
@@ -263,10 +264,10 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
           {displayedServices.slice(4).map((service) => (
             <div
               key={service.id}
-              className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+              className="group bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 relative"
             >
               {/* Image */}
-              <div className="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden">
+              <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)} className="block relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden cursor-pointer">
                 {service.cover_image_url ? (
                   <img
                     src={service.cover_image_url}
@@ -278,19 +279,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     <div className="text-6xl opacity-20">🤖</div>
                   </div>
                 )}
-                
-                {/* Favorite button */}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onToggleFavorite(service.id);
-                  }}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110"
-                >
-                  <Heart
-                    className={`w-5 h-5 ${isFavorite(service.id) ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
-                  />
-                </button>
 
                 {/* Featured badge */}
                 {service.featured && (
@@ -311,7 +299,21 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                     </Badge>
                   </div>
                 )}
-              </div>
+              </Link>
+              
+              {/* Favorite button - outside Link */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleFavorite(service.id);
+                }}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110 z-10"
+              >
+                <Heart
+                  className={`w-5 h-5 ${isFavorite(service.id) ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
+                />
+              </button>
 
               {/* Content */}
               <div className="p-6">

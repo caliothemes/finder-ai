@@ -46,25 +46,32 @@ export default function LatestNews() {
               key={article.id}
               className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300"
             >
-              {article.cover_image_url ? (
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={article.cover_image_url}
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <Badge className="bg-white/90 text-purple-700 backdrop-blur-sm">
-                      <Newspaper className="w-3 h-3 mr-1" />
-                      News
-                    </Badge>
+              <a
+                href={article.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                {article.cover_image_url ? (
+                  <div className="relative h-48 overflow-hidden cursor-pointer">
+                    <img
+                      src={article.cover_image_url}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-white/90 text-purple-700 backdrop-blur-sm">
+                        <Newspaper className="w-3 h-3 mr-1" />
+                        News
+                      </Badge>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                  <Newspaper className="w-12 h-12 text-purple-300" />
-                </div>
-              )}
+                ) : (
+                  <div className="h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center cursor-pointer">
+                    <Newspaper className="w-12 h-12 text-purple-300" />
+                  </div>
+                )}
+              </a>
               
               <div className="p-5">
                 {/* Source */}
