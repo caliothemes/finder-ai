@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminServices() {
@@ -20,6 +20,7 @@ export default function AdminServices() {
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [fetchingCover, setFetchingCover] = useState(false);
   const [filter, setFilter] = useState('all');
   const [rejectingService, setRejectingService] = useState(null);
   const [rejectComment, setRejectComment] = useState('');
@@ -232,6 +233,43 @@ export default function AdminServices() {
       toast.error('Erreur upload cover');
     } finally {
       setUploadingCover(false);
+    }
+  };
+
+  const fetchCoverFromWeb = async () => {
+    if (!formData.website_url && !formData.name) {
+      toast.error('URL du site ou nom requis');
+      return;
+    }
+    
+    setFetchingCover(true);
+    try {
+      const urlToFetch = formData.website_url || `https://www.google.com/search?q=${encodeURIComponent(formData.name + ' AI tool')}`;
+      const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(urlToFetch)}&meta=true`);
+      const ogData = await ogResponse.json();
+      
+      if (ogData?.data?.image?.url) {
+        setFormData({ ...formData, cover_image_url: ogData.data.image.url });
+        toast.success('Image trouvée sur le site !');
+      } else if (ogData?.data?.logo?.url) {
+        setFormData({ ...formData, cover_image_url: ogData.data.logo.url });
+        toast.success('Logo trouvé sur le site !');
+      } else {
+        toast.info('Aucune image trouvée, génération en cours...');
+        const imageResult = await base44.integrations.Core.GenerateImage({
+          prompt: `Professional modern banner for AI tool "${formData.name}". ${formData.tagline || 'AI technology'}. Abstract futuristic design, gradient purple pink blue, technology aesthetic, clean minimal, no text, high quality.`
+        });
+        if (imageResult?.url) {
+          setFormData({ ...formData, cover_image_url: imageResult.url });
+          toast.success('Image générée avec succès !');
+        } else {
+          toast.error('Impossible de trouver ou générer une image');
+        }
+      }
+    } catch (error) {
+      toast.error('Erreur lors de la recherche: ' + error.message);
+    } finally {
+      setFetchingCover(false);
     }
   };
 
@@ -548,14 +586,38 @@ Provide accurate English translations.`,
                 </div>
                 <div>
                   <label className="text-sm font-medium mb-2 block">Image de couverture</label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverUpload}
-                    disabled={uploadingCover}
-                  />
+                  <div className="flex gap-2 mb-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                        {uploadingCover ? (
+                          <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                        ) : (
+                          <>
+                            <Upload className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                            <span className="text-xs text-slate-600">Upload</span>
+                          </>
+                        )}
+                      </div>
+                      <input type="file" accept="image/*" onChange={handleCoverUpload} className="hidden" />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={fetchCoverFromWeb}
+                      disabled={fetchingCover}
+                      className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-3 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
+                    >
+                      {fetchingCover ? (
+                        <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5 mx-auto text-purple-500 mb-1" />
+                          <span className="text-xs text-purple-600 font-medium">Auto-fetch</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                   {formData.cover_image_url && (
-                    <img src={formData.cover_image_url} alt="Cover" className="mt-2 w-full h-20 object-cover rounded-lg" />
+                    <img src={formData.cover_image_url} alt="Cover" className="w-full h-20 object-cover rounded-lg" />
                   )}
                 </div>
               </div>
@@ -921,14 +983,38 @@ Provide accurate English translations.`,
                           </div>
                           <div>
                             <label className="text-sm font-medium mb-2 block">Image de couverture</label>
-                            <Input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleCoverUpload}
-                              disabled={uploadingCover}
-                            />
+                            <div className="flex gap-2 mb-2">
+                              <label className="flex-1 cursor-pointer">
+                                <div className="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                                  {uploadingCover ? (
+                                    <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                                  ) : (
+                                    <>
+                                      <Upload className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                                      <span className="text-xs text-slate-600">Upload</span>
+                                    </>
+                                  )}
+                                </div>
+                                <input type="file" accept="image/*" onChange={handleCoverUpload} className="hidden" />
+                              </label>
+                              <button
+                                type="button"
+                                onClick={fetchCoverFromWeb}
+                                disabled={fetchingCover}
+                                className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-3 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
+                              >
+                                {fetchingCover ? (
+                                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                                ) : (
+                                  <>
+                                    <Sparkles className="w-5 h-5 mx-auto text-purple-500 mb-1" />
+                                    <span className="text-xs text-purple-600 font-medium">Auto-fetch</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
                             {formData.cover_image_url && (
-                              <img src={formData.cover_image_url} alt="Cover" className="mt-2 w-full h-20 object-cover rounded-lg" />
+                              <img src={formData.cover_image_url} alt="Cover" className="w-full h-20 object-cover rounded-lg" />
                             )}
                           </div>
                         </div>
