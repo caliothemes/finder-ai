@@ -123,6 +123,7 @@ IMPORTANT: Ne retourne que des articles réels. Si tu n'en trouves pas, retourne
               source_name: article.source_name,
               source_url: article.source_url,
               source_logo_url: logoUrl,
+              cover_image_url: '', // Sera rempli après
               published_date: today,
               tags: article.tags || [],
               status: 'new'
@@ -137,6 +138,30 @@ IMPORTANT: Ne retourne que des articles réels. Si tu n'en trouves pas, retourne
       }
 
       await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    // Récupérer les images de couverture pour chaque article
+    console.log(`🖼️ Fetching cover images for ${allArticles.length} articles...`);
+    for (let i = 0; i < allArticles.length; i++) {
+      const article = allArticles[i];
+      
+      try {
+        // Utiliser Microlink pour récupérer l'image OpenGraph
+        const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(article.source_url)}&meta=true`);
+        const ogData = await ogResponse.json();
+        
+        if (ogData?.data?.image?.url) {
+          allArticles[i].cover_image_url = ogData.data.image.url;
+          console.log(`🖼️ Cover found for: ${article.title.substring(0, 30)}...`);
+        } else if (ogData?.data?.logo?.url) {
+          allArticles[i].cover_image_url = ogData.data.logo.url;
+          console.log(`🖼️ Logo used for: ${article.title.substring(0, 30)}...`);
+        }
+      } catch (imgError) {
+        console.log(`⚠️ No image for: ${article.title.substring(0, 30)}...`);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
 
     // Sauvegarder les découvertes

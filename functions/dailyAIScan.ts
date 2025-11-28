@@ -160,6 +160,9 @@ IMPORTANT: Ne retourne que des outils réels trouvés via ta recherche. Si tu n'
 
             // Favicon comme logo
             const logoUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`;
+            
+            // Image de couverture via OpenGraph scraping
+            const coverUrl = `https://opengraph.io/api/1.1/site/${encodeURIComponent(tool.website_url)}?accept_lang=auto&app_id=default`;
 
             allDiscoveries.push({
               name: tool.name,
@@ -169,11 +172,12 @@ IMPORTANT: Ne retourne que des outils réels trouvés via ta recherche. Si tu n'
               features: tool.features || [],
               suggested_pricing: tool.pricing || 'freemium',
               suggested_categories: suggestedCategories,
-              cover_image_url: '',
+              cover_image_url: '', // Sera rempli après
               logo_url: logoUrl,
               status: 'new',
               source: `Search: ${query}`,
-              tags: []
+              tags: [],
+              _hostname: hostname // Pour récupérer l'image après
             });
 
             seenUrls.add(normalizedUrl);
@@ -192,28 +196,40 @@ IMPORTANT: Ne retourne que des outils réels trouvés via ta recherche. Si tu n'
     if (allDiscoveries.length > 0) {
       console.log(`📝 Creating ${allDiscoveries.length} new discoveries...`);
       
-      // Générer des images de couverture pour quelques découvertes
-      const discoveriesToProcess = allDiscoveries.slice(0, 10); // Limiter pour éviter timeout
-      
-      for (let i = 0; i < discoveriesToProcess.length; i++) {
-        const discovery = discoveriesToProcess[i];
+      // Récupérer les images OpenGraph pour chaque découverte
+      for (let i = 0; i < allDiscoveries.length; i++) {
+        const discovery = allDiscoveries[i];
         
         try {
-          const imagePrompt = `Professional modern banner for AI tool "${discovery.name}". ${discovery.tagline || 'AI technology'}. Abstract futuristic design, gradient purple pink blue, neural network patterns, technology aesthetic, clean minimal, no text, high quality.`;
+          // Essayer de récupérer l'image OpenGraph du site
+          const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(discovery.website_url)}&meta=true`);
+          const ogData = await ogResponse.json();
           
-          const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-            prompt: imagePrompt
-          });
-          
-          if (imageResult?.url) {
-            allDiscoveries[i].cover_image_url = imageResult.url;
-            console.log(`🖼️ Image for: ${discovery.name}`);
+          if (ogData?.data?.image?.url) {
+            allDiscoveries[i].cover_image_url = ogData.data.image.url;
+            console.log(`🖼️ OG Image found for: ${discovery.name}`);
+          } else if (ogData?.data?.logo?.url) {
+            // Utiliser le logo comme fallback
+            allDiscoveries[i].cover_image_url = ogData.data.logo.url;
+            console.log(`🖼️ Logo used for: ${discovery.name}`);
+          } else {
+            // Générer une image si aucune trouvée
+            console.log(`⚠️ No OG image for ${discovery.name}, generating...`);
+            const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+              prompt: `Professional modern banner for AI tool "${discovery.name}". ${discovery.tagline || 'AI technology'}. Abstract futuristic design, gradient purple pink blue, technology aesthetic, clean minimal, no text.`
+            });
+            if (imageResult?.url) {
+              allDiscoveries[i].cover_image_url = imageResult.url;
+            }
           }
         } catch (imgError) {
-          console.log(`⚠️ Image failed for ${discovery.name}`);
+          console.log(`⚠️ Image fetch failed for ${discovery.name}: ${imgError.message}`);
         }
         
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Nettoyer le champ temporaire
+        delete allDiscoveries[i]._hostname;
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
       
       // Sauvegarder les découvertes
