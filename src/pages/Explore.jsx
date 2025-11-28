@@ -114,6 +114,10 @@ export default function Explore() {
 
     return matchesSearch && matchesCategory && matchesPricing;
   }).sort((a, b) => {
+    // Prioriser les services "à l'affiche"
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    
     // Prioriser les IA avec image de couverture ou logo
     const aHasImage = a.cover_image_url || a.logo_url;
     const bHasImage = b.cover_image_url || b.logo_url;
