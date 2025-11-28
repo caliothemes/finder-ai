@@ -744,7 +744,7 @@ function LayoutContent({ children, currentPageName }) {
                             Finder AI
                           </h2>
                           <p className="text-slate-400 text-sm mb-4">
-                            Le répertoire ultime des outils d'intelligence artificielle
+                            {t('footer_tagline')}
                           </p>
                           <a 
                             href="https://www.instagram.com/finderai_/" 
@@ -759,37 +759,37 @@ function LayoutContent({ children, currentPageName }) {
                         </div>
 
                         <div>
-                          <h3 className="font-bold mb-4">Découvrir</h3>
+                          <h3 className="font-bold mb-4">{t('footer_discover')}</h3>
                           <ul className="space-y-2 text-slate-400">
-                            <li><Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link></li>
-                            <li><Link to={createPageUrl('Explore')} className="hover:text-white transition-colors">Explorer IA</Link></li>
-                            <li><Link to={createPageUrl('Categories')} className="hover:text-white transition-colors">Catégories</Link></li>
-                            <li><Link to={createPageUrl('AINews')} className="hover:text-white transition-colors">Actualités IA</Link></li>
+                            <li><Link to={createPageUrl('Home')} className="hover:text-white transition-colors">{t('footer_home')}</Link></li>
+                            <li><Link to={createPageUrl('Explore')} className="hover:text-white transition-colors">{t('footer_explore')}</Link></li>
+                            <li><Link to={createPageUrl('Categories')} className="hover:text-white transition-colors">{t('footer_categories')}</Link></li>
+                            <li><Link to={createPageUrl('AINews')} className="hover:text-white transition-colors">{t('footer_ai_news')}</Link></li>
                           </ul>
                         </div>
 
                         <div>
-                          <h3 className="font-bold mb-4">Compte</h3>
+                          <h3 className="font-bold mb-4">{t('footer_account')}</h3>
                           <ul className="space-y-2 text-slate-400">
-                            <li><Link to={createPageUrl('Profile')} className="hover:text-white transition-colors">Mon Profil</Link></li>
-                            <li><Link to={createPageUrl('Favorites')} className="hover:text-white transition-colors">Favoris</Link></li>
-                            <li><Link to={createPageUrl('ProAccount')} className="hover:text-white transition-colors">Compte Pro</Link></li>
+                            <li><Link to={createPageUrl('Profile')} className="hover:text-white transition-colors">{t('footer_profile')}</Link></li>
+                            <li><Link to={createPageUrl('Favorites')} className="hover:text-white transition-colors">{t('footer_favorites')}</Link></li>
+                            <li><Link to={createPageUrl('ProAccount')} className="hover:text-white transition-colors">{t('footer_pro_account')}</Link></li>
                           </ul>
                         </div>
 
                         <div>
-                          <h3 className="font-bold mb-4">Contribuer</h3>
+                          <h3 className="font-bold mb-4">{t('footer_contribute')}</h3>
                           <ul className="space-y-2 text-slate-400">
-                            <li><Link to={createPageUrl('SubmitAI')} className="hover:text-white transition-colors">Proposer une IA</Link></li>
+                            <li><Link to={createPageUrl('SubmitAI')} className="hover:text-white transition-colors">{t('footer_submit_ai')}</Link></li>
                           </ul>
                         </div>
 
                         </div>
 
                         <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-center gap-2 text-slate-500 text-xs">
-                          <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
+                          <p>{t('footer_copyright')} {t('footer_powered_by')} <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
                           <span className="hidden sm:inline">•</span>
-                          <Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">Mentions légales</Link>
+                          <Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">{t('footer_legal')}</Link>
                         </div>
                     </div>
                     </footer>
