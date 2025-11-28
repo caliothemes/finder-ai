@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -52,15 +52,18 @@ export default function ActiveBanner({ position }) {
             />
           </a>
           
-          {/* Badge "Sponsorisé" avec tooltip */}
-          <div className="absolute top-4 left-4 z-10" onClick={(e) => e.stopPropagation()}>
+          {/* Badge "Sponsorisé" + icône info avec tooltip */}
+          <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+            <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Sponsorisé
+            </Badge>
             <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer hover:opacity-90">
-                    <Sparkles className="w-3 h-3 mr-1" />
-                    Sponsorisé
-                  </Badge>
+                  <div className="w-5 h-5 bg-white/90 rounded-full flex items-center justify-center cursor-pointer hover:bg-white shadow-md">
+                    <Info className="w-3 h-3 text-purple-600" />
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3 z-50">
                   <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
@@ -123,15 +126,18 @@ export default function ActiveBanner({ position }) {
         />
       </a>
       
-      {/* Badge "Sponsorisé" avec tooltip - en dehors du lien */}
-      <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
+      {/* Badge "Sponsorisé" + icône info avec tooltip */}
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+        <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg">
+          <Sparkles className="w-3 h-3 mr-1" />
+          Sponsorisé
+        </Badge>
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer hover:opacity-90">
-                <Sparkles className="w-3 h-3 mr-1" />
-                Sponsorisé
-              </Badge>
+              <div className="w-5 h-5 bg-white/90 rounded-full flex items-center justify-center cursor-pointer hover:bg-white shadow-md">
+                <Info className="w-3 h-3 text-purple-600" />
+              </div>
             </TooltipTrigger>
             <TooltipContent side="bottom" className="max-w-xs bg-white text-slate-800 border shadow-lg p-3 z-50">
               <p className="text-sm font-medium mb-1">🚀 Votre bannière ici !</p>
