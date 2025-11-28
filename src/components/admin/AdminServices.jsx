@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload, Star } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 
 export default function AdminServices() {
@@ -16,7 +17,8 @@ export default function AdminServices() {
   const [formData, setFormData] = useState({
     name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', 
     features: [], features_en: [], categories: [],
-    pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: ''
+    pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '',
+    featured: false
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -49,7 +51,7 @@ export default function AdminServices() {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       setShowForm(false);
       setEditingService(null);
-      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
+      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '', featured: false });
       toast.success('Service créé avec succès');
     },
   });
@@ -203,7 +205,8 @@ export default function AdminServices() {
       website_url: service.website_url || '',
       status: service.status,
       logo_url: service.logo_url || '',
-      cover_image_url: service.cover_image_url || ''
+      cover_image_url: service.cover_image_url || '',
+      featured: service.featured || false
     });
   };
 
@@ -900,6 +903,21 @@ Provide accurate English translations.`,
                 value={formData.website_url}
                 onChange={(e) => setFormData({...formData, website_url: e.target.value})}
               />
+              
+              {/* À l'affiche */}
+              <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                <Checkbox
+                  id="featured"
+                  checked={formData.featured}
+                  onCheckedChange={(checked) => setFormData({...formData, featured: checked})}
+                />
+                <label htmlFor="featured" className="flex items-center gap-2 cursor-pointer">
+                  <Star className="w-5 h-5 text-amber-500" />
+                  <span className="font-medium text-slate-900">À l'affiche</span>
+                  <span className="text-sm text-slate-500">(affiché en premier dans les listes)</span>
+                </label>
+              </div>
+
               <div className="flex gap-2">
                 <Button type="submit" disabled={createServiceMutation.isPending || updateServiceMutation.isPending}>
                   {editingService ? 'Mettre à jour' : 'Créer le service'}
@@ -1079,6 +1097,12 @@ Provide accurate English translations.`,
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-slate-900">{service.name}</h3>
+                        {service.featured && (
+                          <Badge className="bg-amber-100 text-amber-700 border-amber-300">
+                            <Star className="w-3 h-3 mr-1 fill-amber-500" />
+                            À l'affiche
+                          </Badge>
+                        )}
                         {service.pending_revision && (
                           <button
                             onClick={() => setPreviewingRevision(service)}
@@ -1300,6 +1324,21 @@ Provide accurate English translations.`,
                           value={formData.website_url}
                           onChange={(e) => setFormData({...formData, website_url: e.target.value})}
                         />
+                        
+                        {/* À l'affiche */}
+                        <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                          <Checkbox
+                            id="featured-edit"
+                            checked={formData.featured}
+                            onCheckedChange={(checked) => setFormData({...formData, featured: checked})}
+                          />
+                          <label htmlFor="featured-edit" className="flex items-center gap-2 cursor-pointer">
+                            <Star className="w-5 h-5 text-amber-500" />
+                            <span className="font-medium text-slate-900">À l'affiche</span>
+                            <span className="text-sm text-slate-500">(affiché en premier dans les listes)</span>
+                          </label>
+                        </div>
+
                         <div className="flex gap-2">
                           <Button type="submit" disabled={updateServiceMutation.isPending}>
                             Mettre à jour
