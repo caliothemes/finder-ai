@@ -32,8 +32,19 @@ function AdminNavLink() {
       const services = await base44.entities.AIService.list();
       return services.filter(s => s.pending_revision).length;
     },
-    refetchInterval: 30000, // Refresh toutes les 30 secondes
+    refetchInterval: 30000,
   });
+
+  const { data: pendingBannersCount = 0 } = useQuery({
+    queryKey: ['pendingBannersCount'],
+    queryFn: async () => {
+      const banners = await base44.entities.BannerReservation.list();
+      return banners.filter(b => !b.validated && b.active).length;
+    },
+    refetchInterval: 30000,
+  });
+
+  const totalNotifications = revisionCount + pendingBannersCount;
 
   return (
     <Link
@@ -42,9 +53,9 @@ function AdminNavLink() {
     >
       <Crown className="w-4 h-4" />
       {t('nav_admin')}
-      {revisionCount > 0 && (
+      {totalNotifications > 0 && (
         <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse">
-          {revisionCount}
+          {totalNotifications}
         </span>
       )}
     </Link>

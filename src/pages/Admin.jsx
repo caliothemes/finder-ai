@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, FileText, Mail, Image, 
   BarChart3, Users, Sparkles, Shield, Search,
@@ -53,6 +54,17 @@ export default function Admin() {
     );
   }
 
+  // Compter les bannières en attente de validation
+  const { data: pendingBannersCount = 0 } = useQuery({
+    queryKey: ['pendingBannersCount'],
+    queryFn: async () => {
+      const banners = await base44.entities.BannerReservation.list();
+      return banners.filter(b => !b.validated && b.active).length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   if (!user) return null;
 
   const adminSections = [
@@ -64,7 +76,7 @@ export default function Admin() {
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
     { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
     { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
-    { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600' },
+    { id: 'banners', label: 'Bannières', icon: Image, description: 'Gérer les publicités', color: 'from-violet-600 to-purple-600', badge: pendingBannersCount },
     { id: 'emails', label: 'Templates Email', icon: Mail, description: 'Gérer les emails', color: 'from-red-600 to-pink-600' },
     { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Envoyer des newsletters', color: 'from-teal-600 to-cyan-600' },
     { id: 'logo', label: 'Logo', icon: Image, description: 'Personnaliser le logo', color: 'from-slate-600 to-gray-600' },
@@ -119,9 +131,14 @@ export default function Admin() {
               return (
                 <Card
                   key={section.id}
-                  className="cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-300"
+                  className="cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-300 relative"
                   onClick={() => setActiveSection(section.id)}
                 >
+                  {section.badge > 0 && (
+                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse z-10">
+                      {section.badge}
+                    </span>
+                  )}
                   <CardHeader>
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                       <Icon className="w-6 h-6 text-white" />
