@@ -118,10 +118,7 @@ export default function Explore() {
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
     
-    // Pour les non-featured, trier selon critère sélectionné
-    if (sortBy === '-created_date') return new Date(b.created_date) - new Date(a.created_date);
-    if (sortBy === '-views') return (b.views || 0) - (a.views || 0);
-    if (sortBy === '-average_rating') return (b.average_rating || 0) - (a.average_rating || 0);
+    // Pour les non-featured, toujours par date de création (plus récents d'abord)
     return new Date(b.created_date) - new Date(a.created_date);
   });
 
