@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminServices() {
@@ -30,6 +30,7 @@ export default function AdminServices() {
   const [generatingCovers, setGeneratingCovers] = useState(false);
   const [coverProgress, setCoverProgress] = useState({ current: 0, total: 0 });
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const itemsPerPage = 20;
   const queryClient = useQueryClient();
 
@@ -414,7 +415,7 @@ Provide accurate English translations.`,
   const approvedServices = services.filter(s => s.status === 'approved' && !s.pending_revision);
   const rejectedServices = services.filter(s => s.status === 'rejected');
 
-  // Filtrage
+  // Filtrage par statut
   let filteredServices = services;
   if (filter === 'revisions') {
     filteredServices = servicesWithRevisions;
@@ -424,6 +425,17 @@ Provide accurate English translations.`,
     filteredServices = approvedServices;
   } else if (filter === 'rejected') {
     filteredServices = rejectedServices;
+  }
+
+  // Filtrage par recherche
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filteredServices = filteredServices.filter(s => 
+      s.name?.toLowerCase().includes(query) ||
+      s.tagline?.toLowerCase().includes(query) ||
+      s.submitted_by?.toLowerCase().includes(query) ||
+      s.slug?.toLowerCase().includes(query)
+    );
   }
 
   // Trier pour mettre les révisions en premier
@@ -440,10 +452,10 @@ Provide accurate English translations.`,
     currentPage * itemsPerPage
   );
 
-  // Reset page when filter changes
+  // Reset page when filter or search changes
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [filter]);
+  }, [filter, searchQuery]);
 
   if (isLoading) {
     return (
@@ -972,9 +984,18 @@ Provide accurate English translations.`,
         </Card>
       </div>
 
-      {/* Filter + Create */}
+      {/* Search + Filter + Create */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap items-center">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              placeholder="Rechercher un service..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-64"
+            />
+          </div>
           <Button
             variant={filter === 'all' ? 'default' : 'outline'}
             size="sm"
