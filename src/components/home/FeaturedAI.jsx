@@ -137,12 +137,12 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   </div>
                 )}
                 
-                {/* Featured badge */}
+                {/* Badge À l'affiche */}
                 {service.featured && (
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
-                      <TrendingUp className="w-3 h-3 mr-1" />
-                      En vedette
+                    <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
+                      <Star className="w-3 h-3 mr-1 fill-white" />
+                      À l'affiche
                     </Badge>
                   </div>
                 )}
@@ -280,12 +280,12 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   </div>
                 )}
 
-                {/* Featured badge */}
+                {/* Badge À l'affiche */}
                 {service.featured && (
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
-                      <TrendingUp className="w-3 h-3 mr-1" />
-                      {t('home_featured_badge')}
+                    <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
+                      <Star className="w-3 h-3 mr-1 fill-white" />
+                      À l'affiche
                     </Badge>
                   </div>
                 )}

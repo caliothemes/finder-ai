@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Star, Heart, ExternalLink, Eye, Info, Sparkles } from 'lucide-react';
+import { Star, Heart, ExternalLink, Eye, Info, Sparkles, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -79,8 +79,18 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite })
           />
         </button>
 
+        {/* Badge À l'affiche */}
+        {service.featured && (
+          <div className="absolute top-3 left-3">
+            <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
+              <Star className="w-3 h-3 mr-1 fill-white" />
+              À l'affiche
+            </Badge>
+          </div>
+        )}
+
         {/* Badge Nouveau */}
-        {isNew() && (
+        {isNew() && !service.featured && (
           <div className="absolute top-3 left-3">
             <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
               <Sparkles className="w-3 h-3 mr-1" />
