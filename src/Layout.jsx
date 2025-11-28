@@ -735,54 +735,64 @@ function LayoutContent({ children, currentPageName }) {
         `}</style>
 
         {/* Footer */}
-        <footer className="bg-slate-900 text-white py-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <Logo size={50} />
-                <span className="text-xl font-bold">Finder AI</span>
-              </div>
-              <p className="text-slate-400">
-                Le répertoire ultime des outils d'intelligence artificielle
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Découvrir</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link></li>
-                <li><Link to={createPageUrl('Explore')} className="hover:text-white transition-colors">Explorer</Link></li>
-                <li><Link to={createPageUrl('Categories')} className="hover:text-white transition-colors">Catégories</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Compte</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to={createPageUrl('Profile')} className="hover:text-white transition-colors">Mon Profil</Link></li>
-                <li><Link to={createPageUrl('Favorites')} className="hover:text-white transition-colors">Favoris</Link></li>
-                <li><Link to={createPageUrl('ProAccount')} className="hover:text-white transition-colors">Compte Pro</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Contribuer</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to={createPageUrl('SubmitAI')} className="hover:text-white transition-colors">Proposer une IA</Link></li>
-              </ul>
-            </div>
+                    <footer className="bg-slate-900 text-white py-12 px-6">
+                    <div className="max-w-7xl mx-auto">
+                      <div className="grid md:grid-cols-4 gap-8 mb-8">
+                        <div className="flex flex-col items-center text-center border-r border-slate-700 pr-8">
+                          <Logo size={100} />
+                          <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mt-3 mb-2">
+                            Finder AI
+                          </h2>
+                          <p className="text-slate-400 text-sm mb-4">
+                            Le répertoire ultime des outils d'intelligence artificielle
+                          </p>
+                          <a 
+                            href="https://www.instagram.com/finderai_/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-slate-400 hover:text-pink-400 transition-colors"
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                          </a>
+                        </div>
 
-            </div>
+                        <div>
+                          <h3 className="font-bold mb-4">Découvrir</h3>
+                          <ul className="space-y-2 text-slate-400">
+                            <li><Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link></li>
+                            <li><Link to={createPageUrl('Explore')} className="hover:text-white transition-colors">Explorer IA</Link></li>
+                            <li><Link to={createPageUrl('Categories')} className="hover:text-white transition-colors">Catégories</Link></li>
+                            <li><Link to={createPageUrl('AINews')} className="hover:text-white transition-colors">Actualités IA</Link></li>
+                          </ul>
+                        </div>
 
-            <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-              <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
-              <p className="mt-2">
-                <Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">Mentions légales</Link>
-              </p>
-            </div>
-        </div>
-        </footer>
+                        <div>
+                          <h3 className="font-bold mb-4">Compte</h3>
+                          <ul className="space-y-2 text-slate-400">
+                            <li><Link to={createPageUrl('Profile')} className="hover:text-white transition-colors">Mon Profil</Link></li>
+                            <li><Link to={createPageUrl('Favorites')} className="hover:text-white transition-colors">Favoris</Link></li>
+                            <li><Link to={createPageUrl('ProAccount')} className="hover:text-white transition-colors">Compte Pro</Link></li>
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h3 className="font-bold mb-4">Contribuer</h3>
+                          <ul className="space-y-2 text-slate-400">
+                            <li><Link to={createPageUrl('SubmitAI')} className="hover:text-white transition-colors">Proposer une IA</Link></li>
+                          </ul>
+                        </div>
+
+                        </div>
+
+                        <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-center gap-2 text-slate-500 text-xs">
+                          <p>© 2025 Finder AI. Tous droits réservés. App propulsé par <a href="https://caliothemes.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Caliothemes</a>.</p>
+                          <span className="hidden sm:inline">•</span>
+                          <Link to={createPageUrl('LegalMentions')} className="hover:text-white transition-colors">Mentions légales</Link>
+                        </div>
+                    </div>
+                    </footer>
       </div>
     </div>
     );
