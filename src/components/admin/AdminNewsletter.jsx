@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { 
   Mail, Users, Download, Plus, Send, FileText, Edit, Trash2, 
   Eye, EyeOff, Sparkles, Zap, Calendar, PlayCircle, PauseCircle,
-  RefreshCw, CheckCircle, Clock, Loader2, X, Save
+  RefreshCw, CheckCircle, Clock, Loader2, X, Save, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 
 export default function AdminNewsletter() {
@@ -27,6 +29,15 @@ export default function AdminNewsletter() {
   const [showPreview, setShowPreview] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [selectedTemplateForGenerate, setSelectedTemplateForGenerate] = useState('');
+  
+  // Send modal state
+  const [sendModalOpen, setSendModalOpen] = useState(false);
+  const [sendingNewsletter, setSendingNewsletter] = useState(null);
+  const [sendProgress, setSendProgress] = useState(0);
+  const [sendStatus, setSendStatus] = useState('idle'); // idle, confirming, sending, success, error
+  const [sentCount, setSentCount] = useState(0);
+  const [errorCount, setErrorCount] = useState(0);
+  
   const queryClient = useQueryClient();
 
   // Fetch subscribers newsletter
@@ -167,34 +178,65 @@ export default function AdminNewsletter() {
     },
   });
 
-  const sendNewsletterMutation = useMutation({
-    mutationFn: async (newsletter) => {
-      let sent = 0;
-      for (const sub of allSubscribers) {
-        try {
-          await base44.integrations.Core.SendEmail({
-            to: sub.email,
-            subject: newsletter.subject,
-            body: newsletter.content
-          });
-          sent++;
-        } catch (e) {
-          console.error('Failed to send to', sub.email, e);
-        }
+  // Open send modal
+  const openSendModal = (newsletter) => {
+    setSendingNewsletter(newsletter);
+    setSendProgress(0);
+    setSendStatus('confirming');
+    setSentCount(0);
+    setErrorCount(0);
+    setSendModalOpen(true);
+  };
+
+  // Close send modal
+  const closeSendModal = () => {
+    if (sendStatus !== 'sending') {
+      setSendModalOpen(false);
+      setSendingNewsletter(null);
+      setSendStatus('idle');
+    }
+  };
+
+  // Send newsletter with progress
+  const sendNewsletter = async () => {
+    if (!sendingNewsletter) return;
+    
+    setSendStatus('sending');
+    setSendProgress(0);
+    setSentCount(0);
+    setErrorCount(0);
+    
+    const total = allSubscribers.length;
+    let sent = 0;
+    let errors = 0;
+    
+    for (let i = 0; i < allSubscribers.length; i++) {
+      const sub = allSubscribers[i];
+      try {
+        await base44.integrations.Core.SendEmail({
+          to: sub.email,
+          subject: sendingNewsletter.subject,
+          body: sendingNewsletter.content
+        });
+        sent++;
+        setSentCount(sent);
+      } catch (e) {
+        console.error('Failed to send to', sub.email, e);
+        errors++;
+        setErrorCount(errors);
       }
-      
-      await base44.entities.Newsletter.update(newsletter.id, {
-        status: 'sent',
-        sent_to: sent,
-        sent_date: new Date().toISOString()
-      });
-      return sent;
-    },
-    onSuccess: (sent) => {
-      queryClient.invalidateQueries({ queryKey: ['newsletters'] });
-      toast.success(`Newsletter envoyée à ${sent} destinataires`);
-    },
-  });
+      setSendProgress(Math.round(((i + 1) / total) * 100));
+    }
+    
+    await base44.entities.Newsletter.update(sendingNewsletter.id, {
+      status: 'sent',
+      sent_to: sent,
+      sent_date: new Date().toISOString()
+    });
+    
+    queryClient.invalidateQueries({ queryKey: ['newsletters'] });
+    setSendStatus('success');
+  };
 
   const resetNewsletterForm = () => {
     setShowNewsletterForm(false);
@@ -365,6 +407,115 @@ export default function AdminNewsletter() {
   }
 
   return (
+    <>
+    {/* Send Newsletter Modal */}
+    <Dialog open={sendModalOpen} onOpenChange={closeSendModal}>
+      <DialogContent className="sm:max-w-lg">
+        {sendStatus === 'confirming' && (
+          <div className="text-center py-6">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+              <Send className="w-10 h-10 text-purple-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Confirmer l'envoi</h2>
+            <p className="text-slate-600 mb-6">
+              Vous êtes sur le point d'envoyer cette newsletter à <span className="font-bold text-purple-600">{allSubscribers.length}</span> destinataires.
+            </p>
+            <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left">
+              <p className="text-sm text-slate-500 mb-1">Sujet :</p>
+              <p className="font-medium text-slate-900">{sendingNewsletter?.subject}</p>
+            </div>
+            <div className="flex gap-3 justify-center">
+              <Button variant="outline" onClick={closeSendModal}>
+                Annuler
+              </Button>
+              <Button 
+                onClick={sendNewsletter}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Envoyer maintenant
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {sendStatus === 'sending' && (
+          <div className="text-center py-6">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center relative">
+              <Mail className="w-10 h-10 text-purple-600" />
+              <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                <Loader2 className="w-5 h-5 text-purple-600 animate-spin" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Envoi en cours...</h2>
+            <p className="text-slate-600 mb-6">
+              Veuillez patienter, ne fermez pas cette fenêtre.
+            </p>
+            
+            <div className="mb-4">
+              <Progress value={sendProgress} className="h-3" />
+            </div>
+            
+            <div className="flex justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-500" />
+                <span className="text-slate-600"><span className="font-bold text-green-600">{sentCount}</span> envoyés</span>
+              </div>
+              {errorCount > 0 && (
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500" />
+                  <span className="text-slate-600"><span className="font-bold text-red-600">{errorCount}</span> erreurs</span>
+                </div>
+              )}
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-slate-400" />
+                <span className="text-slate-600"><span className="font-bold">{allSubscribers.length}</span> total</span>
+              </div>
+            </div>
+            
+            <p className="text-xs text-slate-400 mt-4">
+              {sendProgress}% complété
+            </p>
+          </div>
+        )}
+
+        {sendStatus === 'success' && (
+          <div className="text-center py-6">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-green-200 animate-pulse">
+              <CheckCircle2 className="w-14 h-14 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">Newsletter envoyée !</h2>
+            <p className="text-slate-600 mb-6">
+              Votre newsletter a été envoyée avec succès.
+            </p>
+            
+            <div className="bg-green-50 rounded-xl p-4 mb-6">
+              <div className="flex justify-center gap-8">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-green-600">{sentCount}</p>
+                  <p className="text-sm text-green-700">Emails envoyés</p>
+                </div>
+                {errorCount > 0 && (
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-red-500">{errorCount}</p>
+                    <p className="text-sm text-red-600">Erreurs</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <Button 
+              onClick={closeSendModal}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <CheckCircle2 className="w-4 h-4 mr-2" />
+              Terminé
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+
     <div className="space-y-6">
       {/* Header with Autopilot */}
       <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
@@ -593,19 +744,10 @@ export default function AdminNewsletter() {
                               <Trash2 className="w-4 h-4 text-red-500" />
                             </Button>
                             <Button
-                              onClick={() => {
-                                if (confirm(`Envoyer à ${allSubscribers.length} destinataires ?`)) {
-                                  sendNewsletterMutation.mutate(newsletter);
-                                }
-                              }}
-                              disabled={sendNewsletterMutation.isPending}
+                              onClick={() => openSendModal(newsletter)}
                               className="bg-gradient-to-r from-purple-600 to-pink-600"
                             >
-                              {sendNewsletterMutation.isPending ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              ) : (
-                                <Send className="w-4 h-4 mr-2" />
-                              )}
+                              <Send className="w-4 h-4 mr-2" />
                               Envoyer
                             </Button>
                           </>
@@ -815,5 +957,6 @@ export default function AdminNewsletter() {
         </TabsContent>
       </Tabs>
     </div>
+    </>
   );
 }
