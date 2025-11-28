@@ -298,11 +298,11 @@ function LayoutContent({ children, currentPageName }) {
             <NewItemsBadge count={newItems.categories} />
           </Link>
           <Link
-            to={createPageUrl('AINews')}
-            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-          >
-            <Newspaper className="w-4 h-4" />
-            Actualités IA
+                            to={createPageUrl('AINews')}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                          >
+                            <Newspaper className="w-4 h-4" />
+                            {t('nav_ai_news')}
             <NewItemsBadge count={newItems.news} />
           </Link>
 
@@ -559,12 +559,12 @@ function LayoutContent({ children, currentPageName }) {
                 <NewItemsBadge count={newItems.categories} />
               </Link>
               <Link
-                to={createPageUrl('AINews')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Newspaper className="w-4 h-4" />
-                Actualités IA
+                                  to={createPageUrl('AINews')}
+                                  className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  <Newspaper className="w-4 h-4" />
+                                  {t('nav_ai_news')}
                 <NewItemsBadge count={newItems.news} />
               </Link>
 
