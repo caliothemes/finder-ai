@@ -95,13 +95,24 @@ function useNewItemsTracker() {
   });
 
   const { data: newsCount = 0 } = useQuery({
-    queryKey: ['newsCount'],
-    queryFn: async () => {
-      const news = await base44.entities.AINews.filter({ status: 'published' });
-      return news.length;
-    },
-    staleTime: 60000,
-  });
+        queryKey: ['newsCount'],
+        queryFn: async () => {
+          const news = await base44.entities.AINews.filter({ status: 'published' });
+          return news.length;
+        },
+        staleTime: 60000,
+      });
+
+      const { data: favoritesCount = 0 } = useQuery({
+        queryKey: ['favoritesCount', user?.email],
+        queryFn: async () => {
+          if (!user?.email) return 0;
+          const favorites = await base44.entities.Favorite.filter({ user_email: user.email });
+          return favorites.length;
+        },
+        enabled: !!user?.email,
+        staleTime: 30000,
+      });
 
   // Calculer les nouveautés
   const newItems = useMemo(() => {
@@ -128,7 +139,7 @@ function useNewItemsTracker() {
     }
   }, [location.pathname, aiServicesCount, categoriesCount, newsCount]);
 
-  return newItems;
+  return { ...newItems, favoritesCount };
 }
 
 // Badge pour les nouveautés
@@ -307,14 +318,19 @@ function LayoutContent({ children, currentPageName }) {
           </Link>
 
           {user && (
-            <>
-              <Link
-                to={createPageUrl('Favorites')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-              >
-                <Heart className="w-4 h-4" />
-                {t('nav_favorites')}
-              </Link>
+                            <>
+                              <Link
+                                to={createPageUrl('Favorites')}
+                                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                              >
+                                <Heart className="w-4 h-4" />
+                                {t('nav_favorites')}
+                                {newItems.favoritesCount > 0 && (
+                                  <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
+                                    {newItems.favoritesCount}
+                                  </span>
+                                )}
+                              </Link>
               <Link
                 to={createPageUrl('Profile')}
                 className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
@@ -428,14 +444,19 @@ function LayoutContent({ children, currentPageName }) {
               </Link>
 
               {user && (
-                <Link
-                  to={createPageUrl('Favorites')}
-                  className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2"
-                >
-                  <Heart className="w-4 h-4" />
-                  {t('nav_favorites')}
-                </Link>
-              )}
+                                    <Link
+                                      to={createPageUrl('Favorites')}
+                                      className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2 relative"
+                                    >
+                                      <Heart className="w-4 h-4" />
+                                      {t('nav_favorites')}
+                                      {newItems.favoritesCount > 0 && (
+                                        <span className="px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[18px] text-center">
+                                          {newItems.favoritesCount}
+                                        </span>
+                                      )}
+                                    </Link>
+                                  )}
 
               <Link to={createPageUrl('SubmitAI')}>
                 <Button className="bg-purple-950 hover:bg-purple-900 text-white">
@@ -571,13 +592,18 @@ function LayoutContent({ children, currentPageName }) {
               {user ? (
                 <>
                   <Link
-                    to={createPageUrl('Favorites')}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Heart className="w-4 h-4" />
-                    {t('nav_favorites')}
-                  </Link>
+                                          to={createPageUrl('Favorites')}
+                                          className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                                          onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                          <Heart className="w-4 h-4" />
+                                          {t('nav_favorites')}
+                                          {newItems.favoritesCount > 0 && (
+                                            <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
+                                              {newItems.favoritesCount}
+                                            </span>
+                                          )}
+                                        </Link>
                   <Link
                     to={createPageUrl('Profile')}
                     className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
