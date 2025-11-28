@@ -4,7 +4,7 @@ const translations = {
   fr: {
     // Navigation
     nav_home: "Accueil",
-    nav_explore: "Explorer",
+    nav_explore: "Explorer IA",
     nav_categories: "Catégories",
     nav_favorites: "Favoris",
     nav_profile: "Mon Profil",
@@ -289,7 +289,7 @@ const translations = {
     toast_favorite_removed: "Removed from favorites",
     // Navigation
     nav_home: "Home",
-    nav_explore: "Explore",
+    nav_explore: "AI Explorer",
     nav_categories: "Categories",
     nav_favorites: "Favorites",
     nav_profile: "My Profile",
