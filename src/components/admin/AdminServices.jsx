@@ -24,6 +24,7 @@ export default function AdminServices() {
   const [filter, setFilter] = useState('all');
   const [rejectingService, setRejectingService] = useState(null);
   const [rejectComment, setRejectComment] = useState('');
+  const [previewingRevision, setPreviewingRevision] = useState(null);
   const [translating, setTranslating] = useState(false);
   const [translationProgress, setTranslationProgress] = useState({ current: 0, total: 0 });
   const [generatingCovers, setGeneratingCovers] = useState(false);
@@ -454,6 +455,255 @@ Provide accurate English translations.`,
 
   return (
     <div className="space-y-6">
+      {/* Modal de prévisualisation des révisions */}
+      {previewingRevision && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl my-4">
+            <div className="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
+              <div>
+                <h3 className="text-xl font-bold">Prévisualisation des modifications</h3>
+                <p className="text-amber-100 text-sm">{previewingRevision.name}</p>
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => setPreviewingRevision(null)} className="text-white hover:bg-white/20">
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Comparaison Nom */}
+              {previewingRevision.pending_revision.name !== previewingRevision.name && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Nom</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-900 line-through">{previewingRevision.name}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900 font-medium">{previewingRevision.pending_revision.name}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Tagline FR */}
+              {previewingRevision.pending_revision.tagline !== previewingRevision.tagline && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">🇫🇷 Tagline</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-700">{previewingRevision.tagline || '(vide)'}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900">{previewingRevision.pending_revision.tagline || '(vide)'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Tagline EN */}
+              {previewingRevision.pending_revision.tagline_en !== previewingRevision.tagline_en && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">🇬🇧 Tagline</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-700">{previewingRevision.tagline_en || '(vide)'}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900">{previewingRevision.pending_revision.tagline_en || '(vide)'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Description FR */}
+              {previewingRevision.pending_revision.description !== previewingRevision.description && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">🇫🇷 Description</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-700 text-sm whitespace-pre-wrap">{previewingRevision.description || '(vide)'}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900 text-sm whitespace-pre-wrap">{previewingRevision.pending_revision.description || '(vide)'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Description EN */}
+              {previewingRevision.pending_revision.description_en !== previewingRevision.description_en && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">🇬🇧 Description</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-700 text-sm whitespace-pre-wrap">{previewingRevision.description_en || '(vide)'}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900 text-sm whitespace-pre-wrap">{previewingRevision.pending_revision.description_en || '(vide)'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Images */}
+              {(previewingRevision.pending_revision.logo_url !== previewingRevision.logo_url || 
+                previewingRevision.pending_revision.cover_image_url !== previewingRevision.cover_image_url) && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Images</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium mb-2 block">Actuel</span>
+                      <div className="flex gap-3">
+                        {previewingRevision.logo_url && (
+                          <img src={previewingRevision.logo_url} alt="Logo actuel" className="w-16 h-16 rounded-lg object-cover" />
+                        )}
+                        {previewingRevision.cover_image_url && (
+                          <img src={previewingRevision.cover_image_url} alt="Cover actuel" className="h-16 flex-1 rounded-lg object-cover" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium mb-2 block">Nouveau</span>
+                      <div className="flex gap-3">
+                        {previewingRevision.pending_revision.logo_url && (
+                          <img src={previewingRevision.pending_revision.logo_url} alt="Logo nouveau" className="w-16 h-16 rounded-lg object-cover" />
+                        )}
+                        {previewingRevision.pending_revision.cover_image_url && (
+                          <img src={previewingRevision.pending_revision.cover_image_url} alt="Cover nouveau" className="h-16 flex-1 rounded-lg object-cover" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison Prix */}
+              {previewingRevision.pending_revision.pricing !== previewingRevision.pricing && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Modèle de prix</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-900 capitalize">{previewingRevision.pricing}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900 capitalize font-medium">{previewingRevision.pending_revision.pricing}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comparaison URL */}
+              {previewingRevision.pending_revision.website_url !== previewingRevision.website_url && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Site web</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium">Actuel</span>
+                      <p className="text-slate-700 text-sm break-all">{previewingRevision.website_url || '(vide)'}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium">Nouveau</span>
+                      <p className="text-slate-900 text-sm break-all">{previewingRevision.pending_revision.website_url || '(vide)'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Features */}
+              {JSON.stringify(previewingRevision.pending_revision.features) !== JSON.stringify(previewingRevision.features) && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Fonctionnalités</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium mb-2 block">Actuel</span>
+                      <div className="flex flex-wrap gap-1">
+                        {(previewingRevision.features || []).map((f, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">{f}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium mb-2 block">Nouveau</span>
+                      <div className="flex flex-wrap gap-1">
+                        {(previewingRevision.pending_revision.features || []).map((f, i) => (
+                          <Badge key={i} className="bg-green-200 text-green-800 text-xs">{f}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tags */}
+              {JSON.stringify(previewingRevision.pending_revision.tags) !== JSON.stringify(previewingRevision.tags) && (
+                <div className="border rounded-xl p-4">
+                  <label className="text-sm font-semibold text-slate-500 mb-2 block">Tags</label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <span className="text-xs text-red-600 font-medium mb-2 block">Actuel</span>
+                      <div className="flex flex-wrap gap-1">
+                        {(previewingRevision.tags || []).map((t, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">{t}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <span className="text-xs text-green-600 font-medium mb-2 block">Nouveau</span>
+                      <div className="flex flex-wrap gap-1">
+                        {(previewingRevision.pending_revision.tags || []).map((t, i) => (
+                          <Badge key={i} className="bg-green-200 text-green-800 text-xs">{t}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="sticky bottom-0 bg-white border-t px-6 py-4 flex gap-3 rounded-b-2xl">
+              <Button
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                onClick={() => {
+                  approveRevisionMutation.mutate(previewingRevision);
+                  setPreviewingRevision(null);
+                }}
+                disabled={approveRevisionMutation.isPending}
+              >
+                <Check className="w-4 h-4 mr-2" />
+                Approuver ces modifications
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1 text-red-600 border-red-300 hover:bg-red-50"
+                onClick={() => {
+                  setRejectingService(previewingRevision);
+                  setPreviewingRevision(null);
+                }}
+              >
+                <X className="w-4 h-4 mr-2" />
+                Refuser
+              </Button>
+              <Button variant="ghost" onClick={() => setPreviewingRevision(null)}>
+                Fermer
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal de refus avec commentaire */}
       {rejectingService && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
@@ -830,10 +1080,13 @@ Provide accurate English translations.`,
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-slate-900">{service.name}</h3>
                         {service.pending_revision && (
-                          <Badge className="bg-amber-500 text-white animate-pulse">
-                            <RefreshCw className="w-3 h-3 mr-1" />
-                            Nouvelle version à valider
-                          </Badge>
+                          <button
+                            onClick={() => setPreviewingRevision(service)}
+                            className="inline-flex items-center gap-1 bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-medium animate-pulse hover:bg-amber-600 transition-colors"
+                          >
+                            <Eye className="w-3 h-3" />
+                            Voir les modifications
+                          </button>
                         )}
                       </div>
                       <p className="text-sm text-slate-600">{service.tagline}</p>
