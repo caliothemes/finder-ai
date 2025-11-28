@@ -250,8 +250,8 @@ export default function AdminNewsletter() {
       const template = templates.find(t => t.id === selectedTemplateForGenerate);
       if (!template) throw new Error('Modèle non trouvé');
 
-      // Get random 3 categories
-      const randomCategories = [...categories].sort(() => Math.random() - 0.5).slice(0, 3);
+      // Get random 10 categories
+      const randomCategories = [...categories].sort(() => Math.random() - 0.5).slice(0, 10);
 
       // Build newsletter content
       const today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -265,33 +265,51 @@ export default function AdminNewsletter() {
         </div>
       `).join('');
 
-      const servicesHtml = latestServices.map(service => `
-        <div style="display: inline-block; width: 30%; margin: 1%; padding: 15px; background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%); border-radius: 10px; vertical-align: top; box-sizing: border-box;">
-          ${service.logo_url ? `<img src="${service.logo_url}" alt="${service.name}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;" />` : ''}
-          <h4 style="margin: 0 0 5px 0; color: #1a1a2e; font-size: 14px;">${service.name}</h4>
-          <p style="margin: 0 0 8px 0; color: #666; font-size: 12px;">${service.tagline?.substring(0, 60) || ''}...</p>
-          <a href="https://finderai.app.base44.dev/AIDetail?slug=${service.slug}" style="display: inline-block; padding: 6px 12px; background: #9333ea; color: white; text-decoration: none; border-radius: 15px; font-size: 11px; font-weight: 600;">Découvrir →</a>
-        </div>
-      `).join('');
+      const servicesHtml = latestServices.map((service, index) => {
+        const isLarge = index < 2;
+        if (isLarge) {
+          return `
+            <div style="display: block; margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%); border-radius: 12px;">
+              <div style="display: flex; align-items: flex-start; gap: 15px;">
+                ${service.logo_url ? `<img src="${service.logo_url}" alt="${service.name}" style="width: 70px; height: 70px; border-radius: 12px; object-fit: cover; flex-shrink: 0;" />` : ''}
+                <div style="flex: 1;">
+                  <h4 style="margin: 0 0 8px 0; color: #1a1a2e; font-size: 18px; font-weight: 700;">${service.name}</h4>
+                  <p style="margin: 0 0 12px 0; color: #666; font-size: 14px; line-height: 1.6;">${service.description?.substring(0, 250) || service.tagline || ''}...</p>
+                  <a href="https://finderai.app.base44.dev/AIDetail?slug=${service.slug}" style="display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; text-decoration: none; border-radius: 20px; font-size: 13px; font-weight: 600;">Découvrir cet outil →</a>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div style="display: inline-block; width: 30%; margin: 1%; padding: 15px; background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%); border-radius: 10px; vertical-align: top; box-sizing: border-box;">
+              ${service.logo_url ? `<img src="${service.logo_url}" alt="${service.name}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;" />` : ''}
+              <h4 style="margin: 0 0 5px 0; color: #1a1a2e; font-size: 14px;">${service.name}</h4>
+              <p style="margin: 0 0 8px 0; color: #666; font-size: 12px;">${service.tagline?.substring(0, 60) || ''}...</p>
+              <a href="https://finderai.app.base44.dev/AIDetail?slug=${service.slug}" style="display: inline-block; padding: 6px 12px; background: #9333ea; color: white; text-decoration: none; border-radius: 15px; font-size: 11px; font-weight: 600;">Découvrir →</a>
+            </div>
+          `;
+        }
+      }).join('');
 
       const categoriesHtml = randomCategories.map(cat => `
-        <span style="display: inline-block; padding: 8px 16px; margin: 5px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; border-radius: 20px; font-size: 13px;">${cat.name}</span>
+        <a href="https://finderai.app.base44.dev/Category?slug=${cat.slug}" style="display: inline-block; padding: 8px 16px; margin: 5px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; border-radius: 20px; font-size: 13px; text-decoration: none;">${cat.name}</a>
       `).join('');
 
       // Build the generated content block - Services first, then News
       const generatedContent = `
         <div style="margin-top: 30px;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
-          <div style="text-align: center;">
+          <h2 style="color: #9333ea; font-size: 22px; margin-bottom: 20px; font-weight: 700;">Nouveaux outils IA</h2>
+          <div>
             ${servicesHtml || '<p style="color: #666;">Aucun nouveau service cette semaine.</p>'}
           </div>
         </div>
         <div style="margin-top: 30px;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
+          <h2 style="color: #9333ea; font-size: 22px; margin-bottom: 20px; font-weight: 700;">Actualités IA de la semaine</h2>
           ${newsHtml || '<p style="color: #666;">Aucune actualité cette semaine.</p>'}
         </div>
         <div style="margin-top: 30px; text-align: center;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
+          <h2 style="color: #9333ea; font-size: 22px; margin-bottom: 20px; font-weight: 700;">Catégories à explorer</h2>
           ${categoriesHtml || ''}
         </div>
       `;
