@@ -103,16 +103,7 @@ function useNewItemsTracker() {
         staleTime: 60000,
       });
 
-      const { data: favoritesCount = 0 } = useQuery({
-        queryKey: ['favoritesCount', user?.email],
-        queryFn: async () => {
-          if (!user?.email) return 0;
-          const favorites = await base44.entities.Favorite.filter({ user_email: user.email });
-          return favorites.length;
-        },
-        enabled: !!user?.email,
-        staleTime: 30000,
-      });
+
 
   // Calculer les nouveautés
   const newItems = useMemo(() => {
@@ -139,7 +130,7 @@ function useNewItemsTracker() {
     }
   }, [location.pathname, aiServicesCount, categoriesCount, newsCount]);
 
-  return { ...newItems, favoritesCount };
+  return newItems;
 }
 
 // Badge pour les nouveautés
@@ -161,6 +152,17 @@ function LayoutContent({ children, currentPageName }) {
     const { language, changeLanguage, t } = useLanguage();
     const newItems = useNewItemsTracker();
     const location = useLocation();
+
+    const { data: favoritesCount = 0 } = useQuery({
+      queryKey: ['favoritesCount', user?.email],
+      queryFn: async () => {
+        if (!user?.email) return 0;
+        const favorites = await base44.entities.Favorite.filter({ user_email: user.email });
+        return favorites.length;
+      },
+      enabled: !!user?.email,
+      staleTime: 30000,
+    });
 
     useEffect(() => {
       const loadUser = async () => {
@@ -325,11 +327,11 @@ function LayoutContent({ children, currentPageName }) {
                               >
                                 <Heart className="w-4 h-4" />
                                 {t('nav_favorites')}
-                                {newItems.favoritesCount > 0 && (
-                                  <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
-                                    {newItems.favoritesCount}
-                                  </span>
-                                )}
+                                {favoritesCount > 0 && (
+                                                        <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
+                                                          {favoritesCount}
+                                                        </span>
+                                                      )}
                               </Link>
               <Link
                 to={createPageUrl('Profile')}
@@ -450,11 +452,11 @@ function LayoutContent({ children, currentPageName }) {
                                     >
                                       <Heart className="w-4 h-4" />
                                       {t('nav_favorites')}
-                                      {newItems.favoritesCount > 0 && (
-                                        <span className="px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[18px] text-center">
-                                          {newItems.favoritesCount}
-                                        </span>
-                                      )}
+                                      {favoritesCount > 0 && (
+                                                                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[18px] text-center">
+                                                                  {favoritesCount}
+                                                                </span>
+                                                              )}
                                     </Link>
                                   )}
 
