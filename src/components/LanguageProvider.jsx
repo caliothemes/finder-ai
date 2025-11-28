@@ -14,6 +14,7 @@ const translations = {
     nav_logout: "Se déconnecter",
     nav_login: "Connexion",
     nav_submit_ai: "Proposer mon IA",
+      nav_ai_news: "Actualités IA",
     
     // Hero Section
     hero_title: "Découvrez les Meilleurs Outils",
@@ -299,6 +300,7 @@ const translations = {
     nav_logout: "Logout",
     nav_login: "Login",
     nav_submit_ai: "Submit my AI",
+      nav_ai_news: "AI News",
     
     // Hero Section
     hero_title: "Discover the Best AI Tools",
