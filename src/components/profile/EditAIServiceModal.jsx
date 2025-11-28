@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { X, Upload, Loader2 } from 'lucide-react';
+import { X, Upload, Loader2, Search, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function EditAIServiceModal({ service, onClose }) {
@@ -26,6 +26,7 @@ export default function EditAIServiceModal({ service, onClose }) {
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [fetchingCover, setFetchingCover] = useState(false);
   const [newFeature, setNewFeature] = useState('');
   const [newTag, setNewTag] = useState('');
   const queryClient = useQueryClient();
@@ -109,6 +110,45 @@ export default function EditAIServiceModal({ service, onClose }) {
       toast.error('Erreur upload');
     } finally {
       setUploadingCover(false);
+    }
+  };
+
+  const fetchCoverFromWeb = async () => {
+    if (!formData.website_url && !formData.name) {
+      toast.error('URL du site ou nom requis');
+      return;
+    }
+    
+    setFetchingCover(true);
+    try {
+      // Essayer de récupérer l'image OpenGraph du site
+      const urlToFetch = formData.website_url || `https://www.google.com/search?q=${encodeURIComponent(formData.name + ' AI tool')}`;
+      const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(urlToFetch)}&meta=true`);
+      const ogData = await ogResponse.json();
+      
+      if (ogData?.data?.image?.url) {
+        setFormData({ ...formData, cover_image_url: ogData.data.image.url });
+        toast.success('Image trouvée sur le site !');
+      } else if (ogData?.data?.logo?.url) {
+        setFormData({ ...formData, cover_image_url: ogData.data.logo.url });
+        toast.success('Logo trouvé sur le site !');
+      } else {
+        // Générer une image si aucune trouvée
+        toast.info('Aucune image trouvée, génération en cours...');
+        const imageResult = await base44.integrations.Core.GenerateImage({
+          prompt: `Professional modern banner for AI tool "${formData.name}". ${formData.tagline || 'AI technology'}. Abstract futuristic design, gradient purple pink blue, technology aesthetic, clean minimal, no text, high quality.`
+        });
+        if (imageResult?.url) {
+          setFormData({ ...formData, cover_image_url: imageResult.url });
+          toast.success('Image générée avec succès !');
+        } else {
+          toast.error('Impossible de trouver ou générer une image');
+        }
+      }
+    } catch (error) {
+      toast.error('Erreur lors de la recherche: ' + error.message);
+    } finally {
+      setFetchingCover(false);
     }
   };
 
@@ -261,19 +301,36 @@ export default function EditAIServiceModal({ service, onClose }) {
                 {formData.cover_image_url && (
                   <img src={formData.cover_image_url} alt="Cover" className="w-full h-24 rounded-lg object-cover" />
                 )}
-                <label className="cursor-pointer">
-                  <div className="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
-                    {uploadingCover ? (
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-purple-600" />
+                <div className="flex gap-2">
+                  <label className="cursor-pointer flex-1">
+                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                      {uploadingCover ? (
+                        <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                      ) : (
+                        <>
+                          <Upload className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                          <span className="text-xs text-slate-600">Upload</span>
+                        </>
+                      )}
+                    </div>
+                    <input type="file" accept="image/*" onChange={handleCoverUpload} className="hidden" />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={fetchCoverFromWeb}
+                    disabled={fetchingCover}
+                    className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-3 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
+                  >
+                    {fetchingCover ? (
+                      <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
                     ) : (
                       <>
-                        <Upload className="w-6 h-6 mx-auto text-slate-400 mb-2" />
-                        <span className="text-sm text-slate-600">Changer l'image</span>
+                        <Sparkles className="w-5 h-5 mx-auto text-purple-500 mb-1" />
+                        <span className="text-xs text-purple-600 font-medium">Auto-fetch</span>
                       </>
                     )}
-                  </div>
-                  <input type="file" accept="image/*" onChange={handleCoverUpload} className="hidden" />
-                </label>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
