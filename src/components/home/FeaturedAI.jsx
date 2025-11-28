@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ExternalLink, Heart, Sparkles, Crown, Info, Star } from 'lucide-react';
+import { ExternalLink, Heart, Sparkles, Crown, Info, Star, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -10,8 +10,9 @@ import ActiveBanner from '@/components/banners/ActiveBanner';
 import DefaultAILogo from '@/components/DefaultAILogo';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [] }) {
+export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [], finderReviews = [] }) {
   const { t, language } = useLanguage();
   const [pricingOpen, setPricingOpen] = useState({});
   
@@ -37,6 +38,10 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
   
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
+  };
+
+  const getFinderReview = (serviceId) => {
+    return finderReviews.find(r => r.ai_service_id === serviceId && r.active);
   };
 
   // Vérifier si le service est nouveau (moins de 7 jours)
@@ -154,6 +159,27 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                       <Sparkles className="w-3 h-3 mr-1" />
                       {language === 'en' ? 'New' : 'Nouveau'}
                     </Badge>
+                  </div>
+                )}
+
+                {/* Badge Finder AI Review */}
+                {getFinderReview(service.id) && (
+                  <div className="absolute bottom-4 left-4">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                            <Award className="w-3 h-3 mr-1" />
+                            Finder AI
+                            <Star className="w-3 h-3 ml-1 fill-white" />
+                            {getFinderReview(service.id).rating}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-white text-slate-800 border shadow-lg">
+                          <p className="text-sm">{language === 'en' ? 'Reviewed by Finder AI team' : 'Testé par l\'équipe Finder AI'}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 )}
               </Link>
@@ -297,6 +323,27 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                       <Sparkles className="w-3 h-3 mr-1" />
                       {language === 'en' ? 'New' : 'Nouveau'}
                     </Badge>
+                  </div>
+                )}
+
+                {/* Badge Finder AI Review */}
+                {getFinderReview(service.id) && (
+                  <div className="absolute bottom-4 left-4">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-lg cursor-pointer">
+                            <Award className="w-3 h-3 mr-1" />
+                            Finder AI
+                            <Star className="w-3 h-3 ml-1 fill-white" />
+                            {getFinderReview(service.id).rating}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-white text-slate-800 border shadow-lg">
+                          <p className="text-sm">{language === 'en' ? 'Reviewed by Finder AI team' : 'Testé par l\'équipe Finder AI'}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 )}
               </Link>
