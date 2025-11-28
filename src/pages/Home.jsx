@@ -59,6 +59,11 @@ export default function Home() {
     enabled: !!user,
   });
 
+  const { data: finderReviews = [] } = useQuery({
+    queryKey: ['finderReviewsHome'],
+    queryFn: () => base44.entities.FinderAIReview.filter({ active: true }),
+  });
+
   const toggleFavoriteMutation = useMutation({
     mutationFn: async (serviceId) => {
       if (!user) {
@@ -110,6 +115,7 @@ export default function Home() {
       <FeaturedAI
         aiServices={aiServices}
         favorites={favorites}
+        finderReviews={finderReviews}
         onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
       />
 
