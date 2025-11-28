@@ -531,76 +531,105 @@ function LayoutContent({ children, currentPageName }) {
 
           {/* Mobile Nav */}
           {mobileMenuOpen && (
-            <nav className="lg:hidden pt-4 pb-2 space-y-2">
+            <nav className="lg:hidden pt-4 pb-2 space-y-1">
               <Link
                 to={createPageUrl('Home')}
-                className="block py-2 text-slate-700 hover:text-purple-600 font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Accueil
+                <Home className="w-4 h-4" />
+                {t('nav_home')}
               </Link>
               <Link
                 to={createPageUrl('Explore')}
-                className="block py-2 text-slate-700 hover:text-purple-600 font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Explorer
+                <Compass className="w-4 h-4" />
+                {t('nav_explore')}
+                <NewItemsBadge count={newItems.explore} />
               </Link>
               <Link
                 to={createPageUrl('Categories')}
-                className="block py-2 text-slate-700 hover:text-purple-600 font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Catégories
+                <Grid3X3 className="w-4 h-4" />
+                {t('nav_categories')}
+                <NewItemsBadge count={newItems.categories} />
               </Link>
-              
+              <Link
+                to={createPageUrl('AINews')}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Newspaper className="w-4 h-4" />
+                Actualités IA
+                <NewItemsBadge count={newItems.news} />
+              </Link>
+
               {user ? (
                 <>
                   <Link
                     to={createPageUrl('Favorites')}
-                    className="block py-2 text-slate-700 hover:text-purple-600 font-medium"
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Favoris
-                  </Link>
-                  <Link
-                    to={createPageUrl('SubmitAI')}
-                    className="block py-2 text-purple-600 font-semibold"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Proposer mon IA
+                    <Heart className="w-4 h-4" />
+                    {t('nav_favorites')}
                   </Link>
                   <Link
                     to={createPageUrl('Profile')}
-                    className="block py-2 text-slate-700"
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Mon Profil
+                    <User className="w-4 h-4" />
+                    {t('nav_profile')}
                   </Link>
                   <Link
                     to={createPageUrl('ProAccount')}
-                    className="block py-2 text-slate-700"
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Compte Pro
+                    <Crown className="w-4 h-4" />
+                    {t('nav_pro_account')}
                   </Link>
+                  <Link
+                    to={createPageUrl('BannerManager')}
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    {t('nav_my_banners')}
+                  </Link>
+
                   {user.role === 'admin' && (
-                    <Link
-                      to={createPageUrl('Admin')}
-                      className="block py-2 text-purple-600 font-semibold"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Admin
-                    </Link>
+                    <>
+                      <div className="my-2 border-t border-slate-200" />
+                      <div className="px-3 py-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        Administration
+                      </div>
+                      <Link
+                        to={createPageUrl('Admin')}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Crown className="w-4 h-4" />
+                        {t('nav_admin')}
+                      </Link>
+                    </>
                   )}
+
+                  <div className="my-2 border-t border-slate-200" />
                   <button
                     onClick={() => {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="block w-full text-left py-2 text-red-600 font-medium"
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
                   >
-                    Se déconnecter
+                    <LogOut className="w-4 h-4" />
+                    {t('nav_logout')}
                   </button>
                 </>
               ) : (
@@ -609,9 +638,10 @@ function LayoutContent({ children, currentPageName }) {
                     base44.auth.redirectToLogin();
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left py-2 text-purple-600 font-semibold"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
                 >
-                  Connexion
+                  <LogIn className="w-4 h-4" />
+                  {t('nav_login')}
                 </button>
               )}
             </nav>
