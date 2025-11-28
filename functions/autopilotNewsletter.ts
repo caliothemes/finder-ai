@@ -64,30 +64,32 @@ Deno.serve(async (req) => {
       <span style="display: inline-block; padding: 8px 16px; margin: 5px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; border-radius: 20px; font-size: 13px;">${cat.name}</span>
     `).join('');
 
-    // Replace placeholders or append content
+    // Build the generated content block
+    const generatedContent = `
+      <div style="margin-top: 30px;">
+        <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
+        ${newsHtml || '<p style="color: #666;">Aucune actualité cette semaine.</p>'}
+      </div>
+      <div style="margin-top: 30px;">
+        <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
+        <div style="text-align: center;">
+          ${servicesHtml || '<p style="color: #666;">Aucun nouveau service cette semaine.</p>'}
+        </div>
+      </div>
+      <div style="margin-top: 30px; text-align: center;">
+        <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
+        ${categoriesHtml || ''}
+      </div>
+    `;
+
+    // Replace placeholders
     let content = template.content
       .replace(/{{date}}/g, today)
-      .replace(/{{news_block}}/g, newsHtml || '<p>Aucune actualité cette semaine.</p>')
-      .replace(/{{services_block}}/g, servicesHtml || '<p>Aucun nouveau service cette semaine.</p>')
-      .replace(/{{categories_block}}/g, categoriesHtml || '');
+      .replace(/{{contenu_genere}}/g, generatedContent);
 
-    if (!template.content.includes('{{news_block}}')) {
-      content = template.content + `
-        <div style="margin-top: 30px;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
-          ${newsHtml}
-        </div>
-        <div style="margin-top: 30px;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
-          <div style="text-align: center;">
-            ${servicesHtml}
-          </div>
-        </div>
-        <div style="margin-top: 30px; text-align: center;">
-          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
-          ${categoriesHtml}
-        </div>
-      `;
+    // If template doesn't have {{contenu_genere}}, append at the end
+    if (!template.content.includes('{{contenu_genere}}')) {
+      content = template.content.replace(/{{date}}/g, today) + generatedContent;
     }
 
     const subject = template.subject.replace(/{{date}}/g, today);

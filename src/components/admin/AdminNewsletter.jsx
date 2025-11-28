@@ -276,31 +276,32 @@ export default function AdminNewsletter() {
         <span style="display: inline-block; padding: 8px 16px; margin: 5px; background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); color: white; border-radius: 20px; font-size: 13px;">${cat.name}</span>
       `).join('');
 
+      // Build the generated content block
+      const generatedContent = `
+        <div style="margin-top: 30px;">
+          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
+          ${newsHtml || '<p style="color: #666;">Aucune actualité cette semaine.</p>'}
+        </div>
+        <div style="margin-top: 30px;">
+          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
+          <div style="text-align: center;">
+            ${servicesHtml || '<p style="color: #666;">Aucun nouveau service cette semaine.</p>'}
+          </div>
+        </div>
+        <div style="margin-top: 30px; text-align: center;">
+          <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
+          ${categoriesHtml || ''}
+        </div>
+      `;
+
       // Replace placeholders in template
       let content = template.content
         .replace(/{{date}}/g, today)
-        .replace(/{{news_block}}/g, newsHtml || '<p>Aucune actualité cette semaine.</p>')
-        .replace(/{{services_block}}/g, servicesHtml || '<p>Aucun nouveau service cette semaine.</p>')
-        .replace(/{{categories_block}}/g, categoriesHtml || '');
+        .replace(/{{contenu_genere}}/g, generatedContent);
 
-      // If template doesn't have placeholders, append content
-      if (!template.content.includes('{{news_block}}')) {
-        content = template.content + `
-          <div style="margin-top: 30px;">
-            <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">📰 Actualités IA de la semaine</h2>
-            ${newsHtml}
-          </div>
-          <div style="margin-top: 30px;">
-            <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🚀 Nouveaux outils IA</h2>
-            <div style="text-align: center;">
-              ${servicesHtml}
-            </div>
-          </div>
-          <div style="margin-top: 30px; text-align: center;">
-            <h2 style="color: #9333ea; font-size: 20px; margin-bottom: 15px;">🏷️ Catégories à explorer</h2>
-            ${categoriesHtml}
-          </div>
-        `;
+      // If template doesn't have {{contenu_genere}}, append at the end
+      if (!template.content.includes('{{contenu_genere}}')) {
+        content = template.content.replace(/{{date}}/g, today) + generatedContent;
       }
 
       const subject = template.subject.replace(/{{date}}/g, today);
@@ -625,10 +626,13 @@ export default function AdminNewsletter() {
                 <div className="bg-purple-50 rounded-lg p-3">
                   <p className="text-sm font-medium text-purple-800 mb-2">Variables disponibles :</p>
                   <div className="flex flex-wrap gap-2">
-                    {['{{date}}', '{{news_block}}', '{{services_block}}', '{{categories_block}}'].map(v => (
+                    {['{{date}}', '{{contenu_genere}}'].map(v => (
                       <Badge key={v} variant="outline" className="bg-white">{v}</Badge>
                     ))}
                   </div>
+                  <p className="text-xs text-purple-600 mt-2">
+                    <code>{'{{contenu_genere}}'}</code> = 4 actualités + 6 services IA + 3 catégories
+                  </p>
                 </div>
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-medium">Contenu HTML du modèle</label>
