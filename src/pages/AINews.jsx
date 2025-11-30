@@ -10,10 +10,12 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 export default function AINews() {
   const { language } = useLanguage();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const articlesPerPage = 9; // 1 featured + 8 grid
   
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['publicNews'],
-    queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 50),
+    queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 500),
   });
 
   if (isLoading) {
