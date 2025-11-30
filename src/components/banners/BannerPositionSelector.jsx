@@ -7,7 +7,7 @@ const positions = [
     label: 'Accueil - Hero',
     description: 'Grande bannière visible en haut de la page d\'accueil',
     recommendedSize: '1200 x 200 px',
-    creditsPerDay: 3,
+    creditsPerDay: 5,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -27,7 +27,7 @@ const positions = [
     label: 'Accueil - Sidebar (Card)',
     description: 'Bannière format card parmi les outils IA en vedette',
     recommendedSize: '400 x 300 px',
-    creditsPerDay: 2,
+    creditsPerDay: 3,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -48,7 +48,7 @@ const positions = [
     label: 'Explorer - Haut de page',
     description: 'Bannière sous le bloc de recherche dans Explorer',
     recommendedSize: '1200 x 200 px',
-    creditsPerDay: 2,
+    creditsPerDay: 4,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -69,7 +69,7 @@ const positions = [
     label: 'Explorer - Sidebar (Card)',
     description: 'Bannière format card parmi les outils IA',
     recommendedSize: '400 x 300 px',
-    creditsPerDay: 1,
+    creditsPerDay: 2,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -90,7 +90,7 @@ const positions = [
     label: 'Explorer - Bas de page',
     description: 'Bannière sous la pagination dans Explorer',
     recommendedSize: '1200 x 200 px',
-    creditsPerDay: 1,
+    creditsPerDay: 2,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -115,7 +115,7 @@ const positions = [
     label: 'Catégories - Bas de page',
     description: 'Bannière sous les blocs catégories',
     recommendedSize: '1200 x 200 px',
-    creditsPerDay: 1,
+    creditsPerDay: 2,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
@@ -136,7 +136,7 @@ const positions = [
     label: 'Accueil - Sous Catégories',
     description: 'Bannière entre les catégories et le bouton Explorer',
     recommendedSize: '1200 x 200 px',
-    creditsPerDay: 1,
+    creditsPerDay: 2,
     preview: (
       <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
         <div className="h-3 bg-slate-300 rounded w-full mb-2" />
