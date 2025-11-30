@@ -50,31 +50,26 @@ Deno.serve(async (req) => {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
           prompt: `Tu es un journaliste tech spécialisé en IA. Recherche les dernières actualités: "${query}"
 
-MISSION: Trouve des articles d'actualité IA récents (dernières semaines/mois).
+MISSION: Trouve 3-5 articles d'actualité IA récents.
 
 RÈGLES:
 1. Retourne UNIQUEMENT des articles réels trouvés via ta recherche
-2. Privilégie les sources fiables: TechCrunch, The Verge, Wired, VentureBeat, Reuters, Bloomberg, etc.
-3. L'URL doit pointer vers l'article original (pas un agrégateur)
-4. Articles de moins de 3 mois idéalement
-5. Retourne 5 à 10 articles
+2. Sources fiables: TechCrunch, The Verge, Wired, VentureBeat, Reuters, Bloomberg, etc.
+3. URL doit pointer vers l'article original
+4. Retourne 3-5 articles MAX
 
-Pour chaque article, fournis un CONTENU DÉTAILLÉ:
-- title: Titre de l'article (en anglais original)
-- title_fr: Titre traduit en français
-- summary: Résumé en français (4-6 phrases détaillées couvrant les points clés)
-- summary_en: Résumé en anglais (4-6 sentences)
-- content: Contenu complet de l'article en français (8-15 paragraphes, développe tous les points importants, les détails techniques, les citations, les implications)
-- content_en: Full article content in English (8-15 paragraphs)
-- source_name: Nom de la source (ex: TechCrunch)
-- source_url: URL complète de l'article
-- tags: 2-4 tags pertinents
+Pour chaque article:
+- title: Titre en anglais
+- title_fr: Titre en français  
+- summary: Résumé détaillé en français (5-8 phrases, couvre les points clés, chiffres, implications)
+- summary_en: Summary in English (5-8 sentences)
+- content: Article complet en français (4-6 paragraphes développant le sujet en détail)
+- content_en: Full article in English (4-6 paragraphs)
+- source_name: Nom source
+- source_url: URL complète
+- tags: 2-3 tags
 
-IMPORTANT: 
-- Ne retourne que des articles réels
-- Le contenu doit être SUBSTANTIEL et DÉTAILLÉ (minimum 500 mots par article)
-- Inclus les détails techniques, chiffres, citations quand disponibles
-- Structure le contenu avec des paragraphes clairs`,
+IMPORTANT: Ne retourne que des articles réels avec du contenu substantiel.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -94,7 +89,7 @@ IMPORTANT:
                     source_url: { type: "string" },
                     tags: { type: "array", items: { type: "string" } }
                   },
-                  required: ["title", "source_url", "source_name", "summary", "content"]
+                  required: ["title", "source_url", "source_name"]
                 }
               }
             }
