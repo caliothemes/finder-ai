@@ -17,19 +17,22 @@ Deno.serve(async (req) => {
       ...existingDiscoveries.map(d => d.source_url?.toLowerCase())
     ].filter(Boolean));
 
-    // Requêtes de recherche pour l'actualité IA
+    // Requêtes de recherche pour l'actualité IA - plus variées et précises
     const newsQueries = [
-      "artificial intelligence news today",
-      "AI latest announcements 2024 2025",
-      "OpenAI news updates",
-      "Google AI Gemini news",
-      "AI startup funding news",
-      "machine learning breakthrough news",
-      "generative AI news updates",
-      "AI regulation policy news",
+      "OpenAI ChatGPT news this week",
+      "Google Gemini AI announcement",
+      "Anthropic Claude AI update",
+      "Microsoft Copilot AI news",
+      "Meta AI Llama news",
+      "AI startup funding round 2024",
+      "artificial intelligence breakthrough research",
+      "generative AI tools launch",
+      "AI regulation law Europe USA",
+      "machine learning new model release",
     ];
 
-    const shuffledQueries = newsQueries.sort(() => Math.random() - 0.5).slice(0, 5);
+    // Utiliser toutes les requêtes pour maximiser les résultats
+    const shuffledQueries = newsQueries.sort(() => Math.random() - 0.5);
     const allArticles = [];
     const seenUrls = new Set([...existingUrls]);
 
