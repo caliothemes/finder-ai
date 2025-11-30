@@ -22,6 +22,7 @@ import AdminOwnershipClaims from '@/components/admin/AdminOwnershipClaims';
 import AdminLegalSections from '@/components/admin/AdminLegalSections';
 import AdminNews from '@/components/admin/AdminNews';
 import AdminFinderAIReviews from '@/components/admin/AdminFinderAIReviews';
+import AdminReviewsManager from '@/components/admin/AdminReviewsManager';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -115,7 +116,7 @@ export default function Admin() {
       case 'services': return <AdminServices />;
       case 'stories': return <AdminStories />;
       case 'categories': return <AdminCategories />;
-      case 'reviews': return <AdminReviews />;
+      case 'reviews': return <AdminReviewsManager />;
       case 'finder-reviews': return <AdminFinderAIReviews />;
       case 'banners': return <AdminBanners />;
       case 'emails': return <AdminEmailTemplates />;
