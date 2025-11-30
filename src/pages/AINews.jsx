@@ -68,46 +68,46 @@ export default function AINews() {
           <div className="space-y-6">
             {/* Featured Article */}
             {paginatedArticles[0] && (
-              <Link to={createPageUrl(`AINewsDetail?slug=${articles[0].slug}`)}>
+              <Link to={createPageUrl(`AINewsDetail?slug=${paginatedArticles[0].slug}`)}>
                 <article className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg hover:shadow-xl hover:border-purple-300 transition-all group">
                   <div className="md:flex">
-                    {articles[0].cover_image_url && (
+                    {paginatedArticles[0].cover_image_url && (
                       <div className="md:w-1/2 overflow-hidden">
                         <img
-                          src={articles[0].cover_image_url}
-                          alt={getTitle(articles[0])}
+                          src={paginatedArticles[0].cover_image_url}
+                          alt={getTitle(paginatedArticles[0])}
                           className="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                     )}
                     <div className="p-8 md:w-1/2 flex flex-col justify-center">
                       <div className="flex items-center gap-2 mb-4">
-                        {articles[0].source_logo_url && (
-                          <img src={articles[0].source_logo_url} alt="" className="w-5 h-5" />
+                        {paginatedArticles[0].source_logo_url && (
+                          <img src={paginatedArticles[0].source_logo_url} alt="" className="w-5 h-5" />
                         )}
-                        <span className="text-sm font-medium text-purple-600">{articles[0].source_name}</span>
+                        <span className="text-sm font-medium text-purple-600">{paginatedArticles[0].source_name}</span>
                         <span className="text-slate-300">•</span>
                         <span className="text-sm text-slate-500 flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          {articles[0].published_date}
+                          {paginatedArticles[0].published_date}
                         </span>
-                        {articles[0].views > 0 && (
+                        {paginatedArticles[0].views > 0 && (
                           <>
                             <span className="text-slate-300">•</span>
                             <span className="text-sm text-slate-500 flex items-center gap-1">
                               <Eye className="w-4 h-4" />
-                              {articles[0].views}
+                              {paginatedArticles[0].views}
                             </span>
                           </>
                         )}
                       </div>
                       <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
-                        {getTitle(articles[0])}
+                        {getTitle(paginatedArticles[0])}
                       </h2>
-                      <p className="text-slate-600 mb-6 line-clamp-3">{getSummary(articles[0])}</p>
-                      {articles[0].tags?.length > 0 && (
+                      <p className="text-slate-600 mb-6 line-clamp-3">{getSummary(paginatedArticles[0])}</p>
+                      {paginatedArticles[0].tags?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-6">
-                          {articles[0].tags.slice(0, 4).map((tag, i) => (
+                          {paginatedArticles[0].tags.slice(0, 4).map((tag, i) => (
                             <Badge key={i} variant="secondary">{tag}</Badge>
                           ))}
                         </div>
