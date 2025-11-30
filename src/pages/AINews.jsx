@@ -67,7 +67,7 @@ export default function AINews() {
         ) : (
           <div className="space-y-6">
             {/* Featured Article */}
-            {articles[0] && (
+            {paginatedArticles[0] && (
               <Link to={createPageUrl(`AINewsDetail?slug=${articles[0].slug}`)}>
                 <article className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg hover:shadow-xl hover:border-purple-300 transition-all group">
                   <div className="md:flex">
