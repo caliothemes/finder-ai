@@ -51,28 +51,22 @@ Deno.serve(async (req) => {
 
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Tu es un journaliste tech spécialisé en IA. Recherche les dernières actualités: "${query}"
+          prompt: `Search for recent AI news about: "${query}"
 
-MISSION: Trouve 3-5 articles d'actualité IA récents.
+Find 2-3 REAL news articles from the past month.
 
-RÈGLES:
-1. Retourne UNIQUEMENT des articles réels trouvés via ta recherche
-2. Sources fiables: TechCrunch, The Verge, Wired, VentureBeat, Reuters, Bloomberg, etc.
-3. URL doit pointer vers l'article original
-4. Retourne 3-5 articles MAX
+For each article provide:
+- title: Original English title
+- title_fr: French translation of title
+- summary: French summary (3-4 sentences)
+- summary_en: English summary (3-4 sentences)  
+- content: Detailed French article (3-4 paragraphs)
+- content_en: Detailed English article (3-4 paragraphs)
+- source_name: Source name (TechCrunch, The Verge, etc.)
+- source_url: Full article URL
+- tags: 2-3 relevant tags
 
-Pour chaque article:
-- title: Titre en anglais
-- title_fr: Titre en français  
-- summary: Résumé détaillé en français (5-8 phrases, couvre les points clés, chiffres, implications)
-- summary_en: Summary in English (5-8 sentences)
-- content: Article complet en français (4-6 paragraphes développant le sujet en détail)
-- content_en: Full article in English (4-6 paragraphs)
-- source_name: Nom source
-- source_url: URL complète
-- tags: 2-3 tags
-
-IMPORTANT: Ne retourne que des articles réels avec du contenu substantiel.`,
+Only return real articles with valid URLs.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -91,8 +85,7 @@ IMPORTANT: Ne retourne que des articles réels avec du contenu substantiel.`,
                     source_name: { type: "string" },
                     source_url: { type: "string" },
                     tags: { type: "array", items: { type: "string" } }
-                  },
-                  required: ["title", "source_url", "source_name"]
+                  }
                 }
               }
             }
