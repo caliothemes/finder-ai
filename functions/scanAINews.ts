@@ -59,15 +59,22 @@ RÈGLES:
 4. Articles de moins de 3 mois idéalement
 5. Retourne 5 à 10 articles
 
-Pour chaque article:
+Pour chaque article, fournis un CONTENU DÉTAILLÉ:
 - title: Titre de l'article (en anglais original)
 - title_fr: Titre traduit en français
-- summary: Résumé en français (2-3 phrases)
+- summary: Résumé en français (4-6 phrases détaillées couvrant les points clés)
+- summary_en: Résumé en anglais (4-6 sentences)
+- content: Contenu complet de l'article en français (8-15 paragraphes, développe tous les points importants, les détails techniques, les citations, les implications)
+- content_en: Full article content in English (8-15 paragraphs)
 - source_name: Nom de la source (ex: TechCrunch)
 - source_url: URL complète de l'article
 - tags: 2-4 tags pertinents
 
-IMPORTANT: Ne retourne que des articles réels. Si tu n'en trouves pas, retourne un tableau vide.`,
+IMPORTANT: 
+- Ne retourne que des articles réels
+- Le contenu doit être SUBSTANTIEL et DÉTAILLÉ (minimum 500 mots par article)
+- Inclus les détails techniques, chiffres, citations quand disponibles
+- Structure le contenu avec des paragraphes clairs`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -80,11 +87,14 @@ IMPORTANT: Ne retourne que des articles réels. Si tu n'en trouves pas, retourne
                     title: { type: "string" },
                     title_fr: { type: "string" },
                     summary: { type: "string" },
+                    summary_en: { type: "string" },
+                    content: { type: "string" },
+                    content_en: { type: "string" },
                     source_name: { type: "string" },
                     source_url: { type: "string" },
                     tags: { type: "array", items: { type: "string" } }
                   },
-                  required: ["title", "source_url", "source_name"]
+                  required: ["title", "source_url", "source_name", "summary", "content"]
                 }
               }
             }
@@ -119,7 +129,9 @@ IMPORTANT: Ne retourne que des articles réels. Si tu n'en trouves pas, retourne
               title: article.title_fr || article.title,
               title_en: article.title,
               summary: article.summary || '',
-              summary_en: '',
+              summary_en: article.summary_en || '',
+              content: article.content || '',
+              content_en: article.content_en || '',
               source_name: article.source_name,
               source_url: article.source_url,
               source_logo_url: logoUrl,
