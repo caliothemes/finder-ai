@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import StoriesViewer from '@/components/StoriesViewer';
 import Logo from '@/components/Logo';
 import ScrollToTop from '@/components/ScrollToTop';
+import MemberInviteCard from '@/components/sidebar/MemberInviteCard';
 import { 
         Menu, X, User, Heart, 
         LogOut, LogIn, PlusCircle, Crown, Search,
@@ -393,6 +394,7 @@ function LayoutContent({ children, currentPageName }) {
               )}
 
               {!user && (
+              <>
               <button
               onClick={() => base44.auth.redirectToLogin()}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
@@ -400,8 +402,14 @@ function LayoutContent({ children, currentPageName }) {
               <LogIn className="w-4 h-4" />
               {t('nav_login')}
               </button>
+
+              {/* Member Invite Card */}
+              <div className="mt-4 px-1">
+                <MemberInviteCard />
+              </div>
+              </>
               )}
-        </nav>
+              </nav>
       </aside>
 
       {/* Main Content Wrapper */}
