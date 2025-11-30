@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
 import ReactMarkdown from 'react-markdown';
 import { toast } from 'sonner';
+import NewsReviewSection from '@/components/news/NewsReviewSection';
 
 export default function AINewsDetail() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -253,6 +254,9 @@ export default function AINewsDetail() {
             </div>
           </div>
         </article>
+
+        {/* Reviews Section */}
+        <NewsReviewSection newsId={article.id} />
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
