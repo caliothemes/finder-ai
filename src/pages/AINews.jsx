@@ -124,7 +124,7 @@ export default function AINews() {
 
             {/* Other Articles */}
             <div className="grid md:grid-cols-2 gap-6">
-              {articles.slice(1).map((article) => (
+              {paginatedArticles.slice(1).map((article) => (
                 <Link
                   key={article.id}
                   to={createPageUrl(`AINewsDetail?slug=${article.slug}`)}
