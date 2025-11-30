@@ -140,7 +140,7 @@ Only return real articles with valid URLs.`,
         console.error(`Error for query "${query}": ${error.message}`);
       }
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // Récupérer les images de couverture pour chaque article
