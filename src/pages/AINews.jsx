@@ -29,6 +29,11 @@ export default function AINews() {
   const getTitle = (article) => language === 'en' && article.title_en ? article.title_en : article.title;
   const getSummary = (article) => language === 'en' && article.summary_en ? article.summary_en : article.summary;
 
+  // Pagination
+  const totalPages = Math.ceil(articles.length / articlesPerPage);
+  const startIndex = (currentPage - 1) * articlesPerPage;
+  const paginatedArticles = articles.slice(startIndex, startIndex + articlesPerPage);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
       <div className="max-w-5xl mx-auto">
