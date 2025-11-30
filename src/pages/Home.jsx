@@ -109,7 +109,7 @@ export default function Home() {
 
       {/* Bannière Hero Homepage */}
       <div className="max-w-7xl mx-auto px-6 pt-6 pb-4">
-        <ActiveBanner position="homepage_hero" />
+        <ActiveBanner position="homepage_hero" showPlaceholder={true} />
       </div>
 
       <FeaturedAI
