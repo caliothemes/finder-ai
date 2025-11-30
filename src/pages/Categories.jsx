@@ -12,6 +12,7 @@ import {
   GraduationCap, Gamepad2, Film, Headphones, BookOpen, ShoppingCart
 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import ActiveBanner from '@/components/banners/ActiveBanner';
 
 export default function Categories() {
   const { t } = useLanguage();
@@ -141,6 +142,11 @@ export default function Categories() {
               </Link>
             );
           })}
+        </div>
+
+        {/* Bannière bas de page Catégories */}
+        <div className="mt-12">
+          <ActiveBanner position="categories_bottom" showPlaceholder={true} />
         </div>
       </div>
     </div>

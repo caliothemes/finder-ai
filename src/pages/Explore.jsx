@@ -242,7 +242,7 @@ export default function Explore() {
 
           {/* Bannière Explorer - Haut de page */}
           <div className="mb-8">
-          <ActiveBanner position="explore_top" />
+          <ActiveBanner position="explore_top" showPlaceholder={true} />
           </div>
 
           {/* Results count */}
@@ -348,7 +348,7 @@ export default function Explore() {
                 >
                   ‹
                 </Button>
-                
+
                 <div className="flex items-center gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
@@ -391,12 +391,17 @@ export default function Explore() {
                 >
                   »
                 </Button>
-                
+
                 <span className="text-sm text-slate-500 ml-4">
                   Page {currentPage} sur {totalPages}
                 </span>
               </div>
             )}
+
+            {/* Bannière bas de page Explorer */}
+            <div className="mt-12">
+              <ActiveBanner position="explore_bottom" showPlaceholder={true} />
+            </div>
           </>
         ) : (
           <div className="text-center py-16">
