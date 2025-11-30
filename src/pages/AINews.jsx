@@ -170,6 +170,75 @@ export default function AINews() {
                 </Link>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(1); window.scrollTo(0, 0); }}
+                  disabled={currentPage === 1}
+                >
+                  «
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo(0, 0); }}
+                  disabled={currentPage === 1}
+                >
+                  ‹
+                </Button>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => { setCurrentPage(pageNum); window.scrollTo(0, 0); }}
+                        className="w-10"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo(0, 0); }}
+                  disabled={currentPage === totalPages}
+                >
+                  ›
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setCurrentPage(totalPages); window.scrollTo(0, 0); }}
+                  disabled={currentPage === totalPages}
+                >
+                  »
+                </Button>
+
+                <span className="text-sm text-slate-500 ml-4">
+                  Page {currentPage} {language === 'en' ? 'of' : 'sur'} {totalPages}
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
