@@ -6,8 +6,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Sparkles, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import EmptyBannerPlaceholder from './EmptyBannerPlaceholder';
 
-export default function ActiveBanner({ position }) {
+export default function ActiveBanner({ position, showPlaceholder = false }) {
   const today = new Date().toISOString().split('T')[0];
 
   const { data: activeBanner, isLoading } = useQuery({
@@ -32,6 +33,12 @@ export default function ActiveBanner({ position }) {
       }
     },
   });
+
+  // Si pas de bannière et placeholder demandé, afficher le placeholder
+  if (!isLoading && !activeBanner && showPlaceholder) {
+    const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
+    return <EmptyBannerPlaceholder variant={isCardFormat ? 'card' : 'banner'} />;
+  }
 
   if (isLoading || !activeBanner) return null;
 
@@ -107,6 +114,8 @@ export default function ActiveBanner({ position }) {
   const heightClasses = {
     homepage_hero: 'h-[150px] md:h-[200px]',
     explore_top: 'h-[150px] md:h-[200px]',
+    explore_bottom: 'h-[150px] md:h-[200px]',
+    categories_bottom: 'h-[150px] md:h-[200px]',
     category_top: 'h-[150px] md:h-[200px]',
     service_detail: 'h-[250px]'
   };
