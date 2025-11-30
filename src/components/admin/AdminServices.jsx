@@ -1171,12 +1171,22 @@ Provide accurate English translations.`,
                   </div>
                 </div>
                 
-                {/* Inline Edit Form */}
+                {/* Inline Edit Form - Full Screen Modal on Mobile */}
                 {editingService?.id === service.id && (
-                  <Card className="mt-4">
-                    <CardContent className="pt-6">
-                      <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid md:grid-cols-2 gap-4">
+                  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center p-2 sm:p-4 overflow-y-auto">
+                    <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl my-2 sm:my-4">
+                      <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl z-10">
+                        <div>
+                          <h3 className="text-lg sm:text-xl font-bold">Modifier le service</h3>
+                          <p className="text-purple-100 text-xs sm:text-sm">{service.name}</p>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => setEditingService(null)} className="text-white hover:bg-white/20">
+                          <X className="w-5 h-5" />
+                        </Button>
+                      </div>
+                      
+                      <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <Input
                             placeholder="Nom du service"
                             value={formData.name}
@@ -1212,6 +1222,7 @@ Provide accurate English translations.`,
                             value={formData.description}
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                             required
+                            className="min-h-20"
                           />
                         </div>
                         <div>
@@ -1220,18 +1231,19 @@ Provide accurate English translations.`,
                             placeholder="Description in English"
                             value={formData.description_en}
                             onChange={(e) => setFormData({...formData, description_en: e.target.value})}
+                            className="min-h-20"
                           />
                         </div>
                         
                         <div>
                           <label className="text-sm font-medium mb-2 block">Catégories</label>
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto p-1">
                             {categories.map(cat => (
                               <button
                                 key={cat.id}
                                 type="button"
                                 onClick={() => toggleCategory(cat.id)}
-                                className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+                                className={`px-3 py-2 text-xs sm:text-sm rounded-lg border transition-colors ${
                                   (formData.categories || []).includes(cat.id)
                                     ? 'bg-purple-100 border-purple-600 text-purple-900'
                                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
@@ -1243,7 +1255,7 @@ Provide accurate English translations.`,
                           </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <label className="text-sm font-medium mb-2 block">Logo</label>
                             <Input
@@ -1253,19 +1265,19 @@ Provide accurate English translations.`,
                               disabled={uploadingLogo}
                             />
                             {formData.logo_url && (
-                              <img src={formData.logo_url} alt="Logo" className="mt-2 w-20 h-20 object-cover rounded-lg" />
+                              <img src={formData.logo_url} alt="Logo" className="mt-2 w-16 h-16 object-cover rounded-lg" />
                             )}
                           </div>
                           <div>
                             <label className="text-sm font-medium mb-2 block">Image de couverture</label>
                             <div className="flex gap-2 mb-2">
                               <label className="flex-1 cursor-pointer">
-                                <div className="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                                <div className="border-2 border-dashed border-slate-300 rounded-lg p-2 text-center hover:border-purple-400 transition-colors">
                                   {uploadingCover ? (
-                                    <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                                    <Loader2 className="w-4 h-4 animate-spin mx-auto text-purple-600" />
                                   ) : (
                                     <>
-                                      <Upload className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                                      <Upload className="w-4 h-4 mx-auto text-slate-400 mb-1" />
                                       <span className="text-xs text-slate-600">Upload</span>
                                     </>
                                   )}
@@ -1276,25 +1288,25 @@ Provide accurate English translations.`,
                                 type="button"
                                 onClick={fetchCoverFromWeb}
                                 disabled={fetchingCover}
-                                className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-3 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
+                                className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-2 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
                               >
                                 {fetchingCover ? (
-                                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                                  <Loader2 className="w-4 h-4 animate-spin mx-auto text-purple-600" />
                                 ) : (
                                   <>
-                                    <Sparkles className="w-5 h-5 mx-auto text-purple-500 mb-1" />
-                                    <span className="text-xs text-purple-600 font-medium">Auto-fetch</span>
+                                    <Sparkles className="w-4 h-4 mx-auto text-purple-500 mb-1" />
+                                    <span className="text-xs text-purple-600 font-medium">Auto</span>
                                   </>
                                 )}
                               </button>
                             </div>
                             {formData.cover_image_url && (
-                              <img src={formData.cover_image_url} alt="Cover" className="w-full h-20 object-cover rounded-lg" />
+                              <img src={formData.cover_image_url} alt="Cover" className="w-full h-16 object-cover rounded-lg" />
                             )}
                           </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
                           <Select value={formData.pricing} onValueChange={(v) => setFormData({...formData, pricing: v})}>
                             <SelectTrigger>
                               <SelectValue placeholder="Prix" />
@@ -1323,17 +1335,21 @@ Provide accurate English translations.`,
                           onChange={(e) => setFormData({...formData, website_url: e.target.value})}
                         />
 
-                        <div className="flex gap-2">
-                          <Button type="submit" disabled={updateServiceMutation.isPending}>
-                            Mettre à jour
-                          </Button>
-                          <Button type="button" variant="outline" onClick={() => setEditingService(null)}>
-                            Annuler
-                          </Button>
+                        {/* Sticky footer buttons */}
+                        <div className="sticky bottom-0 bg-white pt-4 pb-2 -mx-4 sm:-mx-6 px-4 sm:px-6 border-t mt-4">
+                          <div className="flex gap-2">
+                            <Button type="submit" disabled={updateServiceMutation.isPending} className="flex-1 bg-purple-600 hover:bg-purple-700">
+                              <Check className="w-4 h-4 mr-2" />
+                              Mettre à jour
+                            </Button>
+                            <Button type="button" variant="outline" onClick={() => setEditingService(null)} className="flex-1">
+                              Annuler
+                            </Button>
+                          </div>
                         </div>
                       </form>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
               </div>
             ))}
