@@ -62,8 +62,13 @@ export default function AdminStats() {
   yesterdayStart.setDate(yesterdayStart.getDate() - 1);
   const weekStart = new Date(todayStart);
   weekStart.setDate(weekStart.getDate() - 7);
+  const lastWeekStart = new Date(todayStart);
+  lastWeekStart.setDate(lastWeekStart.getDate() - 14);
   const monthStart = new Date(todayStart);
   monthStart.setDate(monthStart.getDate() - 30);
+  const lastMonthStart = new Date(todayStart);
+  lastMonthStart.setDate(lastMonthStart.getDate() - 60);
+  const yearStart = new Date(now.getFullYear(), 0, 1);
   const last5Minutes = new Date(now.getTime() - 5 * 60 * 1000);
 
   // Visiteurs uniques par période
