@@ -103,7 +103,7 @@ export default function Admin() {
   if (!user) return null;
 
   const adminSections = [
-    { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600' },
+    { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600', badge: pendingDiscoveriesCount },
     { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
     { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600', badge: pendingClaimsCount },
     { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
