@@ -490,13 +490,13 @@ ${JSON.stringify(context.news, null, 0)}
       {/* Input Area */}
       <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-2 md:px-6 py-2 md:py-4 flex-shrink-0 w-full">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto w-full">
-          <div className="flex gap-2">
-            <div className="flex-1 relative">
+          <div className="flex gap-2 w-full">
+            <div className="flex-1 relative min-w-0">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('agent_placeholder')}
-                className="w-full resize-none min-h-[40px] md:min-h-[50px] max-h-[80px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-9 md:pr-12 text-sm md:text-base py-2"
+                className="w-full resize-none min-h-[40px] md:min-h-[50px] max-h-[80px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-8 md:pr-12 text-sm md:text-base py-2"
                 rows={1}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -508,7 +508,7 @@ ${JSON.stringify(context.news, null, 0)}
               <button
                 type="button"
                 onClick={toggleVoiceInput}
-                className={`absolute right-1.5 md:right-3 top-1/2 -translate-y-1/2 p-1 md:p-2 rounded-full transition-all ${
+                className={`absolute right-1 md:right-3 top-1/2 -translate-y-1/2 p-1 md:p-2 rounded-full transition-all ${
                   isListening 
                     ? 'bg-red-100 text-red-600 animate-pulse' 
                     : 'hover:bg-purple-100 text-purple-600'
@@ -520,7 +520,7 @@ ${JSON.stringify(context.news, null, 0)}
             <Button 
               type="submit" 
               disabled={isLoading || !input.trim()}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 md:px-6 h-[40px] md:h-auto"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-2.5 md:px-6 h-[40px] md:h-auto flex-shrink-0"
             >
               <Send className="w-4 h-4 md:w-5 md:h-5" />
             </Button>
