@@ -1,161 +1,120 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { bannerPositions } from './bannerPositions';
 
-const positions = [
-  {
-    value: 'homepage_hero',
-    label: 'Accueil - Hero',
-    description: 'Grande bannière visible en haut de la page d\'accueil',
-    recommendedSize: '1200 x 200 px',
-    creditsPerDay: 5,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
-        <div className="mt-2 flex gap-1">
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
-          <div className="h-6 w-1/3 bg-slate-200 rounded" />
-        </div>
+// Previews pour chaque position
+const positionPreviews = {
+  homepage_hero: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+        VOTRE BANNIÈRE ICI
       </div>
-    )
-  },
-  {
-    value: 'homepage_sidebar',
-    label: 'Accueil - Sidebar (Card)',
-    description: 'Bannière format card parmi les outils IA en vedette',
-    recommendedSize: '400 x 300 px',
-    creditsPerDay: 3,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
-        <div className="flex gap-1">
-          <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
-            <div className="w-6 h-4 bg-white/30 rounded mb-1" />
-            CARD
-          </div>
-          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
-          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
-        </div>
+      <div className="mt-2 flex gap-1">
+        <div className="h-6 w-1/3 bg-slate-200 rounded" />
+        <div className="h-6 w-1/3 bg-slate-200 rounded" />
+        <div className="h-6 w-1/3 bg-slate-200 rounded" />
       </div>
-    )
-  },
-  {
-    value: 'explore_top',
-    label: 'Explorer - Haut de page',
-    description: 'Bannière sous le bloc de recherche dans Explorer',
-    recommendedSize: '1200 x 200 px',
-    creditsPerDay: 4,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="h-6 bg-slate-200 rounded w-full mb-2" />
-        <div className="h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
+    </div>
+  ),
+  homepage_sidebar: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
+      <div className="flex gap-1">
+        <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
+          <div className="w-6 h-4 bg-white/30 rounded mb-1" />
+          CARD
         </div>
-        <div className="mt-2 grid grid-cols-3 gap-1">
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-        </div>
+        <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
+        <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
       </div>
-    )
-  },
-  {
-    value: 'explore_sidebar',
-    label: 'Explorer - Sidebar (Card)',
-    description: 'Bannière format card parmi les outils IA',
-    recommendedSize: '400 x 300 px',
-    creditsPerDay: 2,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
-        <div className="flex gap-1">
-          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
-          <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
-            <div className="w-6 h-4 bg-white/30 rounded mb-1" />
-            CARD
-          </div>
-          <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
-        </div>
+    </div>
+  ),
+  explore_top: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="h-6 bg-slate-200 rounded w-full mb-2" />
+      <div className="h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+        VOTRE BANNIÈRE ICI
       </div>
-    )
-  },
-  {
-    value: 'explore_bottom',
-    label: 'Explorer - Bas de page',
-    description: 'Bannière sous la pagination dans Explorer',
-    recommendedSize: '1200 x 200 px',
-    creditsPerDay: 2,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="grid grid-cols-3 gap-1 mb-2">
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-        </div>
-        <div className="flex justify-center gap-1 mb-2">
-          <div className="h-4 w-4 bg-slate-300 rounded" />
-          <div className="h-4 w-4 bg-slate-300 rounded" />
-          <div className="h-4 w-4 bg-slate-300 rounded" />
-        </div>
-        <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
+      <div className="mt-2 grid grid-cols-3 gap-1">
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
       </div>
-    )
-  },
-  {
-    value: 'categories_bottom',
-    label: 'Catégories - Bas de page',
-    description: 'Bannière sous les blocs catégories',
-    recommendedSize: '1200 x 200 px',
-    creditsPerDay: 2,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="grid grid-cols-4 gap-1 mb-2">
-          <div className="h-8 bg-slate-200 rounded" />
-          <div className="h-8 bg-slate-200 rounded" />
-          <div className="h-8 bg-slate-200 rounded" />
-          <div className="h-8 bg-slate-200 rounded" />
+    </div>
+  ),
+  explore_sidebar: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
+      <div className="flex gap-1">
+        <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
+        <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
+          <div className="w-6 h-4 bg-white/30 rounded mb-1" />
+          CARD
         </div>
-        <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
+        <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
       </div>
-    )
-  },
-  {
-    value: 'homepage_category_bottom',
-    label: 'Accueil - Sous Catégories',
-    description: 'Bannière entre les catégories et le bouton Explorer',
-    recommendedSize: '1200 x 200 px',
-    creditsPerDay: 2,
-    preview: (
-      <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-        <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-        <div className="grid grid-cols-4 gap-1 mb-2">
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-          <div className="h-6 bg-slate-200 rounded" />
-        </div>
-        <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-          VOTRE BANNIÈRE ICI
-        </div>
-        <div className="mt-2 flex justify-center">
-          <div className="h-4 w-24 bg-slate-300 rounded" />
-        </div>
+    </div>
+  ),
+  explore_bottom: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="grid grid-cols-3 gap-1 mb-2">
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
       </div>
-    )
-  }
-];
+      <div className="flex justify-center gap-1 mb-2">
+        <div className="h-4 w-4 bg-slate-300 rounded" />
+        <div className="h-4 w-4 bg-slate-300 rounded" />
+        <div className="h-4 w-4 bg-slate-300 rounded" />
+      </div>
+      <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+        VOTRE BANNIÈRE ICI
+      </div>
+    </div>
+  ),
+  categories_bottom: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="grid grid-cols-4 gap-1 mb-2">
+        <div className="h-8 bg-slate-200 rounded" />
+        <div className="h-8 bg-slate-200 rounded" />
+        <div className="h-8 bg-slate-200 rounded" />
+        <div className="h-8 bg-slate-200 rounded" />
+      </div>
+      <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+        VOTRE BANNIÈRE ICI
+      </div>
+    </div>
+  ),
+  homepage_category_bottom: (
+    <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
+      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
+      <div className="grid grid-cols-4 gap-1 mb-2">
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
+        <div className="h-6 bg-slate-200 rounded" />
+      </div>
+      <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
+        VOTRE BANNIÈRE ICI
+      </div>
+      <div className="mt-2 flex justify-center">
+        <div className="h-4 w-24 bg-slate-300 rounded" />
+      </div>
+    </div>
+  )
+};
+
+// Combine positions avec previews
+const positions = bannerPositions.map(pos => ({
+  ...pos,
+  preview: positionPreviews[pos.value]
+}));
 
 export default function BannerPositionSelector({ value, onChange }) {
   return (
