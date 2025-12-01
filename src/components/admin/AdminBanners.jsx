@@ -4,7 +4,15 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, Calendar, Power, PowerOff, Trash2 } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Calendar, Power, PowerOff, Trash2, Pencil, Upload } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +28,9 @@ import { toast } from 'sonner';
 
 export default function AdminBanners() {
   const queryClient = useQueryClient();
+  const [editingBanner, setEditingBanner] = React.useState(null);
+  const [editForm, setEditForm] = React.useState({});
+  const [uploading, setUploading] = React.useState(false);
 
   const { data: banners = [], isLoading } = useQuery({
     queryKey: ['adminBanners'],
@@ -49,6 +60,48 @@ export default function AdminBanners() {
       toast.success(active ? 'Bannière activée' : 'Bannière désactivée');
     },
   });
+
+  const updateBannerMutation = useMutation({
+    mutationFn: ({ bannerId, data }) => base44.entities.BannerReservation.update(bannerId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminBanners'] });
+      toast.success('Bannière mise à jour');
+      setEditingBanner(null);
+    },
+  });
+
+  const handleEditBanner = (banner) => {
+    setEditingBanner(banner);
+    setEditForm({
+      title: banner.title || '',
+      description: banner.description || '',
+      image_url: banner.image_url || '',
+      target_url: banner.target_url || '',
+    });
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setEditForm(prev => ({ ...prev, image_url: file_url }));
+      toast.success('Image uploadée');
+    } catch (error) {
+      toast.error("Erreur lors de l'upload");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveEdit = () => {
+    updateBannerMutation.mutate({
+      bannerId: editingBanner.id,
+      data: editForm,
+    });
+  };
 
   const deleteBannerMutation = useMutation({
     mutationFn: async (banner) => {
@@ -186,6 +239,13 @@ export default function AdminBanners() {
                   </Badge>
                   <Button
                     size="sm"
+                    variant="outline"
+                    onClick={() => handleEditBanner(banner)}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    size="sm"
                     variant={banner.active ? "outline" : "default"}
                     onClick={() => toggleActiveMutation.mutate({ bannerId: banner.id, active: !banner.active })}
                     className={banner.active ? "text-red-600 hover:bg-red-50" : "bg-green-600 hover:bg-green-700"}
@@ -237,6 +297,64 @@ export default function AdminBanners() {
           </div>
         </CardContent>
       </Card>
+      {/* Modal d'édition */}
+      <Dialog open={!!editingBanner} onOpenChange={() => setEditingBanner(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Modifier la bannière</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-1 block">Titre</label>
+              <Input
+                value={editForm.title}
+                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                placeholder="Titre de la bannière"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1 block">Description</label>
+              <Textarea
+                value={editForm.description}
+                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                placeholder="Description (optionnel)"
+                rows={2}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1 block">URL de destination</label>
+              <Input
+                value={editForm.target_url}
+                onChange={(e) => setEditForm({ ...editForm, target_url: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1 block">Image</label>
+              {editForm.image_url && (
+                <img src={editForm.image_url} alt="Preview" className="w-full h-32 object-cover rounded-lg mb-2" />
+              )}
+              <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-slate-50">
+                <Upload className="w-4 h-4" />
+                {uploading ? 'Upload en cours...' : 'Changer l\'image'}
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              </label>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setEditingBanner(null)}>
+                Annuler
+              </Button>
+              <Button 
+                onClick={handleSaveEdit}
+                disabled={updateBannerMutation.isPending}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                Enregistrer
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
