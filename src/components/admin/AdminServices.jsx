@@ -1146,9 +1146,9 @@ Provide accurate English translations.`,
         <CardContent>
           <div className="space-y-4">
             {paginatedServices.map((service) => (
-              <div key={service.id}>
+              <div key={service.id} className="mb-4">
                 <div
-                  className={`flex items-center justify-between p-4 border rounded-xl transition-colors ${
+                  className={`flex items-center justify-between p-4 border rounded-t-xl transition-colors ${
                     service.pending_revision
                       ? 'border-amber-400 bg-amber-50'
                       : 'border-slate-200 hover:bg-slate-50'
