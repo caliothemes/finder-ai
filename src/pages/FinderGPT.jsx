@@ -528,7 +528,7 @@ ${JSON.stringify(context.news, null, 0)}
           
           {/* Chat History - Horizontal under prompt */}
           {user && chatHistory.length > 0 && (
-            <div className="mt-2 md:mt-4 flex items-center gap-1.5 md:gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+            <div className="mt-2 md:mt-4 flex items-center gap-1.5 md:gap-2 overflow-x-auto pb-1 scrollbar-hide w-full">
               <button
                 onClick={startNewChat}
                 className="flex-shrink-0 px-2 md:px-3 py-1 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-[10px] md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
@@ -536,11 +536,11 @@ ${JSON.stringify(context.news, null, 0)}
                 <Plus className="w-3 h-3 md:w-4 md:h-4" />
                 {t('agent_new_chat')}
               </button>
-              {chatHistory.slice(0, 4).map((chat) => (
+              {chatHistory.slice(0, 3).map((chat) => (
                 <button
                   key={chat.id}
                   onClick={() => loadChat(chat)}
-                  className={`flex-shrink-0 px-2 md:px-3 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-all flex items-center gap-1 md:gap-2 max-w-[100px] md:max-w-[180px] group ${
+                  className={`flex-shrink-0 px-2 md:px-3 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-all flex items-center gap-1 md:gap-2 max-w-[80px] md:max-w-[180px] group ${
                     currentChatId === chat.id 
                       ? 'bg-purple-200 text-purple-800 border border-purple-400' 
                       : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50'
