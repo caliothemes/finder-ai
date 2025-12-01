@@ -45,47 +45,15 @@ export default function BannerManager() {
     enabled: !!user,
   });
 
-  // Récupérer les services soumis par l'utilisateur
-  const { data: submittedServices = [] } = useQuery({
-    queryKey: ['submittedServices', user?.email],
-    queryFn: () => base44.entities.AIService.filter({ submitted_by: user.email }),
-    enabled: !!user,
-  });
-
-  // Récupérer les services revendiqués (ownership claims approuvés)
-  const { data: claimedServiceIds = [] } = useQuery({
-    queryKey: ['claimedServices', user?.email],
+  // Récupérer TOUS les services approuvés (l'utilisateur peut promouvoir n'importe quel service)
+  const { data: myServices = [] } = useQuery({
+    queryKey: ['allApprovedServices'],
     queryFn: async () => {
-      const claims = await base44.entities.AIOwnershipClaim.filter({ 
-        user_email: user.email, 
-        status: 'approved' 
-      });
-      return claims.map(c => c.ai_service_id);
+      const services = await base44.entities.AIService.filter({ status: 'approved' }, 'name', 1000);
+      return services.sort((a, b) => a.name.localeCompare(b.name));
     },
     enabled: !!user,
   });
-
-  // Récupérer les détails des services revendiqués
-  const { data: claimedServices = [] } = useQuery({
-    queryKey: ['claimedServicesDetails', claimedServiceIds],
-    queryFn: async () => {
-      if (claimedServiceIds.length === 0) return [];
-      const allServices = await base44.entities.AIService.filter({ status: 'approved' });
-      return allServices.filter(s => claimedServiceIds.includes(s.id));
-    },
-    enabled: claimedServiceIds.length > 0,
-  });
-
-  // Combiner les services soumis et revendiqués (sans doublons)
-  const myServices = React.useMemo(() => {
-    const allServices = [...submittedServices];
-    claimedServices.forEach(cs => {
-      if (!allServices.find(s => s.id === cs.id)) {
-        allServices.push(cs);
-      }
-    });
-    return allServices.sort((a, b) => a.name.localeCompare(b.name));
-  }, [submittedServices, claimedServices]);
 
   const { data: myBanners = [] } = useQuery({
     queryKey: ['myBanners', proAccount?.id],
