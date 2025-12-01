@@ -63,6 +63,17 @@ export default function Admin() {
     refetchInterval: 30000,
   });
 
+  // Compter les découvertes IA à valider
+  const { data: pendingDiscoveriesCount = 0 } = useQuery({
+    queryKey: ['pendingDiscoveriesCount'],
+    queryFn: async () => {
+      const discoveries = await base44.entities.AIServiceDiscovery.filter({ status: 'new' });
+      return discoveries.length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
