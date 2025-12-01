@@ -353,7 +353,7 @@ FORMAT DE RÉPONSE:
                     <p>{message.content}</p>
                   ) : (
                     <ReactMarkdown
-                      className="prose prose-sm max-w-none prose-slate"
+                      className="prose prose-sm max-w-none prose-slate text-sm md:text-base"
                       components={{
                         a: ({ href, children }) => {
                           // Check if it's an internal link
