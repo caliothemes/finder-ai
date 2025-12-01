@@ -394,12 +394,12 @@ FORMAT DE RÉPONSE:
           )}
           
           {isLoading && (
-            <div className="flex gap-4 justify-start">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Bot className="w-5 h-5 text-white" />
+            <div className="flex gap-2 md:gap-4 justify-start">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </div>
-              <div className="bg-white border border-slate-200 rounded-2xl px-5 py-3">
-                <div className="flex items-center gap-2 text-slate-500">
+              <div className="bg-white border border-slate-200 rounded-xl md:rounded-2xl px-3 md:px-5 py-2.5 md:py-3">
+                <div className="flex items-center gap-2 text-slate-500 text-sm">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   {language === 'en' ? 'Thinking...' : 'Réflexion...'}
                 </div>
