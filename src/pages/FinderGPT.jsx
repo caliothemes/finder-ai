@@ -412,17 +412,17 @@ FORMAT DE RÉPONSE:
       </div>
 
       {/* Input Area */}
-      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-6 py-5">
+      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-3 md:px-6 py-3 md:py-5">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-          <div className="flex gap-3">
+          <div className="flex gap-2 md:gap-3">
             <div className="flex-1 relative">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={language === 'en' 
                   ? 'Ask me about AI tools...' 
-                  : 'Pose-moi une question sur les outils IA...'}
-                className="w-full resize-none min-h-[50px] max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-12"
+                  : 'Pose-moi une question...'}
+                className="w-full resize-none min-h-[44px] md:min-h-[50px] max-h-[120px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-10 md:pr-12 text-sm md:text-base"
                 rows={1}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -434,21 +434,21 @@ FORMAT DE RÉPONSE:
               <button
                 type="button"
                 onClick={toggleVoiceInput}
-                className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
+                className={`absolute right-2 md:right-3 top-1/2 -translate-y-1/2 p-1.5 md:p-2 rounded-full transition-all ${
                   isListening 
                     ? 'bg-red-100 text-red-600 animate-pulse' 
                     : 'hover:bg-purple-100 text-purple-600'
                 }`}
               >
-                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                {isListening ? <MicOff className="w-4 h-4 md:w-5 md:h-5" /> : <Mic className="w-4 h-4 md:w-5 md:h-5" />}
               </button>
             </div>
             <Button 
               type="submit" 
               disabled={isLoading || !input.trim()}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 md:px-6"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4 md:w-5 md:h-5" />
             </Button>
           </div>
           
