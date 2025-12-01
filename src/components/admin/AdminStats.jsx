@@ -344,36 +344,78 @@ export default function AdminStats() {
       </div>
 
       {/* Utilisateurs inscrits */}
-      <Card className="bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-cyan-500" />
+      <Card className="bg-gradient-to-br from-cyan-50 via-white to-blue-50 border-cyan-200 shadow-lg">
+        <CardHeader className="pb-4 border-b border-cyan-100">
+          <CardTitle className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
+              <UserCheck className="w-5 h-5 text-white" />
+            </div>
             Utilisateurs inscrits
+            <span className="ml-auto text-3xl font-bold text-cyan-600">{users.length}</span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-6">
-            <div>
-              <span className="text-3xl font-bold text-cyan-600">{users.length}</span>
-              <p className="text-xs text-slate-500">Total</p>
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-slate-600">
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
+              <span className="text-2xl font-bold text-blue-600">
                 {users.filter(u => new Date(u.created_date) >= todayStart).length}
               </span>
-              <p className="text-xs text-slate-500">Aujourd'hui</p>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Aujourd'hui</p>
             </div>
-            <div>
+            <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-200">
               <span className="text-2xl font-bold text-slate-600">
+                {users.filter(u => {
+                  const date = new Date(u.created_date);
+                  return date >= yesterdayStart && date < todayStart;
+                }).length}
+              </span>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Hier</p>
+            </div>
+            <div className="text-center p-3 bg-purple-50 rounded-xl border border-purple-100">
+              <span className="text-2xl font-bold text-purple-600">
                 {users.filter(u => new Date(u.created_date) >= weekStart).length}
               </span>
-              <p className="text-xs text-slate-500">Cette semaine</p>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Cette semaine</p>
             </div>
-            <div>
-              <span className="text-2xl font-bold text-slate-600">
+            <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span className="text-2xl font-bold text-gray-600">
+                {users.filter(u => {
+                  const date = new Date(u.created_date);
+                  return date >= lastWeekStart && date < weekStart;
+                }).length}
+              </span>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Sem. dernière</p>
+            </div>
+            <div className="text-center p-3 bg-orange-50 rounded-xl border border-orange-100">
+              <span className="text-2xl font-bold text-orange-600">
                 {users.filter(u => new Date(u.created_date) >= monthStart).length}
               </span>
-              <p className="text-xs text-slate-500">Ce mois</p>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Ce mois</p>
+            </div>
+            <div className="text-center p-3 bg-stone-50 rounded-xl border border-stone-200">
+              <span className="text-2xl font-bold text-stone-600">
+                {users.filter(u => {
+                  const date = new Date(u.created_date);
+                  return date >= lastMonthStart && date < monthStart;
+                }).length}
+              </span>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Mois dernier</p>
+            </div>
+            <div className="text-center p-3 bg-pink-50 rounded-xl border border-pink-100">
+              <span className="text-2xl font-bold text-pink-600">
+                {users.filter(u => {
+                  const threeMonthsAgo = new Date(todayStart);
+                  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                  return new Date(u.created_date) >= threeMonthsAgo;
+                }).length}
+              </span>
+              <p className="text-xs text-slate-600 mt-1 font-medium">3 derniers mois</p>
+            </div>
+            <div className="text-center p-3 bg-cyan-50 rounded-xl border border-cyan-100">
+              <span className="text-2xl font-bold text-cyan-600">
+                {users.filter(u => new Date(u.created_date) >= yearStart).length}
+              </span>
+              <p className="text-xs text-slate-600 mt-1 font-medium">Cette année</p>
             </div>
           </div>
         </CardContent>
