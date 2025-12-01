@@ -252,7 +252,13 @@ ${JSON.stringify(context.news, null, 0)}
    - Dis que tu n'as pas trouvé d'outil spécifique mais suggère d'explorer les catégories proches
    - Propose de soumettre un nouvel outil si l'utilisateur en connaît un
 
-8. TOUJOURS terminer par un lien FinderAI pertinent ou une invitation à explorer`;
+8. TOUJOURS terminer par un lien FinderAI pertinent ou une invitation à explorer
+
+9. ⚠️ LIENS EXTERNES INTERDITS:
+   - Ne JAMAIS utiliser finderai.com ou tout autre domaine externe
+   - Le SEUL site officiel est finder-ai.app
+   - Utilise UNIQUEMENT les liens internes comme [Explorer](Explore), [Catégories](Categories), etc.
+   - Pour les outils: [**Nom**](AIDetail?slug=SLUG) - PAS de liens externes`;
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
