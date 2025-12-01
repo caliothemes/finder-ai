@@ -88,6 +88,36 @@ export default function FinderGPT() {
     setMessages([]);
   };
 
+  // Voice input
+  const toggleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert(language === 'en' ? 'Speech recognition not supported in this browser' : 'La reconnaissance vocale n\'est pas supportée par ce navigateur');
+      return;
+    }
+    
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = language === 'en' ? 'en-US' : 'fr-FR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(prev => prev + (prev ? ' ' : '') + transcript);
+    };
+
+    recognition.start();
+  };
+
   // Fetch AI Services and News for context
   const { data: services = [] } = useQuery({
     queryKey: ['gptServices'],
@@ -218,91 +248,30 @@ FORMAT DE RÉPONSE:
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex">
-      {/* Sidebar - Chat History */}
-      {user && (
-        <div className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 bg-white border-r border-slate-200 flex flex-col overflow-hidden`}>
-          <div className="p-4 border-b border-slate-200">
-            <Button 
-              onClick={startNewChat}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {language === 'en' ? 'New Chat' : 'Nouveau chat'}
-            </Button>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 px-6 py-4">
+        <div className="max-w-4xl mx-auto flex items-center gap-3">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
+            <Bot className="w-7 h-7 text-white" />
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {chatHistory.length === 0 ? (
-              <p className="text-sm text-slate-500 text-center py-4">
-                {language === 'en' ? 'No chat history yet' : 'Aucun historique'}
-              </p>
-            ) : (
-              chatHistory.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`group flex items-center gap-2 p-3 rounded-xl cursor-pointer transition-all ${
-                    currentChatId === chat.id 
-                      ? 'bg-purple-100 border border-purple-300' 
-                      : 'hover:bg-slate-100 border border-transparent'
-                  }`}
-                  onClick={() => loadChat(chat)}
-                >
-                  <MessageSquare className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                  <span className="flex-1 text-sm text-slate-700 truncate">
-                    {chat.title || 'Nouveau chat'}
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (confirm(language === 'en' ? 'Delete this chat?' : 'Supprimer ce chat ?')) {
-                        deleteChatMutation.mutate(chat.id);
-                      }
-                    }}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all"
-                  >
-                    <Trash2 className="w-4 h-4 text-red-500" />
-                  </button>
-                </div>
-              ))
-            )}
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              FinderAI-GPT
+              <Sparkles className="w-5 h-5 text-yellow-500" />
+            </h1>
+            <p className="text-sm text-slate-600">
+              {language === 'en' 
+                ? 'Your AI expert to find the perfect tool' 
+                : 'Ton expert IA pour trouver l\'outil parfait'}
+            </p>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-6 py-4">
-          <div className="max-w-4xl mx-auto flex items-center gap-3">
-            {user && (
-              <button 
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors lg:hidden"
-              >
-                {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            )}
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
-              <Bot className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                FinderAI-GPT
-                <Sparkles className="w-5 h-5 text-yellow-500" />
-              </h1>
-              <p className="text-sm text-slate-600">
-                {language === 'en' 
-                  ? 'Your AI expert to find the perfect tool' 
-                  : 'Ton expert IA pour trouver l\'outil parfait'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="max-w-4xl mx-auto space-y-6">
+      {/* Chat Area */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {messages.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -406,21 +375,22 @@ FORMAT DE RÉPONSE:
             </div>
           )}
           
-            <div ref={messagesEndRef} />
-          </div>
+          <div ref={messagesEndRef} />
         </div>
+      </div>
 
-        {/* Input Area */}
-        <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-6 py-5">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="flex gap-3">
+      {/* Input Area */}
+      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-6 py-5">
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+          <div className="flex gap-3">
+            <div className="flex-1 relative">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={language === 'en' 
                   ? 'Ask me about AI tools...' 
                   : 'Pose-moi une question sur les outils IA...'}
-                className="flex-1 resize-none min-h-[50px] max-h-[150px] bg-white border-purple-200 focus:border-purple-400"
+                className="w-full resize-none min-h-[50px] max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-12"
                 rows={1}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -429,25 +399,75 @@ FORMAT DE RÉPONSE:
                   }
                 }}
               />
-              <Button 
-                type="submit" 
-                disabled={isLoading || !input.trim()}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6"
+              <button
+                type="button"
+                onClick={toggleVoiceInput}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
+                  isListening 
+                    ? 'bg-red-100 text-red-600 animate-pulse' 
+                    : 'hover:bg-purple-100 text-purple-600'
+                }`}
               >
-                <Send className="w-5 h-5" />
-              </Button>
+                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              </button>
             </div>
-            <p className="text-xs text-purple-600 mt-2 text-center">
-              {user 
-                ? (language === 'en' 
-                    ? '✨ Your conversations are saved automatically' 
-                    : '✨ Tes conversations sont sauvegardées automatiquement')
-                : (language === 'en' 
-                    ? 'Log in to save your chat history' 
-                    : 'Connecte-toi pour sauvegarder ton historique')}
-            </p>
-          </form>
-        </div>
+            <Button 
+              type="submit" 
+              disabled={isLoading || !input.trim()}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6"
+            >
+              <Send className="w-5 h-5" />
+            </Button>
+          </div>
+          
+          {/* Chat History - Horizontal under prompt */}
+          {user && chatHistory.length > 0 && (
+            <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-2">
+              <button
+                onClick={startNewChat}
+                className="flex-shrink-0 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
+              >
+                <Plus className="w-4 h-4" />
+                {language === 'en' ? 'New' : 'Nouveau'}
+              </button>
+              {chatHistory.slice(0, 8).map((chat) => (
+                <button
+                  key={chat.id}
+                  onClick={() => loadChat(chat)}
+                  className={`flex-shrink-0 px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 max-w-[180px] group ${
+                    currentChatId === chat.id 
+                      ? 'bg-purple-200 text-purple-800 border border-purple-400' 
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50'
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{chat.title || 'Chat'}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm(language === 'en' ? 'Delete?' : 'Supprimer ?')) {
+                        deleteChatMutation.mutate(chat.id);
+                      }
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-0.5 hover:bg-red-100 rounded transition-all flex-shrink-0"
+                  >
+                    <Trash2 className="w-3 h-3 text-red-500" />
+                  </button>
+                </button>
+              ))}
+            </div>
+          )}
+          
+          <p className="text-xs text-purple-600 mt-2 text-center">
+            {user 
+              ? (language === 'en' 
+                  ? '✨ Your conversations are saved automatically' 
+                  : '✨ Tes conversations sont sauvegardées automatiquement')
+              : (language === 'en' 
+                  ? 'Log in to save your chat history' 
+                  : 'Connecte-toi pour sauvegarder ton historique')}
+          </p>
+        </form>
       </div>
     </div>
   );
