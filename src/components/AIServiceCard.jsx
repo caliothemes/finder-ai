@@ -156,8 +156,8 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
           </div>
           <Popover open={pricingOpen} onOpenChange={setPricingOpen}>
             <PopoverTrigger asChild>
-              <button className="focus:outline-none">
-                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
+              <button className="focus:outline-none flex-shrink-0">
+                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1 whitespace-nowrap`}>
                   {getPricingLabel(service.pricing)}
                   <Info className="w-3 h-3" />
                 </Badge>
