@@ -143,7 +143,8 @@ export default function FinderGPT() {
   }, [messages]);
 
   const buildContext = () => {
-    const servicesContext = services.slice(0, 100).map(s => ({
+    // Inclure TOUS les services pour une meilleure recherche
+    const servicesContext = services.map(s => ({
       name: s.name,
       slug: s.slug,
       description: language === 'en' && s.description_en ? s.description_en : s.description,
@@ -152,10 +153,11 @@ export default function FinderGPT() {
       pricing: s.pricing,
       rating: s.average_rating,
       tags: s.tags,
-      website: s.website_url
+      website: s.website_url,
+      features: language === 'en' && s.features_en ? s.features_en : s.features
     }));
 
-    const newsContext = news.slice(0, 20).map(n => ({
+    const newsContext = news.slice(0, 30).map(n => ({
       title: language === 'en' && n.title_en ? n.title_en : n.title,
       slug: n.slug,
       summary: language === 'en' && n.summary_en ? n.summary_en : n.summary,
