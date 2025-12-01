@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock, X } from 'lucide-react';
+import { Calendar, Image as ImageIcon, Plus, CheckCircle, Clock, X, Tag } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import BannerCalendar from '@/components/banners/BannerCalendar';
@@ -16,8 +17,9 @@ export default function BannerManager() {
   const [user, setUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero'
+    ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero', badges: []
   });
+  const [badgeInput, setBadgeInput] = useState('');
   const [selectedDates, setSelectedDates] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [reservingBanner, setReservingBanner] = useState(null);
@@ -73,7 +75,7 @@ export default function BannerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myBanners'] });
       setShowForm(false);
-      setFormData({ ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero' });
+      setFormData({ ai_service_id: '', title: '', description: '', image_url: '', target_url: '', position: 'homepage_hero', badges: [] });
       setSelectedDates([]);
       toast.success('Bannière soumise pour validation');
     },
@@ -182,17 +184,88 @@ export default function BannerManager() {
                   required
                 />
 
-                {/* Champ description pour les formats card (sidebar) */}
-                {(formData.position === 'homepage_sidebar' || formData.position === 'explore_sidebar') && (
+                {/* Champ description pour les formats card (sidebar) et article (hero/explore_top) */}
+                {(formData.position === 'homepage_sidebar' || formData.position === 'explore_sidebar' || formData.position === 'homepage_hero' || formData.position === 'explore_top') && (
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Description (affiché sous l'image)</label>
-                    <textarea
-                      placeholder="Décrivez votre service en quelques lignes..."
+                    <label className="text-sm font-medium mb-2 block">
+                      {(formData.position === 'homepage_hero' || formData.position === 'explore_top') 
+                        ? "Description de l'article (affiché à côté de l'image)" 
+                        : "Description (affiché sous l'image)"}
+                    </label>
+                    <Textarea
+                      placeholder={
+                        (formData.position === 'homepage_hero' || formData.position === 'explore_top')
+                          ? "Rédigez un texte accrocheur pour présenter votre service IA..."
+                          : "Décrivez votre service en quelques lignes..."
+                      }
                       value={formData.description}
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[80px]"
+                      className="min-h-[100px]"
                       required
                     />
+                  </div>
+                )}
+
+                {/* Badges pour les formats sidebar uniquement */}
+                {(formData.position === 'homepage_sidebar' || formData.position === 'explore_sidebar') && (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block flex items-center gap-2">
+                      <Tag className="w-4 h-4" />
+                      Badges (max 2)
+                    </label>
+                    <p className="text-xs text-slate-500 mb-2">Ajoutez jusqu'à 2 badges courts pour mettre en avant des points forts (ex: "IA Française", "Gratuit", "Nouveau")</p>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {(formData.badges || []).map((badge, idx) => (
+                        <Badge key={idx} className="bg-purple-100 text-purple-700 flex items-center gap-1">
+                          {badge}
+                          <button
+                            type="button"
+                            onClick={() => setFormData({
+                              ...formData, 
+                              badges: formData.badges.filter((_, i) => i !== idx)
+                            })}
+                            className="hover:text-red-500"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    {(formData.badges || []).length < 2 && (
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Ex: IA Française"
+                          value={badgeInput}
+                          onChange={(e) => setBadgeInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && badgeInput.trim()) {
+                              e.preventDefault();
+                              setFormData({
+                                ...formData,
+                                badges: [...(formData.badges || []), badgeInput.trim()]
+                              });
+                              setBadgeInput('');
+                            }
+                          }}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (badgeInput.trim()) {
+                              setFormData({
+                                ...formData,
+                                badges: [...(formData.badges || []), badgeInput.trim()]
+                              });
+                              setBadgeInput('');
+                            }
+                          }}
+                        >
+                          Ajouter
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
 
