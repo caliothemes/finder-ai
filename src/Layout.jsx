@@ -243,7 +243,7 @@ function LayoutContent({ children, currentPageName }) {
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
         {/* Logo Section */}
-        <div className="p-6 border-b border-slate-200 flex flex-col items-center justify-center">
+          <div className="p-4 border-b border-slate-200 flex flex-col items-center justify-center">
           <div className="relative inline-flex items-center justify-center mb-2">
                             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative w-[80px] h-[80px] flex items-center justify-center">
                               {/* Glow effect externe */}
