@@ -1234,6 +1234,9 @@ Provide accurate English translations.`,
                     </Button>
                   </div>
                 </div>
+
+                {/* Stats Accordion */}
+                <ServiceStatsAccordion service={service} />
                 
                 {/* Inline Edit Form - Full Screen Modal on Mobile */}
                 {editingService?.id === service.id && (
