@@ -454,25 +454,25 @@ FORMAT DE RÉPONSE:
           
           {/* Chat History - Horizontal under prompt */}
           {user && chatHistory.length > 0 && (
-            <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-2">
+            <div className="mt-3 md:mt-4 flex items-center gap-2 overflow-x-auto pb-2 -mx-1 px-1">
               <button
                 onClick={startNewChat}
-                className="flex-shrink-0 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
+                className="flex-shrink-0 px-2.5 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg md:rounded-xl text-xs md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 {language === 'en' ? 'New' : 'Nouveau'}
               </button>
-              {chatHistory.slice(0, 8).map((chat) => (
+              {chatHistory.slice(0, 5).map((chat) => (
                 <button
                   key={chat.id}
                   onClick={() => loadChat(chat)}
-                  className={`flex-shrink-0 px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 max-w-[180px] group ${
+                  className={`flex-shrink-0 px-2.5 md:px-3 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-medium transition-all flex items-center gap-1.5 md:gap-2 max-w-[140px] md:max-w-[180px] group ${
                     currentChatId === chat.id 
                       ? 'bg-purple-200 text-purple-800 border border-purple-400' 
                       : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50'
                   }`}
                 >
-                  <MessageSquare className="w-4 h-4 flex-shrink-0" />
+                  <MessageSquare className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                   <span className="truncate">{chat.title || 'Chat'}</span>
                   <button
                     onClick={(e) => {
@@ -490,14 +490,14 @@ FORMAT DE RÉPONSE:
             </div>
           )}
           
-          <p className="text-xs text-purple-600 mt-2 text-center">
+          <p className="text-[10px] md:text-xs text-purple-600 mt-2 text-center">
             {user 
               ? (language === 'en' 
-                  ? '✨ Your conversations are saved automatically' 
-                  : '✨ Tes conversations sont sauvegardées automatiquement')
+                  ? '✨ Conversations saved automatically' 
+                  : '✨ Conversations sauvegardées')
               : (language === 'en' 
-                  ? 'Log in to save your chat history' 
-                  : 'Connecte-toi pour sauvegarder ton historique')}
+                  ? 'Log in to save your history' 
+                  : 'Connecte-toi pour sauvegarder')}
           </p>
         </form>
       </div>
