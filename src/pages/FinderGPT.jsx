@@ -380,7 +380,7 @@ ${JSON.stringify(context.news, null, 0)}
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-2 md:px-6 py-3 md:py-6">
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-6">
         <div className="max-w-4xl mx-auto space-y-3 md:space-y-6">
             {messages.length === 0 ? (
             <div className="text-center py-4 md:py-12 px-2">
