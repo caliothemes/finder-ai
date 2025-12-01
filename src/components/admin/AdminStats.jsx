@@ -127,7 +127,7 @@ export default function AdminStats() {
   return (
     <div className="space-y-6">
       {/* Visiteurs en temps réel */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
@@ -142,6 +142,22 @@ export default function AdminStats() {
               <span className="text-sm text-slate-500">visiteurs actifs</span>
             </div>
             <p className="text-xs text-slate-400 mt-2">Dernières 5 minutes</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-slate-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-slate-500" />
+              Hier
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-slate-600">{uniqueVisitorsYesterday}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsYesterday} pages vues</p>
           </CardContent>
         </Card>
 
