@@ -84,14 +84,28 @@ export default function AdminStats() {
   });
   const uniqueVisitorsYesterday = new Set(visitorsYesterday.map(v => v.visitor_id)).size;
   const visitorsWeek = getUniqueVisitors(pageViews, weekStart);
+  const visitorsLastWeek = pageViews.filter(v => {
+    const date = new Date(v.created_date);
+    return date >= lastWeekStart && date < weekStart;
+  });
+  const uniqueVisitorsLastWeek = new Set(visitorsLastWeek.map(v => v.visitor_id)).size;
   const visitorsMonth = getUniqueVisitors(pageViews, monthStart);
+  const visitorsLastMonth = pageViews.filter(v => {
+    const date = new Date(v.created_date);
+    return date >= lastMonthStart && date < monthStart;
+  });
+  const uniqueVisitorsLastMonth = new Set(visitorsLastMonth.map(v => v.visitor_id)).size;
+  const visitorsYear = getUniqueVisitors(pageViews, yearStart);
   const visitorsNow = getUniqueVisitors(pageViews, last5Minutes);
 
   // Pages vues par période
   const viewsToday = pageViews.filter(v => new Date(v.created_date) >= todayStart).length;
   const viewsYesterday = visitorsYesterday.length;
   const viewsWeek = pageViews.filter(v => new Date(v.created_date) >= weekStart).length;
+  const viewsLastWeek = visitorsLastWeek.length;
   const viewsMonth = pageViews.filter(v => new Date(v.created_date) >= monthStart).length;
+  const viewsLastMonth = visitorsLastMonth.length;
+  const viewsYear = pageViews.filter(v => new Date(v.created_date) >= yearStart).length;
 
   // Top pages visitées aujourd'hui
   const todayViews = pageViews.filter(v => new Date(v.created_date) >= todayStart);
