@@ -260,6 +260,113 @@ ${JSON.stringify(context.news, null, 0)}
     "Quelles sont les dernières actualités IA ?"
   ];
 
+  // Show login prompt for non-authenticated users
+  if (authChecked && !user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4">
+          <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Bot className="w-5 h-5 md:w-7 md:h-7 text-white" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
+                Agent FinderAI
+                <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
+              </h1>
+              <p className="text-xs md:text-sm text-slate-600 truncate">
+                {language === 'en' 
+                  ? 'Your AI expert to find the perfect tool' 
+                  : 'Ton expert IA pour trouver l\'outil parfait'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Login Prompt */}
+        <div className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="max-w-md w-full text-center">
+            <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+              <Bot className="w-12 h-12 text-white" />
+            </div>
+            
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              {language === 'en' 
+                ? 'Create your free account' 
+                : 'Crée ton compte gratuit'}
+            </h2>
+            
+            <p className="text-slate-600 mb-6">
+              {language === 'en'
+                ? 'Sign up in 20 seconds to access Agent FinderAI and discover thousands of AI tools!'
+                : 'Inscris-toi en 20 secondes pour accéder à Agent FinderAI et découvrir des milliers d\'outils IA !'}
+            </p>
+
+            {/* Features */}
+            <div className="grid grid-cols-1 gap-3 mb-8 text-left">
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Zap className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-slate-900">
+                    {language === 'en' ? 'Instant AI Recommendations' : 'Recommandations IA instantanées'}
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {language === 'en' ? 'Find the perfect tool in seconds' : 'Trouve l\'outil parfait en secondes'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200">
+                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Heart className="w-5 h-5 text-pink-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-slate-900">
+                    {language === 'en' ? 'Save your favorites' : 'Sauvegarde tes favoris'}
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {language === 'en' ? 'Keep track of tools you love' : 'Garde une trace des outils que tu aimes'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-slate-900">
+                    {language === 'en' ? 'Chat history saved' : 'Historique de chat sauvegardé'}
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {language === 'en' ? 'Resume conversations anytime' : 'Reprends tes conversations à tout moment'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => base44.auth.redirectToLogin()}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg rounded-xl shadow-lg"
+            >
+              <LogIn className="w-5 h-5 mr-2" />
+              {language === 'en' ? 'Sign up for free' : 'S\'inscrire gratuitement'}
+            </Button>
+            
+            <p className="text-xs text-slate-500 mt-4">
+              {language === 'en' 
+                ? '✨ 100% free • No credit card required • Access in 20 seconds'
+                : '✨ 100% gratuit • Pas de carte bancaire • Accès en 20 secondes'}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       {/* Header */}
