@@ -143,27 +143,29 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
         </p>
 
         {/* Meta info */}
-        <div className="flex items-center justify-between mb-4 text-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">{service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}</span>
-            </div>
-            <div className="flex items-center gap-1 text-slate-500">
-              <Eye className="w-4 h-4" />
-              <span>{service.views || 0}</span>
-            </div>
+        <div className="flex items-center gap-3 mb-3 text-sm">
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <span className="font-semibold">{service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}</span>
           </div>
+          <div className="flex items-center gap-1 text-slate-500">
+            <Eye className="w-4 h-4" />
+            <span>{service.views || 0}</span>
+          </div>
+        </div>
+
+        {/* Pricing badge on its own line */}
+        <div className="mb-4">
           <Popover open={pricingOpen} onOpenChange={setPricingOpen}>
             <PopoverTrigger asChild>
-              <button className="focus:outline-none flex-shrink-0">
-                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1 whitespace-nowrap`}>
+              <button className="focus:outline-none">
+                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
                   {getPricingLabel(service.pricing)}
                   <Info className="w-3 h-3" />
                 </Badge>
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-3" align="end">
+            <PopoverContent className="w-64 p-3" align="start">
               <div className="space-y-2">
                 <div className="font-semibold text-sm">{getPricingLabel(service.pricing)}</div>
                 <div className="text-xs text-slate-600">{getPricingDescription(service.pricing)}</div>
