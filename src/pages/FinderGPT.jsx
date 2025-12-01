@@ -36,6 +36,58 @@ export default function FinderGPT() {
     loadUser();
   }, []);
 
+  // Fetch chat history for logged in users
+  const { data: chatHistory = [] } = useQuery({
+    queryKey: ['gptChatHistory', user?.email],
+    queryFn: () => base44.entities.GPTChat.filter({ user_email: user.email }, '-updated_date', 50),
+    enabled: !!user?.email,
+  });
+
+  // Save chat mutation
+  const saveChatMutation = useMutation({
+    mutationFn: async ({ chatId, messages, title }) => {
+      if (chatId) {
+        await base44.entities.GPTChat.update(chatId, { messages, title });
+        return chatId;
+      } else {
+        const newChat = await base44.entities.GPTChat.create({
+          user_email: user.email,
+          messages,
+          title: title || messages[0]?.content?.slice(0, 50) + '...'
+        });
+        return newChat.id;
+      }
+    },
+    onSuccess: (id) => {
+      setCurrentChatId(id);
+      queryClient.invalidateQueries({ queryKey: ['gptChatHistory'] });
+    }
+  });
+
+  // Delete chat mutation
+  const deleteChatMutation = useMutation({
+    mutationFn: (id) => base44.entities.GPTChat.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gptChatHistory'] });
+      if (currentChatId) {
+        setCurrentChatId(null);
+        setMessages([]);
+      }
+    }
+  });
+
+  // Load a chat from history
+  const loadChat = (chat) => {
+    setCurrentChatId(chat.id);
+    setMessages(chat.messages || []);
+  };
+
+  // Start new chat
+  const startNewChat = () => {
+    setCurrentChatId(null);
+    setMessages([]);
+  };
+
   // Fetch AI Services and News for context
   const { data: services = [] } = useQuery({
     queryKey: ['gptServices'],
