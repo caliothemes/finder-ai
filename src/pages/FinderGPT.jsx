@@ -182,7 +182,17 @@ FORMAT DE RÉPONSE:
         add_context_from_internet: true,
       });
 
-      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      const newMessages = [...messages, { role: 'user', content: userMessage }, { role: 'assistant', content: response }];
+      setMessages(newMessages);
+      
+      // Save chat for logged in users
+      if (user) {
+        saveChatMutation.mutate({
+          chatId: currentChatId,
+          messages: newMessages,
+          title: newMessages[0]?.content?.slice(0, 50)
+        });
+      }
     } catch (error) {
       setMessages(prev => [...prev, { 
         role: 'assistant', 
