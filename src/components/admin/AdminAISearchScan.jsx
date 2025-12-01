@@ -123,6 +123,7 @@ export default function AdminAISearchScan() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [isGeneratingTags, setIsGeneratingTags] = useState(false);
 
   const handleApprove = (discovery) => {
     if (!discovery.name || !discovery.website_url) {
