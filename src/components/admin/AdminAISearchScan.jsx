@@ -251,9 +251,55 @@ export default function AdminAISearchScan() {
         </Card>
       </div>
 
+      {/* Pagination Top */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between bg-white p-4 rounded-xl border">
+          <span className="text-sm text-slate-600">
+            Affichage {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredDiscoveries.length)} sur {filteredDiscoveries.length}
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              «
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              ‹
+            </Button>
+            <span className="px-3 py-1 text-sm font-medium">
+              Page {currentPage} / {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              ›
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              »
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Discoveries List */}
       <div className="space-y-4">
-        {filteredDiscoveries.map((discovery) => (
+        {paginatedDiscoveries.map((discovery) => (
           <Card key={discovery.id} className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-slate-50 to-purple-50">
               <div className="flex items-start justify-between">
