@@ -15,7 +15,7 @@ export default function AdminServices() {
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({
     name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', 
-    features: [], features_en: [], categories: [],
+    features: [], features_en: [], categories: [], tags: [],
     pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: ''
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
