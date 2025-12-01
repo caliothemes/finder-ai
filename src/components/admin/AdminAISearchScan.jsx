@@ -115,6 +115,10 @@ export default function AdminAISearchScan() {
     });
   };
 
+  const [approveFormData, setApproveFormData] = useState({});
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+
   const handleApprove = (discovery) => {
     if (!discovery.name || !discovery.website_url) {
       toast.error('Nom et URL sont requis');
@@ -122,6 +126,40 @@ export default function AdminAISearchScan() {
     }
     setApprovingDiscovery(discovery);
     setSelectedCategories(discovery.suggested_categories || []);
+    setApproveFormData({
+      name: discovery.name || '',
+      tagline: discovery.tagline || '',
+      tagline_en: '',
+      description: discovery.description || '',
+      description_en: '',
+      website_url: discovery.website_url || '',
+      pricing: discovery.suggested_pricing || 'freemium',
+      logo_url: discovery.logo_url || '',
+      cover_image_url: discovery.cover_image_url || '',
+      features: discovery.features || [],
+      features_en: [],
+      tags: discovery.tags || [],
+    });
+  };
+
+  const handleImageUpload = async (file, type) => {
+    if (!file) return;
+    if (type === 'logo') setUploadingLogo(true);
+    else setUploadingCover(true);
+    
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setApproveFormData(prev => ({
+        ...prev,
+        [type === 'logo' ? 'logo_url' : 'cover_image_url']: file_url
+      }));
+      toast.success('Image uploadée');
+    } catch (error) {
+      toast.error('Erreur upload');
+    } finally {
+      if (type === 'logo') setUploadingLogo(false);
+      else setUploadingCover(false);
+    }
   };
 
   const [filter, setFilter] = useState('all');
