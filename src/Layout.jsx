@@ -194,9 +194,12 @@ function LayoutContent({ children, currentPageName }) {
       loadUser();
     }, []);
 
-    // Tracking des visites
+    // Tracking des visites (exclure les admins)
     useEffect(() => {
       const trackPageView = async () => {
+        // Ne pas tracker les visites des admins
+        if (user?.role === 'admin') return;
+
         // Générer ou récupérer un ID visiteur unique
         let visitorId = localStorage.getItem('visitor_id');
         if (!visitorId) {
@@ -225,7 +228,7 @@ function LayoutContent({ children, currentPageName }) {
       };
 
       trackPageView();
-    }, [location.pathname, currentPageName]);
+    }, [location.pathname, currentPageName, user]);
 
   const handleLogout = async () => {
     await base44.auth.logout();
