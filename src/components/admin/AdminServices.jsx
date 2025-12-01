@@ -29,6 +29,7 @@ export default function AdminServices() {
   const [translationProgress, setTranslationProgress] = useState({ current: 0, total: 0 });
   const [generatingCovers, setGeneratingCovers] = useState(false);
   const [coverProgress, setCoverProgress] = useState({ current: 0, total: 0 });
+  const [generatingTags, setGeneratingTags] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const itemsPerPage = 20;
