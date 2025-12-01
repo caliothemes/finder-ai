@@ -120,9 +120,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Bannière Homepage Sidebar en format card (ou placeholder si pas active) */}
-          <ActiveBanner position="homepage_sidebar" showPlaceholder={true} />
-
           {displayedServices.slice(0, 4).map((service) => (
             <div
               key={service.id}
@@ -265,6 +262,9 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 </div>
                 </div>
                 ))}
+
+          {/* Bannière Homepage Sidebar en format card (ou placeholder si pas active) - Position 5 (milieu 2ème ligne) */}
+          <ActiveBanner position="homepage_sidebar" showPlaceholder={true} />
 
           {displayedServices.slice(4).map((service) => (
             <div
