@@ -1335,6 +1335,86 @@ Provide accurate English translations.`,
                           onChange={(e) => setFormData({...formData, website_url: e.target.value})}
                         />
 
+                        {/* Features FR */}
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇫🇷 Fonctionnalités (Français)</label>
+                          <div className="space-y-2">
+                            {(formData.features || []).map((feature, idx) => (
+                              <div key={idx} className="flex gap-2">
+                                <Input
+                                  value={feature}
+                                  onChange={(e) => {
+                                    const newFeatures = [...formData.features];
+                                    newFeatures[idx] = e.target.value;
+                                    setFormData({...formData, features: newFeatures});
+                                  }}
+                                  placeholder={`Fonctionnalité ${idx + 1}`}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="icon"
+                                  onClick={() => {
+                                    const newFeatures = formData.features.filter((_, i) => i !== idx);
+                                    setFormData({...formData, features: newFeatures});
+                                  }}
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setFormData({...formData, features: [...(formData.features || []), '']})}
+                            >
+                              <Plus className="w-4 h-4 mr-1" />
+                              Ajouter une fonctionnalité
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Features EN */}
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🇬🇧 Fonctionnalités (English)</label>
+                          <div className="space-y-2">
+                            {(formData.features_en || []).map((feature, idx) => (
+                              <div key={idx} className="flex gap-2">
+                                <Input
+                                  value={feature}
+                                  onChange={(e) => {
+                                    const newFeatures = [...formData.features_en];
+                                    newFeatures[idx] = e.target.value;
+                                    setFormData({...formData, features_en: newFeatures});
+                                  }}
+                                  placeholder={`Feature ${idx + 1}`}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="icon"
+                                  onClick={() => {
+                                    const newFeatures = formData.features_en.filter((_, i) => i !== idx);
+                                    setFormData({...formData, features_en: newFeatures});
+                                  }}
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setFormData({...formData, features_en: [...(formData.features_en || []), '']})}
+                            >
+                              <Plus className="w-4 h-4 mr-1" />
+                              Add a feature
+                            </Button>
+                          </div>
+                        </div>
+
                         {/* Sticky footer buttons */}
                         <div className="sticky bottom-0 bg-white pt-4 pb-2 -mx-4 sm:-mx-6 px-4 sm:px-6 border-t mt-4">
                           <div className="flex gap-2">
