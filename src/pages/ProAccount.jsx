@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Crown, Sparkles, Check, Zap, TrendingUp, Image, Calendar, CreditCard, LayoutGrid, Loader2, XCircle, CheckCircle } from 'lucide-react';
+import { bannerPositions } from '@/components/banners/bannerPositions';
 import {
   Dialog,
   DialogContent,
