@@ -10,7 +10,7 @@ import MemberInviteCard from '@/components/sidebar/MemberInviteCard';
 import { 
         Menu, X, User, Heart, 
         LogOut, LogIn, PlusCircle, Crown, Search,
-        Home, Compass, Grid3X3, Newspaper
+        Home, Compass, Grid3X3, Newspaper, Sparkles
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -320,13 +320,20 @@ function LayoutContent({ children, currentPageName }) {
             <NewItemsBadge count={newItems.explore} />
           </Link>
           <Link
-            to={createPageUrl('Categories')}
-            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-          >
-            <Grid3X3 className="w-4 h-4" />
-            {t('nav_categories')}
-            <NewItemsBadge count={newItems.categories} />
-          </Link>
+                            to={createPageUrl('Categories')}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                          >
+                            <Grid3X3 className="w-4 h-4" />
+                            {t('nav_categories')}
+                            <NewItemsBadge count={newItems.categories} />
+                          </Link>
+                          <Link
+                            to={createPageUrl('FinderGPT')}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                          >
+                            <Sparkles className="w-4 h-4" />
+                            {t('nav_finder_gpt')}
+                          </Link>
           <Link
                             to={createPageUrl('AINews')}
                             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
