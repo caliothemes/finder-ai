@@ -49,8 +49,8 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     if (!service.created_date) return false;
     const createdDate = new Date(service.created_date);
     const now = new Date();
-    const diffDays = (now - createdDate) / (1000 * 60 * 60 * 24);
-    return diffDays <= 7;
+    const diffDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
+    return diffDays < 7;
   };
 
   const getPricingBadge = (pricing) => {
