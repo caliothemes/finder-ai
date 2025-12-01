@@ -6,6 +6,7 @@ import CategoryGrid from '@/components/home/CategoryGrid';
 import FeaturedAI from '@/components/home/FeaturedAI';
 import NewsletterSection from '@/components/home/NewsletterSection';
 import LatestNews from '@/components/home/LatestNews';
+import AgentFinderAIPromo from '@/components/home/AgentFinderAIPromo';
 import { Loader2, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -118,6 +119,9 @@ export default function Home() {
         finderReviews={finderReviews}
         onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
       />
+
+      {/* Agent FinderAI Promo */}
+      <AgentFinderAIPromo />
 
       {/* Latest AI News */}
       <LatestNews />
