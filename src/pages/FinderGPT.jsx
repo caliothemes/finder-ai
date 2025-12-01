@@ -411,25 +411,25 @@ ${JSON.stringify(context.news, null, 0)}
             messages.map((message, i) => (
               <div
                 key={i}
-                className={`flex gap-2 md:gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-1.5 md:gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'assistant' && (
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                  <div className="w-6 h-6 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-md md:rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Bot className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" />
                   </div>
                 )}
                 <div
-                  className={`max-w-[85%] md:max-w-[80%] rounded-xl md:rounded-2xl px-3 md:px-5 py-2.5 md:py-3 ${
+                  className={`max-w-[80%] md:max-w-[80%] rounded-lg md:rounded-2xl px-2.5 md:px-5 py-2 md:py-3 ${
                     message.role === 'user'
-                      ? 'bg-purple-600 text-white'
+                      ? 'bg-purple-600 text-white text-sm'
                       : 'bg-white border border-slate-200 text-slate-700'
                   }`}
                 >
                   {message.role === 'user' ? (
-                    <p>{message.content}</p>
+                    <p className="text-sm">{message.content}</p>
                   ) : (
                     <ReactMarkdown
-                      className="prose prose-sm max-w-none prose-slate text-sm md:text-base"
+                      className="prose prose-sm max-w-none prose-slate text-xs md:text-base [&>p]:mb-1.5 [&>ul]:mb-1.5 [&>ul]:space-y-0.5"
                       components={{
                         a: ({ href, children }) => {
                           // Check if it's an internal link
@@ -450,9 +450,9 @@ ${JSON.stringify(context.news, null, 0)}
                             </a>
                           );
                         },
-                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                        ul: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>,
-                        li: ({ children }) => <li>{children}</li>,
+                        p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc list-inside space-y-0.5 mb-1.5">{children}</ul>,
+                        li: ({ children }) => <li className="text-xs md:text-base">{children}</li>,
                         strong: ({ children }) => <strong className="font-semibold text-purple-700">{children}</strong>,
                       }}
                     >
@@ -461,8 +461,8 @@ ${JSON.stringify(context.news, null, 0)}
                   )}
                 </div>
                 {message.role === 'user' && (
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-slate-200 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 md:w-5 md:h-5 text-slate-600" />
+                  <div className="w-6 h-6 md:w-10 md:h-10 bg-slate-200 rounded-md md:rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <User className="w-3.5 h-3.5 md:w-5 md:h-5 text-slate-600" />
                   </div>
                 )}
               </div>
@@ -470,13 +470,13 @@ ${JSON.stringify(context.news, null, 0)}
           )}
           
           {isLoading && (
-            <div className="flex gap-2 md:gap-4 justify-start">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
-                <Bot className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            <div className="flex gap-1.5 md:gap-4 justify-start">
+              <div className="w-6 h-6 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-md md:rounded-xl flex items-center justify-center flex-shrink-0">
+                <Bot className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" />
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl md:rounded-2xl px-3 md:px-5 py-2.5 md:py-3">
-                <div className="flex items-center gap-2 text-slate-500 text-sm">
-                  <Loader2 className="w-4 h-4 animate-spin" />
+              <div className="bg-white border border-slate-200 rounded-lg md:rounded-2xl px-2.5 md:px-5 py-2 md:py-3">
+                <div className="flex items-center gap-2 text-slate-500 text-xs md:text-sm">
+                  <Loader2 className="w-3.5 h-3.5 md:w-4 md:h-4 animate-spin" />
                   {t('agent_thinking')}
                 </div>
               </div>
