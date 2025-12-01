@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Search, Check, X, Eye, ExternalLink, 
-  Loader2, Pencil, Save, AlertCircle, Sparkles, Plus, Trash2, Upload, Languages
+  Loader2, Pencil, Save, AlertCircle, Sparkles, Plus, Trash2, Upload, Languages, Tags
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
