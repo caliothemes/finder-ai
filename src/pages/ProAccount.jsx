@@ -338,75 +338,106 @@ export default function ProAccount() {
             <LayoutGrid className="w-5 h-5 text-purple-600" />
             {t('pro_positions_title')}
           </h3>
-          <div className="grid md:grid-cols-4 gap-4">
-            {/* Hero */}
-            <div className="bg-slate-100 rounded-xl p-4">
-              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden">
-                <div className="absolute top-1 left-1 right-1 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
-                  HERO
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {bannerPositions.map((position) => (
+              <div key={position.value} className="bg-slate-100 rounded-xl p-4 hover:shadow-md transition-shadow">
+                <div className="w-full h-20 bg-slate-200 rounded-lg mb-3 relative overflow-hidden p-1">
+                  {position.value === 'homepage_hero' && (
+                    <>
+                      <div className="h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold mb-1">
+                        HERO
+                      </div>
+                      <div className="flex gap-1">
+                        <div className="h-5 flex-1 bg-slate-300 rounded" />
+                        <div className="h-5 flex-1 bg-slate-300 rounded" />
+                        <div className="h-5 flex-1 bg-slate-300 rounded" />
+                      </div>
+                    </>
+                  )}
+                  {position.value === 'homepage_sidebar' && (
+                    <div className="flex gap-1 h-full">
+                      <div className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold border-2 border-purple-400">
+                        CARD
+                      </div>
+                      <div className="flex-1 bg-slate-300 rounded" />
+                      <div className="flex-1 bg-slate-300 rounded" />
+                    </div>
+                  )}
+                  {position.value === 'explore_top' && (
+                    <>
+                      <div className="h-4 bg-slate-300 rounded mb-1" />
+                      <div className="h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold mb-1">
+                        BANNIÈRE
+                      </div>
+                      <div className="grid grid-cols-3 gap-1">
+                        <div className="h-4 bg-slate-300 rounded" />
+                        <div className="h-4 bg-slate-300 rounded" />
+                        <div className="h-4 bg-slate-300 rounded" />
+                      </div>
+                    </>
+                  )}
+                  {position.value === 'explore_sidebar' && (
+                    <div className="flex gap-1 h-full">
+                      <div className="flex-1 bg-slate-300 rounded" />
+                      <div className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold border-2 border-purple-400">
+                        CARD
+                      </div>
+                      <div className="flex-1 bg-slate-300 rounded" />
+                    </div>
+                  )}
+                  {position.value === 'explore_bottom' && (
+                    <>
+                      <div className="grid grid-cols-3 gap-1 mb-1">
+                        <div className="h-5 bg-slate-300 rounded" />
+                        <div className="h-5 bg-slate-300 rounded" />
+                        <div className="h-5 bg-slate-300 rounded" />
+                      </div>
+                      <div className="flex justify-center gap-1 mb-1">
+                        <div className="h-3 w-3 bg-slate-400 rounded" />
+                        <div className="h-3 w-3 bg-slate-400 rounded" />
+                      </div>
+                      <div className="h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
+                        BANNIÈRE
+                      </div>
+                    </>
+                  )}
+                  {position.value === 'categories_bottom' && (
+                    <>
+                      <div className="grid grid-cols-4 gap-1 mb-1">
+                        <div className="h-5 bg-slate-300 rounded" />
+                        <div className="h-5 bg-slate-300 rounded" />
+                        <div className="h-5 bg-slate-300 rounded" />
+                        <div className="h-5 bg-slate-300 rounded" />
+                      </div>
+                      <div className="h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
+                        BANNIÈRE
+                      </div>
+                    </>
+                  )}
+                  {position.value === 'homepage_category_bottom' && (
+                    <>
+                      <div className="grid grid-cols-4 gap-1 mb-1">
+                        <div className="h-4 bg-slate-300 rounded" />
+                        <div className="h-4 bg-slate-300 rounded" />
+                        <div className="h-4 bg-slate-300 rounded" />
+                        <div className="h-4 bg-slate-300 rounded" />
+                      </div>
+                      <div className="h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold mb-1">
+                        BANNIÈRE
+                      </div>
+                      <div className="flex justify-center">
+                        <div className="h-3 w-12 bg-slate-400 rounded" />
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div className="absolute bottom-1 left-1 right-1 flex gap-1">
-                  <div className="h-6 flex-1 bg-slate-300 rounded" />
-                  <div className="h-6 flex-1 bg-slate-300 rounded" />
-                  <div className="h-6 flex-1 bg-slate-300 rounded" />
+                <h4 className="font-semibold text-sm text-slate-900">{position.labelShort}</h4>
+                <p className="text-xs text-slate-500 mb-2">{position.description}</p>
+                <div className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded-lg text-xs font-medium">
+                  💰 {position.creditsPerDay} crédit{position.creditsPerDay > 1 ? 's' : ''}/jour
                 </div>
               </div>
-              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_hero')}</h4>
-              <p className="text-xs text-slate-500">{t('pro_position_hero_desc')}</p>
-            </div>
-
-            {/* Sidebar Card */}
-            <div className="bg-slate-100 rounded-xl p-4">
-              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
-                <div className="flex gap-1 h-full">
-                  <div className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold border-2 border-purple-400">
-                    CARD
-                  </div>
-                  <div className="flex-1 bg-slate-300 rounded" />
-                  <div className="flex-1 bg-slate-300 rounded" />
-                </div>
-              </div>
-              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_sidebar')}</h4>
-              <p className="text-xs text-slate-500">{t('pro_position_sidebar_desc')}</p>
-            </div>
-
-            {/* Category bottom */}
-            <div className="bg-slate-100 rounded-xl p-4">
-              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
-                <div className="grid grid-cols-4 gap-1 mb-1">
-                  <div className="h-4 bg-slate-300 rounded" />
-                  <div className="h-4 bg-slate-300 rounded" />
-                  <div className="h-4 bg-slate-300 rounded" />
-                  <div className="h-4 bg-slate-300 rounded" />
-                </div>
-                <div className="h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold">
-                  BANNIÈRE
-                </div>
-                <div className="flex justify-center mt-1">
-                  <div className="h-3 w-12 bg-slate-400 rounded" />
-                </div>
-              </div>
-              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_category')}</h4>
-              <p className="text-xs text-slate-500">{t('pro_position_category_desc')}</p>
-            </div>
-
-            {/* Explore */}
-            <div className="bg-slate-100 rounded-xl p-4">
-              <div className="w-full h-20 bg-slate-200 rounded-lg mb-2 relative overflow-hidden p-1">
-                <div className="h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-[8px] font-bold mb-1">
-                  TOP
-                </div>
-                <div className="flex gap-1">
-                  <div className="flex-1 h-8 bg-slate-300 rounded" />
-                  <div className="flex-1 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded flex items-center justify-center text-white text-[6px] font-bold">
-                    CARD
-                  </div>
-                  <div className="flex-1 h-8 bg-slate-300 rounded" />
-                </div>
-              </div>
-              <h4 className="font-semibold text-sm text-slate-900">{t('pro_position_explore')}</h4>
-              <p className="text-xs text-slate-500">{t('pro_position_explore_desc')}</p>
-            </div>
+            ))}
           </div>
         </div>
 
