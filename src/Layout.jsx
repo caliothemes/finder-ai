@@ -327,17 +327,6 @@ function LayoutContent({ children, currentPageName }) {
                             {t('nav_categories')}
                             <NewItemsBadge count={newItems.categories} />
                           </Link>
-                          <Link
-                                            to={createPageUrl('FinderGPT')}
-                                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:text-purple-600 rounded-l-xl transition-all font-medium"
-                                            style={{ background: 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
-                                          >
-                                            <Bot className="w-4 h-4" />
-                                            Agent FinderAI
-                                            <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">
-                                              NEW
-                                            </span>
-                                          </Link>
           <Link
                             to={createPageUrl('AINews')}
                             className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
@@ -346,6 +335,17 @@ function LayoutContent({ children, currentPageName }) {
                             {t('nav_ai_news')}
             <NewItemsBadge count={newItems.news} />
           </Link>
+          <Link
+                            to={createPageUrl('FinderGPT')}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:text-purple-600 rounded-l-xl transition-all font-medium"
+                            style={{ background: 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
+                          >
+                            <Bot className="w-4 h-4" />
+                            Agent FinderAI
+                            <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">
+                              NEW
+                            </span>
+                          </Link>
 
           {user && (
                             <>
