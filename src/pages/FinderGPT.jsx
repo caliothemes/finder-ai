@@ -138,9 +138,14 @@ export default function FinderGPT() {
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 50),
   });
 
+  const chatContainerRef = useRef(null);
+
   const scrollToLastAssistant = () => {
-    if (lastAssistantRef.current) {
-      lastAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (lastAssistantRef.current && chatContainerRef.current) {
+      const container = chatContainerRef.current;
+      const element = lastAssistantRef.current;
+      const elementTop = element.offsetTop - container.offsetTop;
+      container.scrollTo({ top: elementTop - 20, behavior: 'smooth' });
     }
   };
 
@@ -148,7 +153,7 @@ export default function FinderGPT() {
     // Scroll to last assistant message when messages change
     const lastMessage = messages[messages.length - 1];
     if (lastMessage?.role === 'assistant') {
-      setTimeout(() => scrollToLastAssistant(), 100);
+      setTimeout(() => scrollToLastAssistant(), 150);
     }
   }, [messages]);
 
