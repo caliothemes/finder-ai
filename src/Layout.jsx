@@ -479,28 +479,45 @@ function LayoutContent({ children, currentPageName }) {
             </Link>
 
             {/* Desktop Nav - Simplified */}
-            <nav className="hidden lg:flex items-center gap-6">
+            <nav className="hidden lg:flex items-center gap-3">
               <Link
                 to={createPageUrl('Explore')}
-                className="text-slate-700 hover:text-purple-600 font-medium transition-colors"
+                className="p-2.5 bg-purple-100 hover:bg-purple-200 rounded-xl transition-all duration-300 hover:scale-105"
+                title={t('nav_explore')}
               >
-                {t('nav_explore')}
+                <Compass className="w-5 h-5 text-purple-600" />
+              </Link>
+
+              <Link
+                to={createPageUrl('Categories')}
+                className="p-2.5 bg-purple-100 hover:bg-purple-200 rounded-xl transition-all duration-300 hover:scale-105"
+                title={t('nav_categories')}
+              >
+                <Grid3X3 className="w-5 h-5 text-purple-600" />
+              </Link>
+
+              <Link
+                to={createPageUrl('AINews')}
+                className="p-2.5 bg-purple-100 hover:bg-purple-200 rounded-xl transition-all duration-300 hover:scale-105"
+                title={t('nav_ai_news')}
+              >
+                <Newspaper className="w-5 h-5 text-purple-600" />
               </Link>
 
               {user && (
-                                    <Link
-                                      to={createPageUrl('Favorites')}
-                                      className="text-slate-700 hover:text-purple-600 font-medium transition-colors flex items-center gap-2 relative"
-                                    >
-                                      <Heart className="w-4 h-4" />
-                                      {t('nav_favorites')}
-                                      {favoritesCount > 0 && (
-                                                                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[18px] text-center">
-                                                                  {favoritesCount}
-                                                                </span>
-                                                              )}
-                                    </Link>
-                                  )}
+                <Link
+                  to={createPageUrl('Favorites')}
+                  className="relative p-2.5 bg-purple-100 hover:bg-purple-200 rounded-xl transition-all duration-300 hover:scale-105"
+                  title={t('nav_favorites')}
+                >
+                  <Heart className="w-5 h-5 text-purple-600" />
+                  {favoritesCount > 0 && (
+                    <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[18px] text-center">
+                      {favoritesCount}
+                    </span>
+                  )}
+                </Link>
+              )}
 
               <Link to={createPageUrl('SubmitAI')}>
                 <Button className="bg-purple-950 hover:bg-purple-900 text-white">
