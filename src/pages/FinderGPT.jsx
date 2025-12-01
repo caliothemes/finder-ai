@@ -360,7 +360,7 @@ ${JSON.stringify(context.news, null, 0)}
   }
 
   return (
-    <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-gradient-to-b from-slate-50 to-white flex flex-col overflow-hidden">
+    <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-gradient-to-b from-slate-50 to-white flex flex-col overflow-hidden w-full max-w-full">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-3 md:px-6 py-2 md:py-4 flex-shrink-0">
         <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
