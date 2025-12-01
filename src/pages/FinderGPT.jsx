@@ -278,12 +278,12 @@ FORMAT DE RÉPONSE:
                 <Bot className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-3">
-                {language === 'en' ? 'Welcome to FinderAI-GPT!' : 'Bienvenue sur FinderAI-GPT !'}
+                {language === 'en' ? 'Welcome to Agent FinderAI!' : 'Bienvenue sur Agent FinderAI !'}
               </h2>
               <p className="text-slate-600 mb-8 max-w-md mx-auto">
                 {language === 'en' 
-                  ? 'Ask me anything about AI tools. I know all the tools in the FinderAI database and can help you find the perfect one for your needs.'
-                  : 'Pose-moi n\'importe quelle question sur les outils IA. Je connais tous les outils de la base FinderAI et peux t\'aider à trouver celui qu\'il te faut.'}
+                  ? 'I\'m your AI expert! Ask me anything: find the perfect AI tool, get the latest AI news, or ask any question about artificial intelligence.'
+                  : 'Je suis ton expert IA ! Pose-moi n\'importe quelle question : trouver l\'outil IA parfait, connaître les dernières actualités IA, ou poser une question sur l\'intelligence artificielle.'}
               </p>
               
               {/* Suggestions */}
