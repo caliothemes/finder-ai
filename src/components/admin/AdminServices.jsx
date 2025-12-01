@@ -200,6 +200,7 @@ export default function AdminServices() {
       features: service.features || [],
       features_en: service.features_en || [],
       categories: service.categories || [],
+      tags: service.tags || [],
       pricing: service.pricing,
       website_url: service.website_url || '',
       status: service.status,
