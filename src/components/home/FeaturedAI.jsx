@@ -32,8 +32,8 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
   });
   
   // Toujours 15 cards max: promo card + bannière payante (si présente) + services IA
-  // 2 slots réservés: 1 pour promo card, 1 pour bannière payante (ou service IA si pas de bannière)
-  const maxServices = hasPaidBanner ? 13 : 14; // 15 - 1 promo - (1 bannière si présente)
+  // 1 slot réservé pour promo card, 1 pour bannière payante (si présente)
+  const maxServices = hasPaidBanner ? 14 : 15; // 15 - (1 bannière si présente)
   const displayedServices = aiServices.slice(0, maxServices);
   
   const isFavorite = (serviceId) => {
@@ -265,27 +265,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                 </div>
                 </div>
                 ))}
-
-                {/* Promo Card */}
-          <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-3xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">
-                {t('promo_your_service')}
-              </h3>
-              <p className="text-sm text-slate-600 mb-4">
-                {t('promo_increase_visibility')}
-              </p>
-              <Link to={createPageUrl('ProAccount')}>
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                  <Crown className="w-4 h-4 mr-2" />
-                  {t('promo_become_pro')}
-                </Button>
-              </Link>
-            </div>
-          </div>
 
           {displayedServices.slice(4).map((service) => (
             <div
