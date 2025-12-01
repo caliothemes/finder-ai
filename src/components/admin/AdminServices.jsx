@@ -1480,7 +1480,29 @@ Provide accurate English translations.`,
 
                         {/* Tags */}
                         <div>
-                          <label className="text-sm font-medium mb-2 block">🏷️ Tags / Mots-clés</label>
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-sm font-medium">🏷️ Tags / Mots-clés</label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={generateTags}
+                              disabled={generatingTags}
+                              className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 text-purple-700 hover:from-purple-100 hover:to-pink-100"
+                            >
+                              {generatingTags ? (
+                                <>
+                                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                                  Génération...
+                                </>
+                              ) : (
+                                <>
+                                  <Tags className="w-3 h-3 mr-1" />
+                                  Générer avec IA
+                                </>
+                              )}
+                            </Button>
+                          </div>
                           <div className="flex flex-wrap gap-2 mb-2">
                             {(formData.tags || []).map((tag, idx) => (
                               <Badge key={idx} variant="secondary" className="flex items-center gap-1 px-3 py-1">
