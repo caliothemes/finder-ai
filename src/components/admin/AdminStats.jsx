@@ -73,12 +73,18 @@ export default function AdminStats() {
   };
 
   const visitorsToday = getUniqueVisitors(pageViews, todayStart);
+  const visitorsYesterday = pageViews.filter(v => {
+    const date = new Date(v.created_date);
+    return date >= yesterdayStart && date < todayStart;
+  });
+  const uniqueVisitorsYesterday = new Set(visitorsYesterday.map(v => v.visitor_id)).size;
   const visitorsWeek = getUniqueVisitors(pageViews, weekStart);
   const visitorsMonth = getUniqueVisitors(pageViews, monthStart);
   const visitorsNow = getUniqueVisitors(pageViews, last5Minutes);
 
   // Pages vues par période
   const viewsToday = pageViews.filter(v => new Date(v.created_date) >= todayStart).length;
+  const viewsYesterday = visitorsYesterday.length;
   const viewsWeek = pageViews.filter(v => new Date(v.created_date) >= weekStart).length;
   const viewsMonth = pageViews.filter(v => new Date(v.created_date) >= monthStart).length;
 
