@@ -888,7 +888,29 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {/* Tags */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tags</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-sm font-medium text-slate-700">Tags</label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleGenerateTags}
+                      disabled={isGeneratingTags}
+                      className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 text-purple-700 hover:from-purple-100 hover:to-pink-100"
+                    >
+                      {isGeneratingTags ? (
+                        <>
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                          Génération...
+                        </>
+                      ) : (
+                        <>
+                          <Tags className="w-3 h-3 mr-1" />
+                          Générer avec IA
+                        </>
+                      )}
+                    </Button>
+                  </div>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {(approveFormData.tags || []).map((tag, idx) => (
                       <Badge key={idx} variant="secondary" className="flex items-center gap-1">
