@@ -196,6 +196,22 @@ export default function AdminStats() {
           </CardContent>
         </Card>
 
+        <Card className="bg-gradient-to-br from-gray-50 to-slate-100 border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-gray-500" />
+              Semaine dernière
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-gray-600">{uniqueVisitorsLastWeek}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsLastWeek} pages vues</p>
+          </CardContent>
+        </Card>
+
         <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
@@ -209,6 +225,25 @@ export default function AdminStats() {
               <span className="text-sm text-slate-500">visiteurs uniques</span>
             </div>
             <p className="text-xs text-slate-400 mt-2">{viewsWeek} pages vues</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mois et Année */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="bg-gradient-to-br from-stone-50 to-neutral-100 border-stone-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-stone-500" />
+              Mois dernier
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-stone-600">{uniqueVisitorsLastMonth}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsLastMonth} pages vues</p>
           </CardContent>
         </Card>
 
@@ -225,6 +260,22 @@ export default function AdminStats() {
               <span className="text-sm text-slate-500">visiteurs uniques</span>
             </div>
             <p className="text-xs text-slate-400 mt-2">{viewsMonth} pages vues</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-cyan-500" />
+              Cette année
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-cyan-600">{visitorsYear}</span>
+              <span className="text-sm text-slate-500">visiteurs uniques</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{viewsYear} pages vues</p>
           </CardContent>
         </Card>
       </div>
