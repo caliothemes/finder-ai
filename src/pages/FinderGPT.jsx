@@ -360,19 +360,19 @@ ${JSON.stringify(context.news, null, 0)}
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+    <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-gradient-to-b from-slate-50 to-white flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4">
+      <div className="bg-white border-b border-slate-200 px-3 md:px-6 py-2 md:py-4 flex-shrink-0">
         <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0">
-            <Bot className="w-5 h-5 md:w-7 md:h-7 text-white" />
+          <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-2xl flex items-center justify-center flex-shrink-0">
+            <Bot className="w-4 h-4 md:w-7 md:h-7 text-white" />
           </div>
-          <div className="min-w-0">
-            <h1 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-base md:text-xl font-bold text-slate-900 flex items-center gap-1 md:gap-2">
               Agent FinderAI
-              <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
+              <Sparkles className="w-3 h-3 md:w-5 md:h-5 text-yellow-500" />
             </h1>
-            <p className="text-xs md:text-sm text-slate-600 truncate">
+            <p className="text-[10px] md:text-sm text-slate-600 truncate">
               {t('agent_subtitle')}
             </p>
           </div>
@@ -380,27 +380,27 @@ ${JSON.stringify(context.news, null, 0)}
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4 md:py-6">
-        <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
+      <div className="flex-1 overflow-y-auto px-2 md:px-6 py-3 md:py-6">
+        <div className="max-w-4xl mx-auto space-y-3 md:space-y-6">
             {messages.length === 0 ? (
-            <div className="text-center py-8 md:py-12 px-2">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg">
-                <Bot className="w-8 h-8 md:w-10 md:h-10 text-white" />
+            <div className="text-center py-4 md:py-12 px-2">
+              <div className="w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-3xl flex items-center justify-center mx-auto mb-3 md:mb-6 shadow-lg">
+                <Bot className="w-7 h-7 md:w-10 md:h-10 text-white" />
               </div>
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3">
+              <h2 className="text-lg md:text-2xl font-bold text-slate-900 mb-1 md:mb-3">
                 {t('agent_welcome')}
               </h2>
-              <p className="text-sm md:text-base text-slate-600 mb-6 md:mb-8 max-w-md mx-auto">
+              <p className="text-xs md:text-base text-slate-600 mb-4 md:mb-8 max-w-md mx-auto px-2">
                 {t('agent_description')}
               </p>
               
               {/* Suggestions */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-3 max-w-2xl mx-auto">
                 {suggestions.map((suggestion, i) => (
                   <button
                     key={i}
                     onClick={() => setInput(suggestion)}
-                    className="text-left px-3 md:px-4 py-2.5 md:py-3 bg-white rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50 transition-all text-xs md:text-sm text-slate-700"
+                    className="text-left px-3 py-2 md:px-4 md:py-3 bg-white rounded-lg md:rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50 transition-all text-xs md:text-sm text-slate-700"
                   >
                     {suggestion}
                   </button>
