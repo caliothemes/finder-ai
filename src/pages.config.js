@@ -12,6 +12,7 @@ import BannerManager from './pages/BannerManager';
 import LegalMentions from './pages/LegalMentions';
 import AINews from './pages/AINews';
 import AINewsDetail from './pages/AINewsDetail';
+import FinderGPT from './pages/FinderGPT';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +31,7 @@ export const PAGES = {
     "LegalMentions": LegalMentions,
     "AINews": AINews,
     "AINewsDetail": AINewsDetail,
+    "FinderGPT": FinderGPT,
 }
 
 export const pagesConfig = {

@@ -5,7 +5,8 @@ const translations = {
     // Navigation
     nav_home: "Accueil",
     nav_explore: "Explorer IA",
-    nav_categories: "Catégories",
+    nav_categories: "Catégories IA",
+      nav_finder_gpt: "FinderAI-GPT",
     nav_favorites: "Favoris",
     nav_profile: "Mon Profil",
     nav_pro_account: "Compte Pro",
@@ -308,7 +309,8 @@ const translations = {
     // Navigation
     nav_home: "Home",
     nav_explore: "AI Explorer",
-    nav_categories: "Categories",
+    nav_categories: "AI Categories",
+      nav_finder_gpt: "FinderAI-GPT",
     nav_favorites: "Favorites",
     nav_profile: "My Profile",
     nav_pro_account: "Pro Account",
