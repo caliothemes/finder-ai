@@ -197,8 +197,12 @@ function LayoutContent({ children, currentPageName }) {
     // Tracking des visites (exclure les admins)
     useEffect(() => {
       const trackPageView = async () => {
-        // Ne pas tracker les visites des admins
+        // Ne pas tracker les visites des admins (connectés ou non encore chargés)
         if (user?.role === 'admin') return;
+
+        // Attendre que l'utilisateur soit chargé pour vérifier s'il est admin
+        // Si user est null mais qu'on est en train de charger, ne pas tracker encore
+        if (user === undefined) return;
 
         // Générer ou récupérer un ID visiteur unique
         let visitorId = localStorage.getItem('visitor_id');
@@ -240,26 +244,26 @@ function LayoutContent({ children, currentPageName }) {
       <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
         {/* Logo Section */}
         <div className="p-6 border-b border-slate-200 flex flex-col items-center justify-center">
-          <div className="relative inline-flex items-center justify-center mb-3">
-            <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative w-[110px] h-[110px] flex items-center justify-center">
-              {/* Glow effect externe */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-15 blur-lg group-hover:opacity-30 animate-pulse-slow"></div>
+          <div className="relative inline-flex items-center justify-center mb-2">
+                            <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative w-[80px] h-[80px] flex items-center justify-center">
+                              {/* Glow effect externe */}
+                              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-15 blur-lg group-hover:opacity-30 animate-pulse-slow"></div>
 
-              {/* Bordure animée 1 */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow"></div>
+                              {/* Bordure animée 1 */}
+                              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 animate-spin-slow"></div>
 
-              {/* Fond blanc intérieur pour bordure 1 */}
-              <div className="absolute inset-[3px] rounded-full bg-white"></div>
+                              {/* Fond blanc intérieur pour bordure 1 */}
+                              <div className="absolute inset-[2px] rounded-full bg-white"></div>
 
-              {/* Bordure animée 2 (sens inverse) */}
-              <div className="absolute inset-[3px] rounded-full bg-gradient-to-l from-cyan-500 via-purple-500 to-pink-500 animate-spin-reverse opacity-80"></div>
+                              {/* Bordure animée 2 (sens inverse) */}
+                              <div className="absolute inset-[2px] rounded-full bg-gradient-to-l from-cyan-500 via-purple-500 to-pink-500 animate-spin-reverse opacity-80"></div>
 
-              {/* Fond blanc intérieur pour bordure 2 */}
-              <div className="absolute inset-[5px] rounded-full bg-white"></div>
+                              {/* Fond blanc intérieur pour bordure 2 */}
+                              <div className="absolute inset-[4px] rounded-full bg-white"></div>
 
-              {/* Logo */}
-              <div className="relative bg-white rounded-full w-[100px] h-[100px] flex items-center justify-center">
-                <svg width="90" height="90" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              {/* Logo */}
+                              <div className="relative bg-white rounded-full w-[72px] h-[72px] flex items-center justify-center">
+                                <svg width="65" height="65" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="gradientSidebar" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#06b6d4" />
