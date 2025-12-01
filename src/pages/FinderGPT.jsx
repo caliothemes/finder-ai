@@ -218,30 +218,91 @@ FORMAT DE RÉPONSE:
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
-            <Bot className="w-7 h-7 text-white" />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex">
+      {/* Sidebar - Chat History */}
+      {user && (
+        <div className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 bg-white border-r border-slate-200 flex flex-col overflow-hidden`}>
+          <div className="p-4 border-b border-slate-200">
+            <Button 
+              onClick={startNewChat}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {language === 'en' ? 'New Chat' : 'Nouveau chat'}
+            </Button>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              FinderAI-GPT
-              <Sparkles className="w-5 h-5 text-yellow-500" />
-            </h1>
-            <p className="text-sm text-slate-600">
-              {language === 'en' 
-                ? 'Your AI expert to find the perfect tool' 
-                : 'Ton expert IA pour trouver l\'outil parfait'}
-            </p>
+          
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {chatHistory.length === 0 ? (
+              <p className="text-sm text-slate-500 text-center py-4">
+                {language === 'en' ? 'No chat history yet' : 'Aucun historique'}
+              </p>
+            ) : (
+              chatHistory.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`group flex items-center gap-2 p-3 rounded-xl cursor-pointer transition-all ${
+                    currentChatId === chat.id 
+                      ? 'bg-purple-100 border border-purple-300' 
+                      : 'hover:bg-slate-100 border border-transparent'
+                  }`}
+                  onClick={() => loadChat(chat)}
+                >
+                  <MessageSquare className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                  <span className="flex-1 text-sm text-slate-700 truncate">
+                    {chat.title || 'Nouveau chat'}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm(language === 'en' ? 'Delete this chat?' : 'Supprimer ce chat ?')) {
+                        deleteChatMutation.mutate(chat.id);
+                      }
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all"
+                  >
+                    <Trash2 className="w-4 h-4 text-red-500" />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 px-6 py-4">
+          <div className="max-w-4xl mx-auto flex items-center gap-3">
+            {user && (
+              <button 
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors lg:hidden"
+              >
+                {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            )}
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
+              <Bot className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                FinderAI-GPT
+                <Sparkles className="w-5 h-5 text-yellow-500" />
+              </h1>
+              <p className="text-sm text-slate-600">
+                {language === 'en' 
+                  ? 'Your AI expert to find the perfect tool' 
+                  : 'Ton expert IA pour trouver l\'outil parfait'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex-1 overflow-y-auto px-6 py-6">
+          <div className="max-w-4xl mx-auto space-y-6">
           {messages.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
