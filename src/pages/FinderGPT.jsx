@@ -488,8 +488,8 @@ ${JSON.stringify(context.news, null, 0)}
       </div>
 
       {/* Input Area */}
-      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-2 md:px-6 py-2 md:py-4 flex-shrink-0">
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-2 md:px-6 py-2 md:py-4 flex-shrink-0 w-full">
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto w-full">
           <div className="flex gap-2">
             <div className="flex-1 relative">
               <Textarea
