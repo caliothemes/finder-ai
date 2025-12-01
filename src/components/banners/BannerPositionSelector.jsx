@@ -7,14 +7,19 @@ const positionPreviews = {
   homepage_hero: (
     <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
       <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-      <div className="h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-        VOTRE BANNIÈRE ICI
+      {/* Format Article */}
+      <div className="flex gap-2 h-20 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg p-2 border-2 border-purple-400 animate-pulse">
+        <div className="w-1/3 h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded flex items-center justify-center text-white text-[8px] font-bold">
+          IMAGE
+        </div>
+        <div className="w-2/3 flex flex-col justify-center">
+          <div className="h-2 bg-purple-300 rounded w-3/4 mb-1" />
+          <div className="h-1.5 bg-slate-300 rounded w-full mb-1" />
+          <div className="h-1.5 bg-slate-300 rounded w-2/3" />
+          <div className="h-3 bg-purple-500 rounded w-1/2 mt-1" />
+        </div>
       </div>
-      <div className="mt-2 flex gap-1">
-        <div className="h-6 w-1/3 bg-slate-200 rounded" />
-        <div className="h-6 w-1/3 bg-slate-200 rounded" />
-        <div className="h-6 w-1/3 bg-slate-200 rounded" />
-      </div>
+      <div className="mt-1 text-[8px] text-center text-purple-600 font-medium">FORMAT ARTICLE</div>
     </div>
   ),
   homepage_sidebar: (
@@ -22,9 +27,13 @@ const positionPreviews = {
       <div className="h-3 bg-slate-300 rounded w-full mb-2" />
       <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
       <div className="flex gap-1">
-        <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
-          <div className="w-6 h-4 bg-white/30 rounded mb-1" />
-          CARD
+        <div className="w-1/3 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex flex-col items-center justify-center text-[7px] font-bold animate-pulse border-2 border-purple-400">
+          <div className="w-6 h-3 bg-purple-300 rounded mb-0.5" />
+          <div className="text-purple-700">CARD</div>
+          <div className="flex gap-0.5 mt-0.5">
+            <div className="w-4 h-1.5 bg-purple-200 rounded text-[5px]" />
+            <div className="w-4 h-1.5 bg-pink-200 rounded text-[5px]" />
+          </div>
         </div>
         <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
         <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
@@ -33,15 +42,22 @@ const positionPreviews = {
   ),
   explore_top: (
     <div className="w-full h-32 bg-slate-100 rounded-lg p-2 relative overflow-hidden">
-      <div className="h-3 bg-slate-300 rounded w-full mb-2" />
-      <div className="h-6 bg-slate-200 rounded w-full mb-2" />
-      <div className="h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-bold animate-pulse">
-        VOTRE BANNIÈRE ICI
+      <div className="h-3 bg-slate-300 rounded w-full mb-1" />
+      {/* Format Article */}
+      <div className="flex gap-2 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg p-1.5 border-2 border-purple-400 animate-pulse">
+        <div className="w-1/3 h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded flex items-center justify-center text-white text-[7px] font-bold">
+          IMAGE
+        </div>
+        <div className="w-2/3 flex flex-col justify-center">
+          <div className="h-1.5 bg-purple-300 rounded w-3/4 mb-0.5" />
+          <div className="h-1 bg-slate-300 rounded w-full mb-0.5" />
+          <div className="h-2.5 bg-purple-500 rounded w-1/2 mt-0.5" />
+        </div>
       </div>
-      <div className="mt-2 grid grid-cols-3 gap-1">
-        <div className="h-6 bg-slate-200 rounded" />
-        <div className="h-6 bg-slate-200 rounded" />
-        <div className="h-6 bg-slate-200 rounded" />
+      <div className="mt-1 grid grid-cols-3 gap-1">
+        <div className="h-5 bg-slate-200 rounded" />
+        <div className="h-5 bg-slate-200 rounded" />
+        <div className="h-5 bg-slate-200 rounded" />
       </div>
     </div>
   ),
@@ -51,9 +67,13 @@ const positionPreviews = {
       <div className="h-4 bg-slate-200 rounded w-1/4 mb-2" />
       <div className="flex gap-1">
         <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
-        <div className="w-1/3 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex flex-col items-center justify-center text-white text-[8px] font-bold animate-pulse border-2 border-purple-400">
-          <div className="w-6 h-4 bg-white/30 rounded mb-1" />
-          CARD
+        <div className="w-1/3 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex flex-col items-center justify-center text-[7px] font-bold animate-pulse border-2 border-purple-400">
+          <div className="w-6 h-3 bg-purple-300 rounded mb-0.5" />
+          <div className="text-purple-700">CARD</div>
+          <div className="flex gap-0.5 mt-0.5">
+            <div className="w-4 h-1.5 bg-purple-200 rounded" />
+            <div className="w-4 h-1.5 bg-pink-200 rounded" />
+          </div>
         </div>
         <div className="w-1/3 h-16 bg-slate-200 rounded-lg" />
       </div>
