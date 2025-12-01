@@ -41,23 +41,26 @@ export default function AdminAISearchScan() {
   });
 
   const approveDiscoveryMutation = useMutation({
-    mutationFn: async ({ discovery, categories }) => {
-      const slug = discovery.name.toLowerCase()
+    mutationFn: async ({ discovery, categories, formData }) => {
+      const slug = formData.name.toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
       const aiServiceData = {
-        name: discovery.name,
+        name: formData.name,
         slug: slug,
-        tagline: discovery.tagline || '',
-        description: discovery.description || '',
+        tagline: formData.tagline || '',
+        tagline_en: formData.tagline_en || '',
+        description: formData.description || '',
+        description_en: formData.description_en || '',
         categories: categories,
-        logo_url: discovery.logo_url || '',
-        cover_image_url: discovery.cover_image_url || '',
-        website_url: discovery.website_url,
-        pricing: discovery.suggested_pricing || 'freemium',
-        features: discovery.features || [],
-        tags: discovery.tags || [],
+        logo_url: formData.logo_url || '',
+        cover_image_url: formData.cover_image_url || '',
+        website_url: formData.website_url,
+        pricing: formData.pricing || 'freemium',
+        features: formData.features || [],
+        features_en: formData.features_en || [],
+        tags: formData.tags || [],
         status: 'approved',
         submitted_by: 'ai_scanner'
       };
@@ -75,6 +78,7 @@ export default function AdminAISearchScan() {
       queryClient.invalidateQueries({ queryKey: ['discoveries'] });
       setApprovingDiscovery(null);
       setSelectedCategories([]);
+      setApproveFormData({});
       toast.success('Service IA créé et approuvé !');
     },
   });
