@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
-import { Send, Bot, User, Sparkles, Loader2, ExternalLink, Star } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Send, Bot, User, Sparkles, Loader2, ExternalLink, Star, Plus, MessageSquare, Trash2, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
@@ -10,11 +10,31 @@ import { useLanguage } from '@/components/LanguageProvider';
 import ReactMarkdown from 'react-markdown';
 
 export default function FinderGPT() {
+  const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const messagesEndRef = useRef(null);
   const { language } = useLanguage();
+  const queryClient = useQueryClient();
+
+  // Load user
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const isAuth = await base44.auth.isAuthenticated();
+        if (isAuth) {
+          const currentUser = await base44.auth.me();
+          setUser(currentUser);
+        }
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    loadUser();
+  }, []);
 
   // Fetch AI Services and News for context
   const { data: services = [] } = useQuery({
