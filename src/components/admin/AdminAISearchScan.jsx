@@ -613,8 +613,29 @@ Return JSON format:
       {approvingDiscovery && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
           <div className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-2">Publier: {approvingDiscovery.name}</h2>
-            <p className="text-slate-600 mb-6">Modifiez les informations avant de publier le service</p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold mb-1">Publier: {approvingDiscovery.name}</h2>
+                <p className="text-slate-600">Modifiez les informations avant de publier le service</p>
+              </div>
+              <Button
+                onClick={handleAutoTranslate}
+                disabled={isTranslating}
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+              >
+                {isTranslating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Traduction...
+                  </>
+                ) : (
+                  <>
+                    <Languages className="w-4 h-4 mr-2" />
+                    Traduire FR → EN
+                  </>
+                )}
+              </Button>
+            </div>
             
             <div className="grid grid-cols-2 gap-6">
               {/* Colonne gauche */}
