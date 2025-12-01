@@ -47,6 +47,14 @@ export default function MemberInviteCard() {
             {language === 'en' ? 'Comment on AI news' : 'Commente les actualités IA'}
           </span>
         </div>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+            <Bot className="w-3.5 h-3.5 text-green-300" />
+          </div>
+          <span className="text-purple-100">
+            {language === 'en' ? 'Use our AI agent' : 'Profite de notre agent IA'}
+          </span>
+        </div>
       </div>
 
       <Button 
