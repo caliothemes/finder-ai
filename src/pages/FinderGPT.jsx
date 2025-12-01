@@ -18,6 +18,7 @@ export default function FinderGPT() {
   const [isListening, setIsListening] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const messagesEndRef = useRef(null);
+  const lastAssistantRef = useRef(null);
   const { language, t } = useLanguage();
   const queryClient = useQueryClient();
 
@@ -137,12 +138,18 @@ export default function FinderGPT() {
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 50),
   });
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToLastAssistant = () => {
+    if (lastAssistantRef.current) {
+      lastAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Scroll to last assistant message when messages change
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.role === 'assistant') {
+      setTimeout(() => scrollToLastAssistant(), 100);
+    }
   }, [messages]);
 
   const buildContext = () => {
@@ -427,6 +434,7 @@ ${JSON.stringify(context.news, null, 0)}
             messages.map((message, i) => (
               <div
                 key={i}
+                ref={message.role === 'assistant' && i === messages.length - 1 ? lastAssistantRef : null}
                 className={`flex gap-1.5 md:gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'assistant' && (
