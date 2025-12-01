@@ -282,20 +282,20 @@ FORMAT DE RÉPONSE:
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
-            <Bot className="w-7 h-7 text-white" />
+      <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4">
+        <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0">
+            <Bot className="w-5 h-5 md:w-7 md:h-7 text-white" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <div className="min-w-0">
+            <h1 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
               Agent FinderAI
-              <Sparkles className="w-5 h-5 text-yellow-500" />
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-xs md:text-sm text-slate-600 truncate">
               {language === 'en' 
-                ? 'Your AI expert to find the perfect tool or ask questions about AI' 
-                : 'Ton expert IA pour trouver l\'outil parfait ou poser des questions sur l\'IA'}
+                ? 'Your AI expert to find the perfect tool' 
+                : 'Ton expert IA pour trouver l\'outil parfait'}
             </p>
           </div>
         </div>
