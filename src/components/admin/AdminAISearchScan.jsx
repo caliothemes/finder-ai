@@ -22,7 +22,7 @@ export default function AdminAISearchScan() {
 
   const { data: discoveries = [], isLoading } = useQuery({
     queryKey: ['discoveries'],
-    queryFn: () => base44.entities.AIServiceDiscovery.list('-created_date', 500),
+    queryFn: () => base44.entities.AIServiceDiscovery.list('-created_date', 2000),
   });
 
   const { data: categories = [] } = useQuery({
