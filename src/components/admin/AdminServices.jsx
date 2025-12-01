@@ -50,7 +50,7 @@ export default function AdminServices() {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       setShowForm(false);
       setEditingService(null);
-      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
+      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], tags: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
       toast.success('Service créé avec succès');
     },
   });
