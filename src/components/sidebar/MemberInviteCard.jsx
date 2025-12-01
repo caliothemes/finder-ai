@@ -1,6 +1,6 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
-import { Heart, Star, MessageSquare, Sparkles, ArrowRight } from 'lucide-react';
+import { Heart, Star, MessageSquare, Sparkles, ArrowRight, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
 
