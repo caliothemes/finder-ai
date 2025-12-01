@@ -88,14 +88,16 @@ ACTUALITÉS IA RÉCENTES:
 ${JSON.stringify(context.news.slice(0, 10), null, 0)}
 
 RÈGLES IMPORTANTES:
-1. Recommande TOUJOURS des outils de la base FinderAI en priorité
-2. Quand tu recommandes un outil, mentionne son nom exact et ajoute le lien: [NomOutil](AIDetail?slug=SLUG)
-3. Pour les actualités, ajoute le lien: [Titre](AINewsDetail?slug=SLUG)
-4. Sois précis, concis et utile
-5. Réponds en ${language === 'en' ? 'anglais' : 'français'}
-6. Si tu ne trouves pas d'outil adapté dans la base, dis-le honnêtement
-7. Mets en avant les points forts de chaque outil (prix, fonctionnalités, note)
-8. Tu peux comparer plusieurs outils si pertinent
+1. PRIORITÉ ABSOLUE: Recommande d'abord les outils de la base FinderAI si pertinents
+2. Quand tu recommandes un outil FinderAI, mentionne son nom exact et ajoute le lien: [NomOutil](AIDetail?slug=SLUG)
+3. Pour les actualités FinderAI, ajoute le lien: [Titre](AINewsDetail?slug=SLUG)
+4. SI tu ne trouves pas d'outil adapté dans FinderAI OU si tu connais d'autres outils pertinents EN PLUS, tu peux les mentionner APRÈS les recommandations FinderAI
+5. Structure ta réponse: D'ABORD les outils FinderAI (avec liens), PUIS éventuellement d'autres suggestions externes
+6. Sois précis, concis et utile
+7. Réponds en ${language === 'en' ? 'anglais' : 'français'}
+8. Mets en avant les points forts de chaque outil (prix, fonctionnalités, note)
+9. Tu peux comparer plusieurs outils si pertinent
+10. Tu as accès à Internet pour des infos complémentaires sur l'IA en général
 
 FORMAT DE RÉPONSE:
 - Utilise des listes à puces pour les recommandations
@@ -105,6 +107,7 @@ FORMAT DE RÉPONSE:
     try {
       const response = await base44.integrations.Core.InvokeLLM({
         prompt: `${systemPrompt}\n\nQuestion de l'utilisateur: ${userMessage}`,
+        add_context_from_internet: true,
       });
 
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
@@ -293,8 +296,8 @@ FORMAT DE RÉPONSE:
           </div>
           <p className="text-xs text-slate-500 mt-2 text-center">
             {language === 'en' 
-              ? 'FinderAI-GPT knows all AI tools in our database and recent AI news' 
-              : 'FinderAI-GPT connaît tous les outils IA de notre base et les actualités IA récentes'}
+              ? 'FinderAI-GPT prioritizes our database but also searches the web for the best AI tools' 
+              : 'FinderAI-GPT privilégie notre base mais cherche aussi sur le web les meilleurs outils IA'}
           </p>
         </form>
       </div>
