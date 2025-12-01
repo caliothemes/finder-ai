@@ -257,13 +257,13 @@ FORMAT DE RÉPONSE:
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              FinderAI-GPT
+              Agent FinderAI
               <Sparkles className="w-5 h-5 text-yellow-500" />
             </h1>
             <p className="text-sm text-slate-600">
               {language === 'en' 
-                ? 'Your AI expert to find the perfect tool' 
-                : 'Ton expert IA pour trouver l\'outil parfait'}
+                ? 'Your AI expert to find the perfect tool or ask questions about AI' 
+                : 'Ton expert IA pour trouver l\'outil parfait ou poser des questions sur l\'IA'}
             </p>
           </div>
         </div>
