@@ -30,7 +30,48 @@ export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
     );
   }
 
-  // Banner format (horizontal)
+  // Article format (pour homepage_hero et explore_top)
+  if (variant === 'article') {
+    return (
+      <div className="group bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-3xl overflow-hidden border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl">
+        <div className="flex flex-col md:flex-row">
+          {/* Image placeholder à gauche */}
+          <div className="md:w-2/5 h-48 md:h-auto bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgZmlsbD0icmdiYSgxNDcsIDUxLCAyMzQsIDAuMSkiIGN4PSIyMCIgY3k9IjIwIiByPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-50"></div>
+            <div className="relative text-center p-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Sparkles className="w-10 h-10 text-white" />
+              </div>
+              <p className="text-purple-700 font-medium text-sm">Votre image ici</p>
+            </div>
+          </div>
+
+          {/* Contenu à droite */}
+          <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium w-fit mb-4">
+              <Sparkles className="w-3 h-3" />
+              Espace disponible
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              Titre de votre service IA
+            </h3>
+            <p className="text-slate-600 mb-6 text-base leading-relaxed">
+              Rédigez une description accrocheuse pour présenter votre service IA. 
+              Expliquez les avantages et fonctionnalités qui font la différence pour vos utilisateurs.
+            </p>
+            <Link to={createPageUrl('ProAccount')}>
+              <Button className="w-fit bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all">
+                <Crown className="w-4 h-4 mr-2" />
+                Réserver cet emplacement
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Banner format (horizontal) - pour les autres positions
   return (
     <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 h-[150px] md:h-[200px]">
       <div className="absolute inset-0 flex items-center justify-center">

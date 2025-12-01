@@ -37,7 +37,8 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
   // Si pas de bannière et placeholder demandé, afficher le placeholder
   if (!isLoading && !activeBanner && showPlaceholder) {
     const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
-    return <EmptyBannerPlaceholder variant={isCardFormat ? 'card' : 'banner'} />;
+    const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
+    return <EmptyBannerPlaceholder variant={isArticleFormat ? 'article' : isCardFormat ? 'card' : 'banner'} />;
   }
 
   if (isLoading || !activeBanner) return null;
