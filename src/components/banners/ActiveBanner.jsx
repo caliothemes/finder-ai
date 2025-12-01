@@ -92,7 +92,7 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
             </h3>
           </a>
           {activeBanner.description && (
-            <p className="text-slate-600 mb-4 line-clamp-3 text-sm font-normal">
+            <p className="text-slate-600 mb-4 line-clamp-[8] text-sm font-normal">
               {activeBanner.description}
             </p>
           )}
