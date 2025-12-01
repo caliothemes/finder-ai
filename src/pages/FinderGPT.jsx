@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Send, Bot, User, Sparkles, Loader2, ExternalLink, Star, Plus, MessageSquare, Trash2, Mic, MicOff } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader2, ExternalLink, Star, Plus, MessageSquare, Trash2, Mic, MicOff, Zap, Heart, Clock, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,7 @@ export default function FinderGPT() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [isListening, setIsListening] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const messagesEndRef = useRef(null);
   const { language } = useLanguage();
   const queryClient = useQueryClient();
@@ -31,6 +32,8 @@ export default function FinderGPT() {
         }
       } catch (error) {
         setUser(null);
+      } finally {
+        setAuthChecked(true);
       }
     };
     loadUser();
