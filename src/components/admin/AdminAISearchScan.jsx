@@ -560,57 +560,283 @@ export default function AdminAISearchScan() {
         )}
       </div>
 
-      {/* Modal de validation avec sélection de catégories */}
+      {/* Modal de validation avec édition complète */}
       {approvingDiscovery && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-2">Approuver: {approvingDiscovery.name}</h2>
-            <p className="text-slate-600 mb-6">Sélectionnez au moins une catégorie pour ce service IA</p>
+          <div className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-2">Publier: {approvingDiscovery.name}</h2>
+            <p className="text-slate-600 mb-6">Modifiez les informations avant de publier le service</p>
             
-            <div className="space-y-2 mb-6 max-h-96 overflow-y-auto">
-              {categories.map(cat => (
-                <label 
-                  key={cat.id} 
-                  className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(cat.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedCategories([...selectedCategories, cat.id]);
-                      } else {
-                        setSelectedCategories(selectedCategories.filter(id => id !== cat.id));
+            <div className="grid grid-cols-2 gap-6">
+              {/* Colonne gauche */}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Nom *</label>
+                  <Input
+                    value={approveFormData.name || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, name: e.target.value})}
+                    placeholder="Nom du service"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tagline (FR)</label>
+                  <Input
+                    value={approveFormData.tagline || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, tagline: e.target.value})}
+                    placeholder="Phrase d'accroche en français"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tagline (EN)</label>
+                  <Input
+                    value={approveFormData.tagline_en || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, tagline_en: e.target.value})}
+                    placeholder="Tagline in English"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Description (FR)</label>
+                  <Textarea
+                    value={approveFormData.description || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, description: e.target.value})}
+                    placeholder="Description complète en français"
+                    rows={4}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Description (EN)</label>
+                  <Textarea
+                    value={approveFormData.description_en || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, description_en: e.target.value})}
+                    placeholder="Full description in English"
+                    rows={4}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">URL du site *</label>
+                  <Input
+                    value={approveFormData.website_url || ''}
+                    onChange={(e) => setApproveFormData({...approveFormData, website_url: e.target.value})}
+                    placeholder="https://..."
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Modèle de prix</label>
+                  <Select 
+                    value={approveFormData.pricing || 'freemium'} 
+                    onValueChange={(v) => setApproveFormData({...approveFormData, pricing: v})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="gratuit">Gratuit</SelectItem>
+                      <SelectItem value="freemium">Freemium</SelectItem>
+                      <SelectItem value="payant">Payant</SelectItem>
+                      <SelectItem value="abonnement">Abonnement</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Colonne droite */}
+              <div className="space-y-4">
+                {/* Images */}
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Logo</label>
+                  <div className="flex items-center gap-3">
+                    {approveFormData.logo_url && (
+                      <img src={approveFormData.logo_url} alt="Logo" className="w-16 h-16 rounded-lg object-cover" />
+                    )}
+                    <div className="flex-1">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e.target.files[0], 'logo')}
+                        disabled={uploadingLogo}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Image de couverture</label>
+                  <div className="space-y-2">
+                    {approveFormData.cover_image_url && (
+                      <img src={approveFormData.cover_image_url} alt="Cover" className="w-full h-32 rounded-lg object-cover" />
+                    )}
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e.target.files[0], 'cover')}
+                      disabled={uploadingCover}
+                    />
+                  </div>
+                </div>
+
+                {/* Features FR */}
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Fonctionnalités (FR)</label>
+                  <div className="space-y-2">
+                    {(approveFormData.features || []).map((feature, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <Input
+                          value={feature}
+                          onChange={(e) => {
+                            const newFeatures = [...approveFormData.features];
+                            newFeatures[idx] = e.target.value;
+                            setApproveFormData({...approveFormData, features: newFeatures});
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            const newFeatures = approveFormData.features.filter((_, i) => i !== idx);
+                            setApproveFormData({...approveFormData, features: newFeatures});
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setApproveFormData({...approveFormData, features: [...(approveFormData.features || []), '']})}
+                    >
+                      <Plus className="w-4 h-4 mr-1" /> Ajouter
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Features EN */}
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Features (EN)</label>
+                  <div className="space-y-2">
+                    {(approveFormData.features_en || []).map((feature, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <Input
+                          value={feature}
+                          onChange={(e) => {
+                            const newFeatures = [...approveFormData.features_en];
+                            newFeatures[idx] = e.target.value;
+                            setApproveFormData({...approveFormData, features_en: newFeatures});
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            const newFeatures = approveFormData.features_en.filter((_, i) => i !== idx);
+                            setApproveFormData({...approveFormData, features_en: newFeatures});
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setApproveFormData({...approveFormData, features_en: [...(approveFormData.features_en || []), '']})}
+                    >
+                      <Plus className="w-4 h-4 mr-1" /> Add
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tags</label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {(approveFormData.tags || []).map((tag, idx) => (
+                      <Badge key={idx} variant="secondary" className="flex items-center gap-1">
+                        {tag}
+                        <button
+                          onClick={() => {
+                            const newTags = approveFormData.tags.filter((_, i) => i !== idx);
+                            setApproveFormData({...approveFormData, tags: newTags});
+                          }}
+                          className="hover:text-red-500"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                  <Input
+                    placeholder="Ajouter un tag et appuyer sur Entrée"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.target.value.trim()) {
+                        e.preventDefault();
+                        setApproveFormData({
+                          ...approveFormData, 
+                          tags: [...(approveFormData.tags || []), e.target.value.trim()]
+                        });
+                        e.target.value = '';
                       }
                     }}
-                    className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
                   />
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900">{cat.name}</div>
-                    {cat.description && (
-                      <div className="text-sm text-slate-500">{cat.description}</div>
-                    )}
-                  </div>
-                </label>
-              ))}
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-3">
+            {/* Catégories */}
+            <div className="mt-6">
+              <label className="text-sm font-medium text-slate-700 mb-2 block">Catégories *</label>
+              <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 border rounded-lg">
+                {categories.map(cat => (
+                  <label 
+                    key={cat.id} 
+                    className="flex items-center gap-2 p-2 border rounded cursor-pointer hover:bg-slate-50 transition-colors text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(cat.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedCategories([...selectedCategories, cat.id]);
+                        } else {
+                          setSelectedCategories(selectedCategories.filter(id => id !== cat.id));
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                    />
+                    <span className="font-medium text-slate-900">{cat.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6 pt-4 border-t">
               <Button
                 onClick={() => approveDiscoveryMutation.mutate({ 
                   discovery: approvingDiscovery, 
-                  categories: selectedCategories 
+                  categories: selectedCategories,
+                  formData: approveFormData
                 })}
-                disabled={selectedCategories.length === 0 || approveDiscoveryMutation.isPending}
+                disabled={selectedCategories.length === 0 || !approveFormData.name || !approveFormData.website_url || approveDiscoveryMutation.isPending}
                 className="bg-green-600 hover:bg-green-700 text-white flex-1"
               >
                 <Check className="w-4 h-4 mr-2" />
-                {approveDiscoveryMutation.isPending ? 'Création...' : `Approuver (${selectedCategories.length} catégorie${selectedCategories.length > 1 ? 's' : ''})`}
+                {approveDiscoveryMutation.isPending ? 'Création...' : `Publier le service`}
               </Button>
               <Button
                 onClick={() => {
                   setApprovingDiscovery(null);
                   setSelectedCategories([]);
+                  setApproveFormData({});
                 }}
                 variant="outline"
                 disabled={approveDiscoveryMutation.isPending}
