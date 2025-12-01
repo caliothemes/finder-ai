@@ -4,7 +4,18 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, Calendar, Power, PowerOff } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Calendar, Power, PowerOff, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
 export default function AdminBanners() {
@@ -36,6 +47,30 @@ export default function AdminBanners() {
     onSuccess: (_, { active }) => {
       queryClient.invalidateQueries({ queryKey: ['adminBanners'] });
       toast.success(active ? 'Bannière activée' : 'Bannière désactivée');
+    },
+  });
+
+  const deleteBannerMutation = useMutation({
+    mutationFn: async (banner) => {
+      // Rembourser les crédits au compte pro si des dates étaient réservées
+      if (banner.pro_account_id && banner.credits_used > 0) {
+        const proAccounts = await base44.entities.ProAccount.filter({ id: banner.pro_account_id });
+        if (proAccounts.length > 0) {
+          const proAccount = proAccounts[0];
+          await base44.entities.ProAccount.update(proAccount.id, {
+            credits: (proAccount.credits || 0) + banner.credits_used
+          });
+        }
+      }
+      // Supprimer la bannière
+      await base44.entities.BannerReservation.delete(banner.id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminBanners'] });
+      toast.success('Bannière supprimée et crédits remboursés');
+    },
+    onError: () => {
+      toast.error('Erreur lors de la suppression');
     },
   });
 
@@ -167,6 +202,35 @@ export default function AdminBanners() {
                       </>
                     )}
                   </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Supprimer cette bannière ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Cette action supprimera la bannière et libérera les dates réservées.
+                          {banner.credits_used > 0 && (
+                            <span className="block mt-2 font-medium text-green-600">
+                              ✓ {banner.credits_used} crédits seront remboursés au compte pro.
+                            </span>
+                          )}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deleteBannerMutation.mutate(banner)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Supprimer
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             ))}
