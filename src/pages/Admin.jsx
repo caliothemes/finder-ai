@@ -67,7 +67,7 @@ export default function Admin() {
   const { data: pendingDiscoveriesCount = 0 } = useQuery({
     queryKey: ['pendingDiscoveriesCount'],
     queryFn: async () => {
-      const discoveries = await base44.entities.AIServiceDiscovery.filter({ status: 'new' });
+      const discoveries = await base44.entities.AIServiceDiscovery.filter({ status: 'new' }, '-created_date', 2000);
       return discoveries.length;
     },
     enabled: !!user,
