@@ -505,6 +505,18 @@ function LayoutContent({ children, currentPageName }) {
 
             {/* Right Actions */}
             <div className="hidden lg:flex items-center gap-4">
+              {/* Agent FinderAI Button */}
+              <Link
+                to={createPageUrl('FinderGPT')}
+                className="group relative p-2.5 bg-gradient-to-r from-yellow-100 to-orange-100 hover:from-yellow-200 hover:to-orange-200 rounded-xl transition-all duration-300 hover:shadow-md hover:scale-105"
+                title="Agent FinderAI"
+              >
+                <Bot className="w-5 h-5 text-purple-600 group-hover:scale-110 transition-transform duration-300" />
+                <span className="absolute -top-1 -right-1 px-1 py-0.5 text-[8px] font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">
+                  AI
+                </span>
+              </Link>
+
               {/* Search Button with Animation */}
               <button
                 onClick={() => setSearchModalOpen(true)}

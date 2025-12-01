@@ -18,7 +18,7 @@ export default function FinderGPT() {
   const [isListening, setIsListening] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const messagesEndRef = useRef(null);
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const queryClient = useQueryClient();
 
   // Load user
@@ -260,6 +260,8 @@ ${JSON.stringify(context.news, null, 0)}
     "Quelles sont les dernières actualités IA ?"
   ];
 
+  const { t } = useLanguage();
+
   // Show login prompt for non-authenticated users
   if (authChecked && !user) {
     return (
@@ -276,9 +278,7 @@ ${JSON.stringify(context.news, null, 0)}
                 <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
               </h1>
               <p className="text-xs md:text-sm text-slate-600 truncate">
-                {language === 'en' 
-                  ? 'Your AI expert to find the perfect tool' 
-                  : 'Ton expert IA pour trouver l\'outil parfait'}
+                {t('agent_subtitle')}
               </p>
             </div>
           </div>
@@ -292,15 +292,11 @@ ${JSON.stringify(context.news, null, 0)}
             </div>
             
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
-              {language === 'en' 
-                ? 'Create your free account' 
-                : 'Crée ton compte gratuit'}
+              {t('agent_create_account')}
             </h2>
             
             <p className="text-slate-600 mb-6">
-              {language === 'en'
-                ? 'Sign up in 20 seconds to access Agent FinderAI and discover thousands of AI tools!'
-                : 'Inscris-toi en 20 secondes pour accéder à Agent FinderAI et découvrir des milliers d\'outils IA !'}
+              {t('agent_signup_desc')}
             </p>
 
             {/* Features */}
@@ -311,10 +307,10 @@ ${JSON.stringify(context.news, null, 0)}
                 </div>
                 <div>
                   <p className="font-medium text-slate-900">
-                    {language === 'en' ? 'Instant AI Recommendations' : 'Recommandations IA instantanées'}
+                    {t('agent_feature_recommendations')}
                   </p>
                   <p className="text-sm text-slate-500">
-                    {language === 'en' ? 'Find the perfect tool in seconds' : 'Trouve l\'outil parfait en secondes'}
+                    {t('agent_feature_recommendations_desc')}
                   </p>
                 </div>
               </div>
@@ -325,10 +321,10 @@ ${JSON.stringify(context.news, null, 0)}
                 </div>
                 <div>
                   <p className="font-medium text-slate-900">
-                    {language === 'en' ? 'Save your favorites' : 'Sauvegarde tes favoris'}
+                    {t('agent_feature_favorites')}
                   </p>
                   <p className="text-sm text-slate-500">
-                    {language === 'en' ? 'Keep track of tools you love' : 'Garde une trace des outils que tu aimes'}
+                    {t('agent_feature_favorites_desc')}
                   </p>
                 </div>
               </div>
@@ -339,10 +335,10 @@ ${JSON.stringify(context.news, null, 0)}
                 </div>
                 <div>
                   <p className="font-medium text-slate-900">
-                    {language === 'en' ? 'Chat history saved' : 'Historique de chat sauvegardé'}
+                    {t('agent_feature_history')}
                   </p>
                   <p className="text-sm text-slate-500">
-                    {language === 'en' ? 'Resume conversations anytime' : 'Reprends tes conversations à tout moment'}
+                    {t('agent_feature_history_desc')}
                   </p>
                 </div>
               </div>
@@ -353,13 +349,11 @@ ${JSON.stringify(context.news, null, 0)}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg rounded-xl shadow-lg"
             >
               <LogIn className="w-5 h-5 mr-2" />
-              {language === 'en' ? 'Sign up for free' : 'S\'inscrire gratuitement'}
+              {t('agent_signup_btn')}
             </Button>
             
             <p className="text-xs text-slate-500 mt-4">
-              {language === 'en' 
-                ? '✨ 100% free • No credit card required • Access in 20 seconds'
-                : '✨ 100% gratuit • Pas de carte bancaire • Accès en 20 secondes'}
+              {t('agent_signup_info')}
             </p>
           </div>
         </div>
@@ -381,9 +375,7 @@ ${JSON.stringify(context.news, null, 0)}
               <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
             </h1>
             <p className="text-xs md:text-sm text-slate-600 truncate">
-              {language === 'en' 
-                ? 'Your AI expert to find the perfect tool' 
-                : 'Ton expert IA pour trouver l\'outil parfait'}
+              {t('agent_subtitle')}
             </p>
           </div>
         </div>
@@ -398,12 +390,10 @@ ${JSON.stringify(context.news, null, 0)}
                 <Bot className="w-8 h-8 md:w-10 md:h-10 text-white" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3">
-                {language === 'en' ? 'Welcome to Agent FinderAI!' : 'Bienvenue sur Agent FinderAI !'}
+                {t('agent_welcome')}
               </h2>
               <p className="text-sm md:text-base text-slate-600 mb-6 md:mb-8 max-w-md mx-auto">
-                {language === 'en' 
-                  ? 'I\'m your AI expert! Ask me anything: find the perfect AI tool, get the latest AI news, or ask any question about artificial intelligence.'
-                  : 'Je suis ton expert IA ! Pose-moi n\'importe quelle question : trouver l\'outil IA parfait, connaître les dernières actualités IA, ou poser une question sur l\'intelligence artificielle.'}
+                {t('agent_description')}
               </p>
               
               {/* Suggestions */}
@@ -489,7 +479,7 @@ ${JSON.stringify(context.news, null, 0)}
               <div className="bg-white border border-slate-200 rounded-xl md:rounded-2xl px-3 md:px-5 py-2.5 md:py-3">
                 <div className="flex items-center gap-2 text-slate-500 text-sm">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  {language === 'en' ? 'Thinking...' : 'Réflexion...'}
+                  {t('agent_thinking')}
                 </div>
               </div>
             </div>
@@ -507,9 +497,7 @@ ${JSON.stringify(context.news, null, 0)}
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={language === 'en' 
-                  ? 'Ask me about AI tools...' 
-                  : 'Pose-moi une question...'}
+                placeholder={t('agent_placeholder')}
                 className="w-full resize-none min-h-[44px] md:min-h-[50px] max-h-[120px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-10 md:pr-12 text-sm md:text-base"
                 rows={1}
                 onKeyDown={(e) => {
@@ -548,7 +536,7 @@ ${JSON.stringify(context.news, null, 0)}
                 className="flex-shrink-0 px-2.5 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg md:rounded-xl text-xs md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                {language === 'en' ? 'New' : 'Nouveau'}
+                {t('agent_new_chat')}
               </button>
               {chatHistory.slice(0, 5).map((chat) => (
                 <button
@@ -579,13 +567,7 @@ ${JSON.stringify(context.news, null, 0)}
           )}
           
           <p className="text-[10px] md:text-xs text-purple-600 mt-2 text-center">
-            {user 
-              ? (language === 'en' 
-                  ? '✨ Conversations saved automatically' 
-                  : '✨ Conversations sauvegardées')
-              : (language === 'en' 
-                  ? 'Log in to save your history' 
-                  : 'Connecte-toi pour sauvegarder')}
+            {user ? t('agent_saved') : t('agent_login_prompt')}
           </p>
         </form>
       </div>

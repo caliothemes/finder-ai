@@ -241,6 +241,26 @@ const translations = {
     reviews_submit: "Publier l'avis",
     reviews_empty: "Aucun avis pour le moment. Soyez le premier à donner votre avis !",
 
+    // Agent FinderAI
+    agent_welcome: "Bienvenue sur Agent FinderAI !",
+    agent_subtitle: "Ton expert IA pour trouver l'outil parfait",
+    agent_description: "Je suis ton expert IA ! Pose-moi n'importe quelle question : trouver l'outil IA parfait, connaître les dernières actualités IA, ou poser une question sur l'intelligence artificielle.",
+    agent_create_account: "Crée ton compte gratuit",
+    agent_signup_desc: "Inscris-toi en 20 secondes pour accéder à Agent FinderAI et découvrir des milliers d'outils IA !",
+    agent_feature_recommendations: "Recommandations IA instantanées",
+    agent_feature_recommendations_desc: "Trouve l'outil parfait en secondes",
+    agent_feature_favorites: "Sauvegarde tes favoris",
+    agent_feature_favorites_desc: "Garde une trace des outils que tu aimes",
+    agent_feature_history: "Historique de chat sauvegardé",
+    agent_feature_history_desc: "Reprends tes conversations à tout moment",
+    agent_signup_btn: "S'inscrire gratuitement",
+    agent_signup_info: "✨ 100% gratuit • Pas de carte bancaire • Accès en 20 secondes",
+    agent_placeholder: "Pose-moi une question...",
+    agent_thinking: "Réflexion...",
+    agent_new_chat: "Nouveau",
+    agent_saved: "✨ Conversations sauvegardées",
+    agent_login_prompt: "Connecte-toi pour sauvegarder",
+
     // Common
           common_loading: "Chargement...",
           common_cancel: "Annuler",
@@ -544,6 +564,26 @@ const translations = {
     reviews_placeholder: "Share your experience...",
     reviews_submit: "Submit review",
     reviews_empty: "No reviews yet. Be the first to share your thoughts!",
+
+    // Agent FinderAI
+    agent_welcome: "Welcome to Agent FinderAI!",
+    agent_subtitle: "Your AI expert to find the perfect tool",
+    agent_description: "I'm your AI expert! Ask me anything: find the perfect AI tool, get the latest AI news, or ask any question about artificial intelligence.",
+    agent_create_account: "Create your free account",
+    agent_signup_desc: "Sign up in 20 seconds to access Agent FinderAI and discover thousands of AI tools!",
+    agent_feature_recommendations: "Instant AI Recommendations",
+    agent_feature_recommendations_desc: "Find the perfect tool in seconds",
+    agent_feature_favorites: "Save your favorites",
+    agent_feature_favorites_desc: "Keep track of tools you love",
+    agent_feature_history: "Chat history saved",
+    agent_feature_history_desc: "Resume conversations anytime",
+    agent_signup_btn: "Sign up for free",
+    agent_signup_info: "✨ 100% free • No credit card required • Access in 20 seconds",
+    agent_placeholder: "Ask me about AI tools...",
+    agent_thinking: "Thinking...",
+    agent_new_chat: "New",
+    agent_saved: "✨ Conversations saved automatically",
+    agent_login_prompt: "Log in to save your history",
 
     // Common
           common_loading: "Loading...",
