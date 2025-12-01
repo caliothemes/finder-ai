@@ -260,20 +260,6 @@ ${JSON.stringify(context.news, null, 0)}
     }
   };
 
-  const suggestions = language === 'en' ? [
-    "What AI for generating images?",
-    "Best free AI tools for writing?",
-    "Which AI for creating videos?",
-    "Latest AI news?"
-  ] : [
-    "Quelle IA pour générer des images ?",
-    "Les meilleurs outils IA gratuits pour écrire ?",
-    "Quelle IA pour créer des vidéos ?",
-    "Quelles sont les dernières actualités IA ?"
-  ];
-
-  const { t } = useLanguage();
-
   // Show login prompt for non-authenticated users
   if (authChecked && !user) {
     return (
