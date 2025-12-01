@@ -488,15 +488,15 @@ ${JSON.stringify(context.news, null, 0)}
       </div>
 
       {/* Input Area */}
-      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-3 md:px-6 py-3 md:py-5">
+      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-2 md:px-6 py-2 md:py-4 flex-shrink-0">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-          <div className="flex gap-2 md:gap-3">
+          <div className="flex gap-2">
             <div className="flex-1 relative">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('agent_placeholder')}
-                className="w-full resize-none min-h-[44px] md:min-h-[50px] max-h-[120px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-10 md:pr-12 text-sm md:text-base"
+                className="w-full resize-none min-h-[40px] md:min-h-[50px] max-h-[80px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-9 md:pr-12 text-sm md:text-base py-2"
                 rows={1}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -508,7 +508,7 @@ ${JSON.stringify(context.news, null, 0)}
               <button
                 type="button"
                 onClick={toggleVoiceInput}
-                className={`absolute right-2 md:right-3 top-1/2 -translate-y-1/2 p-1.5 md:p-2 rounded-full transition-all ${
+                className={`absolute right-1.5 md:right-3 top-1/2 -translate-y-1/2 p-1 md:p-2 rounded-full transition-all ${
                   isListening 
                     ? 'bg-red-100 text-red-600 animate-pulse' 
                     : 'hover:bg-purple-100 text-purple-600'
@@ -520,7 +520,7 @@ ${JSON.stringify(context.news, null, 0)}
             <Button 
               type="submit" 
               disabled={isLoading || !input.trim()}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 md:px-6"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 md:px-6 h-[40px] md:h-auto"
             >
               <Send className="w-4 h-4 md:w-5 md:h-5" />
             </Button>
@@ -528,25 +528,25 @@ ${JSON.stringify(context.news, null, 0)}
           
           {/* Chat History - Horizontal under prompt */}
           {user && chatHistory.length > 0 && (
-            <div className="mt-3 md:mt-4 flex items-center gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+            <div className="mt-2 md:mt-4 flex items-center gap-1.5 md:gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
               <button
                 onClick={startNewChat}
-                className="flex-shrink-0 px-2.5 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg md:rounded-xl text-xs md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
+                className="flex-shrink-0 px-2 md:px-3 py-1 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-[10px] md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
               >
-                <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                <Plus className="w-3 h-3 md:w-4 md:h-4" />
                 {t('agent_new_chat')}
               </button>
-              {chatHistory.slice(0, 5).map((chat) => (
+              {chatHistory.slice(0, 4).map((chat) => (
                 <button
                   key={chat.id}
                   onClick={() => loadChat(chat)}
-                  className={`flex-shrink-0 px-2.5 md:px-3 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-medium transition-all flex items-center gap-1.5 md:gap-2 max-w-[140px] md:max-w-[180px] group ${
+                  className={`flex-shrink-0 px-2 md:px-3 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-all flex items-center gap-1 md:gap-2 max-w-[100px] md:max-w-[180px] group ${
                     currentChatId === chat.id 
                       ? 'bg-purple-200 text-purple-800 border border-purple-400' 
                       : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50'
                   }`}
                 >
-                  <MessageSquare className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
+                  <MessageSquare className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
                   <span className="truncate">{chat.title || 'Chat'}</span>
                   <button
                     onClick={(e) => {
@@ -555,7 +555,7 @@ ${JSON.stringify(context.news, null, 0)}
                         deleteChatMutation.mutate(chat.id);
                       }
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-0.5 hover:bg-red-100 rounded transition-all flex-shrink-0"
+                    className="hidden md:block opacity-0 group-hover:opacity-100 p-0.5 hover:bg-red-100 rounded transition-all flex-shrink-0"
                   >
                     <Trash2 className="w-3 h-3 text-red-500" />
                   </button>
@@ -564,7 +564,7 @@ ${JSON.stringify(context.news, null, 0)}
             </div>
           )}
           
-          <p className="text-[10px] md:text-xs text-purple-600 mt-2 text-center">
+          <p className="text-[9px] md:text-xs text-purple-600 mt-1 md:mt-2 text-center">
             {user ? t('agent_saved') : t('agent_login_prompt')}
           </p>
         </form>
