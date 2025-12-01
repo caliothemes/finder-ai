@@ -216,6 +216,65 @@ Return JSON format:
     }
   };
 
+  const handleGenerateTags = async () => {
+    if (!approveFormData.name && !approveFormData.description) {
+      toast.error('Nom ou description requis pour générer les tags');
+      return;
+    }
+
+    setIsGeneratingTags(true);
+    try {
+      const categoryNames = selectedCategories
+        .map(catId => categories.find(c => c.id === catId)?.name)
+        .filter(Boolean);
+
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Generate relevant search tags/keywords for this AI tool. Tags should be in French and help users find this tool.
+
+AI Tool Information:
+- Name: ${approveFormData.name || ''}
+- Tagline: ${approveFormData.tagline || ''}
+- Description: ${approveFormData.description || ''}
+- Categories: ${categoryNames.join(', ') || 'N/A'}
+- Features: ${(approveFormData.features || []).join(', ') || 'N/A'}
+
+Generate 8-12 relevant tags. Include:
+- Main use cases
+- Technology type (AI, machine learning, etc.)
+- Target users
+- Key features
+- Related terms users might search for
+
+Return ONLY a JSON array of lowercase French tags, no duplicates.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            tags: { 
+              type: "array", 
+              items: { type: "string" },
+              description: "Array of relevant tags in French"
+            }
+          },
+          required: ["tags"]
+        }
+      });
+
+      if (response.tags && response.tags.length > 0) {
+        const existingTags = approveFormData.tags || [];
+        const newTags = [...new Set([...existingTags, ...response.tags])];
+        setApproveFormData({ ...approveFormData, tags: newTags });
+        toast.success(`${response.tags.length} tags générés !`);
+      } else {
+        toast.error('Aucun tag généré');
+      }
+    } catch (error) {
+      console.error('Tag generation error:', error);
+      toast.error('Erreur lors de la génération des tags');
+    } finally {
+      setIsGeneratingTags(false);
+    }
+  };
+
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
