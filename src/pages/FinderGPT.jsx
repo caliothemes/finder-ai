@@ -335,15 +335,15 @@ FORMAT DE RÉPONSE:
             messages.map((message, i) => (
               <div
                 key={i}
-                className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 md:gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'assistant' && (
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-5 h-5 text-white" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] rounded-2xl px-5 py-3 ${
+                  className={`max-w-[85%] md:max-w-[80%] rounded-xl md:rounded-2xl px-3 md:px-5 py-2.5 md:py-3 ${
                     message.role === 'user'
                       ? 'bg-purple-600 text-white'
                       : 'bg-white border border-slate-200 text-slate-700'
