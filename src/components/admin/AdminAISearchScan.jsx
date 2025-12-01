@@ -167,6 +167,54 @@ export default function AdminAISearchScan() {
     }
   };
 
+  const handleAutoTranslate = async () => {
+    if (!approveFormData.tagline && !approveFormData.description && (!approveFormData.features || approveFormData.features.length === 0)) {
+      toast.error('Aucun contenu français à traduire');
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Translate the following French content to English. Return ONLY a valid JSON object with the translated fields.
+
+French content:
+- Tagline: "${approveFormData.tagline || ''}"
+- Description: "${approveFormData.description || ''}"
+- Features: ${JSON.stringify(approveFormData.features || [])}
+
+Return JSON format:
+{
+  "tagline_en": "translated tagline",
+  "description_en": "translated description", 
+  "features_en": ["feature 1", "feature 2", ...]
+}`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            tagline_en: { type: "string" },
+            description_en: { type: "string" },
+            features_en: { type: "array", items: { type: "string" } }
+          }
+        }
+      });
+
+      setApproveFormData(prev => ({
+        ...prev,
+        tagline_en: response.tagline_en || prev.tagline_en,
+        description_en: response.description_en || prev.description_en,
+        features_en: response.features_en || prev.features_en
+      }));
+      
+      toast.success('Traduction automatique effectuée !');
+    } catch (error) {
+      console.error('Translation error:', error);
+      toast.error('Erreur lors de la traduction');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
