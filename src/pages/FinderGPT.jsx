@@ -302,29 +302,29 @@ FORMAT DE RÉPONSE:
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4 md:py-6">
+        <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
             {messages.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Bot className="w-10 h-10 text-white" />
+            <div className="text-center py-8 md:py-12 px-2">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg">
+                <Bot className="w-8 h-8 md:w-10 md:h-10 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3">
                 {language === 'en' ? 'Welcome to Agent FinderAI!' : 'Bienvenue sur Agent FinderAI !'}
               </h2>
-              <p className="text-slate-600 mb-8 max-w-md mx-auto">
+              <p className="text-sm md:text-base text-slate-600 mb-6 md:mb-8 max-w-md mx-auto">
                 {language === 'en' 
                   ? 'I\'m your AI expert! Ask me anything: find the perfect AI tool, get the latest AI news, or ask any question about artificial intelligence.'
                   : 'Je suis ton expert IA ! Pose-moi n\'importe quelle question : trouver l\'outil IA parfait, connaître les dernières actualités IA, ou poser une question sur l\'intelligence artificielle.'}
               </p>
               
               {/* Suggestions */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 max-w-2xl mx-auto">
                 {suggestions.map((suggestion, i) => (
                   <button
                     key={i}
                     onClick={() => setInput(suggestion)}
-                    className="text-left px-4 py-3 bg-white rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50 transition-all text-sm text-slate-700"
+                    className="text-left px-3 md:px-4 py-2.5 md:py-3 bg-white rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50 transition-all text-xs md:text-sm text-slate-700"
                   >
                     {suggestion}
                   </button>
