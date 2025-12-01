@@ -124,6 +124,9 @@ export default function AdminAISearchScan() {
   };
 
   const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  
   const newCount = discoveries.filter(d => d.status === 'new').length;
   const reviewedCount = discoveries.filter(d => d.status === 'reviewed').length;
 
@@ -131,6 +134,16 @@ export default function AdminAISearchScan() {
   const filteredDiscoveries = filter === 'all' 
     ? discoveries 
     : discoveries.filter(d => d.status === filter);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredDiscoveries.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedDiscoveries = filteredDiscoveries.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset page when filter changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
 
   if (isLoading) {
     return (
