@@ -48,7 +48,7 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
   // Format Card (comme les autres services)
   if (isCardFormat) {
     return (
-      <div className="group bg-gradient-to-br from-purple-50 via-white to-purple-100 rounded-3xl overflow-hidden border-2 border-purple-400 ring-2 ring-purple-200 hover:border-purple-500 hover:ring-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+      <div className="group bg-gradient-to-br from-purple-100 via-purple-50 to-pink-100 rounded-3xl overflow-hidden border-2 border-purple-400 ring-2 ring-purple-200 hover:border-purple-500 hover:ring-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
         {/* Image */}
         <div className="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden">
           <a href={activeBanner.target_url} target="_blank" rel="noopener noreferrer">
