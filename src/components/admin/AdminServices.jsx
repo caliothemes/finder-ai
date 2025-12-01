@@ -1416,6 +1416,58 @@ Provide accurate English translations.`,
                           </div>
                         </div>
 
+                        {/* Tags */}
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">🏷️ Tags / Mots-clés</label>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {(formData.tags || []).map((tag, idx) => (
+                              <Badge key={idx} variant="secondary" className="flex items-center gap-1 px-3 py-1">
+                                {tag}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTags = formData.tags.filter((_, i) => i !== idx);
+                                    setFormData({...formData, tags: newTags});
+                                  }}
+                                  className="ml-1 hover:text-red-600"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Ajouter un tag..."
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  const value = e.target.value.trim();
+                                  if (value && !(formData.tags || []).includes(value)) {
+                                    setFormData({...formData, tags: [...(formData.tags || []), value]});
+                                    e.target.value = '';
+                                  }
+                                }
+                              }}
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={(e) => {
+                                const input = e.currentTarget.previousElementSibling;
+                                const value = input.value.trim();
+                                if (value && !(formData.tags || []).includes(value)) {
+                                  setFormData({...formData, tags: [...(formData.tags || []), value]});
+                                  input.value = '';
+                                }
+                              }}
+                            >
+                              <Plus className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1">Appuyez sur Entrée pour ajouter un tag</p>
+                        </div>
+
                         {/* Sticky footer buttons */}
                         <div className="sticky bottom-0 bg-white pt-4 pb-2 -mx-4 sm:-mx-6 px-4 sm:px-6 border-t mt-4">
                           <div className="flex gap-2">
