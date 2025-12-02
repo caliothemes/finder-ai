@@ -57,7 +57,7 @@ export default function Logo({ size = 200, animated = false }) {
       {/* AI neural network nodes around the circle */}
       {/* Top */}
       <g>
-        <line x1="100" y1="50" x2="100" x2="20" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
+        <line x1="100" y1="50" x2="100" y2="20" stroke="#9333ea" strokeWidth="2" opacity="0.4" />
         <circle cx="100" cy="20" r="6" fill="#9333ea" filter="url(#glow)" />
       </g>
       
