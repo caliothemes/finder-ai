@@ -79,7 +79,7 @@ export default function HeroSection({ onSearch }) {
         </p>
 
         {/* Smart Search bar */}
-        <div className="max-w-3xl mx-auto mb-12">
+        <div className="max-w-3xl mx-auto mb-12 relative z-50">
           <SmartSearchBar onSearch={(query) => navigate(createPageUrl(`Explore?search=${encodeURIComponent(query)}`))} />
         </div>
 
