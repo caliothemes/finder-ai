@@ -331,6 +331,15 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
+  const [duplicateServices, setDuplicateServices] = useState([]);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [pendingApproval, setPendingApproval] = useState(null);
+
+  // Fetch existing AI services to check for duplicates
+  const { data: existingServices = [] } = useQuery({
+    queryKey: ['existingAIServices'],
+    queryFn: () => base44.entities.AIService.list('-created_date', 5000),
+  });
   
   const newCount = discoveries.filter(d => d.status === 'new').length;
   const reviewedCount = discoveries.filter(d => d.status === 'reviewed').length;
