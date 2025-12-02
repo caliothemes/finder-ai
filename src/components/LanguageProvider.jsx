@@ -212,13 +212,6 @@ const translations = {
     submit_submit: "Soumettre",
     submit_submitting: "Envoi en cours...",
     
-    // Footer
-    footer_discover: "Découvrir",
-    footer_account: "Compte",
-    footer_contribute: "Contribuer",
-    footer_all_rights: "Tous droits réservés.",
-    footer_powered_by: "App propulsé par",
-    
     // Toasts
     toast_favorite_added: "Ajouté aux favoris",
     toast_favorite_removed: "Retiré des favoris",
@@ -323,9 +316,6 @@ const translations = {
     home_newsletter_success_toast: "Merci ! Vous êtes inscrit à notre newsletter 🎉",
   },
   en: {
-    // Toast messages
-    toast_favorite_added: "Added to favorites ❤️",
-    toast_favorite_removed: "Removed from favorites",
     // Navigation
     nav_home: "Home",
     nav_explore: "AI Explorer",
@@ -536,16 +526,7 @@ const translations = {
     submit_submit: "Submit",
     submit_submitting: "Submitting...",
     
-    // Footer
-    footer_discover: "Discover",
-    footer_account: "Account",
-    footer_contribute: "Contribute",
-    footer_all_rights: "All rights reserved.",
-    footer_powered_by: "App powered by",
-    
     // Toasts
-    toast_favorite_added: "Added to favorites ❤️",
-    toast_favorite_removed: "Removed from favorites",
     toast_login_required: "Please log in",
     toast_dates_reserved: "Dates reserved successfully",
     toast_insufficient_credits: "Insufficient credits",
