@@ -176,7 +176,22 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
         </div>
 
         {/* Action */}
-        <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
+        <Link 
+          to={createPageUrl(`AIDetail?slug=${service.slug}`)}
+          onClick={() => {
+            // Track card click
+            let visitorId = localStorage.getItem('visitor_id');
+            if (!visitorId) {
+              visitorId = 'v_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+              localStorage.setItem('visitor_id', visitorId);
+            }
+            base44.entities.ServiceClick.create({
+              ai_service_id: service.id,
+              click_type: 'card',
+              visitor_id: visitorId
+            });
+          }}
+        >
           <Button className="w-full bg-purple-950 hover:bg-purple-900 text-white">
             <span>Découvrir</span>
             <ExternalLink className="w-4 h-4 ml-2" />
