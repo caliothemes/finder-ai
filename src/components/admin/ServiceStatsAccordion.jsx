@@ -55,7 +55,7 @@ export default function ServiceStatsAccordion({ service }) {
               <Loader2 className="w-5 h-5 animate-spin text-amber-600" />
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
               {/* Visites totales */}
               <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
