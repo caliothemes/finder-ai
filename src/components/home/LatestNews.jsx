@@ -6,8 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Newspaper, Calendar, ExternalLink, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function LatestNews() {
+  const { theme } = useTheme();
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['latestNews'],
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 3),
@@ -16,18 +18,18 @@ export default function LatestNews() {
   if (isLoading || articles.length === 0) return null;
 
   return (
-    <section className="py-16 px-6">
+    <section className="py-16 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Newspaper className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-semibold text-purple-600 uppercase tracking-wider">
+              <Newspaper className="w-5 h-5 text-purple-500" />
+              <span className="text-sm font-semibold text-purple-500 uppercase tracking-wider">
                 Actualités IA
               </span>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900">
+            <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
               Les dernières nouvelles
             </h2>
           </div>
@@ -44,7 +46,8 @@ export default function LatestNews() {
           {articles.map((article) => (
             <article
               key={article.id}
-              className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300"
+              className="group rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
+              style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
             >
               <a
                 href={article.source_url}
@@ -79,21 +82,21 @@ export default function LatestNews() {
                   {article.source_logo_url && (
                     <img src={article.source_logo_url} alt="" className="w-4 h-4" />
                   )}
-                  <span className="text-xs font-medium text-purple-600">{article.source_name}</span>
-                  <span className="text-slate-300">•</span>
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
+                  <span className="text-xs font-medium text-purple-500">{article.source_name}</span>
+                  <span style={{ color: 'var(--border-color)' }}>•</span>
+                  <span className="text-xs flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                     <Calendar className="w-3 h-3" />
                     {article.published_date}
                   </span>
                 </div>
 
                 {/* Title */}
-                <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                <h3 className="font-semibold mb-2 line-clamp-2 group-hover:text-purple-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
                   {article.title}
                 </h3>
 
                 {/* Summary */}
-                <p className="text-sm text-slate-600 mb-4 line-clamp-2">
+                <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
                   {article.summary}
                 </p>
 
