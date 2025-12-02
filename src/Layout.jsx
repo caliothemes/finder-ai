@@ -334,78 +334,96 @@ function LayoutContent({ children, currentPageName }) {
         <nav className="flex-1 p-4 space-y-1">
           <Link
             to={createPageUrl('Home')}
-            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+              currentPageName === 'Home' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+            }`}
           >
             <Home className="w-4 h-4" />
             {t('nav_home')}
           </Link>
           <Link
             to={createPageUrl('Explore')}
-            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+              currentPageName === 'Explore' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+            }`}
           >
             <Compass className="w-4 h-4" />
             {t('nav_explore')}
             <NewItemsBadge count={newItems.explore} />
           </Link>
           <Link
-                            to={createPageUrl('Categories')}
-                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-                          >
-                            <Grid3X3 className="w-4 h-4" />
-                            {t('nav_categories')}
-                            <NewItemsBadge count={newItems.categories} />
-                          </Link>
+            to={createPageUrl('Categories')}
+            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+              currentPageName === 'Categories' || currentPageName === 'Category' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+            }`}
+          >
+            <Grid3X3 className="w-4 h-4" />
+            {t('nav_categories')}
+            <NewItemsBadge count={newItems.categories} />
+          </Link>
           <Link
-                            to={createPageUrl('AINews')}
-                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-                          >
-                            <Newspaper className="w-4 h-4" />
-                            {t('nav_ai_news')}
+            to={createPageUrl('AINews')}
+            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+              currentPageName === 'AINews' || currentPageName === 'AINewsDetail' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+            }`}
+          >
+            <Newspaper className="w-4 h-4" />
+            {t('nav_ai_news')}
             <NewItemsBadge count={newItems.news} />
           </Link>
           <Link
-                            to={createPageUrl('FinderGPT')}
-                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:text-purple-600 rounded-l-xl transition-all font-medium"
-                            style={{ background: 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
-                          >
-                            <Bot className="w-4 h-4" />
-                            Agent FinderAI
-                            <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">
-                              NEW
-                            </span>
-                          </Link>
+            to={createPageUrl('FinderGPT')}
+            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-l-xl transition-all font-medium ${
+              currentPageName === 'FinderGPT' ? 'text-purple-600' : 'text-slate-700 hover:text-purple-600'
+            }`}
+            style={{ background: currentPageName === 'FinderGPT' ? 'linear-gradient(to right, rgba(253, 224, 71, 0.4), rgba(255, 255, 255, 0))' : 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
+          >
+            <Bot className="w-4 h-4" />
+            Agent FinderAI
+            <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">
+              NEW
+            </span>
+          </Link>
 
           {user && (
-                            <>
-                              <Link
-                                to={createPageUrl('Favorites')}
-                                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
-                              >
-                                <Heart className="w-4 h-4" />
-                                {t('nav_favorites')}
-                                {favoritesCount > 0 && (
-                                                        <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
-                                                          {favoritesCount}
-                                                        </span>
-                                                      )}
-                              </Link>
+            <>
+              <Link
+                to={createPageUrl('Favorites')}
+                className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+                  currentPageName === 'Favorites' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                }`}
+              >
+                <Heart className="w-4 h-4" />
+                {t('nav_favorites')}
+                {favoritesCount > 0 && (
+                  <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-green-500 text-white rounded-full min-w-[20px] text-center">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
               <Link
                 to={createPageUrl('Profile')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+                  currentPageName === 'Profile' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                }`}
               >
                 <User className="w-4 h-4" />
                 {t('nav_profile')}
               </Link>
               <Link
                 to={createPageUrl('ProAccount')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+                  currentPageName === 'ProAccount' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                }`}
               >
                 <Crown className="w-4 h-4" />
                 {t('nav_pro_account')}
               </Link>
               <Link
                 to={createPageUrl('BannerManager')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
+                  currentPageName === 'BannerManager' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                }`}
               >
                 <PlusCircle className="w-4 h-4" />
                 {t('nav_my_banners')}
