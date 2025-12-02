@@ -122,7 +122,7 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
           {/* Pro promo encart */}
           <Link 
             to={createPageUrl('ProAccount')}
-            className="mt-3 block text-center text-[10px] text-purple-600 hover:text-purple-700 transition-colors"
+            className="mt-3 block text-center text-xs text-purple-600 hover:text-purple-700 transition-colors"
           >
             <span className="opacity-70">🚀 Votre service IA ici ?</span>{' '}
             <span className="font-semibold underline">Devenir Pro</span>
