@@ -73,7 +73,7 @@ export default function ServiceStatsAccordion({ service }) {
               <Loader2 className="w-5 h-5 animate-spin text-amber-600" />
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
               {/* Visites totales */}
               <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
@@ -110,7 +110,32 @@ export default function ServiceStatsAccordion({ service }) {
                 <span className="text-lg font-bold text-orange-600">{viewsYear}</span>
               </div>
 
+              {/* Clics "Visiter le site" */}
+              <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <ExternalLink className="w-3 h-3 text-cyan-500" />
+                  <span className="text-[10px] text-slate-500 font-medium">Visiter</span>
+                </div>
+                <span className="text-lg font-bold text-cyan-600">{websiteClicks.length}</span>
+              </div>
 
+              {/* Clics Cards */}
+              <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <MousePointer className="w-3 h-3 text-pink-500" />
+                  <span className="text-[10px] text-slate-500 font-medium">Cards</span>
+                </div>
+                <span className="text-lg font-bold text-pink-600">{cardClicks.length}</span>
+              </div>
+
+              {/* Favoris */}
+              <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <Heart className="w-3 h-3 text-red-500" />
+                  <span className="text-[10px] text-slate-500 font-medium">Favoris</span>
+                </div>
+                <span className="text-lg font-bold text-red-600">{favorites.length}</span>
+              </div>
 
               {/* Avis */}
               <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
