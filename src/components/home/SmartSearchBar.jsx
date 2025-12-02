@@ -136,7 +136,7 @@ export default function SmartSearchBar({ onSearch }) {
                         <Sparkles className="w-5 h-5 text-purple-600" />
                       </div>
                     )}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 text-left">
                       <div className="font-medium text-slate-900 truncate">{service.name}</div>
                       <div className="text-sm text-slate-500 truncate">{service.tagline}</div>
                     </div>
