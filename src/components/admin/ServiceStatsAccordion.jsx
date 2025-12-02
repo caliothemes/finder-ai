@@ -92,23 +92,7 @@ export default function ServiceStatsAccordion({ service }) {
                 <span className="text-lg font-bold text-orange-600">{viewsYear}</span>
               </div>
 
-              {/* Vues historiques (compteur legacy) */}
-              <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <ExternalLink className="w-3 h-3 text-cyan-500" />
-                  <span className="text-[10px] text-slate-500 font-medium">Vues (legacy)</span>
-                </div>
-                <span className="text-lg font-bold text-cyan-600">{legacyViews}</span>
-              </div>
 
-              {/* Likes */}
-              <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <LayoutGrid className="w-3 h-3 text-pink-500" />
-                  <span className="text-[10px] text-slate-500 font-medium">Likes</span>
-                </div>
-                <span className="text-lg font-bold text-pink-600">{likes}</span>
-              </div>
 
               {/* Avis */}
               <div className="bg-white rounded-lg p-2 border border-amber-200 text-center">
