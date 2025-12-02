@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ExternalLink, Heart, Sparkles, Crown, Info, Star, Award } from 'lucide-react';
+import { ExternalLink, Heart, Sparkles, Star, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLanguage } from '@/components/LanguageProvider';
 import ActiveBanner from '@/components/banners/ActiveBanner';
 import DefaultAILogo from '@/components/DefaultAILogo';
@@ -14,7 +13,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [], finderReviews = [] }) {
   const { t, language } = useLanguage();
-  const [pricingOpen, setPricingOpen] = useState({});
   
   // Vérifier s'il y a une bannière payante active
   const { data: hasPaidBanner = false } = useQuery({
@@ -53,54 +51,7 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     return diffDays < 7;
   };
 
-  const getPricingBadge = (pricing) => {
-    const colors = {
-      gratuit: 'bg-green-100 text-green-800 border-green-200',
-      freemium: 'bg-blue-100 text-blue-800 border-blue-200',
-      payant: 'bg-orange-100 text-orange-800 border-orange-200',
-      abonnement: 'bg-purple-100 text-purple-800 border-purple-200'
-    };
-    return colors[pricing] || colors.freemium;
-  };
 
-  const getPricingLabel = (pricing) => {
-    const labels = {
-      gratuit: '€0',
-      freemium: '€+',
-      payant: '€€',
-      abonnement: '⚡'
-    };
-    return labels[pricing] || pricing;
-  };
-
-  const getPricingDescription = (pricing) => {
-    const descriptions = {
-      gratuit: 'Service entièrement gratuit',
-      freemium: 'Gratuit avec options payantes',
-      payant: 'Service payant',
-      abonnement: 'Facturation mensuelle ou annuelle'
-    };
-    return descriptions[pricing] || '';
-  };
-
-  const PricingBadge = ({ service }) => (
-    <Popover open={pricingOpen[service.id]} onOpenChange={(open) => setPricingOpen({...pricingOpen, [service.id]: open})}>
-      <PopoverTrigger asChild>
-        <button className="focus:outline-none">
-          <Badge className={`${getPricingBadge(service.pricing)} border cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
-            {getPricingLabel(service.pricing)}
-            <Info className="w-3 h-3" />
-          </Badge>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-64 p-3" align="end">
-        <div className="space-y-2">
-          <div className="font-semibold text-sm">{getPricingLabel(service.pricing)}</div>
-          <div className="text-xs text-slate-600">{getPricingDescription(service.pricing)}</div>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
 
   return (
     <div className="py-16 px-6 bg-slate-50">
@@ -225,17 +176,13 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   {language === 'en' && service.description_en ? service.description_en : service.description}
                 </p>
 
-                {/* Rating and pricing */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-semibold text-slate-900">
-                      {service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}
-                    </span>
-                    <span className="text-xs text-slate-500">({service.views || 0})</span>
-                  </div>
-                  
-                  <PricingBadge service={service} />
+                {/* Rating */}
+                <div className="flex items-center gap-1 mb-4">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="text-sm font-semibold text-slate-900">
+                    {service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}
+                  </span>
+                  <span className="text-xs text-slate-500">({service.views || 0})</span>
                 </div>
 
                 {/* Tags */}
@@ -371,17 +318,13 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
                   {language === 'en' && service.description_en ? service.description_en : service.description}
                 </p>
 
-                {/* Rating and pricing */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-semibold text-slate-900">
-                      {service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}
-                    </span>
-                    <span className="text-xs text-slate-500">({service.views || 0})</span>
-                  </div>
-                  
-                  <PricingBadge service={service} />
+                {/* Rating */}
+                <div className="flex items-center gap-1 mb-4">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="text-sm font-semibold text-slate-900">
+                    {service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}
+                  </span>
+                  <span className="text-xs text-slate-500">({service.views || 0})</span>
                 </div>
 
                 {/* Tags */}
