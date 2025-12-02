@@ -124,7 +124,8 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
             to={createPageUrl('ProAccount')}
             className="mt-3 block text-center text-xs text-purple-600 hover:text-purple-700 transition-colors"
           >
-            <span className="opacity-70">🚀 Votre service IA ici ?</span>{' '}
+            <span className="opacity-70">🚀 Votre service IA ici ?</span>
+            <br />
             <span className="font-semibold underline">Devenir Pro</span>
           </Link>
           </div>
