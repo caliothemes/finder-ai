@@ -854,12 +854,36 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                     {approveFormData.cover_image_url && (
                       <img src={approveFormData.cover_image_url} alt="Cover" className="w-full h-32 rounded-lg object-cover" />
                     )}
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e.target.files[0], 'cover')}
-                      disabled={uploadingCover}
-                    />
+                    <div className="flex gap-2">
+                      <label className="flex-1 cursor-pointer">
+                        <div className="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                          {uploadingCover ? (
+                            <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                          ) : (
+                            <>
+                              <Upload className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                              <span className="text-xs text-slate-600">Upload</span>
+                            </>
+                          )}
+                        </div>
+                        <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e.target.files[0], 'cover')} className="hidden" />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleAutoGenerateCover}
+                        disabled={fetchingCover}
+                        className="flex-1 border-2 border-dashed border-purple-300 rounded-lg p-3 text-center hover:border-purple-500 hover:bg-purple-50 transition-colors disabled:opacity-50"
+                      >
+                        {fetchingCover ? (
+                          <Loader2 className="w-5 h-5 animate-spin mx-auto text-purple-600" />
+                        ) : (
+                          <>
+                            <Sparkles className="w-5 h-5 mx-auto text-purple-500 mb-1" />
+                            <span className="text-xs text-purple-600 font-medium">Auto</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
