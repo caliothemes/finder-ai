@@ -49,6 +49,37 @@ export default function AdminAISearchScan() {
     },
   });
 
+  // Check for duplicates before approving
+  const checkForDuplicates = (formData, discovery, categories) => {
+    const nameToCheck = formData.name.toLowerCase().trim();
+    
+    // Find services with similar names
+    const duplicates = existingServices.filter(service => {
+      const existingName = service.name.toLowerCase().trim();
+      // Exact match or very similar
+      return existingName === nameToCheck || 
+             existingName.includes(nameToCheck) || 
+             nameToCheck.includes(existingName);
+    });
+
+    if (duplicates.length > 0) {
+      setDuplicateServices(duplicates);
+      setPendingApproval({ discovery, categories, formData });
+      setShowDuplicateModal(true);
+      return true;
+    }
+    return false;
+  };
+
+  const deleteServiceMutation = useMutation({
+    mutationFn: (id) => base44.entities.AIService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['existingAIServices'] });
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      toast.success('Service supprimé');
+    },
+  });
+
   const approveDiscoveryMutation = useMutation({
     mutationFn: async ({ discovery, categories, formData }) => {
       const slug = formData.name.toLowerCase()
@@ -85,9 +116,13 @@ export default function AdminAISearchScan() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['discoveries'] });
+      queryClient.invalidateQueries({ queryKey: ['existingAIServices'] });
       setApprovingDiscovery(null);
       setSelectedCategories([]);
       setApproveFormData({});
+      setShowDuplicateModal(false);
+      setPendingApproval(null);
+      setDuplicateServices([]);
       toast.success('Service IA créé et approuvé !');
     },
   });
