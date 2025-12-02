@@ -145,6 +145,16 @@ export default function Explore() {
           <p className="text-xl text-slate-600">
             {t('explore_subtitle')} <span className="font-semibold text-purple-600">{allServices.length}</span> {t('explore_subtitle_suffix')}
           </p>
+          {(() => {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const newServicesCount = allServices.filter(s => new Date(s.created_date) >= thirtyDaysAgo).length;
+            return newServicesCount > 0 ? (
+              <p className="text-sm text-slate-500 mt-2">
+                <span className="font-semibold text-green-600">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 30 derniers jours
+              </p>
+            ) : null;
+          })()}
         </div>
 
         {/* Filters */}
