@@ -226,6 +226,49 @@ Return JSON format:
     }
   };
 
+  const handleAutoGenerateCover = async () => {
+    if (!approveFormData.name) {
+      toast.error('Nom requis pour générer une image');
+      return;
+    }
+    
+    setFetchingCover(true);
+    try {
+      // D'abord essayer de récupérer depuis le site web
+      if (approveFormData.website_url) {
+        const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(approveFormData.website_url)}&meta=true`);
+        const ogData = await ogResponse.json();
+        
+        if (ogData?.data?.image?.url) {
+          setApproveFormData({ ...approveFormData, cover_image_url: ogData.data.image.url });
+          toast.success('Image trouvée sur le site !');
+          setFetchingCover(false);
+          return;
+        } else if (ogData?.data?.logo?.url && !approveFormData.logo_url) {
+          setApproveFormData({ ...approveFormData, logo_url: ogData.data.logo.url });
+        }
+      }
+      
+      // Sinon générer avec l'IA
+      toast.info('Aucune image trouvée, génération IA en cours...');
+      const imageResult = await base44.integrations.Core.GenerateImage({
+        prompt: `Professional modern banner for AI tool "${approveFormData.name}". ${approveFormData.tagline || 'Innovative AI technology'}. Abstract futuristic design with gradient colors (purple, pink, blue, cyan), neural network patterns, geometric shapes, technology aesthetic, clean minimal style, high quality digital art. No text, no logos, no words.`
+      });
+      
+      if (imageResult?.url) {
+        setApproveFormData({ ...approveFormData, cover_image_url: imageResult.url });
+        toast.success('Image générée avec succès !');
+      } else {
+        toast.error('Impossible de générer une image');
+      }
+    } catch (error) {
+      console.error('Cover generation error:', error);
+      toast.error('Erreur lors de la génération: ' + error.message);
+    } finally {
+      setFetchingCover(false);
+    }
+  };
+
   const handleGenerateTags = async () => {
     if (!approveFormData.name && !approveFormData.description) {
       toast.error('Nom ou description requis pour générer les tags');
