@@ -381,9 +381,16 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
   const reviewedCount = discoveries.filter(d => d.status === 'reviewed').length;
 
   // Filtrage
-  const filteredDiscoveries = filter === 'all' 
+  let filteredDiscoveries = filter === 'all' 
     ? discoveries 
     : discoveries.filter(d => d.status === filter);
+
+  // Tri par date
+  filteredDiscoveries = [...filteredDiscoveries].sort((a, b) => {
+    const dateA = new Date(a.created_date);
+    const dateB = new Date(b.created_date);
+    return sortOrder === '-created_date' ? dateB - dateA : dateA - dateB;
+  });
 
   // Pagination
   const totalPages = Math.ceil(filteredDiscoveries.length / itemsPerPage);
