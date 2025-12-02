@@ -64,7 +64,7 @@ export default function WeeklyHighlights({ articles }) {
               <div className="p-8 md:w-1/2 flex flex-col justify-center">
                 <Badge className="w-fit bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 shadow-lg mb-4">
                   <Flame className="w-3 h-3 mr-1" />
-                  {language === 'en' ? 'Top Story' : 'À la une'}
+                  {language === 'en' ? 'Top Story' : 'À la Une'}
                 </Badge>
                 
                 <div className="flex items-center gap-2 mb-4">

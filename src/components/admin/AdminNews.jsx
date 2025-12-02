@@ -660,7 +660,7 @@ Provide accurate English translations.`,
               <h3 className="text-lg font-bold text-slate-900">Actualités importantes de la semaine</h3>
             </div>
             <p className="text-sm text-slate-600 mb-4">
-              Les 5 dernières actualités marquées comme "importantes" seront affichées dans le module spécial sur la page Actualités (1 en aperçu + 4 en grille).
+              Les 5 dernières actualités marquées comme "importantes" seront affichées dans le module spécial sur la page Actualités (1 à la une + 4 en grille).
             </p>
           </div>
 
