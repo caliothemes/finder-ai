@@ -69,7 +69,7 @@ export default function Favorites() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       {/* Header */}
       <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 py-24 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -107,11 +107,11 @@ export default function Favorites() {
           </div>
         ) : (
           <div className="text-center py-16">
-            <Heart className="w-20 h-20 mx-auto text-slate-300 mb-6" />
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            <Heart className="w-20 h-20 mx-auto mb-6" style={{ color: 'var(--text-muted)' }} />
+            <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               {t('favorites_none_title')}
             </h2>
-            <p className="text-slate-600 mb-8">
+            <p className="mb-8" style={{ color: 'var(--text-secondary)' }}>
               {t('favorites_none_subtitle')}
             </p>
           </div>

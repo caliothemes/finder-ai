@@ -246,7 +246,7 @@ export default function ProAccount() {
         </DialogContent>
       </Dialog>
 
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -259,7 +259,7 @@ export default function ProAccount() {
             {t('pro_title')}
           </h1>
           
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
             {t('pro_subtitle')}
           </p>
         </div>
@@ -299,12 +299,12 @@ export default function ProAccount() {
         )}
 
         {/* How it works */}
-        <div className="mb-12 bg-white rounded-3xl p-8 border border-slate-200 shadow-lg">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center flex items-center justify-center gap-3">
+        <div className="mb-12 rounded-3xl p-8 shadow-lg" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+          <h2 className="text-3xl font-bold mb-4 text-center flex items-center justify-center gap-3" style={{ color: 'var(--text-primary)' }}>
             <Sparkles className="w-8 h-8 text-purple-600" />
             {t('pro_how_it_works')}
           </h2>
-          <p className="text-center text-slate-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-center mb-8 max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
             {t('pro_how_it_works_intro')}
           </p>
 
@@ -443,17 +443,17 @@ export default function ProAccount() {
 
         {/* Credit Packs */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
+          <h2 className="text-3xl font-bold mb-8 text-center" style={{ color: 'var(--text-primary)' }}>
             {t('pro_buy_credits')}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {creditPacks.map((pack) => (
-              <div key={pack.credits} className="bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-purple-400 transition-all">
+              <div key={pack.credits} className="rounded-2xl p-8 border-2 hover:border-purple-400 transition-all" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-slate-900 mb-2">
+                  <div className="text-5xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
                     {pack.credits}
                   </div>
-                  <div className="text-slate-600 mb-4">{t('pro_credits')}</div>
+                  <div className="mb-4" style={{ color: 'var(--text-secondary)' }}>{t('pro_credits')}</div>
                   <div className="text-4xl font-bold text-purple-600 mb-2">
                     {pack.price}
                   </div>
@@ -481,13 +481,14 @@ export default function ProAccount() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative bg-white rounded-3xl p-8 border-2 transition-all ${
+              className={`relative rounded-3xl p-8 border-2 transition-all ${
                 plan.popular
                   ? 'border-purple-300 shadow-2xl scale-105'
                   : plan.current
                   ? 'border-green-300'
-                  : 'border-slate-200 hover:border-purple-200 hover:shadow-lg'
+                  : 'hover:border-purple-200 hover:shadow-lg'
               }`}
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: plan.popular ? undefined : plan.current ? undefined : 'var(--border-color)' }}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -512,11 +513,11 @@ export default function ProAccount() {
                   <Crown className="w-6 h-6 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">{plan.name}</h3>
+                <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{plan.name}</h3>
                 
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-4xl font-bold text-slate-900">{plan.price}</span>
-                  <span className="text-slate-600">{plan.period}</span>
+                  <span className="text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{plan.price}</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{plan.period}</span>
                 </div>
                 
                 {plan.credits > 0 && (
@@ -528,7 +529,7 @@ export default function ProAccount() {
 
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                  <li key={idx} className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
                   </li>

@@ -142,7 +142,7 @@ export default function Category() {
   const categoryDesc = language === 'en' && category.description_en ? category.description_en : category.description;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       {/* Header */}
       <div className="bg-gradient-to-br from-purple-950 via-slate-950 to-purple-950 py-24 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -201,15 +201,15 @@ export default function Category() {
             ))}
 
             {/* Promo Card */}
-            <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
+            <div className="group rounded-2xl border-2 border-dashed border-purple-400 hover:border-purple-500 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8" style={{ background: 'var(--bg-card)' }}>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
                   {t('promo_your_service')}
                 </h3>
-                <p className="text-sm text-slate-600 mb-4">
+                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
                   {t('promo_increase_visibility')}
                 </p>
                 <Link to={createPageUrl('ProAccount')}>
@@ -233,10 +233,10 @@ export default function Category() {
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🤔</div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               {t('category_no_tools')}
             </h2>
-            <p className="text-slate-600">
+            <p style={{ color: 'var(--text-secondary)' }}>
               {t('category_no_tools_subtitle')}
             </p>
           </div>

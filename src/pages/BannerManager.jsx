@@ -149,11 +149,11 @@ export default function BannerManager() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">{t('banner_manager_title')}</h1>
-          <p className="text-slate-600">
+          <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t('banner_manager_title')}</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>
             {t('banner_credits')}: <span className="font-bold text-purple-600">{proAccount.credits}</span>
           </p>
         </div>

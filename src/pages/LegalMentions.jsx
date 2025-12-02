@@ -27,7 +27,7 @@ export default function LegalMentions() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -40,7 +40,7 @@ export default function LegalMentions() {
             Mentions Légales
           </h1>
           
-          <p className="text-slate-600">
+          <p style={{ color: 'var(--text-secondary)' }}>
             Toutes les informations légales concernant l'utilisation de Finder AI
           </p>
         </div>
@@ -52,9 +52,10 @@ export default function LegalMentions() {
               <AccordionItem
                 key={section.id}
                 value={section.id}
-                className="bg-white rounded-2xl border border-slate-200 px-6 overflow-hidden"
+                className="rounded-2xl px-6 overflow-hidden"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
               >
-                <AccordionTrigger className="text-left text-lg font-semibold text-slate-900 hover:text-purple-600 py-6">
+                <AccordionTrigger className="text-left text-lg font-semibold hover:text-purple-600 py-6" style={{ color: 'var(--text-primary)' }}>
                   {section.title}
                 </AccordionTrigger>
                 <AccordionContent className="pb-6">
@@ -67,12 +68,12 @@ export default function LegalMentions() {
             ))}
           </Accordion>
         ) : (
-          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-            <Scale className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <div className="text-center py-16 rounded-2xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <Scale className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
+            <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
               Aucune mention légale
             </h2>
-            <p className="text-slate-600">
+            <p style={{ color: 'var(--text-secondary)' }}>
               Les mentions légales seront bientôt disponibles.
             </p>
           </div>

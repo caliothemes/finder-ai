@@ -36,7 +36,7 @@ export default function AINews() {
   const paginatedArticles = articles.slice(startIndex, startIndex + articlesPerPage);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -47,7 +47,7 @@ export default function AINews() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             {language === 'en' ? 'AI News' : 'Actualités IA'}
           </h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+          <p className="text-xl max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
             {language === 'en' 
               ? 'Stay up to date with the latest news about artificial intelligence'
               : 'Restez informé des dernières nouvelles sur l\'intelligence artificielle'}
@@ -57,11 +57,11 @@ export default function AINews() {
         {/* Articles Grid */}
         {articles.length === 0 ? (
           <div className="text-center py-16">
-            <Newspaper className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-900 mb-2">
+            <Newspaper className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
+            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
               {language === 'en' ? 'No news yet' : 'Aucune actualité pour le moment'}
             </h3>
-            <p className="text-slate-600">
+            <p style={{ color: 'var(--text-secondary)' }}>
               {language === 'en' ? 'Come back soon for the latest AI news' : 'Revenez bientôt pour les dernières nouvelles IA'}
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function AINews() {
             {/* Featured Article */}
             {paginatedArticles[0] && (
               <Link to={createPageUrl(`AINewsDetail?slug=${paginatedArticles[0].slug}`)}>
-                <article className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg hover:shadow-xl hover:border-purple-300 transition-all group">
+                <article className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all group" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
                   <div className="md:flex">
                     {paginatedArticles[0].cover_image_url && (
                       <div className="md:w-1/2 overflow-hidden">
@@ -86,26 +86,26 @@ export default function AINews() {
                         {paginatedArticles[0].source_logo_url && (
                           <img src={paginatedArticles[0].source_logo_url} alt="" className="w-5 h-5" />
                         )}
-                        <span className="text-sm font-medium text-purple-600">{paginatedArticles[0].source_name}</span>
-                        <span className="text-slate-300">•</span>
-                        <span className="text-sm text-slate-500 flex items-center gap-1">
+                        <span className="text-sm font-medium text-purple-500">{paginatedArticles[0].source_name}</span>
+                        <span style={{ color: 'var(--border-color)' }}>•</span>
+                        <span className="text-sm flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                           <Calendar className="w-4 h-4" />
                           {paginatedArticles[0].published_date}
                         </span>
                         {paginatedArticles[0].views > 0 && (
                           <>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-sm text-slate-500 flex items-center gap-1">
+                            <span style={{ color: 'var(--border-color)' }}>•</span>
+                            <span className="text-sm flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                               <Eye className="w-4 h-4" />
                               {paginatedArticles[0].views}
                             </span>
                           </>
                         )}
                       </div>
-                      <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
+                      <h2 className="text-2xl font-bold mb-3 group-hover:text-purple-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
                         {getTitle(paginatedArticles[0])}
                       </h2>
-                      <p className="text-slate-600 mb-6 line-clamp-3">{getSummary(paginatedArticles[0])}</p>
+                      <p className="mb-6 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>{getSummary(paginatedArticles[0])}</p>
                       {paginatedArticles[0].tags?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-6">
                           {paginatedArticles[0].tags.slice(0, 4).map((tag, i) => (
@@ -130,7 +130,7 @@ export default function AINews() {
                   key={article.id}
                   to={createPageUrl(`AINewsDetail?slug=${article.slug}`)}
                 >
-                  <article className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 hover:shadow-lg transition-all group h-full">
+                  <article className="rounded-2xl overflow-hidden hover:shadow-lg transition-all group h-full" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
                     {article.cover_image_url && (
                       <div className="overflow-hidden">
                         <img
@@ -145,24 +145,24 @@ export default function AINews() {
                         {article.source_logo_url && (
                           <img src={article.source_logo_url} alt="" className="w-4 h-4" />
                         )}
-                        <span className="text-xs font-medium text-purple-600">{article.source_name}</span>
-                        <span className="text-slate-300">•</span>
-                        <span className="text-xs text-slate-500">{article.published_date}</span>
+                        <span className="text-xs font-medium text-purple-500">{article.source_name}</span>
+                        <span style={{ color: 'var(--border-color)' }}>•</span>
+                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{article.published_date}</span>
                         {article.views > 0 && (
                           <>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-xs text-slate-500 flex items-center gap-1">
+                            <span style={{ color: 'var(--border-color)' }}>•</span>
+                            <span className="text-xs flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                               <Eye className="w-3 h-3" />
                               {article.views}
                             </span>
                           </>
                         )}
                       </div>
-                      <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                      <h3 className="font-semibold mb-2 line-clamp-2 group-hover:text-purple-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
                         {getTitle(article)}
                       </h3>
-                      <p className="text-sm text-slate-600 mb-4 line-clamp-3">{getSummary(article)}</p>
-                      <span className="inline-flex items-center text-sm font-medium text-purple-600 group-hover:text-purple-700">
+                      <p className="text-sm mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>{getSummary(article)}</p>
+                      <span className="inline-flex items-center text-sm font-medium text-purple-500 group-hover:text-purple-600">
                         {language === 'en' ? 'Read article' : 'Lire l\'article'}
                         <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </span>
@@ -235,7 +235,7 @@ export default function AINews() {
                   »
                 </Button>
 
-                <span className="text-sm text-slate-500 ml-4">
+                <span className="text-sm ml-4" style={{ color: 'var(--text-muted)' }}>
                   Page {currentPage} {language === 'en' ? 'of' : 'sur'} {totalPages}
                 </span>
               </div>

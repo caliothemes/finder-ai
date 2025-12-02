@@ -180,7 +180,7 @@ export default function SubmitAI() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -191,7 +191,7 @@ export default function SubmitAI() {
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             Proposer mon outil IA
           </h1>
-          <p className="text-xl text-slate-600">
+          <p className="text-xl" style={{ color: 'var(--text-secondary)' }}>
             Partagez votre outil avec des milliers d'utilisateurs
           </p>
         </div>
@@ -217,11 +217,11 @@ export default function SubmitAI() {
         )}
 
         {/* Form */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+        <div className="rounded-3xl shadow-xl p-8 md:p-12" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
           <div className="space-y-8">
             {/* Basic Info */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Informations de base</h2>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Informations de base</h2>
               
               <div className="space-y-6">
                 <div>
@@ -312,7 +312,7 @@ export default function SubmitAI() {
 
             {/* Images */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Visuels</h2>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Visuels</h2>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -365,7 +365,7 @@ export default function SubmitAI() {
 
             {/* Features */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Fonctionnalités</h2>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Fonctionnalités</h2>
               
               <div className="space-y-3">
                 {formData.features.map((feature, index) => (
@@ -400,7 +400,7 @@ export default function SubmitAI() {
 
             {/* Tags */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Tags</h2>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Tags</h2>
               
               <div className="space-y-3">
                 {formData.tags.map((tag, index) => (
@@ -465,7 +465,7 @@ export default function SubmitAI() {
               </Button>
               
               {!submitSuccess && (
-                <p className="text-center text-sm text-slate-500 mt-4">
+                <p className="text-center text-sm mt-4" style={{ color: 'var(--text-muted)' }}>
                   Votre soumission sera examinée sous 48h
                 </p>
               )}
