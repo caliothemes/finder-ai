@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronUp, Eye, MessageSquare, Loader2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, MessageSquare, Loader2, ExternalLink, MousePointer, Heart } from 'lucide-react';
 
 export default function ServiceStatsAccordion({ service }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +15,24 @@ export default function ServiceStatsAccordion({ service }) {
   const { data: reviews = [] } = useQuery({
     queryKey: ['serviceReviews', service.id],
     queryFn: () => base44.entities.Review.filter({ ai_service_id: service.id }),
+    enabled: isOpen,
+  });
+
+  const { data: websiteClicks = [] } = useQuery({
+    queryKey: ['serviceWebsiteClicks', service.id],
+    queryFn: () => base44.entities.ServiceClick.filter({ ai_service_id: service.id, click_type: 'website' }),
+    enabled: isOpen,
+  });
+
+  const { data: cardClicks = [] } = useQuery({
+    queryKey: ['serviceCardClicks', service.id],
+    queryFn: () => base44.entities.ServiceClick.filter({ ai_service_id: service.id, click_type: 'card' }),
+    enabled: isOpen,
+  });
+
+  const { data: favorites = [] } = useQuery({
+    queryKey: ['serviceFavorites', service.id],
+    queryFn: () => base44.entities.Favorite.filter({ ai_service_id: service.id }),
     enabled: isOpen,
   });
 
