@@ -33,10 +33,19 @@ export default function AdminAISearchScan() {
 
   const updateDiscoveryMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.AIServiceDiscovery.update(id, data),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['discoveries'] });
       setEditingId(null);
-      toast.success('Découverte mise à jour');
+      if (variables.data.status === 'dismissed') {
+        toast.success('Service rejeté');
+      } else if (variables.data.status === 'reviewed') {
+        toast.success('Marqué comme vu');
+      } else {
+        toast.success('Découverte mise à jour');
+      }
+    },
+    onError: (error) => {
+      toast.error('Erreur: ' + error.message);
     },
   });
 
