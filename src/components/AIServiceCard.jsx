@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { Star, Heart, ExternalLink, Eye, Info, Sparkles, Award } from 'lucide-react';
+import { Star, Heart, ExternalLink, Eye, Sparkles, Award, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DefaultAILogo from '@/components/DefaultAILogo';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite, hasFinderReview = false, finderReviewRating = null }) {
   const { language, t } = useLanguage();
-  const [pricingOpen, setPricingOpen] = useState(false);
 
   // Vérifier si le service est nouveau (moins de 7 jours)
   const isNew = () => {
@@ -23,34 +22,24 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
     return diffDays < 7;
   };
 
-  const getPricingBadge = (pricing) => {
+  const getPricingColor = (pricing) => {
     const colors = {
-      gratuit: 'bg-green-100 text-green-800 border-green-200',
-      freemium: 'bg-blue-100 text-blue-800 border-blue-200',
-      payant: 'bg-orange-100 text-orange-800 border-orange-200',
-      abonnement: 'bg-purple-100 text-purple-800 border-purple-200'
+      gratuit: 'text-green-600 bg-green-100',
+      freemium: 'text-blue-600 bg-blue-100',
+      payant: 'text-orange-600 bg-orange-100',
+      abonnement: 'text-purple-600 bg-purple-100'
     };
     return colors[pricing] || colors.freemium;
   };
 
-  const getPricingLabel = (pricing) => {
+  const getPricingTooltip = (pricing) => {
     const labels = {
-      gratuit: '€0',
-      freemium: '€+',
-      payant: '€€',
-      abonnement: '⚡'
+      gratuit: language === 'en' ? 'Free - Completely free service' : 'Gratuit - Service entièrement gratuit',
+      freemium: language === 'en' ? 'Freemium - Free with paid options' : 'Freemium - Gratuit avec options payantes',
+      payant: language === 'en' ? 'Paid - Paid service' : 'Payant - Service payant',
+      abonnement: language === 'en' ? 'Subscription - Monthly or annual billing' : 'Abonnement - Facturation mensuelle ou annuelle'
     };
-    return labels[pricing] || pricing;
-  };
-
-  const getPricingDescription = (pricing) => {
-    const descriptions = {
-      gratuit: 'Service entièrement gratuit',
-      freemium: 'Gratuit avec options payantes',
-      payant: 'Service payant',
-      abonnement: 'Facturation mensuelle ou annuelle'
-    };
-    return descriptions[pricing] || '';
+    return labels[pricing] || '';
   };
 
   return (
@@ -155,24 +144,20 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
           </div>
         </div>
 
-        {/* Pricing badge on its own line */}
+        {/* Pricing icon with tooltip */}
         <div className="mb-4">
-          <Popover open={pricingOpen} onOpenChange={setPricingOpen}>
-            <PopoverTrigger asChild>
-              <button className="focus:outline-none">
-                <Badge className={`${getPricingBadge(service.pricing)} border text-xs cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1`}>
-                  {getPricingLabel(service.pricing)}
-                  <Info className="w-3 h-3" />
-                </Badge>
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-64 p-3" align="start">
-              <div className="space-y-2">
-                <div className="font-semibold text-sm">{getPricingLabel(service.pricing)}</div>
-                <div className="text-xs text-slate-600">{getPricingDescription(service.pricing)}</div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className={`w-8 h-8 rounded-full flex items-center justify-center ${getPricingColor(service.pricing)} hover:opacity-80 transition-opacity`}>
+                  <DollarSign className="w-4 h-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white text-slate-800 border shadow-lg max-w-xs">
+                <p className="text-sm">{getPricingTooltip(service.pricing)}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Action */}
