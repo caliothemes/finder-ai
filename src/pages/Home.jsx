@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import HeroSection from '@/components/home/HeroSection';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import FeaturedAI from '@/components/home/FeaturedAI';
+import HomeFeaturedAI from '@/components/home/HomeFeaturedAI';
 import NewsletterSection from '@/components/home/NewsletterSection';
 import LatestNews from '@/components/home/LatestNews';
 import AgentFinderAIPromo from '@/components/home/AgentFinderAIPromo';
@@ -65,6 +66,17 @@ export default function Home() {
     queryFn: () => base44.entities.FinderAIReview.filter({ active: true }),
   });
 
+  const { data: homeFeaturedServices = [] } = useQuery({
+    queryKey: ['homeFeaturedServices'],
+    queryFn: async () => {
+      const services = await base44.entities.AIService.filter({
+        status: 'approved',
+        home_featured: true
+      });
+      return services.slice(0, 6);
+    },
+  });
+
   const toggleFavoriteMutation = useMutation({
     mutationFn: async (serviceId) => {
       if (!user) {
@@ -113,6 +125,17 @@ export default function Home() {
         <ActiveBanner position="homepage_hero" />
       </div>
 
+      {/* Outils IA en Vedette - sélection manuelle admin */}
+      {homeFeaturedServices.length > 0 && (
+        <HomeFeaturedAI
+          aiServices={homeFeaturedServices}
+          favorites={favorites}
+          finderReviews={finderReviews}
+          onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+        />
+      )}
+
+      {/* Nouveautés IA */}
       <FeaturedAI
         aiServices={aiServices}
         favorites={favorites}

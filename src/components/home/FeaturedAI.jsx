@@ -110,11 +110,11 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
             <div className="flex items-center gap-3 mb-3">
               <div className="w-1 h-8 bg-gradient-to-b from-purple-600 to-pink-600 rounded-full" />
               <h2 className="text-4xl font-bold text-slate-900">
-                {t('home_featured_title')}
+                {language === 'en' ? 'Latest AI Tools' : 'Nouveautés IA'}
               </h2>
             </div>
             <p className="text-lg text-slate-600 ml-7">
-              {t('home_featured_subtitle')}
+              {language === 'en' ? 'The latest AI tools added to our directory' : 'Les derniers outils IA ajoutés à notre répertoire'}
             </p>
           </div>
         </div>

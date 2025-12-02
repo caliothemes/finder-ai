@@ -20,7 +20,7 @@ export default function AgentFinderAIPromo() {
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
-          <div className="text-center lg:text-left">
+          <div className="text-center lg:text-left lg:pl-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-6 border border-white/20">
               <Sparkles className="w-4 h-4 text-yellow-400" />
               <span>{language === 'en' ? 'NEW - AI Assistant' : 'NOUVEAU - Assistant IA'}</span>
