@@ -126,6 +126,20 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
           </div>
         </div>
 
+        {/* Tags */}
+        {service.tags && service.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {service.tags.slice(0, 3).map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-medium"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
 
 
         {/* Action */}
