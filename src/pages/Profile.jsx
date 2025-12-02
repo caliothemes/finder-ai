@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2, Pencil, Check, X } from 'lucide-react';
+import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,8 @@ export default function Profile() {
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState('');
   const [savingName, setSavingName] = useState(false);
+  const [submissionsPage, setSubmissionsPage] = useState(1);
+  const SUBMISSIONS_PER_PAGE = 10;
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -265,12 +267,15 @@ export default function Profile() {
         {/* My Submissions */}
         {mySubmissions.length > 0 && (
           <Card className="mb-8">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>{t('profile_my_tools')}</CardTitle>
+              <span className="text-sm text-slate-500">{mySubmissions.length} service{mySubmissions.length > 1 ? 's' : ''}</span>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {mySubmissions.map((service) => (
+                {mySubmissions
+                  .slice((submissionsPage - 1) * SUBMISSIONS_PER_PAGE, submissionsPage * SUBMISSIONS_PER_PAGE)
+                  .map((service) => (
                   <div key={service.id} className="mb-4">
                     <div
                       className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
@@ -341,6 +346,35 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
+
+              {/* Pagination */}
+              {mySubmissions.length > SUBMISSIONS_PER_PAGE && (
+                <div className="flex items-center justify-between mt-6 pt-4 border-t">
+                  <div className="text-sm text-slate-500">
+                    Page {submissionsPage} sur {Math.ceil(mySubmissions.length / SUBMISSIONS_PER_PAGE)}
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSubmissionsPage(p => Math.max(1, p - 1))}
+                      disabled={submissionsPage === 1}
+                    >
+                      <ChevronLeft className="w-4 h-4 mr-1" />
+                      Précédent
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSubmissionsPage(p => Math.min(Math.ceil(mySubmissions.length / SUBMISSIONS_PER_PAGE), p + 1))}
+                      disabled={submissionsPage >= Math.ceil(mySubmissions.length / SUBMISSIONS_PER_PAGE)}
+                    >
+                      Suivant
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
