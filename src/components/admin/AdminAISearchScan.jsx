@@ -1094,11 +1094,16 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
             <div className="flex gap-3 mt-6 pt-4 border-t">
               <Button
-                onClick={() => approveDiscoveryMutation.mutate({ 
-                  discovery: approvingDiscovery, 
-                  categories: selectedCategories,
-                  formData: approveFormData
-                })}
+                onClick={() => {
+                  const hasDuplicates = checkForDuplicates(approveFormData, approvingDiscovery, selectedCategories);
+                  if (!hasDuplicates) {
+                    approveDiscoveryMutation.mutate({ 
+                      discovery: approvingDiscovery, 
+                      categories: selectedCategories,
+                      formData: approveFormData
+                    });
+                  }
+                }}
                 disabled={selectedCategories.length === 0 || !approveFormData.name || !approveFormData.website_url || approveDiscoveryMutation.isPending}
                 className="bg-green-600 hover:bg-green-700 text-white flex-1"
               >
@@ -1112,6 +1117,98 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                   setApproveFormData({});
                 }}
                 variant="outline"
+                disabled={approveDiscoveryMutation.isPending}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de détection de doublons */}
+      {showDuplicateModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-6">
+          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-amber-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-slate-900">⚠️ Doublon(s) détecté(s)</h2>
+                <p className="text-slate-600">
+                  Un ou plusieurs services avec un nom similaire existent déjà
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+              <p className="text-sm text-amber-800">
+                <strong>Nouveau service :</strong> {pendingApproval?.formData?.name}
+              </p>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              <p className="font-medium text-slate-700">Services existants similaires :</p>
+              {duplicateServices.map(service => (
+                <div 
+                  key={service.id} 
+                  className="flex items-center justify-between p-4 bg-slate-50 border rounded-xl"
+                >
+                  <div className="flex items-center gap-3">
+                    {service.logo_url && (
+                      <img src={service.logo_url} alt={service.name} className="w-10 h-10 rounded-lg object-cover" />
+                    )}
+                    <div>
+                      <p className="font-semibold text-slate-900">{service.name}</p>
+                      <p className="text-xs text-slate-500">{service.website_url}</p>
+                      <Badge variant="outline" className="mt-1 text-xs">
+                        {service.status} • {service.views || 0} vues
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                    onClick={() => {
+                      if (confirm(`Supprimer "${service.name}" ?`)) {
+                        deleteServiceMutation.mutate(service.id);
+                        setDuplicateServices(prev => prev.filter(s => s.id !== service.id));
+                      }
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4 mr-1" />
+                    Supprimer
+                  </Button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3 pt-4 border-t">
+              <Button
+                onClick={() => {
+                  if (pendingApproval) {
+                    approveDiscoveryMutation.mutate({
+                      discovery: pendingApproval.discovery,
+                      categories: pendingApproval.categories,
+                      formData: pendingApproval.formData
+                    });
+                  }
+                }}
+                disabled={approveDiscoveryMutation.isPending}
+                className="bg-green-600 hover:bg-green-700 text-white flex-1"
+              >
+                <Check className="w-4 h-4 mr-2" />
+                {approveDiscoveryMutation.isPending ? 'Création...' : 'Créer quand même'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDuplicateModal(false);
+                  setPendingApproval(null);
+                  setDuplicateServices([]);
+                }}
                 disabled={approveDiscoveryMutation.isPending}
               >
                 Annuler
