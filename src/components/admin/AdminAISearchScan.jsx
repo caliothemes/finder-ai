@@ -365,6 +365,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('-created_date'); // Par défaut: plus récents en premier
   const itemsPerPage = 20;
   const [duplicateServices, setDuplicateServices] = useState([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
