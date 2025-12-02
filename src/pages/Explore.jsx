@@ -146,12 +146,12 @@ export default function Explore() {
             {t('explore_subtitle')} <span className="font-semibold text-purple-600">{allServices.length}</span> {t('explore_subtitle_suffix')}
           </p>
           {(() => {
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            const newServicesCount = allServices.filter(s => new Date(s.created_date) >= thirtyDaysAgo).length;
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const newServicesCount = allServices.filter(s => new Date(s.created_date) >= sevenDaysAgo).length;
             return newServicesCount > 0 ? (
               <p className="text-sm text-slate-500 mt-2">
-                <span className="font-semibold text-green-600">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 30 derniers jours
+                <span className="font-semibold text-green-600">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 7 derniers jours
               </p>
             ) : null;
           })()}
