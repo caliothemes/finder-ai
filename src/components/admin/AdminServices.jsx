@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload, Search, Tags } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Plus, Edit, Trash2, RefreshCw, Check, X, Eye, Languages, Loader2, ImageIcon, Sparkles, Upload, Search, Tags, Crown } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import ServiceStatsAccordion from './ServiceStatsAccordion';
 
@@ -17,7 +18,8 @@ export default function AdminServices() {
   const [formData, setFormData] = useState({
     name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', 
     features: [], features_en: [], categories: [], tags: [],
-    pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: ''
+    pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '',
+    home_featured: false
   });
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -52,7 +54,7 @@ export default function AdminServices() {
       queryClient.invalidateQueries({ queryKey: ['adminServices'] });
       setShowForm(false);
       setEditingService(null);
-      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], tags: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '' });
+      setFormData({ name: '', slug: '', tagline: '', tagline_en: '', description: '', description_en: '', features: [], features_en: [], categories: [], tags: [], pricing: 'freemium', website_url: '', status: 'approved', logo_url: '', cover_image_url: '', home_featured: false });
       toast.success('Service créé avec succès');
     },
   });
@@ -207,7 +209,8 @@ export default function AdminServices() {
       website_url: service.website_url || '',
       status: service.status,
       logo_url: service.logo_url || '',
-      cover_image_url: service.cover_image_url || ''
+      cover_image_url: service.cover_image_url || '',
+      home_featured: service.home_featured || false
     });
   };
 
@@ -1401,6 +1404,22 @@ Provide accurate English translations.`,
                           value={formData.website_url}
                           onChange={(e) => setFormData({...formData, website_url: e.target.value})}
                         />
+
+                        {/* Home Featured Checkbox */}
+                        <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl">
+                          <Checkbox
+                            id="home_featured"
+                            checked={formData.home_featured}
+                            onCheckedChange={(checked) => setFormData({...formData, home_featured: checked})}
+                          />
+                          <label htmlFor="home_featured" className="flex items-center gap-2 cursor-pointer">
+                            <Crown className="w-5 h-5 text-yellow-600" />
+                            <div>
+                              <span className="font-medium text-slate-900">Accueil en vedette</span>
+                              <p className="text-xs text-slate-600">Afficher ce service dans le bloc "Outils IA en Vedette" sur la page d'accueil (max 6)</p>
+                            </div>
+                          </label>
+                        </div>
 
                         {/* Features FR */}
                         <div>
