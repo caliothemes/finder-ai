@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { Star, Heart, ExternalLink, Eye, Sparkles, Award, DollarSign } from 'lucide-react';
+import { Star, Heart, ExternalLink, Eye, Sparkles, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -22,25 +22,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
     return diffDays < 7;
   };
 
-  const getPricingColor = (pricing) => {
-    const colors = {
-      gratuit: 'text-green-600 bg-green-100',
-      freemium: 'text-blue-600 bg-blue-100',
-      payant: 'text-orange-600 bg-orange-100',
-      abonnement: 'text-purple-600 bg-purple-100'
-    };
-    return colors[pricing] || colors.freemium;
-  };
 
-  const getPricingTooltip = (pricing) => {
-    const labels = {
-      gratuit: language === 'en' ? 'Free - Completely free service' : 'Gratuit - Service entièrement gratuit',
-      freemium: language === 'en' ? 'Freemium - Free with paid options' : 'Freemium - Gratuit avec options payantes',
-      payant: language === 'en' ? 'Paid - Paid service' : 'Payant - Service payant',
-      abonnement: language === 'en' ? 'Subscription - Monthly or annual billing' : 'Abonnement - Facturation mensuelle ou annuelle'
-    };
-    return labels[pricing] || '';
-  };
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl">
@@ -144,21 +126,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
           </div>
         </div>
 
-        {/* Pricing icon with tooltip */}
-        <div className="mb-4">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className={`w-8 h-8 rounded-full flex items-center justify-center ${getPricingColor(service.pricing)} hover:opacity-80 transition-opacity`}>
-                  <DollarSign className="w-4 h-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-white text-slate-800 border shadow-lg max-w-xs">
-                <p className="text-sm">{getPricingTooltip(service.pricing)}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+
 
         {/* Action */}
         <Link 
