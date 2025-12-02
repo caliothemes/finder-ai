@@ -8,16 +8,19 @@ import { useLanguage } from '@/components/LanguageProvider';
 export default function WeeklyHighlights({ articles }) {
   const { language } = useLanguage();
   
-  // Prendre les 6 derniers articles marqués weekly_highlight triés par date
+  // Prendre les 7 derniers articles marqués weekly_highlight triés par date
   const highlightArticles = articles
     .filter(a => a.weekly_highlight && a.status === 'published')
     .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
-    .slice(0, 6);
+    .slice(0, 7);
 
   if (highlightArticles.length === 0) return null;
 
   const getTitle = (article) => language === 'en' && article.title_en ? article.title_en : article.title;
   const getSummary = (article) => language === 'en' && article.summary_en ? article.summary_en : article.summary;
+
+  const featuredArticle = highlightArticles[0];
+  const otherArticles = highlightArticles.slice(1);
 
   return (
     <div className="mt-16 mb-8">
@@ -44,9 +47,57 @@ export default function WeeklyHighlights({ articles }) {
         </div>
       </div>
 
-      {/* Articles Grid */}
+      {/* Featured Article - Full Width */}
+      {featuredArticle && (
+        <Link to={createPageUrl(`AINewsDetail?slug=${featuredArticle.slug}`)} className="block mb-6">
+          <article className="group bg-white rounded-3xl overflow-hidden border-2 border-orange-300 hover:border-orange-500 hover:shadow-2xl transition-all">
+            <div className="md:flex">
+              {featuredArticle.cover_image_url && (
+                <div className="md:w-1/2 overflow-hidden">
+                  <img
+                    src={featuredArticle.cover_image_url}
+                    alt={getTitle(featuredArticle)}
+                    className="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              )}
+              <div className="p-8 md:w-1/2 flex flex-col justify-center">
+                <Badge className="w-fit bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 shadow-lg mb-4">
+                  <Flame className="w-3 h-3 mr-1" />
+                  {language === 'en' ? 'Top Story' : 'À la une'}
+                </Badge>
+                
+                <div className="flex items-center gap-2 mb-4">
+                  {featuredArticle.source_logo_url && (
+                    <img src={featuredArticle.source_logo_url} alt="" className="w-5 h-5" />
+                  )}
+                  <span className="text-sm font-medium text-orange-600">{featuredArticle.source_name}</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-sm text-slate-500 flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {featuredArticle.published_date}
+                  </span>
+                </div>
+                
+                <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors">
+                  {getTitle(featuredArticle)}
+                </h2>
+                
+                <p className="text-slate-600 mb-6 line-clamp-3">{getSummary(featuredArticle)}</p>
+                
+                <span className="inline-flex items-center text-base font-medium text-orange-600 group-hover:text-orange-700">
+                  {language === 'en' ? 'Read full article' : 'Lire l\'article complet'}
+                  <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+            </div>
+          </article>
+        </Link>
+      )}
+
+      {/* Other Articles Grid - 2 columns */}
       <div className="grid md:grid-cols-2 gap-6">
-        {highlightArticles.map((article) => (
+        {otherArticles.map((article) => (
           <Link
             key={article.id}
             to={createPageUrl(`AINewsDetail?slug=${article.slug}`)}
