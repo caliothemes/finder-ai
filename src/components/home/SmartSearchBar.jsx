@@ -111,7 +111,8 @@ export default function SmartSearchBar({ onSearch }) {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-[100]"
+          className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-[9999]"
+          style={{ position: 'absolute' }}
         >
           {/* Search Results */}
           {filteredServices.length > 0 && (

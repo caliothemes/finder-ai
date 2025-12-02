@@ -23,7 +23,7 @@ export default function HeroSection({ onSearch }) {
   }, []);
 
   return (
-    <div className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 pt-20">
+    <div className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 pt-20" style={{ overflow: 'visible' }}>
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
         {floatingElements.map((el) => (
