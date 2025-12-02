@@ -32,11 +32,6 @@ export default function ServiceStatsAccordion({ service }) {
   const views30Days = pageViews.filter(v => new Date(v.created_date) >= monthStart).length;
   const viewsYear = pageViews.filter(v => new Date(v.created_date) >= yearStart).length;
 
-  // Note: Les clics "Visiter le site" et "Cards" ne sont pas trackés actuellement
-  // On affiche service.views (compteur historique) et service.likes comme référence
-  const legacyViews = service.views || 0;
-  const likes = service.likes || 0;
-
   return (
     <div className="bg-amber-50/50 border border-amber-200 rounded-b-xl -mt-1">
       <button
