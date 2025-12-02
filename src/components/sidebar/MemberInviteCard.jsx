@@ -43,7 +43,7 @@ export default function MemberInviteCard() {
           {language === 'en' ? 'Sign up' : 'Inscription'}
         </Button>
         
-        <p className="text-[10px] text-purple-600 font-medium text-center mt-2">
+        <p className="text-xs text-purple-700 font-semibold text-center mt-2">
           {language === 'en' ? '100% Free' : '100% Gratuit'}
         </p>
       </div>
