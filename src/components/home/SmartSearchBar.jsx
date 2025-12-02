@@ -75,8 +75,8 @@ export default function SmartSearchBar({ onSearch }) {
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       <form onSubmit={handleSubmit}>
-        <div className={`relative flex items-center bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border-2 transition-all duration-300 ${
-          isFocused ? 'border-purple-400 shadow-purple-500/20' : 'border-white/50'
+        <div className={`relative flex items-center bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl border-2 transition-all duration-300 ${
+          isFocused ? 'border-purple-400 shadow-purple-500/20' : 'border-white/30'
         }`}>
           <Search className="absolute left-5 w-6 h-6 text-slate-400" />
           <input
@@ -87,7 +87,7 @@ export default function SmartSearchBar({ onSearch }) {
             onFocus={handleFocus}
             onBlur={() => setIsFocused(false)}
             placeholder={t('home_hero_search_placeholder')}
-            className="w-full py-5 pl-14 pr-32 text-lg text-slate-900 placeholder-slate-400 bg-transparent rounded-2xl focus:outline-none"
+            className="w-full py-5 pl-14 pr-32 text-lg text-white placeholder-white/70 bg-transparent rounded-2xl focus:outline-none"
           />
           {query && (
             <button
