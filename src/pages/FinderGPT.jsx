@@ -542,7 +542,7 @@ ${JSON.stringify(context.news, null, 0)}
       </div>
 
       {/* Input Area */}
-      <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-t border-purple-200 px-4 md:px-6 py-2 md:py-4 flex-shrink-0 w-full">
+      <div className="px-4 md:px-6 py-2 md:py-4 flex-shrink-0 w-full" style={{ background: theme === 'dark' ? 'linear-gradient(to right, rgba(88, 28, 135, 0.15), rgba(157, 23, 77, 0.15), rgba(88, 28, 135, 0.15))' : 'linear-gradient(to right, rgba(250, 245, 255, 1), rgba(252, 231, 243, 1), rgba(250, 245, 255, 1))', borderTop: '1px solid var(--border-color)' }}>
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto w-full">
           <div className="flex gap-2 w-full">
             <div className="flex-1 relative min-w-0">
@@ -550,7 +550,8 @@ ${JSON.stringify(context.news, null, 0)}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('agent_placeholder')}
-                className="w-full resize-none min-h-[40px] md:min-h-[50px] max-h-[80px] md:max-h-[150px] bg-white border-purple-200 focus:border-purple-400 pr-8 md:pr-12 text-sm md:text-base py-2"
+                className="w-full resize-none min-h-[40px] md:min-h-[50px] max-h-[80px] md:max-h-[150px] focus:border-purple-400 pr-8 md:pr-12 text-sm md:text-base py-2"
+                style={{ backgroundColor: 'var(--bg-card)', borderColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.3)' : 'rgba(192, 132, 252, 0.5)', color: 'var(--text-primary)' }}
                 rows={1}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -582,24 +583,25 @@ ${JSON.stringify(context.news, null, 0)}
           
           {/* Chat History - Horizontal under prompt */}
           {user && chatHistory.length > 0 && (
-            <div className="mt-2 md:mt-4 flex items-center gap-1.5 md:gap-2 overflow-x-auto pb-1 scrollbar-hide w-full">
-              <button
-                onClick={startNewChat}
-                className="flex-shrink-0 px-2 md:px-3 py-1 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-[10px] md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
-              >
-                <Plus className="w-3 h-3 md:w-4 md:h-4" />
-                {t('agent_new_chat')}
-              </button>
-              {chatHistory.slice(0, 3).map((chat) => (
-                <button
-                  key={chat.id}
-                  onClick={() => loadChat(chat)}
-                  className={`flex-shrink-0 px-2 md:px-3 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-all flex items-center gap-1 md:gap-2 max-w-[80px] md:max-w-[180px] group ${
-                    currentChatId === chat.id 
-                      ? 'bg-purple-200 text-purple-800 border border-purple-400' 
-                      : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50'
-                  }`}
-                >
+          <div className="mt-2 md:mt-4 flex items-center gap-1.5 md:gap-2 overflow-x-auto pb-1 scrollbar-hide w-full">
+          <button
+            onClick={startNewChat}
+            className="flex-shrink-0 px-2 md:px-3 py-1 md:py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-[10px] md:text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3 md:w-4 md:h-4" />
+            {t('agent_new_chat')}
+          </button>
+          {chatHistory.slice(0, 3).map((chat) => (
+            <button
+              key={chat.id}
+              onClick={() => loadChat(chat)}
+              className={`flex-shrink-0 px-2 md:px-3 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-all flex items-center gap-1 md:gap-2 max-w-[80px] md:max-w-[180px] group ${
+                currentChatId === chat.id 
+                  ? 'bg-purple-200 text-purple-800 border border-purple-400' 
+                  : 'hover:border-purple-300 hover:bg-purple-500/10'
+              }`}
+              style={currentChatId !== chat.id ? { backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' } : {}}
+            >
                   <MessageSquare className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
                   <span className="truncate">{chat.title || 'Chat'}</span>
                   <button
@@ -618,7 +620,7 @@ ${JSON.stringify(context.news, null, 0)}
             </div>
           )}
           
-          <p className="text-[9px] md:text-xs text-purple-600 mt-1 md:mt-2 text-center">
+          <p className="text-[9px] md:text-xs text-purple-500 mt-1 md:mt-2 text-center">
             {user ? t('agent_saved') : t('agent_login_prompt')}
           </p>
         </form>

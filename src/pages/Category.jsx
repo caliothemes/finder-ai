@@ -121,7 +121,7 @@ export default function Category() {
 
   if (categoryLoading || servicesLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <div className="animate-spin w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     );
@@ -129,10 +129,10 @@ export default function Category() {
 
   if (!category) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">{t('category_not_found')}</h1>
-          <p className="text-slate-600">{t('category_not_found_subtitle')}</p>
+          <h1 className="text-3xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>{t('category_not_found')}</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>{t('category_not_found_subtitle')}</p>
         </div>
       </div>
     );

@@ -686,7 +686,8 @@ function LayoutContent({ children, currentPageName }) {
             <nav className="lg:hidden pt-4 pb-2 space-y-1">
               <Link
                 to={createPageUrl('Home')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                style={{ color: 'var(--text-primary)' }}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Home className="w-4 h-4" />
@@ -694,7 +695,8 @@ function LayoutContent({ children, currentPageName }) {
               </Link>
               <Link
                 to={createPageUrl('Explore')}
-                className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                style={{ color: 'var(--text-primary)' }}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Compass className="w-4 h-4" />
@@ -703,7 +705,8 @@ function LayoutContent({ children, currentPageName }) {
               </Link>
               <Link
                                     to={createPageUrl('Categories')}
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                                    className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                                    style={{ color: 'var(--text-primary)' }}
                                     onClick={() => setMobileMenuOpen(false)}
                                   >
                                     <Grid3X3 className="w-4 h-4" />
@@ -712,7 +715,8 @@ function LayoutContent({ children, currentPageName }) {
                                   </Link>
                                   <Link
                                                       to={createPageUrl('AINews')}
-                                  className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                                  className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                                  style={{ color: 'var(--text-primary)' }}
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
                                   <Newspaper className="w-4 h-4" />
@@ -721,8 +725,8 @@ function LayoutContent({ children, currentPageName }) {
               </Link>
               <Link
                                     to={createPageUrl('FinderGPT')}
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:text-purple-600 rounded-l-xl transition-all font-medium"
-                                    style={{ background: 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
+                                    className="flex items-center gap-3 px-3 py-2 text-sm hover:text-purple-500 rounded-l-xl transition-all font-medium"
+                                    style={{ background: theme === 'dark' ? 'linear-gradient(to right, rgba(253, 224, 71, 0.15), transparent)' : 'linear-gradient(to right, rgba(253, 224, 71, 0.25), transparent)', color: 'var(--text-primary)' }}
                                     onClick={() => setMobileMenuOpen(false)}
                                   >
                                     <Bot className="w-4 h-4" />
@@ -736,7 +740,8 @@ function LayoutContent({ children, currentPageName }) {
                 <>
                   <Link
                                           to={createPageUrl('Favorites')}
-                                          className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                                          className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                                          style={{ color: 'var(--text-primary)' }}
                                           onClick={() => setMobileMenuOpen(false)}
                                         >
                                           <Heart className="w-4 h-4" />
@@ -749,7 +754,8 @@ function LayoutContent({ children, currentPageName }) {
                                         </Link>
                   <Link
                     to={createPageUrl('Profile')}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                    className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                    style={{ color: 'var(--text-primary)' }}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User className="w-4 h-4" />
@@ -757,7 +763,8 @@ function LayoutContent({ children, currentPageName }) {
                   </Link>
                   <Link
                     to={createPageUrl('ProAccount')}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                    className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                    style={{ color: 'var(--text-primary)' }}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <Crown className="w-4 h-4" />
@@ -765,7 +772,8 @@ function LayoutContent({ children, currentPageName }) {
                   </Link>
                   <Link
                     to={createPageUrl('BannerManager')}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all font-medium"
+                    className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-purple-500/10 hover:text-purple-500 rounded-lg transition-all font-medium"
+                    style={{ color: 'var(--text-primary)' }}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <PlusCircle className="w-4 h-4" />
@@ -774,13 +782,13 @@ function LayoutContent({ children, currentPageName }) {
 
                   {user.role === 'admin' && (
                     <>
-                      <div className="my-2 border-t border-slate-200" />
-                      <div className="px-3 py-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                      <div className="my-2" style={{ borderTop: '1px solid var(--border-color)' }} />
+                      <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                         Administration
                       </div>
                       <Link
                         to={createPageUrl('Admin')}
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all font-medium"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-purple-600 bg-purple-500/10 hover:bg-purple-500/20 rounded-lg transition-all font-medium"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <Crown className="w-4 h-4" />
@@ -789,30 +797,30 @@ function LayoutContent({ children, currentPageName }) {
                     </>
                   )}
 
-                  <div className="my-2 border-t border-slate-200" />
+                  <div className="my-2" style={{ borderTop: '1px solid var(--border-color)' }} />
                   <button
                     onClick={() => {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 rounded-lg transition-all font-medium"
                   >
                     <LogOut className="w-4 h-4" />
                     {t('nav_logout')}
                   </button>
-                </>
-              ) : (
-                <button
+                  </>
+                  ) : (
+                  <button
                   onClick={() => {
                     base44.auth.redirectToLogin();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
-                >
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-500 hover:bg-purple-500/10 rounded-lg transition-all font-medium"
+                  >
                   <LogIn className="w-4 h-4" />
                   {t('nav_login')}
-                </button>
-              )}
+                  </button>
+                  )}
             </nav>
           )}
         </div>
