@@ -481,6 +481,7 @@ Provide accurate English translations.`,
   const pendingServices = services.filter(s => s.status === 'pending' && !s.pending_revision);
   const approvedServices = services.filter(s => s.status === 'approved' && !s.pending_revision);
   const rejectedServices = services.filter(s => s.status === 'rejected');
+  const homeFeaturedServices = services.filter(s => s.home_featured);
 
   // Filtrage par statut
   let filteredServices = services;
@@ -492,6 +493,8 @@ Provide accurate English translations.`,
     filteredServices = approvedServices;
   } else if (filter === 'rejected') {
     filteredServices = rejectedServices;
+  } else if (filter === 'home_featured') {
+    filteredServices = homeFeaturedServices;
   }
 
   // Filtrage par recherche
@@ -1063,36 +1066,22 @@ Provide accurate English translations.`,
               className="pl-9 w-64"
             />
           </div>
-          <Button
-            variant={filter === 'all' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('all')}
-          >
-            Tous ({services.length})
-          </Button>
-          <Button
-            variant={filter === 'revisions' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('revisions')}
-            className={servicesWithRevisions.length > 0 ? 'border-amber-400 text-amber-700' : ''}
-          >
-            <RefreshCw className="w-3 h-3 mr-1" />
-            Révisions ({servicesWithRevisions.length})
-          </Button>
-          <Button
-            variant={filter === 'pending' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('pending')}
-          >
-            En attente ({pendingServices.length})
-          </Button>
-          <Button
-            variant={filter === 'approved' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('approved')}
-          >
-            Approuvés ({approvedServices.length})
-          </Button>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger className="w-52">
+              <SelectValue placeholder="Filtrer par..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous ({services.length})</SelectItem>
+              <SelectItem value="revisions">
+                Révisions ({servicesWithRevisions.length})
+              </SelectItem>
+              <SelectItem value="pending">En attente ({pendingServices.length})</SelectItem>
+              <SelectItem value="approved">Approuvés ({approvedServices.length})</SelectItem>
+              <SelectItem value="home_featured">
+                En vedette accueil ({homeFeaturedServices.length})
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex gap-2 flex-wrap">
           <Button 
