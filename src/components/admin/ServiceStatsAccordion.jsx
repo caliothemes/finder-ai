@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronUp, Eye, MousePointer, MessageSquare, ExternalLink, LayoutGrid, Loader2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, MessageSquare, Loader2 } from 'lucide-react';
 
 export default function ServiceStatsAccordion({ service }) {
   const [isOpen, setIsOpen] = useState(false);
