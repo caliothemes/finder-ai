@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronUp, Eye, MessageSquare, Loader2, ExternalLink, MousePointer, Heart } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, MessageSquare, Loader2, ExternalLink, MousePointer, Heart, Clock } from 'lucide-react';
 
 export default function ServiceStatsAccordion({ service }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -157,6 +157,22 @@ export default function ServiceStatsAccordion({ service }) {
                   <span className="text-[10px] text-slate-500 font-medium">Avis</span>
                 </div>
                 <span className="text-lg font-bold text-indigo-600">{reviews.length}</span>
+              </div>
+            </div>
+
+            {/* Temps moyen sur la page */}
+            <div className="mt-3 bg-white rounded-lg p-3 border border-amber-200">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-violet-500" />
+                <span className="text-sm text-slate-600">Temps moyen sur la page:</span>
+                <span className="text-lg font-bold text-violet-600">
+                  {avgDuration > 0 ? formatDuration(avgDuration) : 'N/A'}
+                </span>
+                {viewsWithDuration.length > 0 && (
+                  <span className="text-xs text-slate-400">
+                    ({viewsWithDuration.length} mesures)
+                  </span>
+                )}
               </div>
             </div>
           )}
