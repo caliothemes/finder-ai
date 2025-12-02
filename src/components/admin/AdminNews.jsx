@@ -660,7 +660,7 @@ Provide accurate English translations.`,
               <h3 className="text-lg font-bold text-slate-900">Actualités importantes de la semaine</h3>
             </div>
             <p className="text-sm text-slate-600 mb-4">
-              Les 6 dernières actualités marquées comme "importantes" seront affichées dans le module spécial sur la page Actualités.
+              Les 5 dernières actualités marquées comme "importantes" seront affichées dans le module spécial sur la page Actualités (1 en aperçu + 4 en grille).
             </p>
           </div>
 
@@ -678,7 +678,7 @@ Provide accurate English translations.`,
                 .filter(a => a.weekly_highlight)
                 .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
                 .map((article, index) => (
-                  <Card key={article.id} className={index < 6 ? "border-orange-300 bg-orange-50/50" : "border-slate-200 opacity-60"}>
+                  <Card key={article.id} className={index < 5 ? "border-orange-300 bg-orange-50/50" : "border-slate-200 opacity-60"}>
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-4">
                         {article.cover_image_url && (
@@ -690,7 +690,7 @@ Provide accurate English translations.`,
                         )}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            {index < 6 ? (
+                            {index < 5 ? (
                               <Badge className="bg-orange-500 text-white">Affiché #{index + 1}</Badge>
                             ) : (
                               <Badge variant="outline" className="text-slate-500">Non affiché</Badge>
