@@ -11,6 +11,7 @@ import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
 import ActiveBanner from '@/components/banners/ActiveBanner';
 import { useLanguage } from '@/components/LanguageProvider';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function Explore() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -24,6 +25,7 @@ export default function Explore() {
   const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   // Vérifier s'il y a une bannière sidebar active
   const { data: hasSidebarBanner = false } = useQuery({
@@ -135,33 +137,33 @@ export default function Explore() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             {t('explore_title')}
           </h1>
-          <p className="text-xl text-slate-600">
-            {t('explore_subtitle')} <span className="font-semibold text-purple-600">{allServices.length}</span> {t('explore_subtitle_suffix')}
+          <p className="text-xl" style={{ color: 'var(--text-secondary)' }}>
+            {t('explore_subtitle')} <span className="font-semibold text-purple-500">{allServices.length}</span> {t('explore_subtitle_suffix')}
           </p>
           {(() => {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const newServicesCount = allServices.filter(s => new Date(s.created_date) >= sevenDaysAgo).length;
             return newServicesCount > 0 ? (
-              <p className="text-sm text-slate-500 mt-2">
-                <span className="font-semibold text-green-600">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 7 derniers jours
+              <p className="text-sm mt-2" style={{ color: 'var(--text-muted)' }}>
+                <span className="font-semibold text-green-500">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 7 derniers jours
               </p>
             ) : null;
           })()}
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-3xl shadow-xl p-6 mb-12">
+        <div className="rounded-3xl shadow-xl p-6 mb-12" style={{ backgroundColor: 'var(--bg-card)' }}>
           <div className="flex items-center gap-3 mb-6">
-            <Filter className="w-5 h-5 text-purple-600" />
-            <h2 className="text-lg font-semibold">{t('explore_filters_title')}</h2>
+            <Filter className="w-5 h-5 text-purple-500" />
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>{t('explore_filters_title')}</h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-4">
@@ -213,16 +215,17 @@ export default function Explore() {
 
           {/* Sort */}
           <div className="flex items-center gap-3 mt-4">
-            <SlidersHorizontal className="w-4 h-4 text-slate-500" />
-            <span className="text-sm text-slate-600">{t('explore_sort_by')}</span>
+            <SlidersHorizontal className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('explore_sort_by')}</span>
             <div className="flex gap-2">
               <button
                 onClick={() => setSortBy('-created_date')}
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   sortBy === '-created_date'
                     ? 'bg-purple-600 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : ''
                 }`}
+                style={sortBy !== '-created_date' ? { backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' } : {}}
               >
                 {t('explore_sort_recent')}
               </button>
@@ -231,8 +234,9 @@ export default function Explore() {
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   sortBy === '-views'
                     ? 'bg-purple-600 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : ''
                 }`}
+                style={sortBy !== '-views' ? { backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' } : {}}
               >
                 {t('explore_sort_views')}
               </button>
@@ -241,8 +245,9 @@ export default function Explore() {
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   sortBy === '-average_rating'
                     ? 'bg-purple-600 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : ''
                 }`}
+                style={sortBy !== '-average_rating' ? { backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' } : {}}
               >
                 {t('explore_sort_rating')}
               </button>
@@ -256,11 +261,11 @@ export default function Explore() {
           </div>
 
           {/* Results count */}
-        <div className="mb-6">
-          <p className="text-slate-600">
-            <span className="font-semibold text-slate-900">{filteredServices.length}</span> {filteredServices.length > 1 ? t('explore_results_plural') : t('explore_results')}
+          <div className="mb-6">
+          <p style={{ color: 'var(--text-secondary)' }}>
+            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{filteredServices.length}</span> {filteredServices.length > 1 ? t('explore_results_plural') : t('explore_results')}
           </p>
-        </div>
+          </div>
 
         {/* Services Grid */}
         {isLoading ? (
@@ -297,15 +302,18 @@ export default function Explore() {
 
               {/* Promo Card - seulement page 1 */}
               {currentPage === 1 && (
-                <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8">
+                <div 
+                  className="group rounded-2xl border-2 border-dashed border-purple-400 hover:border-purple-500 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8"
+                  style={{ background: theme === 'dark' ? 'linear-gradient(to bottom right, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1))' : 'linear-gradient(to bottom right, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05))' }}
+                >
                   <div className="text-center">
                     <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Sparkles className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                    <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
                       {t('promo_your_service')}
                     </h3>
-                    <p className="text-sm text-slate-600 mb-4">
+                    <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
                       {t('promo_increase_visibility')}
                     </p>
                     <Link to={createPageUrl('ProAccount')}>

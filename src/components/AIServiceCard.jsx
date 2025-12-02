@@ -9,9 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DefaultAILogo from '@/components/DefaultAILogo';
 import { useLanguage } from '@/components/LanguageProvider';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite, hasFinderReview = false, finderReviewRating = null }) {
   const { language, t } = useLanguage();
+  const { theme } = useTheme();
 
   // Vérifier si le service est nouveau (moins de 7 jours)
   const isNew = () => {
@@ -25,7 +27,13 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
 
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl">
+    <div 
+      className="group rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl"
+      style={{ 
+        backgroundColor: 'var(--bg-card)', 
+        border: '1px solid var(--border-color)',
+      }}
+    >
       {/* Image section */}
       <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)} className="block relative h-40 bg-gradient-to-br from-purple-100 to-pink-100 cursor-pointer">
         {service.cover_image_url ? (
@@ -45,10 +53,12 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
             e.preventDefault();
             onToggleFavorite(service.id);
           }}
-          className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg hover:scale-110"
+          className="absolute top-3 right-3 w-9 h-9 backdrop-blur-sm rounded-full flex items-center justify-center transition-all shadow-lg hover:scale-110"
+          style={{ backgroundColor: theme === 'dark' ? 'rgba(30, 41, 59, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}
         >
           <Heart
-            className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-slate-600'}`}
+            className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`}
+            style={{ color: isFavorite ? undefined : 'var(--text-secondary)' }}
           />
         </button>
 
@@ -94,51 +104,55 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
               className="w-10 h-10 rounded-full object-cover border border-slate-200"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+            <div 
+              className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
+              style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+            >
               <DefaultAILogo size={32} />
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
-              <h3 className="text-lg font-bold text-slate-900 hover:text-purple-600 transition-colors truncate">
-                {service.name}
-              </h3>
-            </Link>
-            <p className="text-xs text-slate-500 line-clamp-1">
-              {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
-            </p>
+            <div className="flex-1 min-w-0">
+              <Link to={createPageUrl(`AIDetail?slug=${service.slug}`)}>
+                <h3 className="text-lg font-bold hover:text-purple-500 transition-colors truncate" style={{ color: 'var(--text-primary)' }}>
+                  {service.name}
+                </h3>
+              </Link>
+              <p className="text-xs line-clamp-1" style={{ color: 'var(--text-muted)' }}>
+                {language === 'en' && service.tagline_en ? service.tagline_en : service.tagline}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <p className="text-sm text-slate-700 mb-4 line-clamp-2">
-          {language === 'en' && service.description_en ? service.description_en : service.description}
-        </p>
+          <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+            {language === 'en' && service.description_en ? service.description_en : service.description}
+          </p>
 
-        {/* Meta info */}
-        <div className="flex items-center gap-3 mb-3 text-sm">
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="font-semibold">{service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}</span>
+          {/* Meta info */}
+          <div className="flex items-center gap-3 mb-3 text-sm">
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{service.average_rating > 0 ? service.average_rating.toFixed(1) : 'N/A'}</span>
+            </div>
+            <div className="flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
+              <Eye className="w-4 h-4" />
+              <span>{service.views || 0}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1 text-slate-500">
-            <Eye className="w-4 h-4" />
-            <span>{service.views || 0}</span>
-          </div>
-        </div>
 
-        {/* Tags */}
-        {service.tags && service.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {service.tags.slice(0, 3).map((tag, idx) => (
-              <span
-                key={idx}
-                className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[11px] font-medium"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+          {/* Tags */}
+          {service.tags && service.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {service.tags.slice(0, 3).map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 rounded text-[11px] font-medium"
+                  style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-secondary)' }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
 
 

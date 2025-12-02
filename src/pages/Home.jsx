@@ -110,14 +110,14 @@ export default function Home() {
 
   if (categoriesLoading || servicesLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <Loader2 className="w-12 h-12 animate-spin text-purple-600" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <HeroSection onSearch={handleSearch} />
 
       {/* Bannière Hero Homepage */}

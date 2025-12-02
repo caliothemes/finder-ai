@@ -10,9 +10,11 @@ import {
   Target, Users, Gamepad2, Film, Headphones, BookOpen
 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function CategoryGrid({ categories, aiServices = [] }) {
   const { t, language } = useLanguage();
+  const { theme } = useTheme();
   const iconMap = {
     'Sparkles': Sparkles,
     'Image': Image,
@@ -56,13 +58,13 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
   };
 
   return (
-    <div className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white">
+    <div className="py-24 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             {t('home_category_title')}
           </h2>
-          <p className="text-xl text-slate-600">
+          <p className="text-xl" style={{ color: 'var(--text-secondary)' }}>
             {t('home_category_subtitle')}
           </p>
         </div>
@@ -81,9 +83,13 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
               <Link
                 key={category.id}
                 to={createPageUrl(`Category?slug=${category.slug}`)}
-                className="group relative bg-white rounded-2xl p-8 border border-slate-200 hover:border-purple-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                className="group relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" 
+                  style={{ background: theme === 'dark' ? 'linear-gradient(to bottom right, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1))' : 'linear-gradient(to bottom right, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05))' }}
+                />
 
                 <div className="relative">
                   <div 
@@ -93,21 +99,24 @@ export default function CategoryGrid({ categories, aiServices = [] }) {
                     <Icon className="w-7 h-7" style={{ color: category.color }} />
                   </div>
 
-                  <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-purple-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
                     {categoryName}
                   </h3>
 
-                  <p className="text-sm text-slate-600 mb-4 line-clamp-2">
+                  <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
                     {categoryDesc}
                   </p>
 
                   <div className="mb-3">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                    <span 
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
+                      style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.1)', color: '#a855f7' }}
+                    >
                       {categoryCount} {categoryCount > 1 ? t('home_category_tools_plural') : t('home_category_tools')}
                     </span>
                   </div>
 
-                  <div className="flex items-center text-purple-600 font-medium text-sm group-hover:gap-2 transition-all">
+                  <div className="flex items-center text-purple-500 font-medium text-sm group-hover:gap-2 transition-all">
                     <span>{t('home_category_explore')}</span>
                     <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </div>
