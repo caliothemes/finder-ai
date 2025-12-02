@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SearchModal from '@/components/SearchModal';
 import { LanguageProvider, useLanguage } from '@/components/LanguageProvider';
+import { ThemeProvider, useTheme } from '@/components/ThemeProvider';
+import ThemeToggle from '@/components/ThemeToggle';
 
 // Composant pour le lien admin avec badge de notifications
 function AdminNavLink() {
@@ -160,6 +162,7 @@ function LayoutContent({ children, currentPageName }) {
     const [searchModalOpen, setSearchModalOpen] = useState(false);
     const [storiesOpen, setStoriesOpen] = useState(false);
     const { language, changeLanguage, t } = useLanguage();
+    const { theme } = useTheme();
     const newItems = useNewItemsTracker();
     const location = useLocation();
 
@@ -260,11 +263,11 @@ function LayoutContent({ children, currentPageName }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       {/* Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-slate-200 fixed left-0 top-0 h-screen overflow-y-auto">
+      <aside className="hidden lg:flex lg:flex-col w-72 fixed left-0 top-0 h-screen overflow-y-auto" style={{ backgroundColor: 'var(--bg-primary)', borderRight: '1px solid var(--border-color)' }}>
         {/* Logo Section */}
-          <div className="p-4 border-b border-slate-200 flex flex-col items-center justify-center">
+          <div className="p-4 flex flex-col items-center justify-center" style={{ borderBottom: '1px solid var(--border-color)' }}>
           <div className="relative inline-flex items-center justify-center mb-2">
                             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative w-[80px] h-[80px] flex items-center justify-center">
                               {/* Glow effect externe */}
@@ -325,18 +328,24 @@ function LayoutContent({ children, currentPageName }) {
           <h2 className="text-xl font-bold bg-gradient-to-r from-purple-950 via-purple-700 to-purple-900 bg-clip-text text-transparent mb-1 text-center">
             Finder AI
           </h2>
-          <p className="text-xs text-slate-600 text-center">
-            Le répertoire ultime des outils d'IA
+          <p className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
+            {language === 'en' ? 'The ultimate AI tools directory' : 'Le répertoire ultime des outils IA'}
           </p>
-        </div>
+
+          {/* Theme Toggle */}
+          <div className="mt-3 flex items-center justify-center">
+            <ThemeToggle />
+          </div>
+          </div>
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1">
           <Link
             to={createPageUrl('Home')}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-              currentPageName === 'Home' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+              currentPageName === 'Home' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
             }`}
+            style={{ color: currentPageName === 'Home' ? undefined : 'var(--text-primary)' }}
           >
             <Home className="w-4 h-4" />
             {t('nav_home')}
@@ -344,8 +353,9 @@ function LayoutContent({ children, currentPageName }) {
           <Link
             to={createPageUrl('Explore')}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-              currentPageName === 'Explore' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+              currentPageName === 'Explore' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
             }`}
+            style={{ color: currentPageName === 'Explore' ? undefined : 'var(--text-primary)' }}
           >
             <Compass className="w-4 h-4" />
             {t('nav_explore')}
@@ -354,8 +364,9 @@ function LayoutContent({ children, currentPageName }) {
           <Link
             to={createPageUrl('Categories')}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-              currentPageName === 'Categories' || currentPageName === 'Category' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+              currentPageName === 'Categories' || currentPageName === 'Category' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
             }`}
+            style={{ color: currentPageName === 'Categories' || currentPageName === 'Category' ? undefined : 'var(--text-primary)' }}
           >
             <Grid3X3 className="w-4 h-4" />
             {t('nav_categories')}
@@ -364,8 +375,9 @@ function LayoutContent({ children, currentPageName }) {
           <Link
             to={createPageUrl('AINews')}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-              currentPageName === 'AINews' || currentPageName === 'AINewsDetail' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+              currentPageName === 'AINews' || currentPageName === 'AINewsDetail' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
             }`}
+            style={{ color: currentPageName === 'AINews' || currentPageName === 'AINewsDetail' ? undefined : 'var(--text-primary)' }}
           >
             <Newspaper className="w-4 h-4" />
             {t('nav_ai_news')}
@@ -374,9 +386,12 @@ function LayoutContent({ children, currentPageName }) {
           <Link
             to={createPageUrl('FinderGPT')}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-l-xl transition-all font-medium ${
-              currentPageName === 'FinderGPT' ? 'text-purple-600' : 'text-slate-700 hover:text-purple-600'
+              currentPageName === 'FinderGPT' ? 'text-purple-500' : 'hover:text-purple-500'
             }`}
-            style={{ background: currentPageName === 'FinderGPT' ? 'linear-gradient(to right, rgba(253, 224, 71, 0.4), rgba(255, 255, 255, 0))' : 'linear-gradient(to right, rgba(253, 224, 71, 0.25), rgba(255, 255, 255, 0))' }}
+            style={{ 
+              background: currentPageName === 'FinderGPT' ? 'linear-gradient(to right, rgba(253, 224, 71, 0.4), transparent)' : 'linear-gradient(to right, rgba(253, 224, 71, 0.25), transparent)',
+              color: currentPageName === 'FinderGPT' ? undefined : 'var(--text-primary)'
+            }}
           >
             <Bot className="w-4 h-4" />
             Agent FinderAI
@@ -390,8 +405,9 @@ function LayoutContent({ children, currentPageName }) {
               <Link
                 to={createPageUrl('Favorites')}
                 className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-                  currentPageName === 'Favorites' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                  currentPageName === 'Favorites' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
                 }`}
+                style={{ color: currentPageName === 'Favorites' ? undefined : 'var(--text-primary)' }}
               >
                 <Heart className="w-4 h-4" />
                 {t('nav_favorites')}
@@ -404,8 +420,9 @@ function LayoutContent({ children, currentPageName }) {
               <Link
                 to={createPageUrl('Profile')}
                 className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-                  currentPageName === 'Profile' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                  currentPageName === 'Profile' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
                 }`}
+                style={{ color: currentPageName === 'Profile' ? undefined : 'var(--text-primary)' }}
               >
                 <User className="w-4 h-4" />
                 {t('nav_profile')}
@@ -413,8 +430,9 @@ function LayoutContent({ children, currentPageName }) {
               <Link
                 to={createPageUrl('ProAccount')}
                 className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-                  currentPageName === 'ProAccount' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                  currentPageName === 'ProAccount' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
                 }`}
+                style={{ color: currentPageName === 'ProAccount' ? undefined : 'var(--text-primary)' }}
               >
                 <Crown className="w-4 h-4" />
                 {t('nav_pro_account')}
@@ -422,8 +440,9 @@ function LayoutContent({ children, currentPageName }) {
               <Link
                 to={createPageUrl('BannerManager')}
                 className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
-                  currentPageName === 'BannerManager' ? 'bg-purple-50 text-purple-600' : 'text-slate-700 hover:bg-purple-50 hover:text-purple-600'
+                  currentPageName === 'BannerManager' ? 'bg-purple-500/20 text-purple-500' : 'hover:bg-purple-500/10 hover:text-purple-500'
                 }`}
+                style={{ color: currentPageName === 'BannerManager' ? undefined : 'var(--text-primary)' }}
               >
                 <PlusCircle className="w-4 h-4" />
                 {t('nav_my_banners')}
@@ -431,48 +450,48 @@ function LayoutContent({ children, currentPageName }) {
 
               {user.role === 'admin' && (
                 <>
-                  <div className="my-2 border-t border-slate-200" />
-                  <div className="px-3 py-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <div className="my-2" style={{ borderTop: '1px solid var(--border-color)' }} />
+                  <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                     Administration
                   </div>
                   <AdminNavLink />
                 </>
               )}
 
-              <div className="my-2 border-t border-slate-200" />
+              <div className="my-2" style={{ borderTop: '1px solid var(--border-color)' }} />
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 rounded-lg transition-all font-medium"
               >
                 <LogOut className="w-4 h-4" />
                 {t('nav_logout')}
               </button>
-              </>
-              )}
+            </>
+          )}
 
-              {!user && (
-              <>
+          {!user && (
+            <>
               <button
-              onClick={() => base44.auth.redirectToLogin()}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all font-medium"
+                onClick={() => base44.auth.redirectToLogin()}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-purple-500 hover:bg-purple-500/10 rounded-lg transition-all font-medium"
               >
-              <LogIn className="w-4 h-4" />
-              {t('nav_login')}
+                <LogIn className="w-4 h-4" />
+                {t('nav_login')}
               </button>
 
               {/* Member Invite Card */}
               <div className="mt-4 px-1">
                 <MemberInviteCard />
               </div>
-              </>
-              )}
-              </nav>
+            </>
+          )}
+          </nav>
       </aside>
 
       {/* Main Content Wrapper */}
       <div className="flex-1 lg:ml-72">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <header className="backdrop-blur-xl sticky top-0 z-50 shadow-sm" style={{ backgroundColor: theme === 'dark' ? 'rgba(30, 41, 59, 0.9)' : 'rgba(255, 255, 255, 0.8)', borderBottom: '1px solid var(--border-color)' }}>
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
             {/* Mobile Logo - visible only on mobile */}
@@ -905,9 +924,11 @@ function LayoutContent({ children, currentPageName }) {
     }
 
     export default function Layout({ children, currentPageName }) {
-    return (
-    <LanguageProvider>
-    <LayoutContent children={children} currentPageName={currentPageName} />
-    </LanguageProvider>
-    );
+      return (
+      <LanguageProvider>
+        <ThemeProvider>
+          <LayoutContent children={children} currentPageName={currentPageName} />
+        </ThemeProvider>
+      </LanguageProvider>
+      );
     }
