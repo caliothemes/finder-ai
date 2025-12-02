@@ -132,7 +132,7 @@ export default function AIServiceCard({ service, onToggleFavorite, isFavorite, h
             {service.tags.slice(0, 3).map((tag, idx) => (
               <span
                 key={idx}
-                className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-medium"
+                className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[11px] font-medium"
               >
                 {tag}
               </span>
