@@ -8,11 +8,11 @@ import { useLanguage } from '@/components/LanguageProvider';
 export default function WeeklyHighlights({ articles }) {
   const { language } = useLanguage();
   
-  // Prendre les 7 derniers articles marqués weekly_highlight triés par date
+  // Prendre les 5 derniers articles marqués weekly_highlight triés par date
   const highlightArticles = articles
     .filter(a => a.weekly_highlight && a.status === 'published')
     .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
-    .slice(0, 7);
+    .slice(0, 5);
 
   if (highlightArticles.length === 0) return null;
 
