@@ -410,7 +410,25 @@ export default function AIDetail() {
 
               <div className="flex gap-3">
                 {service.website_url && (
-                  <a href={service.website_url} target="_blank" rel="noopener noreferrer">
+                  <a 
+                    href={service.website_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      // Track website click
+                      let visitorId = localStorage.getItem('visitor_id');
+                      if (!visitorId) {
+                        visitorId = 'v_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+                        localStorage.setItem('visitor_id', visitorId);
+                      }
+                      base44.entities.ServiceClick.create({
+                        ai_service_id: service.id,
+                        click_type: 'website',
+                        visitor_id: visitorId,
+                        user_email: user?.email || null
+                      });
+                    }}
+                  >
                     <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
                       Visiter le site
                       <ExternalLink className="w-5 h-5 ml-2" />
