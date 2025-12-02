@@ -267,8 +267,8 @@ function LayoutContent({ children, currentPageName }) {
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:flex-col w-72 fixed left-0 top-0 h-screen overflow-y-auto" style={{ backgroundColor: 'var(--bg-primary)', borderRight: '1px solid var(--border-color)' }}>
         {/* Logo Section */}
-          <div className="p-4 flex flex-col items-center justify-center" style={{ borderBottom: '1px solid var(--border-color)' }}>
-          <div className="relative inline-flex items-center justify-center mb-2">
+            <div className="p-6 flex flex-col items-center justify-center" style={{ borderBottom: '1px solid var(--border-color)' }}>
+            <div className="relative inline-flex items-center justify-center mb-3">
                             <button onClick={() => setStoriesOpen(true)} className="cursor-pointer group relative w-[80px] h-[80px] flex items-center justify-center">
                               {/* Glow effect externe */}
                               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-15 blur-lg group-hover:opacity-30 animate-pulse-slow"></div>
