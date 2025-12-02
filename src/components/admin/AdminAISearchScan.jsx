@@ -437,43 +437,56 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
         </Button>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2">
-        <Button
-          variant={filter === 'all' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setFilter('all')}
-        >
-          Tous ({discoveries.length})
-        </Button>
-        <Button
-          variant={filter === 'new' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setFilter('new')}
-        >
-          À valider ({newCount})
-        </Button>
-        <Button
-          variant={filter === 'approved' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setFilter('approved')}
-        >
-          Services créés ({discoveries.filter(d => d.status === 'approved').length})
-        </Button>
-        <Button
-          variant={filter === 'reviewed' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setFilter('reviewed')}
-        >
-          Vus ({reviewedCount})
-        </Button>
-        <Button
-          variant={filter === 'dismissed' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setFilter('dismissed')}
-        >
-          Rejetés ({discoveries.filter(d => d.status === 'dismissed').length})
-        </Button>
+      {/* Filter Tabs + Sort */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant={filter === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('all')}
+          >
+            Tous ({discoveries.length})
+          </Button>
+          <Button
+            variant={filter === 'new' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('new')}
+          >
+            À valider ({newCount})
+          </Button>
+          <Button
+            variant={filter === 'approved' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('approved')}
+          >
+            Services créés ({discoveries.filter(d => d.status === 'approved').length})
+          </Button>
+          <Button
+            variant={filter === 'reviewed' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('reviewed')}
+          >
+            Vus ({reviewedCount})
+          </Button>
+          <Button
+            variant={filter === 'dismissed' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilter('dismissed')}
+          >
+            Rejetés ({discoveries.filter(d => d.status === 'dismissed').length})
+          </Button>
+        </div>
+
+        {/* Tri par date */}
+        <Select value={sortOrder} onValueChange={setSortOrder}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="-created_date">Plus récents d'abord</SelectItem>
+            <SelectItem value="created_date">Plus anciens d'abord</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Stats */}
