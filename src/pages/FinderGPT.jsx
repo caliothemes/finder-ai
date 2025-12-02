@@ -467,7 +467,10 @@ ${JSON.stringify(context.news, null, 0)}
                       className="prose prose-sm max-w-none prose-slate text-xs md:text-base [&>p]:mb-1.5 [&>ul]:mb-1.5 [&>ul]:space-y-0.5"
                       components={{
                         a: ({ href, children }) => {
-                          // Check if it's an internal link
+                          // Liste des pages internes
+                          const internalPages = ['Explore', 'Categories', 'AINews', 'SubmitAI', 'Home', 'Favorites', 'ProAccount', 'Profile', 'FinderGPT'];
+                          
+                          // Check if it's an internal page link or detail page
                           if (href?.includes('AIDetail?slug=') || href?.includes('AINewsDetail?slug=')) {
                             return (
                               <Link 
@@ -479,6 +482,20 @@ ${JSON.stringify(context.news, null, 0)}
                               </Link>
                             );
                           }
+                          
+                          // Check for simple internal page names
+                          if (internalPages.includes(href)) {
+                            return (
+                              <Link 
+                                to={createPageUrl(href)} 
+                                className="text-purple-600 hover:text-purple-700 font-medium"
+                              >
+                                {children}
+                              </Link>
+                            );
+                          }
+                          
+                          // External links
                           return (
                             <a href={href} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-700">
                               {children}
