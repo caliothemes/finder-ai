@@ -7,6 +7,7 @@ import { Newspaper, Calendar, Eye, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
+import WeeklyHighlights from '@/components/news/WeeklyHighlights';
 
 export default function AINews() {
   const { language } = useLanguage();
@@ -239,6 +240,9 @@ export default function AINews() {
                 </span>
               </div>
             )}
+
+            {/* Weekly Highlights Section */}
+            <WeeklyHighlights articles={articles} />
           </div>
         )}
       </div>

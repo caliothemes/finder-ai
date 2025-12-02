@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Search, Check, X, Eye, ExternalLink, Loader2, Pencil, Save, 
-  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles, Upload, Image, Languages
+  Trash2, Plus, Newspaper, Globe, Calendar, Sparkles, Upload, Image, Languages, Flame
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -447,6 +447,15 @@ Provide accurate English translations.`,
               </span>
             )}
           </TabsTrigger>
+          <TabsTrigger value="weekly" className="relative">
+            <Flame className="w-4 h-4 mr-1 text-orange-500" />
+            Actu importantes
+            {articles.filter(a => a.weekly_highlight).length > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                {articles.filter(a => a.weekly_highlight).length}
+              </span>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         {/* Articles Tab */}
@@ -588,9 +597,21 @@ Provide accurate English translations.`,
                             </Badge>
                           </div>
                           <p className="text-sm text-slate-600 mt-2 line-clamp-2">{article.summary}</p>
-                          <div className="flex gap-2 mt-3">
+                          <div className="flex gap-2 mt-3 flex-wrap">
                             <Button size="sm" variant="outline" onClick={() => { setEditingId(article.id); setEditData(article); }}>
                               <Pencil className="w-4 h-4 mr-1" />Modifier
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={article.weekly_highlight ? "default" : "outline"}
+                              className={article.weekly_highlight ? "bg-orange-500 hover:bg-orange-600" : ""}
+                              onClick={() => updateArticleMutation.mutate({
+                                id: article.id,
+                                data: { weekly_highlight: !article.weekly_highlight }
+                              })}
+                            >
+                              <Flame className="w-4 h-4 mr-1" />
+                              {article.weekly_highlight ? 'Actu importante ✓' : 'Marquer important'}
                             </Button>
                             <Button
                               size="sm"
@@ -628,6 +649,73 @@ Provide accurate English translations.`,
                 </CardContent>
               </Card>
             ))
+          )}
+        </TabsContent>
+
+        {/* Weekly Highlights Tab */}
+        <TabsContent value="weekly" className="space-y-4">
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-200">
+            <div className="flex items-center gap-3 mb-4">
+              <Flame className="w-6 h-6 text-orange-500" />
+              <h3 className="text-lg font-bold text-slate-900">Actualités importantes de la semaine</h3>
+            </div>
+            <p className="text-sm text-slate-600 mb-4">
+              Les 6 dernières actualités marquées comme "importantes" seront affichées dans le module spécial sur la page Actualités.
+            </p>
+          </div>
+
+          {articles.filter(a => a.weekly_highlight).length === 0 ? (
+            <div className="text-center py-12">
+              <Flame className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <p className="text-slate-500">Aucune actualité importante sélectionnée</p>
+              <p className="text-sm text-slate-400 mt-2">
+                Allez dans l'onglet "Articles" et cliquez sur "Marquer important" pour ajouter des actualités ici.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {articles
+                .filter(a => a.weekly_highlight)
+                .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+                .map((article, index) => (
+                  <Card key={article.id} className={index < 6 ? "border-orange-300 bg-orange-50/50" : "border-slate-200 opacity-60"}>
+                    <CardContent className="pt-4">
+                      <div className="flex items-center gap-4">
+                        {article.cover_image_url && (
+                          <img
+                            src={article.cover_image_url}
+                            alt={article.title}
+                            className="w-20 h-14 rounded-lg object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            {index < 6 ? (
+                              <Badge className="bg-orange-500 text-white">Affiché #{index + 1}</Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-slate-500">Non affiché</Badge>
+                            )}
+                            <span className="text-xs text-slate-500">{article.published_date}</span>
+                          </div>
+                          <h4 className="font-medium text-slate-900 mt-1">{article.title}</h4>
+                          <p className="text-sm text-slate-500">{article.source_name}</p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600"
+                          onClick={() => updateArticleMutation.mutate({
+                            id: article.id,
+                            data: { weekly_highlight: false }
+                          })}
+                        >
+                          <X className="w-4 h-4 mr-1" />Retirer
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
           )}
         </TabsContent>
 
