@@ -125,7 +125,15 @@ export default function Home() {
         <ActiveBanner position="homepage_hero" />
       </div>
 
-      {/* Outils IA en Vedette - sélection manuelle admin */}
+      {/* 1. Nouveautés IA */}
+      <FeaturedAI
+        aiServices={aiServices}
+        favorites={favorites}
+        finderReviews={finderReviews}
+        onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
+      />
+
+      {/* 2. Outils IA en Vedette - sélection manuelle admin */}
       {homeFeaturedServices.length > 0 && (
         <HomeFeaturedAI
           aiServices={homeFeaturedServices}
@@ -135,20 +143,13 @@ export default function Home() {
         />
       )}
 
-      {/* Nouveautés IA */}
-      <FeaturedAI
-        aiServices={aiServices}
-        favorites={favorites}
-        finderReviews={finderReviews}
-        onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
-      />
-
-      {/* Agent FinderAI Promo */}
-      <AgentFinderAIPromo />
-
-      {/* Latest AI News */}
+      {/* 3. Latest AI News */}
       <LatestNews />
 
+      {/* 4. Agent FinderAI Promo */}
+      <AgentFinderAIPromo />
+
+      {/* 5. Categories */}
       <CategoryGrid categories={categories} aiServices={aiServices} />
 
       {/* Bannière entre catégories et bouton Explorer */}
