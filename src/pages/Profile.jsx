@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageProvider';
 import EditAIServiceModal from '@/components/profile/EditAIServiceModal';
+import ServiceStatsAccordion from '@/components/admin/ServiceStatsAccordion';
 import { toast } from 'sonner';
 
 export default function Profile() {
@@ -270,68 +271,73 @@ export default function Profile() {
             <CardContent>
               <div className="space-y-3">
                 {mySubmissions.map((service) => (
-                  <div
-                    key={service.id}
-                    className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
-                      service.pending_revision 
-                        ? 'bg-amber-50 border border-amber-200' 
-                        : 'bg-slate-50 hover:bg-slate-100'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {service.logo_url && (
-                        <img
-                          src={service.logo_url}
-                          alt={service.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                      )}
-                      <div>
-                        <Link
-                          to={createPageUrl(`AIDetail?id=${service.id}`)}
-                          className="font-semibold text-slate-900 hover:text-purple-600"
-                        >
-                          {service.name}
-                        </Link>
-                        <div className="text-sm text-slate-600">{service.tagline}</div>
-                        {service.pending_revision && (
-                          <div className="flex items-center gap-1 text-xs text-amber-700 mt-1">
-                            <Clock className="w-3 h-3" />
-                            Révision en attente de validation
-                          </div>
+                  <div key={service.id} className="mb-4">
+                    <div
+                      className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                        service.pending_revision 
+                          ? 'bg-amber-50 border border-amber-200' 
+                          : 'bg-slate-50 hover:bg-slate-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {service.logo_url && (
+                          <img
+                            src={service.logo_url}
+                            alt={service.name}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
                         )}
+                        <div>
+                          <Link
+                            to={createPageUrl(`AIDetail?id=${service.id}`)}
+                            className="font-semibold text-slate-900 hover:text-purple-600"
+                          >
+                            {service.name}
+                          </Link>
+                          <div className="text-sm text-slate-600">{service.tagline}</div>
+                          {service.pending_revision && (
+                            <div className="flex items-center gap-1 text-xs text-amber-700 mt-1">
+                              <Clock className="w-3 h-3" />
+                              Révision en attente de validation
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        {service.status === 'approved' && !service.pending_revision && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setEditingService(service)}
+                            className="gap-1"
+                          >
+                            <Edit className="w-3 h-3" />
+                            Modifier
+                          </Button>
+                        )}
+                        <Badge
+                          className={
+                            service.pending_revision
+                              ? 'bg-amber-100 text-amber-800'
+                              : service.status === 'approved'
+                              ? 'bg-green-100 text-green-800'
+                              : service.status === 'pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }
+                        >
+                          {service.pending_revision
+                            ? 'Révision en attente'
+                            : service.status === 'approved' ? t('profile_status_approved') : 
+                            service.status === 'pending' ? t('profile_status_pending') : t('profile_status_rejected')}
+                        </Badge>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      {service.status === 'approved' && !service.pending_revision && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setEditingService(service)}
-                          className="gap-1"
-                        >
-                          <Edit className="w-3 h-3" />
-                          Modifier
-                        </Button>
-                      )}
-                      <Badge
-                        className={
-                          service.pending_revision
-                            ? 'bg-amber-100 text-amber-800'
-                            : service.status === 'approved'
-                            ? 'bg-green-100 text-green-800'
-                            : service.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }
-                      >
-                        {service.pending_revision
-                          ? 'Révision en attente'
-                          : service.status === 'approved' ? t('profile_status_approved') : 
-                          service.status === 'pending' ? t('profile_status_pending') : t('profile_status_rejected')}
-                      </Badge>
-                    </div>
+                    {/* Stats Accordion pour les services approuvés */}
+                    {service.status === 'approved' && (
+                      <ServiceStatsAccordion service={service} />
+                    )}
                   </div>
                 ))}
               </div>
