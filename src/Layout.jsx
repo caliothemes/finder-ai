@@ -194,44 +194,65 @@ function LayoutContent({ children, currentPageName }) {
       loadUser();
     }, []);
 
-    // Tracking des visites (exclure les admins)
+    // Tracking des visites (exclure les admins) avec durée
     useEffect(() => {
+      // Ne pas tracker les visites des admins
+      if (user?.role === 'admin') return;
+      if (user === undefined) return;
+
+      // Générer ou récupérer un ID visiteur unique
+      let visitorId = localStorage.getItem('visitor_id');
+      if (!visitorId) {
+        visitorId = 'v_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+        localStorage.setItem('visitor_id', visitorId);
+      }
+
+      // Détecter l'appareil
+      const width = window.innerWidth;
+      let device = 'desktop';
+      if (width < 768) device = 'mobile';
+      else if (width < 1024) device = 'tablet';
+
+      const startTime = Date.now();
+      let pageViewId = null;
+
+      // Enregistrer la visite
       const trackPageView = async () => {
-        // Ne pas tracker les visites des admins (connectés ou non encore chargés)
-        if (user?.role === 'admin') return;
-
-        // Attendre que l'utilisateur soit chargé pour vérifier s'il est admin
-        // Si user est null mais qu'on est en train de charger, ne pas tracker encore
-        if (user === undefined) return;
-
-        // Générer ou récupérer un ID visiteur unique
-        let visitorId = localStorage.getItem('visitor_id');
-        if (!visitorId) {
-          visitorId = 'v_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-          localStorage.setItem('visitor_id', visitorId);
-        }
-
-        // Détecter l'appareil
-        const width = window.innerWidth;
-        let device = 'desktop';
-        if (width < 768) device = 'mobile';
-        else if (width < 1024) device = 'tablet';
-
-        // Enregistrer la visite
         try {
-          await base44.entities.PageView.create({
+          const result = await base44.entities.PageView.create({
             page: currentPageName || location.pathname,
             visitor_id: visitorId,
             user_email: user?.email || null,
             referrer: document.referrer || null,
-            device: device
+            device: device,
+            duration_seconds: 0
           });
+          pageViewId = result.id;
         } catch (e) {
           // Silently fail
         }
       };
 
       trackPageView();
+
+      // Mettre à jour la durée quand l'utilisateur quitte
+      const updateDuration = async () => {
+        if (!pageViewId) return;
+        const durationSeconds = Math.round((Date.now() - startTime) / 1000);
+        try {
+          await base44.entities.PageView.update(pageViewId, { duration_seconds: durationSeconds });
+        } catch (e) {
+          // Silently fail
+        }
+      };
+
+      // Événements de sortie
+      window.addEventListener('beforeunload', updateDuration);
+      
+      return () => {
+        window.removeEventListener('beforeunload', updateDuration);
+        updateDuration(); // Aussi appelé au changement de route
+      };
     }, [location.pathname, currentPageName, user]);
 
   const handleLogout = async () => {

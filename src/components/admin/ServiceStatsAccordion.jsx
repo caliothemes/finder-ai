@@ -50,6 +50,19 @@ export default function ServiceStatsAccordion({ service }) {
   const views30Days = pageViews.filter(v => new Date(v.created_date) >= monthStart).length;
   const viewsYear = pageViews.filter(v => new Date(v.created_date) >= yearStart).length;
 
+  // Calcul du temps moyen passé sur la page
+  const viewsWithDuration = pageViews.filter(v => v.duration_seconds && v.duration_seconds > 0);
+  const avgDuration = viewsWithDuration.length > 0 
+    ? Math.round(viewsWithDuration.reduce((sum, v) => sum + v.duration_seconds, 0) / viewsWithDuration.length)
+    : 0;
+  
+  const formatDuration = (seconds) => {
+    if (seconds < 60) return `${seconds}s`;
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs}s`;
+  };
+
   return (
     <div className="bg-amber-50/50 border border-amber-200 rounded-b-xl -mt-1">
       <button
