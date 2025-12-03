@@ -1111,12 +1111,19 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
             {/* Catégories */}
             <div className="mt-6">
-              <label className="text-sm font-medium text-slate-700 mb-2 block">Catégories *</label>
-              <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 border rounded-lg">
+              <label className="text-sm font-medium mb-2 block" style={{ color: 'var(--text-secondary)' }}>Catégories *</label>
+              <div 
+                className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 rounded-lg"
+                style={{ border: '1px solid var(--border-color)' }}
+              >
                 {categories.map(cat => (
                   <label 
                     key={cat.id} 
-                    className="flex items-center gap-2 p-2 border rounded cursor-pointer hover:bg-slate-50 transition-colors text-sm"
+                    className="flex items-center gap-2 p-2 rounded cursor-pointer transition-colors text-sm"
+                    style={{ 
+                      border: '1px solid var(--border-color)',
+                      backgroundColor: selectedCategories.includes(cat.id) ? (theme === 'dark' ? 'rgba(147, 51, 234, 0.2)' : '#f3e8ff') : 'transparent'
+                    }}
                   >
                     <input
                       type="checkbox"
@@ -1130,7 +1137,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                       }}
                       className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
                     />
-                    <span className="font-medium text-slate-900">{cat.name}</span>
+                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{cat.name}</span>
                   </label>
                 ))}
               </div>
