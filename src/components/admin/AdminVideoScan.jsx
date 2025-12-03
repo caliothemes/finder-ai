@@ -637,6 +637,55 @@ Retourne pour chaque vidéo trouvée:
                   Annuler
                 </Button>
                 <Button
+                  variant="outline"
+                  onClick={async () => {
+                    setTranslating(true);
+                    try {
+                      const result = await base44.integrations.Core.InvokeLLM({
+                        prompt: `Traduis ce contenu de vidéo YouTube:
+
+Titre original: ${editForm.title_en || editForm.title}
+Description originale: ${editForm.description_en || editForm.description}
+
+Retourne:
+- title: titre traduit en français (naturel et accrocheur)
+- title_en: titre en anglais
+- description: description traduite en français (2-3 phrases)
+- description_en: description en anglais`,
+                        response_json_schema: {
+                          type: "object",
+                          properties: {
+                            title: { type: "string" },
+                            title_en: { type: "string" },
+                            description: { type: "string" },
+                            description_en: { type: "string" }
+                          }
+                        }
+                      });
+                      setEditForm({
+                        ...editForm,
+                        title: result.title || editForm.title,
+                        title_en: result.title_en || editForm.title_en,
+                        description: result.description || editForm.description,
+                        description_en: result.description_en || editForm.description_en
+                      });
+                      toast.success('Traduction effectuée !');
+                    } catch (error) {
+                      toast.error('Erreur de traduction');
+                    }
+                    setTranslating(false);
+                  }}
+                  disabled={translating}
+                  className="text-purple-600 border-purple-300 hover:bg-purple-50"
+                >
+                  {translating ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Languages className="w-4 h-4 mr-2" />
+                  )}
+                  Traduire
+                </Button>
+                <Button
                   onClick={() => approveMutation.mutate({...selectedVideo, ...editForm})}
                   disabled={approveMutation.isPending}
                   className="bg-green-600 hover:bg-green-700"
