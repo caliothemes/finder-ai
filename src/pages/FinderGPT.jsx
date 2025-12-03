@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageProvider';
+import { useTheme } from '@/components/ThemeProvider';
 import ReactMarkdown from 'react-markdown';
 
 export default function FinderGPT() {
