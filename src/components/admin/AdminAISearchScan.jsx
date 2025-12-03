@@ -769,10 +769,16 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               </div>
 
               {discovery.admin_notes && (
-                <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                <div 
+                  className="mt-3 p-2 rounded"
+                  style={{ 
+                    backgroundColor: theme === 'dark' ? 'rgba(251, 191, 36, 0.1)' : '#fefce8',
+                    border: theme === 'dark' ? '1px solid rgba(251, 191, 36, 0.3)' : '1px solid #fde047'
+                  }}
+                >
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-yellow-600 mt-0.5" />
-                    <p className="text-xs text-yellow-800">{discovery.admin_notes}</p>
+                    <p className="text-xs" style={{ color: theme === 'dark' ? '#fde047' : '#854d0e' }}>{discovery.admin_notes}</p>
                   </div>
                 </div>
               )}
