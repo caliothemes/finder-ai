@@ -455,6 +455,56 @@ ${channelsList}
         </div>
       )}
 
+      {/* Add Channel Modal */}
+      <Dialog open={showChannelModal} onOpenChange={setShowChannelModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Youtube className="w-5 h-5 text-red-600" />
+              Ajouter une chaîne YouTube
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Nom de la chaîne</label>
+              <Input
+                placeholder="Ex: Underscore_"
+                value={newChannelName}
+                onChange={(e) => setNewChannelName(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">URL de la chaîne</label>
+              <Input
+                placeholder="https://www.youtube.com/@..."
+                value={newChannelUrl}
+                onChange={(e) => setNewChannelUrl(e.target.value)}
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Formats acceptés: youtube.com/@handle ou youtube.com/channel/ID
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowChannelModal(false)}>
+                Annuler
+              </Button>
+              <Button
+                onClick={() => addChannelMutation.mutate()}
+                disabled={addChannelMutation.isPending}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {addChannelMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Plus className="w-4 h-4 mr-2" />
+                )}
+                Ajouter
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Approval Modal */}
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
