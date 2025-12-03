@@ -879,7 +879,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Description (EN)</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Description (EN)</label>
                   <Textarea
                     value={approveFormData.description_en || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, description_en: e.target.value})}
