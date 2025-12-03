@@ -18,6 +18,11 @@ export default function VideoNewsSection() {
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 12),
   });
 
+  const { data: youtubeChannels = [] } = useQuery({
+    queryKey: ['youtubeChannelsNews'],
+    queryFn: () => base44.entities.YouTubeChannel.filter({ active: true }),
+  });
+
   // Extraire l'ID YouTube et créer l'URL embed avec paramètres corrects
   const getYouTubeVideoId = (url) => {
     if (!url) return null;
