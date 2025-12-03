@@ -15,7 +15,7 @@ export default function LatestVideoNews() {
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ['latestVideoNews'],
-    queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 2),
+    queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 3),
   });
 
   // Extraire l'ID YouTube
