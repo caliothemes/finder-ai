@@ -347,9 +347,15 @@ export default function AdminStats() {
       </div>
 
       {/* Utilisateurs inscrits */}
-      <Card className="bg-gradient-to-br from-cyan-50 via-white to-blue-50 border-cyan-200 shadow-lg">
-        <CardHeader className="pb-4 border-b border-cyan-100">
-          <CardTitle className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+      <Card 
+        className="shadow-lg"
+        style={{ 
+          background: isDark ? 'linear-gradient(to bottom right, rgba(6, 182, 212, 0.1), var(--bg-card), rgba(59, 130, 246, 0.1))' : 'linear-gradient(to bottom right, #ecfeff, #ffffff, #eff6ff)',
+          borderColor: isDark ? 'rgba(6, 182, 212, 0.3)' : '#a5f3fc'
+        }}
+      >
+        <CardHeader className="pb-4" style={{ borderBottom: `1px solid ${isDark ? 'rgba(6, 182, 212, 0.2)' : '#a5f3fc'}` }}>
+          <CardTitle className="text-lg font-semibold flex items-center gap-2" style={{ color: isDark ? 'var(--text-primary)' : '#1e293b' }}>
             <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
               <UserCheck className="w-5 h-5 text-white" />
             </div>
@@ -359,52 +365,52 @@ export default function AdminStats() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(59, 130, 246, 0.15)' : '#eff6ff', border: `1px solid ${isDark ? 'rgba(59, 130, 246, 0.3)' : '#bfdbfe'}` }}>
               <span className="text-2xl font-bold text-blue-600">
                 {users.filter(u => new Date(u.created_date) >= todayStart).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Aujourd'hui</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Aujourd'hui</p>
             </div>
-            <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <span className="text-2xl font-bold text-slate-600">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(100, 116, 139, 0.15)' : '#f8fafc', border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.3)' : '#e2e8f0'}` }}>
+              <span className="text-2xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#475569' }}>
                 {users.filter(u => {
                   const date = new Date(u.created_date);
                   return date >= yesterdayStart && date < todayStart;
                 }).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Hier</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Hier</p>
             </div>
-            <div className="text-center p-3 bg-purple-50 rounded-xl border border-purple-100">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(147, 51, 234, 0.15)' : '#faf5ff', border: `1px solid ${isDark ? 'rgba(147, 51, 234, 0.3)' : '#e9d5ff'}` }}>
               <span className="text-2xl font-bold text-purple-600">
                 {users.filter(u => new Date(u.created_date) >= weekStart).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Cette semaine</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Cette semaine</p>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-200">
-              <span className="text-2xl font-bold text-gray-600">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(107, 114, 128, 0.15)' : '#f9fafb', border: `1px solid ${isDark ? 'rgba(107, 114, 128, 0.3)' : '#e5e7eb'}` }}>
+              <span className="text-2xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#4b5563' }}>
                 {users.filter(u => {
                   const date = new Date(u.created_date);
                   return date >= lastWeekStart && date < weekStart;
                 }).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Sem. dernière</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Sem. dernière</p>
             </div>
-            <div className="text-center p-3 bg-orange-50 rounded-xl border border-orange-100">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(249, 115, 22, 0.15)' : '#fff7ed', border: `1px solid ${isDark ? 'rgba(249, 115, 22, 0.3)' : '#fed7aa'}` }}>
               <span className="text-2xl font-bold text-orange-600">
                 {users.filter(u => new Date(u.created_date) >= monthStart).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Ce mois</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Ce mois</p>
             </div>
-            <div className="text-center p-3 bg-stone-50 rounded-xl border border-stone-200">
-              <span className="text-2xl font-bold text-stone-600">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(120, 113, 108, 0.15)' : '#fafaf9', border: `1px solid ${isDark ? 'rgba(120, 113, 108, 0.3)' : '#e7e5e4'}` }}>
+              <span className="text-2xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#57534e' }}>
                 {users.filter(u => {
                   const date = new Date(u.created_date);
                   return date >= lastMonthStart && date < monthStart;
                 }).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Mois dernier</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Mois dernier</p>
             </div>
-            <div className="text-center p-3 bg-pink-50 rounded-xl border border-pink-100">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(236, 72, 153, 0.15)' : '#fdf2f8', border: `1px solid ${isDark ? 'rgba(236, 72, 153, 0.3)' : '#fbcfe8'}` }}>
               <span className="text-2xl font-bold text-pink-600">
                 {users.filter(u => {
                   const threeMonthsAgo = new Date(todayStart);
@@ -412,13 +418,13 @@ export default function AdminStats() {
                   return new Date(u.created_date) >= threeMonthsAgo;
                 }).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">3 derniers mois</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>3 derniers mois</p>
             </div>
-            <div className="text-center p-3 bg-cyan-50 rounded-xl border border-cyan-100">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: isDark ? 'rgba(6, 182, 212, 0.15)' : '#ecfeff', border: `1px solid ${isDark ? 'rgba(6, 182, 212, 0.3)' : '#a5f3fc'}` }}>
               <span className="text-2xl font-bold text-cyan-600">
                 {users.filter(u => new Date(u.created_date) >= yearStart).length}
               </span>
-              <p className="text-xs text-slate-600 mt-1 font-medium">Cette année</p>
+              <p className="text-xs mt-1 font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Cette année</p>
             </div>
           </div>
         </CardContent>
