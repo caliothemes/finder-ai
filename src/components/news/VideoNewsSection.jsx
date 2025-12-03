@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Video, Play, Clock, Calendar, ExternalLink, X } from 'lucide-react';
+import { Video, Play, Clock, Calendar, ExternalLink, X, Youtube, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
