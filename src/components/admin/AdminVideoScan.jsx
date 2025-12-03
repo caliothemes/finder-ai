@@ -115,108 +115,90 @@ export default function AdminVideoScan() {
     mutationFn: async () => {
       setScanning(true);
       
-      // Construire la liste des chaînes à scanner
-      const channelsList = youtubeChannels.length > 0 
-        ? youtubeChannels.map((ch, i) => `${i + 1}. ${ch.name} (${ch.url})`).join('\n')
-        : `1. Underscore_ (https://www.youtube.com/channel/UCx_N9LnjjK6DSvOd26heuQw)
-2. VisionIA-FR (https://www.youtube.com/@VisionIA-FR)
-3. Explor_IA (https://www.youtube.com/@Explor_IA)
-4. malvaAI (https://www.youtube.com/@malvaAI)`;
-      
       const today = new Date().toISOString().split('T')[0];
+      let allVideos = [];
       
-      // Rechercher les vidéos récentes pour chaque chaîne
-      const channelNames = youtubeChannels.length > 0 
-        ? youtubeChannels.map(c => c.name).join(', ')
-        : 'Underscore_, Micode, Fireship, Two Minute Papers';
+      // Scanner chaque chaîne individuellement
+      const channelsToScan = youtubeChannels.filter(c => c.active !== false);
       
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Recherche les dernières vidéos YouTube sur l'intelligence artificielle.
-
-Recherche Google: "site:youtube.com" + ces chaînes: ${channelNames}
-Aussi rechercher: "youtube AI news december 2024", "youtube intelligence artificielle decembre 2024"
-
-Pour chaque vidéo trouvée, donne-moi:
-- Le titre exact
-- L'URL YouTube complète (avec le vrai ID de vidéo)
-- Le nom de la chaîne
-- La date de publication approximative
-- Une courte description
-
-Je veux uniquement des vidéos RÉCENTES (dernières semaines) sur l'IA, ChatGPT, Claude, Gemini, OpenAI, etc.`,
-        add_context_from_internet: true,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            videos: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  title: { type: "string" },
-                  title_en: { type: "string" },
-                  description: { type: "string" },
-                  description_en: { type: "string" },
-                  video_url: { type: "string" },
-                  thumbnail_url: { type: "string" },
-                  source_name: { type: "string" },
-                  duration: { type: "string" },
-                  published_date: { type: "string" },
-                  tags: { type: "array", items: { type: "string" } }
-                }
-              }
-            }
-          }
-        }
-      });
-
-      console.log('Résultat brut du scan:', result);
+      if (channelsToScan.length === 0) {
+        toast.error('Ajoutez au moins une chaîne YouTube à scanner');
+        setScanning(false);
+        return;
+      }
       
-      // Si pas de résultats, essayer une autre approche
-      if (!result.videos || result.videos.length === 0) {
-        toast.warning('Première recherche sans résultat, tentative alternative...');
+      for (const channel of channelsToScan) {
+        toast.info(`Scan de ${channel.name}...`);
         
-        const result2 = await base44.integrations.Core.InvokeLLM({
-          prompt: `Trouve des vidéos YouTube récentes (décembre 2024) sur ces sujets:
-- ChatGPT nouveautés
-- Claude AI Anthropic  
-- Google Gemini
-- OpenAI Sora
-- Actualités intelligence artificielle
+        try {
+          const result = await base44.integrations.Core.InvokeLLM({
+            prompt: `Recherche les dernières vidéos de la chaîne YouTube "${channel.name}" (${channel.url}).
 
-Donne-moi les URLs YouTube réelles que tu trouves.`,
-          add_context_from_internet: true,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              videos: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    title: { type: "string" },
-                    title_en: { type: "string" },
-                    description: { type: "string" },
-                    description_en: { type: "string" },
-                    video_url: { type: "string" },
-                    thumbnail_url: { type: "string" },
-                    source_name: { type: "string" },
-                    duration: { type: "string" },
-                    published_date: { type: "string" },
-                    tags: { type: "array", items: { type: "string" } }
+Trouve les 5 vidéos les plus récentes de cette chaîne qui parlent d'intelligence artificielle, IA, AI, ChatGPT, Claude, Gemini, OpenAI, LLM, machine learning, deep learning.
+
+Pour CHAQUE vidéo, donne:
+- title: le titre EXACT de la vidéo
+- video_url: l'URL YouTube complète (format: https://www.youtube.com/watch?v=XXXXXXXXXXX)
+- published_date: date de publication (format YYYY-MM-DD)
+- description: résumé en 2 phrases
+
+IMPORTANT: Retourne UNIQUEMENT des vidéos avec des URLs YouTube RÉELLES.`,
+            add_context_from_internet: true,
+            response_json_schema: {
+              type: "object",
+              properties: {
+                videos: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      title: { type: "string" },
+                      video_url: { type: "string" },
+                      published_date: { type: "string" },
+                      description: { type: "string" }
+                    }
                   }
                 }
               }
             }
+          });
+          
+          console.log(`Résultat pour ${channel.name}:`, result);
+          
+          if (result.videos && result.videos.length > 0) {
+            const videosWithMeta = result.videos.map(v => {
+              const videoIdMatch = v.video_url?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+              const videoId = videoIdMatch ? videoIdMatch[1] : null;
+              
+              return {
+                title: v.title,
+                title_en: v.title,
+                description: v.description,
+                description_en: v.description,
+                video_url: v.video_url,
+                source_name: channel.name,
+                source_url: channel.url,
+                thumbnail_url: videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '',
+                published_date: v.published_date || today,
+                tags: ['IA', 'AI'],
+                duration: ''
+              };
+            }).filter(v => {
+              if (!v.video_url) return false;
+              const match = v.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+              return match !== null;
+            });
+            
+            allVideos = [...allVideos, ...videosWithMeta];
           }
-        });
-        
-        if (result2.videos && result2.videos.length > 0) {
-          result.videos = result2.videos;
+        } catch (error) {
+          console.error(`Erreur scan ${channel.name}:`, error);
+          toast.error(`Erreur lors du scan de ${channel.name}`);
         }
       }
-        add_context_from_internet: true,
-      console.log('Résultat du scan:', result);
+      
+      const result = { videos: allVideos };
+      console.log('Résultat total du scan:', result);
       
       if (result.videos && result.videos.length > 0) {
         // Filtrer les vidéos avec des URLs valides
