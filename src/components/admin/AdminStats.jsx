@@ -285,9 +285,9 @@ export default function AdminStats() {
 
       {/* Pages populaires et Appareils */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader>
-            <CardTitle className="text-lg">Pages populaires aujourd'hui</CardTitle>
+            <CardTitle className="text-lg" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>Pages populaires aujourd'hui</CardTitle>
           </CardHeader>
           <CardContent>
             {topPages.length > 0 ? (
@@ -295,49 +295,49 @@ export default function AdminStats() {
                 {topPages.map(([page, count], idx) => (
                   <div key={page} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-slate-400">#{idx + 1}</span>
-                      <span className="text-sm font-medium text-slate-700">{page}</span>
+                      <span className="text-sm font-bold" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>#{idx + 1}</span>
+                      <span className="text-sm font-medium" style={{ color: isDark ? 'var(--text-primary)' : '#334155' }}>{page}</span>
                     </div>
                     <span className="text-sm font-semibold text-purple-600">{count} vues</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-500">Aucune donnée aujourd'hui</p>
+              <p className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>Aucune donnée aujourd'hui</p>
             )}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader>
-            <CardTitle className="text-lg">Répartition des appareils</CardTitle>
+            <CardTitle className="text-lg" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>Répartition des appareils</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between text-sm mb-1" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>
                   <span>🖥️ Desktop</span>
                   <span className="font-semibold">{Math.round((deviceStats.desktop / totalDevices) * 100)}%</span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="w-full rounded-full h-2" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0' }}>
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${(deviceStats.desktop / totalDevices) * 100}%` }} />
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between text-sm mb-1" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>
                   <span>📱 Mobile</span>
                   <span className="font-semibold">{Math.round((deviceStats.mobile / totalDevices) * 100)}%</span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="w-full rounded-full h-2" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0' }}>
                   <div className="bg-green-500 h-2 rounded-full" style={{ width: `${(deviceStats.mobile / totalDevices) * 100}%` }} />
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between text-sm mb-1" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>
                   <span>📟 Tablet</span>
                   <span className="font-semibold">{Math.round((deviceStats.tablet / totalDevices) * 100)}%</span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="w-full rounded-full h-2" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0' }}>
                   <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${(deviceStats.tablet / totalDevices) * 100}%` }} />
                 </div>
               </div>
