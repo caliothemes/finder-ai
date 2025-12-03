@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Video, Play, Clock, Calendar } from 'lucide-react';
+import { Video, Play, Clock, Calendar, ExternalLink, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import moment from 'moment';
@@ -10,11 +11,27 @@ import moment from 'moment';
 export default function LatestVideoNews() {
   const { language } = useLanguage();
   const { theme } = useTheme();
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ['latestVideoNews'],
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 2),
   });
+
+  // Extraire l'ID YouTube
+  const getYouTubeVideoId = (url) => {
+    if (!url) return null;
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=)([^&\s]+)/,
+      /(?:youtu\.be\/)([^?\s]+)/,
+      /(?:youtube\.com\/embed\/)([^?\s]+)/
+    ];
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+    return null;
+  };
 
   if (isLoading || videos.length === 0) return null;
 
@@ -40,12 +57,10 @@ export default function LatestVideoNews() {
           {/* Video Grid - 2 videos */}
           <div className="grid md:grid-cols-2 gap-6">
             {videos.map((video) => (
-              <a
+              <div
                 key={video.id}
-                href={video.video_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl cursor-pointer relative block"
+                onClick={() => setSelectedVideo(video)}
+                className="group rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl cursor-pointer relative"
                 style={{ 
                   background: theme === 'dark' 
                     ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(168, 85, 247, 0.1))' 
@@ -102,11 +117,75 @@ export default function LatestVideoNews() {
                     </div>
                   </div>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Video Player Modal */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+          
+          <div 
+            className="relative w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl"
+            style={{ backgroundColor: 'var(--bg-card)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="aspect-video bg-black">
+              {getYouTubeVideoId(selectedVideo.video_url) ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedVideo.video_url)}?autoplay=1&rel=0`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={selectedVideo.title}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-white">
+                  <Video className="w-16 h-16" />
+                </div>
+              )}
+            </div>
+
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                {language === 'en' ? selectedVideo.title_en || selectedVideo.title : selectedVideo.title}
+              </h2>
+              <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
+                {language === 'en' ? selectedVideo.description_en || selectedVideo.description : selectedVideo.description}
+              </p>
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <Badge className="bg-red-100 text-red-700">
+                    {selectedVideo.source_name}
+                  </Badge>
+                  <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                    {moment(selectedVideo.published_date).format('DD MMMM YYYY')}
+                  </span>
+                </div>
+                <a href={selectedVideo.video_url} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    {language === 'en' ? 'Watch on YouTube' : 'Voir sur YouTube'}
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
