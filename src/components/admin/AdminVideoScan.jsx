@@ -428,9 +428,14 @@ Pour chaque vidéo, retourne:
                     >
                       <X className="w-4 h-4" />
                     </Button>
-                    <a href={video.video_url} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline">
-                        <ExternalLink className="w-4 h-4" />
+                    <a 
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(video.title + ' ' + video.source_name)}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      title="Rechercher sur YouTube"
+                    >
+                      <Button size="sm" variant="outline" className="bg-red-50">
+                        <Search className="w-4 h-4 text-red-600" />
                       </Button>
                     </a>
                   </div>
