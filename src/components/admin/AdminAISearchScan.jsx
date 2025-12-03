@@ -920,7 +920,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               <div className="space-y-4">
                 {/* Images */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Logo</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Logo</label>
                   <div className="flex items-center gap-3">
                     {approveFormData.logo_url && (
                       <img src={approveFormData.logo_url} alt="Logo" className="w-16 h-16 rounded-lg object-cover" />
