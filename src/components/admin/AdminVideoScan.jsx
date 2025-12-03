@@ -36,19 +36,27 @@ export default function AdminVideoScan() {
       setScanning(true);
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Recherche les 5 dernières vidéos YouTube populaires et récentes sur l'intelligence artificielle, ChatGPT, les outils IA, l'actualité IA. 
+        prompt: `Recherche les 10 dernières vidéos YouTube populaires et récentes sur l'intelligence artificielle, ChatGPT, les outils IA, l'actualité IA. 
+        
+        IMPORTANT - Recherche EN PRIORITÉ sur ces chaînes YouTube spécifiques:
+        1. Underscore_ (https://www.youtube.com/channel/UCx_N9LnjjK6DSvOd26heuQw) - chaîne tech française
+        2. VisionIA-FR (https://www.youtube.com/@VisionIA-FR) - actualités IA en français
+        3. Explor_IA (https://www.youtube.com/@Explor_IA) - exploration de l'IA
+        4. malvaAI (https://www.youtube.com/@malvaAI) - tutoriels et actualités IA
+        
+        Puis complète avec d'autres chaînes tech populaires.
         
         Privilégie:
-        - Les vidéos des 7 derniers jours
-        - Les chaînes tech populaires (français et anglais)
+        - Les vidéos des 14 derniers jours
         - Les tutoriels, actualités, reviews d'outils IA
+        - Les annonces importantes sur l'IA
         
         Pour chaque vidéo trouvée, fournis:
         - title: titre en français
         - title_en: titre en anglais
-        - description: description courte en français
+        - description: description courte en français (2-3 phrases résumant le contenu)
         - description_en: description courte en anglais  
-        - video_url: URL YouTube complète
+        - video_url: URL YouTube complète (format https://www.youtube.com/watch?v=VIDEO_ID)
         - thumbnail_url: URL de la miniature (format https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)
         - source_name: nom de la chaîne
         - duration: durée estimée
