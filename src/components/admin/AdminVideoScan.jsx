@@ -132,17 +132,21 @@ export default function AdminVideoScan() {
         
         try {
           const result = await base44.integrations.Core.InvokeLLM({
-            prompt: `Recherche les dernières vidéos de la chaîne YouTube "${channel.name}" (${channel.url}).
+            prompt: `Va sur cette page YouTube et liste les vidéos que tu trouves: ${channel.url}
 
-Trouve les 5 vidéos les plus récentes de cette chaîne qui parlent d'intelligence artificielle, IA, AI, ChatGPT, Claude, Gemini, OpenAI, LLM, machine learning, deep learning.
+INSTRUCTIONS CRITIQUES:
+1. Visite RÉELLEMENT la page de la chaîne YouTube
+2. Récupère les VRAIES URLs des vidéos (avec les vrais IDs comme dQw4w9WgXcQ, pas XXXXXXXXXXX)
+3. Ne retourne QUE des vidéos qui existent vraiment
+4. Si tu ne peux pas accéder à la page, retourne un tableau vide
 
-Pour CHAQUE vidéo, donne:
-- title: le titre EXACT de la vidéo
-- video_url: l'URL YouTube complète (format: https://www.youtube.com/watch?v=XXXXXXXXXXX)
-- published_date: date de publication (format YYYY-MM-DD)
-- description: résumé en 2 phrases
+Pour chaque vidéo trouvée sur la page, extrais:
+- title: le titre exact affiché
+- video_url: l'URL complète avec le VRAI ID de vidéo (ex: https://www.youtube.com/watch?v=abc123XYZ99)
+- published_date: la date (format YYYY-MM-DD, convertis "il y a 3 jours" en date)
+- description: résumé du contenu
 
-IMPORTANT: Retourne UNIQUEMENT des vidéos avec des URLs YouTube RÉELLES.`,
+RÈGLE ABSOLUE: Si l'ID de vidéo contient "XXXX" ou est un placeholder, NE PAS l'inclure.`,
             add_context_from_internet: true,
             response_json_schema: {
               type: "object",
