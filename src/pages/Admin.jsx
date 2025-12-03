@@ -31,6 +31,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState(null);
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   // Compter les bannières en attente de validation - hook AVANT les returns conditionnels
   const { data: pendingBannersCount = 0 } = useQuery({
