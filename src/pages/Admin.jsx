@@ -136,24 +136,28 @@ export default function Admin() {
   ];
 
   const renderSection = () => {
-    switch (activeSection) {
-      case 'ai-scan': return <AdminAISearchScan />;
-      case 'video-scan': return <AdminVideoScan />;
-      case 'news': return <AdminNews />;
-      case 'stats': return <AdminStats />;
-      case 'services': return <AdminServices />;
-      case 'stories': return <AdminStories />;
-      case 'categories': return <AdminCategories />;
-      case 'reviews': return <AdminReviewsManager />;
-      case 'finder-reviews': return <AdminFinderAIReviews />;
-      case 'banners': return <AdminBanners />;
-      case 'emails': return <AdminEmailTemplates />;
-      case 'newsletter': return <AdminNewsletter />;
-      case 'logo': return <AdminLogo />;
-      case 'ownership': return <AdminOwnershipClaims />;
-      case 'legal': return <AdminLegalSections />;
-      default: return <AdminAISearchScan />;
-    }
+    const content = (() => {
+      switch (activeSection) {
+        case 'ai-scan': return <AdminAISearchScan />;
+        case 'video-scan': return <AdminVideoScan />;
+        case 'news': return <AdminNews />;
+        case 'stats': return <AdminStats />;
+        case 'services': return <AdminServices />;
+        case 'stories': return <AdminStories />;
+        case 'categories': return <AdminCategories />;
+        case 'reviews': return <AdminReviewsManager />;
+        case 'finder-reviews': return <AdminFinderAIReviews />;
+        case 'banners': return <AdminBanners />;
+        case 'emails': return <AdminEmailTemplates />;
+        case 'newsletter': return <AdminNewsletter />;
+        case 'logo': return <AdminLogo />;
+        case 'ownership': return <AdminOwnershipClaims />;
+        case 'legal': return <AdminLegalSections />;
+        default: return <AdminAISearchScan />;
+      }
+    })();
+    
+    return <AdminWrapper>{content}</AdminWrapper>;
   };
 
   return (
