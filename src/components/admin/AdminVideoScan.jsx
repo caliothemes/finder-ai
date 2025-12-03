@@ -284,6 +284,59 @@ ${channelsList}
         </Button>
       </div>
 
+      {/* Chaînes YouTube */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Youtube className="w-5 h-5 text-red-600" />
+              Chaînes YouTube ({youtubeChannels.length})
+            </CardTitle>
+            <Button
+              size="sm"
+              onClick={() => setShowChannelModal(true)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Ajouter
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {youtubeChannels.length === 0 ? (
+            <p className="text-sm text-slate-500 text-center py-4">
+              Aucune chaîne ajoutée. Le scan utilisera les chaînes par défaut.
+            </p>
+          ) : (
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {youtubeChannels.map((channel) => (
+                <div key={channel.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Youtube className="w-4 h-4 text-red-500" />
+                    <span className="font-medium text-sm">{channel.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <a href={channel.url} target="_blank" rel="noopener noreferrer">
+                      <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
+                        <ExternalLink className="w-3 h-3" />
+                      </Button>
+                    </a>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => deleteChannelMutation.mutate(channel.id)}
+                      className="h-7 w-7 p-0 text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
         <Card>
