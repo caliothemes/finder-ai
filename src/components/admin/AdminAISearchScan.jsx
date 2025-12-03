@@ -842,7 +842,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               {/* Colonne gauche */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Nom *</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Nom *</label>
                   <Input
                     value={approveFormData.name || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, name: e.target.value})}
