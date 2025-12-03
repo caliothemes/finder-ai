@@ -21,6 +21,7 @@ export default function FinderGPT() {
   const messagesEndRef = useRef(null);
   const lastAssistantRef = useRef(null);
   const { language, t } = useLanguage();
+  const { theme } = useTheme();
   const queryClient = useQueryClient();
 
   // Load user
