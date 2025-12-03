@@ -760,6 +760,59 @@ RÈGLE ABSOLUE: Si l'ID de vidéo contient "XXXX" ou est un placeholder, NE PAS 
                 Annuler
               </Button>
               <Button
+                variant="outline"
+                onClick={async () => {
+                  if (!manualForm.title) {
+                    toast.error('Titre requis pour traduire');
+                    return;
+                  }
+                  setTranslating(true);
+                  try {
+                    const result = await base44.integrations.Core.InvokeLLM({
+                      prompt: `Traduis ce contenu de vidéo YouTube:
+
+Titre original: ${manualForm.title_en || manualForm.title}
+Description originale: ${manualForm.description_en || manualForm.description}
+
+Retourne:
+- title: titre traduit en français (naturel et accrocheur)
+- title_en: titre en anglais
+- description: description traduite en français (2-3 phrases)
+- description_en: description en anglais`,
+                      response_json_schema: {
+                        type: "object",
+                        properties: {
+                          title: { type: "string" },
+                          title_en: { type: "string" },
+                          description: { type: "string" },
+                          description_en: { type: "string" }
+                        }
+                      }
+                    });
+                    setManualForm({
+                      ...manualForm,
+                      title: result.title || manualForm.title,
+                      title_en: result.title_en || manualForm.title_en,
+                      description: result.description || manualForm.description,
+                      description_en: result.description_en || manualForm.description_en
+                    });
+                    toast.success('Traduction effectuée !');
+                  } catch (error) {
+                    toast.error('Erreur de traduction');
+                  }
+                  setTranslating(false);
+                }}
+                disabled={translating}
+                className="text-purple-600 border-purple-300 hover:bg-purple-50"
+              >
+                {translating ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Languages className="w-4 h-4 mr-2" />
+                )}
+                Traduire
+              </Button>
+              <Button
                 onClick={async () => {
                   if (!manualForm.video_url || !manualForm.title) {
                     toast.error('URL et titre requis');
