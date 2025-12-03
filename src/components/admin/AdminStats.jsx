@@ -432,133 +432,133 @@ export default function AdminStats() {
 
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(147, 51, 234, 0.15), rgba(236, 72, 153, 0.1))' : 'linear-gradient(to bottom right, #faf5ff, #fdf2f8)', borderColor: isDark ? 'rgba(147, 51, 234, 0.3)' : '#c4b5fd' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Services IA (Total)</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Services IA (Total)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Sparkles className="w-8 h-8 text-purple-500" />
               <div>
-                <span className="text-3xl font-bold">{services.length}</span>
-                <p className="text-xs text-slate-500">{approvedServices} approuvés • {pendingServices} en attente</p>
+                <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{services.length}</span>
+                <p className="text-xs" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>{approvedServices} approuvés • {pendingServices} en attente</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Catégories</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Catégories</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <TrendingUp className="w-8 h-8 text-blue-500" />
-              <span className="text-3xl font-bold">{categories.length}</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{categories.length}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Abonnés Newsletter</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Abonnés Newsletter</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Users className="w-8 h-8 text-green-500" />
-              <span className="text-3xl font-bold">{subscribers.length}</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{subscribers.length}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Avis publiés</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Avis publiés</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <MessageSquare className="w-8 h-8 text-cyan-500" />
-              <span className="text-3xl font-bold">{reviews.length}</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{reviews.length}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Vues</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Total Vues</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Eye className="w-8 h-8 text-indigo-500" />
-              <span className="text-3xl font-bold">{totalViews.toLocaleString()}</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{totalViews.toLocaleString()}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Favoris</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Total Favoris</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Heart className="w-8 h-8 text-pink-500" />
-              <span className="text-3xl font-bold">{favorites.length}</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{favorites.length}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Note Moyenne</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Note Moyenne</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Star className="w-8 h-8 text-yellow-500" />
-              <span className="text-3xl font-bold">{avgRating}/5</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{avgRating}/5</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Comptes Pro</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Comptes Pro</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Crown className="w-8 h-8 text-amber-500" />
               <div>
-                <span className="text-3xl font-bold">{proAccounts.length}</span>
-                <p className="text-xs text-slate-500">{activeProAccounts} payants</p>
+                <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{proAccounts.length}</span>
+                <p className="text-xs" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>{activeProAccounts} payants</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Bannières</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Bannières</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <Image className="w-8 h-8 text-orange-500" />
               <div>
-                <span className="text-3xl font-bold">{banners.length}</span>
-                <p className="text-xs text-slate-500">{validatedBanners} validées</p>
+                <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{banners.length}</span>
+                <p className="text-xs" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>{validatedBanners} validées</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Stories</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>Stories</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
               <FileText className="w-8 h-8 text-fuchsia-500" />
               <div>
-                <span className="text-3xl font-bold">{stories.length}</span>
-                <p className="text-xs text-slate-500">{activeStories} actives</p>
+                <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : undefined }}>{stories.length}</span>
+                <p className="text-xs" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>{activeStories} actives</p>
               </div>
             </div>
           </CardContent>
