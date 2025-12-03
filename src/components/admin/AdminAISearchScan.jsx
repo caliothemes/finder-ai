@@ -693,8 +693,8 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {discovery.features?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold text-slate-600">Fonctionnalités:</span>
-                    <ul className="list-disc list-inside text-sm text-slate-700 mt-1">
+                    <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Fonctionnalités:</span>
+                    <ul className="list-disc list-inside text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
                       {discovery.features.slice(0, 3).map((feature, i) => (
                         <li key={i}>{feature}</li>
                       ))}
