@@ -6,10 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Newspaper, Calendar, ExternalLink, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useTheme } from '@/components/ThemeProvider';
 
 export default function LatestNews() {
-  const { theme } = useTheme();
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['latestNews'],
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 3),
