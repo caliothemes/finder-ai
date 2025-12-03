@@ -150,9 +150,9 @@ export default function AdminStats() {
     <div className="space-y-6">
       {/* Visiteurs en temps réel */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.1))' : 'linear-gradient(to bottom right, #f0fdf4, #ecfdf5)', borderColor: isDark ? 'rgba(34, 197, 94, 0.3)' : '#86efac' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
               <Activity className="w-4 h-4 text-green-500" />
               En ce moment
             </CardTitle>
@@ -161,31 +161,31 @@ export default function AdminStats() {
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
               <span className="text-3xl font-bold text-green-600">{visitorsNow}</span>
-              <span className="text-sm text-slate-500">visiteurs actifs</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs actifs</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">Dernières 5 minutes</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>Dernières 5 minutes</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-slate-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(100, 116, 139, 0.15), rgba(71, 85, 105, 0.1))' : 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)', borderColor: isDark ? 'rgba(100, 116, 139, 0.3)' : '#cbd5e1' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-slate-500" />
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
+              <Clock className="w-4 h-4" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }} />
               Hier
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-slate-600">{uniqueVisitorsYesterday}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#475569' }}>{uniqueVisitorsYesterday}</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsYesterday} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsYesterday} pages vues</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.1))' : 'linear-gradient(to bottom right, #eff6ff, #eef2ff)', borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#93c5fd' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
               <Clock className="w-4 h-4 text-blue-500" />
               Aujourd'hui
             </CardTitle>
@@ -193,31 +193,31 @@ export default function AdminStats() {
           <CardContent>
             <div className="flex items-center gap-3">
               <span className="text-3xl font-bold text-blue-600">{visitorsToday}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsToday} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsToday} pages vues</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-50 to-slate-100 border-gray-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(107, 114, 128, 0.15), rgba(100, 116, 139, 0.1))' : 'linear-gradient(to bottom right, #f9fafb, #f8fafc)', borderColor: isDark ? 'rgba(107, 114, 128, 0.3)' : '#d1d5db' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-gray-500" />
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
+              <Calendar className="w-4 h-4" style={{ color: isDark ? 'var(--text-muted)' : '#6b7280' }} />
               Semaine dernière
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-gray-600">{uniqueVisitorsLastWeek}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#4b5563' }}>{uniqueVisitorsLastWeek}</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsLastWeek} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsLastWeek} pages vues</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(147, 51, 234, 0.15), rgba(236, 72, 153, 0.1))' : 'linear-gradient(to bottom right, #faf5ff, #fdf2f8)', borderColor: isDark ? 'rgba(147, 51, 234, 0.3)' : '#c4b5fd' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
               <Calendar className="w-4 h-4 text-purple-500" />
               Cette semaine
             </CardTitle>
@@ -225,34 +225,34 @@ export default function AdminStats() {
           <CardContent>
             <div className="flex items-center gap-3">
               <span className="text-3xl font-bold text-purple-600">{visitorsWeek}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsWeek} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsWeek} pages vues</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Mois et Année */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="bg-gradient-to-br from-stone-50 to-neutral-100 border-stone-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(120, 113, 108, 0.15), rgba(115, 115, 115, 0.1))' : 'linear-gradient(to bottom right, #fafaf9, #f5f5f4)', borderColor: isDark ? 'rgba(120, 113, 108, 0.3)' : '#d6d3d1' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-stone-500" />
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
+              <Calendar className="w-4 h-4" style={{ color: isDark ? 'var(--text-muted)' : '#78716c' }} />
               Mois dernier
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-stone-600">{uniqueVisitorsLastMonth}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-3xl font-bold" style={{ color: isDark ? 'var(--text-primary)' : '#57534e' }}>{uniqueVisitorsLastMonth}</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsLastMonth} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsLastMonth} pages vues</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(249, 115, 22, 0.15), rgba(245, 158, 11, 0.1))' : 'linear-gradient(to bottom right, #fff7ed, #fffbeb)', borderColor: isDark ? 'rgba(249, 115, 22, 0.3)' : '#fdba74' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
               <TrendingUp className="w-4 h-4 text-orange-500" />
               Ce mois
             </CardTitle>
@@ -260,15 +260,15 @@ export default function AdminStats() {
           <CardContent>
             <div className="flex items-center gap-3">
               <span className="text-3xl font-bold text-orange-600">{visitorsMonth}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsMonth} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsMonth} pages vues</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200">
+        <Card style={{ background: isDark ? 'linear-gradient(to bottom right, rgba(6, 182, 212, 0.15), rgba(20, 184, 166, 0.1))' : 'linear-gradient(to bottom right, #ecfeff, #f0fdfa)', borderColor: isDark ? 'rgba(6, 182, 212, 0.3)' : '#67e8f9' }}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
               <TrendingUp className="w-4 h-4 text-cyan-500" />
               Cette année
             </CardTitle>
@@ -276,9 +276,9 @@ export default function AdminStats() {
           <CardContent>
             <div className="flex items-center gap-3">
               <span className="text-3xl font-bold text-cyan-600">{visitorsYear}</span>
-              <span className="text-sm text-slate-500">visiteurs uniques</span>
+              <span className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#64748b' }}>visiteurs uniques</span>
             </div>
-            <p className="text-xs text-slate-400 mt-2">{viewsYear} pages vues</p>
+            <p className="text-xs mt-2" style={{ color: isDark ? 'var(--text-muted)' : '#94a3b8' }}>{viewsYear} pages vues</p>
           </CardContent>
         </Card>
       </div>
