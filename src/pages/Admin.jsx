@@ -25,6 +25,7 @@ import AdminNews from '@/components/admin/AdminNews';
 import AdminFinderAIReviews from '@/components/admin/AdminFinderAIReviews';
 import AdminReviewsManager from '@/components/admin/AdminReviewsManager';
 import AdminVideoScan from '@/components/admin/AdminVideoScan';
+import AdminWrapper from '@/components/admin/AdminWrapper';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
