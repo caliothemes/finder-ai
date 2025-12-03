@@ -638,9 +638,9 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                   ) : (
                     <>
                       {discovery.tagline && (
-                        <p className="text-sm text-slate-600 mb-2">{discovery.tagline}</p>
+                        <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>{discovery.tagline}</p>
                       )}
-                      <p className="text-sm text-slate-700 mb-2">{discovery.description}</p>
+                      <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{discovery.description}</p>
                       {discovery.website_url && (
                         <a
                           href={discovery.website_url}
