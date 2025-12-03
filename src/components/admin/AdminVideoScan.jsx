@@ -380,7 +380,7 @@ Donne-moi les URLs YouTube réelles que tu trouves.`,
       </div>
 
       {/* Chaînes YouTube */}
-      <Card>
+      <Card className="border-green-200 bg-green-50">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
@@ -405,7 +405,7 @@ Donne-moi les URLs YouTube réelles que tu trouves.`,
           ) : (
             <div className="space-y-2">
               {(showAllChannels ? youtubeChannels : youtubeChannels.slice(0, 3)).map((channel) => (
-                <div key={channel.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+                <div key={channel.id} className="flex items-center justify-between p-2 bg-white/80 rounded-lg border border-green-100">
                   <div className="flex items-center gap-2">
                     <Youtube className="w-4 h-4 text-red-500" />
                     <span className="font-medium text-sm">{channel.name}</span>
@@ -415,8 +415,9 @@ Donne-moi les URLs YouTube réelles que tu trouves.`,
                   </div>
                   <div className="flex items-center gap-2">
                     <a href={channel.url} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
-                        <ExternalLink className="w-3 h-3" />
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-red-600 border-red-200 hover:bg-red-50">
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        <span className="text-xs">Voir</span>
                       </Button>
                     </a>
                     <Button
@@ -435,7 +436,7 @@ Donne-moi les URLs YouTube réelles que tu trouves.`,
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowAllChannels(!showAllChannels)}
-                  className="w-full text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                  className="w-full text-green-700 hover:text-green-800 hover:bg-green-100"
                 >
                   {showAllChannels ? (
                     <>Voir moins</>
