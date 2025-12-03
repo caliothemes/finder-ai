@@ -525,8 +525,11 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
       {/* Pagination Top */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between bg-white p-4 rounded-xl border">
-          <span className="text-sm text-slate-600">
+        <div 
+          className="flex items-center justify-between p-4 rounded-xl border"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+        >
+          <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
             Affichage {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredDiscoveries.length)} sur {filteredDiscoveries.length}
           </span>
           <div className="flex items-center gap-2">
