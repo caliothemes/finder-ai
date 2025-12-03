@@ -671,7 +671,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               <div className="space-y-3 mb-4">
                 {discovery.suggested_categories?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold text-slate-600 mr-2">Catégories:</span>
+                    <span className="text-xs font-semibold mr-2" style={{ color: 'var(--text-muted)' }}>Catégories:</span>
                     {discovery.suggested_categories.map((cat, i) => (
                       <Badge key={i} variant="outline" className="mr-1">
                         {categories.find(c => c.id === cat)?.name || cat}
