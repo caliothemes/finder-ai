@@ -125,52 +125,25 @@ export default function AdminVideoScan() {
       
       const today = new Date().toISOString().split('T')[0];
       
-      // Calculer la date il y a 2 semaines
-      const twoWeeksAgo = new Date();
-      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-      const twoWeeksAgoStr = twoWeeksAgo.toISOString().split('T')[0];
+      // Rechercher les vidéos récentes pour chaque chaîne
+      const channelNames = youtubeChannels.length > 0 
+        ? youtubeChannels.map(c => c.name).join(', ')
+        : 'Underscore_, Micode, Fireship, Two Minute Papers';
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `MISSION URGENTE: Trouve les DERNIÈRES vidéos YouTube sur l'IA publiées ces 2 DERNIÈRES SEMAINES.
+        prompt: `Recherche les dernières vidéos YouTube sur l'intelligence artificielle.
 
-📅 DATE ACTUELLE: ${today}
-📅 NE PAS PRENDRE DE VIDÉOS AVANT: ${twoWeeksAgoStr}
+Recherche Google: "site:youtube.com" + ces chaînes: ${channelNames}
+Aussi rechercher: "youtube AI news december 2024", "youtube intelligence artificielle decembre 2024"
 
-🔍 RECHERCHE CES CHAÎNES YOUTUBE SPÉCIFIQUEMENT:
-${channelsList}
+Pour chaque vidéo trouvée, donne-moi:
+- Le titre exact
+- L'URL YouTube complète (avec le vrai ID de vidéo)
+- Le nom de la chaîne
+- La date de publication approximative
+- Une courte description
 
-Pour CHAQUE chaîne ci-dessus:
-1. Va sur la chaîne YouTube
-2. Regarde les vidéos les plus récentes (onglet "Vidéos" trié par date)
-3. Prends les vidéos publiées APRÈS le ${twoWeeksAgoStr}
-
-🎯 CRITÈRES DE SÉLECTION:
-- UNIQUEMENT les vidéos publiées entre ${twoWeeksAgoStr} et ${today}
-- Vidéos dont le titre contient "IA", "AI", "ChatGPT", "Claude", "Gemini", "OpenAI", "GPT", "LLM", "Midjourney", "Sora", etc.
-- REJETER toute vidéo de 2023 ou avant !
-- REJETER toute vidéo de plus de 2 semaines !
-
-📋 POUR CHAQUE VIDÉO TROUVÉE:
-1. Récupère le vrai VIDEO ID YouTube (11 caractères après "watch?v=")
-2. URL: https://www.youtube.com/watch?v/[VIDEO_ID]
-3. Thumbnail: https://img.youtube.com/vi/[VIDEO_ID]/maxresdefault.jpg
-
-⚠️ RÈGLES ABSOLUES:
-- Le video_url DOIT contenir un ID de 11 caractères réel
-- NE PAS inventer d'IDs - si tu ne trouves pas le vrai ID, n'inclus pas la vidéo
-- La date published_date DOIT être entre ${twoWeeksAgoStr} et ${today}
-
-Retourne les vidéos RÉCENTES avec URLs RÉELLES:
-- title: titre en français
-- title_en: titre en anglais  
-- description: résumé FR (2-3 phrases)
-- description_en: résumé EN
-- video_url: URL YouTube avec vrai ID
-- thumbnail_url: thumbnail YouTube avec même ID
-- source_name: nom de la chaîne
-- duration: durée estimée
-- published_date: YYYY-MM-DD (DOIT être récent!)
-- tags: 3-5 mots-clés`,
+Je veux uniquement des vidéos RÉCENTES (dernières semaines) sur l'IA, ChatGPT, Claude, Gemini, OpenAI, etc.`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
@@ -197,6 +170,52 @@ Retourne les vidéos RÉCENTES avec URLs RÉELLES:
         }
       });
 
+      console.log('Résultat brut du scan:', result);
+      
+      // Si pas de résultats, essayer une autre approche
+      if (!result.videos || result.videos.length === 0) {
+        toast.warning('Première recherche sans résultat, tentative alternative...');
+        
+        const result2 = await base44.integrations.Core.InvokeLLM({
+          prompt: `Trouve des vidéos YouTube récentes (décembre 2024) sur ces sujets:
+- ChatGPT nouveautés
+- Claude AI Anthropic  
+- Google Gemini
+- OpenAI Sora
+- Actualités intelligence artificielle
+
+Donne-moi les URLs YouTube réelles que tu trouves.`,
+          add_context_from_internet: true,
+          response_json_schema: {
+            type: "object",
+            properties: {
+              videos: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    title: { type: "string" },
+                    title_en: { type: "string" },
+                    description: { type: "string" },
+                    description_en: { type: "string" },
+                    video_url: { type: "string" },
+                    thumbnail_url: { type: "string" },
+                    source_name: { type: "string" },
+                    duration: { type: "string" },
+                    published_date: { type: "string" },
+                    tags: { type: "array", items: { type: "string" } }
+                  }
+                }
+              }
+            }
+          }
+        });
+        
+        if (result2.videos && result2.videos.length > 0) {
+          result.videos = result2.videos;
+        }
+      }
+        add_context_from_internet: true,
       console.log('Résultat du scan:', result);
       
       if (result.videos && result.videos.length > 0) {
