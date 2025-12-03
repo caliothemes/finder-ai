@@ -125,36 +125,42 @@ export default function AdminVideoScan() {
       
       const today = new Date().toISOString().split('T')[0];
       
+      // Calculer la date il y a 2 semaines
+      const twoWeeksAgo = new Date();
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+      const twoWeeksAgoStr = twoWeeksAgo.toISOString().split('T')[0];
+      
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `MISSION: Recherche sur internet les vidéos YouTube RÉCENTES sur l'intelligence artificielle.
+        prompt: `MISSION URGENTE: Trouve les DERNIÈRES vidéos YouTube sur l'IA publiées ces 2 DERNIÈRES SEMAINES.
 
-Date actuelle: ${today}
+📅 DATE ACTUELLE: ${today}
+📅 NE PAS PRENDRE DE VIDÉOS AVANT: ${twoWeeksAgoStr}
 
-ÉTAPE 1 - Recherche Google ces requêtes EXACTES:
-- "site:youtube.com ${youtubeChannels.slice(0, 5).map(c => c.name).join(' OR ')}" 
-- "site:youtube.com AI news ${today.substring(0, 7)}"
-- "site:youtube.com ChatGPT Claude Gemini 2024"
-
-CHAÎNES À RECHERCHER:
+🔍 RECHERCHE CES CHAÎNES YOUTUBE SPÉCIFIQUEMENT:
 ${channelsList}
 
-CRITÈRES DE SÉLECTION DES VIDÉOS:
-- Prendre TOUTE vidéo dont le titre contient "IA" ou "AI" (intelligence artificielle)
-- Sujets acceptés: ChatGPT, Claude, Gemini, OpenAI, Anthropic, Midjourney, Sora, LLM, Machine Learning, Deep Learning, etc.
-- Vidéos récentes de préférence (dernières semaines/mois)
+Pour CHAQUE chaîne ci-dessus:
+1. Va sur la chaîne YouTube
+2. Regarde les vidéos les plus récentes (onglet "Vidéos" trié par date)
+3. Prends les vidéos publiées APRÈS le ${twoWeeksAgoStr}
 
-ÉTAPE 2 - Pour CHAQUE vidéo trouvée:
-1. Note le VIDEO ID (11 caractères après "watch?v=" ou après "youtu.be/")
-2. Construis l'URL: https://www.youtube.com/watch?v=[VIDEO_ID]
-3. Construis la thumbnail: https://img.youtube.com/vi/[VIDEO_ID]/maxresdefault.jpg
+🎯 CRITÈRES DE SÉLECTION:
+- UNIQUEMENT les vidéos publiées entre ${twoWeeksAgoStr} et ${today}
+- Vidéos dont le titre contient "IA", "AI", "ChatGPT", "Claude", "Gemini", "OpenAI", "GPT", "LLM", "Midjourney", "Sora", etc.
+- REJETER toute vidéo de 2023 ou avant !
+- REJETER toute vidéo de plus de 2 semaines !
+
+📋 POUR CHAQUE VIDÉO TROUVÉE:
+1. Récupère le vrai VIDEO ID YouTube (11 caractères après "watch?v=")
+2. URL: https://www.youtube.com/watch?v/[VIDEO_ID]
+3. Thumbnail: https://img.youtube.com/vi/[VIDEO_ID]/maxresdefault.jpg
 
 ⚠️ RÈGLES ABSOLUES:
-- Le video_url DOIT contenir un ID de 11 caractères (lettres, chiffres, - ou _)
-- Si tu ne trouves PAS l'ID réel de la vidéo, NE L'INCLUS PAS
-- Exemple valide: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-- INTERDIT d'inventer des IDs comme "XXXXXXXXXXX" ou "abc123..."
+- Le video_url DOIT contenir un ID de 11 caractères réel
+- NE PAS inventer d'IDs - si tu ne trouves pas le vrai ID, n'inclus pas la vidéo
+- La date published_date DOIT être entre ${twoWeeksAgoStr} et ${today}
 
-Retourne UNIQUEMENT les vidéos avec des URLs RÉELLES trouvées:
+Retourne les vidéos RÉCENTES avec URLs RÉELLES:
 - title: titre en français
 - title_en: titre en anglais  
 - description: résumé FR (2-3 phrases)
@@ -163,7 +169,7 @@ Retourne UNIQUEMENT les vidéos avec des URLs RÉELLES trouvées:
 - thumbnail_url: thumbnail YouTube avec même ID
 - source_name: nom de la chaîne
 - duration: durée estimée
-- published_date: YYYY-MM-DD
+- published_date: YYYY-MM-DD (DOIT être récent!)
 - tags: 3-5 mots-clés`,
         add_context_from_internet: true,
         response_json_schema: {
