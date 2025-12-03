@@ -38,7 +38,7 @@ export default function LatestVideoNews() {
   return (
     <>
       <section 
-        className="py-16 px-6 mx-4 md:mx-6 rounded-3xl"
+        className="py-16 px-6 mx-4 md:mx-6 mb-12 rounded-3xl"
         style={{
           background: theme === 'dark' 
             ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(168, 85, 247, 0.12), rgba(59, 130, 246, 0.12))'
