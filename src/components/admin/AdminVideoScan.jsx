@@ -24,6 +24,20 @@ export default function AdminVideoScan() {
   const [newChannelUrl, setNewChannelUrl] = useState('');
   const [newChannelName, setNewChannelName] = useState('');
   const [translating, setTranslating] = useState(false);
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualForm, setManualForm] = useState({
+    title: '',
+    title_en: '',
+    description: '',
+    description_en: '',
+    video_url: '',
+    thumbnail_url: '',
+    source_name: '',
+    duration: '',
+    published_date: new Date().toISOString().split('T')[0],
+    tags: []
+  });
+  const [manualTagInput, setManualTagInput] = useState('');
   const queryClient = useQueryClient();
 
   // Charger les chaînes YouTube enregistrées
@@ -284,23 +298,47 @@ Retourne pour chaque vidéo trouvée:
           <Video className="w-6 h-6 text-purple-600" />
           <h2 className="text-xl font-bold">Scan Vidéos Actualités IA</h2>
         </div>
-        <Button
-          onClick={() => scanMutation.mutate()}
-          disabled={scanning}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-        >
-          {scanning ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Scan en cours...
-            </>
-          ) : (
-            <>
-              <Search className="w-4 h-4 mr-2" />
-              Lancer le scan
-            </>
-          )}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => {
+              setManualForm({
+                title: '',
+                title_en: '',
+                description: '',
+                description_en: '',
+                video_url: '',
+                thumbnail_url: '',
+                source_name: '',
+                duration: '',
+                published_date: new Date().toISOString().split('T')[0],
+                tags: []
+              });
+              setShowManualModal(true);
+            }}
+            variant="outline"
+            className="border-purple-300 text-purple-600 hover:bg-purple-50"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Publier manuellement
+          </Button>
+          <Button
+            onClick={() => scanMutation.mutate()}
+            disabled={scanning}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white"
+          >
+            {scanning ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Scan en cours...
+              </>
+            ) : (
+              <>
+                <Search className="w-4 h-4 mr-2" />
+                Lancer le scan
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Chaînes YouTube */}
@@ -410,7 +448,16 @@ Retourne pour chaque vidéo trouvée:
                 <CardContent className="p-4">
                   <h4 className="font-semibold line-clamp-2 mb-2">{video.title}</h4>
                   <p className="text-sm text-slate-600 mb-2">{video.source_name}</p>
-                  <p className="text-xs text-slate-500 line-clamp-2 mb-3">{video.description}</p>
+                  <p className="text-xs text-slate-500 line-clamp-2 mb-2">{video.description}</p>
+                  {video.tags && video.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {video.tags.slice(0, 4).map((tag, idx) => (
+                        <Badge key={idx} className="bg-purple-100 text-purple-700 text-xs px-2 py-0">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <Button
                       size="sm"
@@ -490,6 +537,209 @@ Retourne pour chaque vidéo trouvée:
           </div>
         </div>
       )}
+
+      {/* Manual Video Modal */}
+      <Dialog open={showManualModal} onOpenChange={setShowManualModal}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Video className="w-5 h-5 text-purple-600" />
+              Publier une vidéo manuellement
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* URL de la vidéo */}
+            <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <label className="text-sm font-medium text-purple-700 flex items-center gap-2">
+                <Video className="w-4 h-4" />
+                URL YouTube
+              </label>
+              <Input
+                value={manualForm.video_url}
+                onChange={(e) => {
+                  const url = e.target.value;
+                  setManualForm({...manualForm, video_url: url});
+                  // Auto-générer la thumbnail
+                  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                  if (match) {
+                    setManualForm(prev => ({
+                      ...prev,
+                      video_url: url,
+                      thumbnail_url: `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`
+                    }));
+                  }
+                }}
+                className="mt-1 font-mono text-sm"
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+            </div>
+
+            {/* Preview */}
+            {manualForm.video_url && (
+              <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                {(() => {
+                  const match = manualForm.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                  return match ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${match[1]}`}
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white">
+                      <Video className="w-16 h-16" />
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {/* Form */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">Titre (FR)</label>
+                <Input
+                  value={manualForm.title}
+                  onChange={(e) => setManualForm({...manualForm, title: e.target.value})}
+                  placeholder="Titre en français"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Title (EN)</label>
+                <Input
+                  value={manualForm.title_en}
+                  onChange={(e) => setManualForm({...manualForm, title_en: e.target.value})}
+                  placeholder="Title in English"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">Description (FR)</label>
+                <Textarea
+                  value={manualForm.description}
+                  onChange={(e) => setManualForm({...manualForm, description: e.target.value})}
+                  rows={3}
+                  placeholder="Description en français"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Description (EN)</label>
+                <Textarea
+                  value={manualForm.description_en}
+                  onChange={(e) => setManualForm({...manualForm, description_en: e.target.value})}
+                  rows={3}
+                  placeholder="Description in English"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm font-medium">Chaîne</label>
+                <Input
+                  value={manualForm.source_name}
+                  onChange={(e) => setManualForm({...manualForm, source_name: e.target.value})}
+                  placeholder="Nom de la chaîne"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Durée</label>
+                <Input
+                  value={manualForm.duration}
+                  onChange={(e) => setManualForm({...manualForm, duration: e.target.value})}
+                  placeholder="12:34"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Date publication</label>
+                <Input
+                  type="date"
+                  value={manualForm.published_date}
+                  onChange={(e) => setManualForm({...manualForm, published_date: e.target.value})}
+                />
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="text-sm font-medium">Tags</label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  value={manualTagInput}
+                  onChange={(e) => setManualTagInput(e.target.value)}
+                  placeholder="Ajouter un tag..."
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && manualTagInput.trim()) {
+                      e.preventDefault();
+                      setManualForm({...manualForm, tags: [...manualForm.tags, manualTagInput.trim()]});
+                      setManualTagInput('');
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    if (manualTagInput.trim()) {
+                      setManualForm({...manualForm, tags: [...manualForm.tags, manualTagInput.trim()]});
+                      setManualTagInput('');
+                    }
+                  }}
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              {manualForm.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {manualForm.tags.map((tag, idx) => (
+                    <Badge key={idx} className="bg-purple-100 text-purple-700">
+                      {tag}
+                      <button
+                        onClick={() => setManualForm({...manualForm, tags: manualForm.tags.filter((_, i) => i !== idx)})}
+                        className="ml-1 hover:text-red-600"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setShowManualModal(false)}>
+                Annuler
+              </Button>
+              <Button
+                onClick={async () => {
+                  if (!manualForm.video_url || !manualForm.title) {
+                    toast.error('URL et titre requis');
+                    return;
+                  }
+                  try {
+                    await base44.entities.AIVideoNews.create({
+                      ...manualForm,
+                      status: 'published'
+                    });
+                    toast.success('Vidéo publiée !');
+                    setShowManualModal(false);
+                    queryClient.invalidateQueries({ queryKey: ['publishedVideos'] });
+                  } catch (error) {
+                    toast.error('Erreur lors de la publication');
+                  }
+                }}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <Check className="w-4 h-4 mr-2" />
+                Publier
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Add Channel Modal */}
       <Dialog open={showChannelModal} onOpenChange={setShowChannelModal}>
