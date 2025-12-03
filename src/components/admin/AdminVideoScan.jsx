@@ -189,8 +189,13 @@ RÈGLE ABSOLUE: Si l'ID de vidéo contient "XXXX" ou est un placeholder, NE PAS 
               };
             }).filter(v => {
               if (!v.video_url) return false;
+              // Vérifier que c'est une vraie URL avec un vrai ID (pas de placeholders)
               const match = v.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-              return match !== null;
+              if (!match) return false;
+              const videoId = match[1];
+              // Rejeter les IDs qui sont des placeholders
+              if (videoId.includes('XXXX') || videoId === 'XXXXXXXXXXX' || videoId === 'dQw4w9WgXcQ') return false;
+              return true;
             });
             
             allVideos = [...allVideos, ...videosWithMeta];
