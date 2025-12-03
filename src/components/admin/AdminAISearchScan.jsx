@@ -1054,7 +1054,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 {/* Tags */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-sm font-medium text-slate-700">Tags</label>
+                    <label className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Tags</label>
                     <Button
                       type="button"
                       variant="outline"
