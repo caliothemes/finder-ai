@@ -23,6 +23,7 @@ export default function AdminVideoScan() {
   const [showChannelModal, setShowChannelModal] = useState(false);
   const [newChannelUrl, setNewChannelUrl] = useState('');
   const [newChannelName, setNewChannelName] = useState('');
+  const [translating, setTranslating] = useState(false);
   const queryClient = useQueryClient();
 
   // Charger les chaînes YouTube enregistrées
