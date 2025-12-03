@@ -143,6 +143,43 @@ export default function LatestVideoNews() {
               </div>
             ))}
           </div>
+
+          {/* Favorite Channels */}
+          {youtubeChannels.length > 0 && (
+            <div 
+              className="mt-6 p-4 rounded-xl"
+              style={{ 
+                backgroundColor: theme === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.7)',
+                border: '1px solid var(--border-color)'
+              }}
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <Heart className="w-4 h-4 text-red-500" fill="currentColor" />
+                <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                  {language === 'en' ? 'Our favorite channels:' : 'Nos chaînes préférées :'}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {youtubeChannels.map((channel) => (
+                  <a
+                    key={channel.id}
+                    href={channel.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all hover:scale-105"
+                    style={{ 
+                      backgroundColor: theme === 'dark' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)',
+                      color: 'var(--text-primary)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)'
+                    }}
+                  >
+                    <Youtube className="w-3.5 h-3.5 text-red-500" />
+                    {channel.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
