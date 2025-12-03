@@ -8,6 +8,7 @@ import {
   ChevronRight, Newspaper, Award, Video
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTheme } from '@/components/ThemeProvider';
 import AdminLogo from '@/components/admin/AdminLogo';
 import AdminServices from '@/components/admin/AdminServices';
 import AdminNewsletter from '@/components/admin/AdminNewsletter';
