@@ -682,7 +682,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 
                 {discovery.tags?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold text-slate-600 mr-2">Tags:</span>
+                    <span className="text-xs font-semibold mr-2" style={{ color: 'var(--text-muted)' }}>Tags:</span>
                     {discovery.tags.map((tag, i) => (
                       <Badge key={i} variant="secondary" className="mr-1 text-xs">
                         {tag}
