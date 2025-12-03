@@ -566,20 +566,24 @@ export default function AdminStats() {
       </div>
 
       {/* Top Services */}
-      <Card>
+      <Card style={{ backgroundColor: isDark ? 'var(--bg-card)' : undefined, borderColor: isDark ? 'var(--border-color)' : undefined }}>
         <CardHeader>
-          <CardTitle>Top 5 Services</CardTitle>
-          <CardDescription>Les services les plus vus</CardDescription>
+          <CardTitle style={{ color: isDark ? 'var(--text-primary)' : undefined }}>Top 5 Services</CardTitle>
+          <CardDescription style={{ color: isDark ? 'var(--text-muted)' : undefined }}>Les services les plus vus</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {topServices.map((service, index) => (
               <div
                 key={service.id}
-                className="flex items-center justify-between p-4 border border-slate-200 rounded-xl"
+                className="flex items-center justify-between p-4 rounded-xl"
+                style={{ 
+                  backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : undefined,
+                  border: `1px solid ${isDark ? 'var(--border-color)' : '#e2e8f0'}` 
+                }}
               >
                 <div className="flex items-center gap-4">
-                  <div className="text-2xl font-bold text-slate-300">#{index + 1}</div>
+                  <div className="text-2xl font-bold" style={{ color: isDark ? 'var(--text-muted)' : '#cbd5e1' }}>#{index + 1}</div>
                   {service.logo_url && (
                     <img
                       src={service.logo_url}
@@ -588,16 +592,16 @@ export default function AdminStats() {
                     />
                   )}
                   <div>
-                    <h3 className="font-semibold text-slate-900">{service.name}</h3>
-                    <p className="text-sm text-slate-600">{service.tagline}</p>
+                    <h3 className="font-semibold" style={{ color: isDark ? 'var(--text-primary)' : '#0f172a' }}>{service.name}</h3>
+                    <p className="text-sm" style={{ color: isDark ? 'var(--text-muted)' : '#475569' }}>{service.tagline}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="flex items-center gap-2 text-slate-600">
+                  <div className="flex items-center gap-2" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
                     <Eye className="w-4 h-4" />
                     <span className="font-semibold">{(service.views || 0).toLocaleString()}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-600 mt-1">
+                  <div className="flex items-center gap-2 mt-1" style={{ color: isDark ? 'var(--text-secondary)' : '#475569' }}>
                     <Heart className="w-4 h-4" />
                     <span>{(service.likes || 0).toLocaleString()}</span>
                   </div>
