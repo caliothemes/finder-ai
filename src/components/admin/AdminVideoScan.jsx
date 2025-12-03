@@ -379,26 +379,33 @@ Retourne pour chaque vidéo trouvée:
           <div className="grid md:grid-cols-2 gap-4">
             {discoveries.map((video) => (
               <Card key={video.id} className="overflow-hidden">
-                <div className="relative aspect-video bg-slate-100">
-                  {video.thumbnail_url ? (
-                    <img
-                      src={video.thumbnail_url}
-                      alt={video.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Video className="w-12 h-12 text-slate-400" />
+                <div className="relative aspect-video bg-slate-900 overflow-hidden">
+                  {/* Cadre TV/Moniteur */}
+                  <div className="absolute inset-2 rounded-lg overflow-hidden border-4 border-slate-700 shadow-inner bg-black">
+                    {video.thumbnail_url ? (
+                      <img
+                        src={video.thumbnail_url}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-slate-800">
+                        <Video className="w-12 h-12 text-slate-500" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
+                        <Play className="w-7 h-7 text-red-600 ml-1" fill="currentColor" />
+                      </div>
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <Play className="w-12 h-12 text-white" />
                   </div>
                   {video.duration && (
-                    <Badge className="absolute bottom-2 right-2 bg-black/70 text-white">
+                    <Badge className="absolute bottom-4 right-4 bg-black/80 text-white text-xs">
                       {video.duration}
                     </Badge>
                   )}
+                  {/* Indicateur LED */}
+                  <div className="absolute bottom-3 left-4 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 </div>
                 <CardContent className="p-4">
                   <h4 className="font-semibold line-clamp-2 mb-2">{video.title}</h4>
