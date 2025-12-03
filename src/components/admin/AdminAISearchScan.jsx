@@ -788,8 +788,8 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
         {filteredDiscoveries.length === 0 && (
           <div className="text-center py-12">
-            <Sparkles className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
+            <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
+            <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
               Aucune découverte pour le moment
             </h3>
             <p className="text-slate-600 mb-4">
