@@ -792,7 +792,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
             <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
               Aucune découverte pour le moment
             </h3>
-            <p className="text-slate-600 mb-4">
+            <p className="mb-4" style={{ color: 'var(--text-muted)' }}>
               Lancez un scan pour découvrir de nouveaux services IA
             </p>
             <Button
