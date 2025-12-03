@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, FileText, Mail, Image, 
   BarChart3, Users, Sparkles, Shield, Search,
-  ChevronRight, Newspaper, Award
+  ChevronRight, Newspaper, Award, Video
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLogo from '@/components/admin/AdminLogo';
@@ -23,6 +23,7 @@ import AdminLegalSections from '@/components/admin/AdminLegalSections';
 import AdminNews from '@/components/admin/AdminNews';
 import AdminFinderAIReviews from '@/components/admin/AdminFinderAIReviews';
 import AdminReviewsManager from '@/components/admin/AdminReviewsManager';
+import AdminVideoScan from '@/components/admin/AdminVideoScan';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -74,6 +75,17 @@ export default function Admin() {
     refetchInterval: 30000,
   });
 
+  // Compter les vidéos IA à valider
+  const { data: pendingVideoCount = 0 } = useQuery({
+    queryKey: ['pendingVideoCount'],
+    queryFn: async () => {
+      const videos = await base44.entities.AIVideoDiscovery.filter({ status: 'new' });
+      return videos.length;
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
@@ -108,6 +120,7 @@ export default function Admin() {
     { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600', badge: pendingClaimsCount },
     { id: 'stats', label: 'Statistiques', icon: BarChart3, description: 'Vue d\'ensemble des métriques', color: 'from-blue-600 to-cyan-600' },
     { id: 'news', label: 'Actualités IA', icon: Newspaper, description: 'Gérer les actualités IA', color: 'from-rose-600 to-orange-600' },
+    { id: 'video-scan', label: 'Scan Vidéos IA', icon: Video, description: 'Scanner les vidéos actualités IA', color: 'from-red-600 to-pink-600', badge: pendingVideoCount },
     { id: 'categories', label: 'Catégories', icon: FileText, description: 'Gérer les catégories', color: 'from-orange-600 to-amber-600' },
     { id: 'stories', label: 'Stories', icon: Image, description: 'Gérer les stories', color: 'from-pink-600 to-rose-600' },
     { id: 'reviews', label: 'Avis', icon: Users, description: 'Modérer les avis', color: 'from-green-600 to-emerald-600' },
@@ -122,6 +135,7 @@ export default function Admin() {
   const renderSection = () => {
     switch (activeSection) {
       case 'ai-scan': return <AdminAISearchScan />;
+      case 'video-scan': return <AdminVideoScan />;
       case 'news': return <AdminNews />;
       case 'stats': return <AdminStats />;
       case 'services': return <AdminServices />;

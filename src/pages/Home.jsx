@@ -7,6 +7,7 @@ import FeaturedAI from '@/components/home/FeaturedAI';
 import HomeFeaturedAI from '@/components/home/HomeFeaturedAI';
 import NewsletterSection from '@/components/home/NewsletterSection';
 import LatestNews from '@/components/home/LatestNews';
+import LatestVideoNews from '@/components/home/LatestVideoNews';
 import AgentFinderAIPromo from '@/components/home/AgentFinderAIPromo';
 import { Loader2, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -145,6 +146,9 @@ export default function Home() {
 
       {/* 3. Latest AI News */}
       <LatestNews />
+
+      {/* 3.5 Latest Video News */}
+      <LatestVideoNews />
 
       {/* 4. Agent FinderAI Promo */}
       <AgentFinderAIPromo />

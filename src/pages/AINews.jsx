@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
 import WeeklyHighlights from '@/components/news/WeeklyHighlights';
+import VideoNewsSection from '@/components/news/VideoNewsSection';
 
 export default function AINews() {
   const { language } = useLanguage();
@@ -243,6 +244,9 @@ export default function AINews() {
 
             {/* Weekly Highlights Section */}
             <WeeklyHighlights articles={articles} />
+
+            {/* Video News Section */}
+            <VideoNewsSection />
           </div>
         )}
       </div>
