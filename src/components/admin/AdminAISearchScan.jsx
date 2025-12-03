@@ -12,8 +12,10 @@ import {
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function AdminAISearchScan() {
+  const { theme } = useTheme();
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [isScanning, setIsScanning] = useState(false);
@@ -571,7 +573,14 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
       <div className="space-y-4">
         {paginatedDiscoveries.map((discovery) => (
           <Card key={discovery.id} className="overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-slate-50 to-purple-50">
+            <CardHeader 
+              className="transition-colors"
+              style={{ 
+                background: theme === 'dark' 
+                  ? 'linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(88, 28, 135, 0.2))' 
+                  : 'linear-gradient(to right, #f8fafc, rgba(147, 51, 234, 0.1))' 
+              }}
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
