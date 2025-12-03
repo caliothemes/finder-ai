@@ -555,6 +555,23 @@ Pour chaque vidéo, retourne:
                 )}
               </div>
 
+              {/* URL de la vidéo - IMPORTANT */}
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <label className="text-sm font-medium text-red-700 flex items-center gap-2">
+                  <Video className="w-4 h-4" />
+                  URL YouTube (à vérifier/corriger)
+                </label>
+                <Input
+                  value={editForm.video_url}
+                  onChange={(e) => setEditForm({...editForm, video_url: e.target.value})}
+                  className="mt-1 font-mono text-sm"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                <p className="text-xs text-red-600 mt-1">
+                  ⚠️ Si la vidéo ne s'affiche pas, l'URL est probablement incorrecte. Recherchez la vraie vidéo sur YouTube et collez l'URL ici.
+                </p>
+              </div>
+
               {/* Form */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
