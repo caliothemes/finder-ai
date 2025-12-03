@@ -37,7 +37,14 @@ export default function LatestVideoNews() {
 
   return (
     <>
-      <section className="py-16 px-6">
+      <section 
+        className="py-16 px-6 mx-4 md:mx-6 rounded-3xl"
+        style={{
+          background: theme === 'dark' 
+            ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(168, 85, 247, 0.12), rgba(59, 130, 246, 0.12))'
+            : 'linear-gradient(135deg, rgba(239, 68, 68, 0.06), rgba(168, 85, 247, 0.06), rgba(59, 130, 246, 0.06))',
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-3 mb-8">

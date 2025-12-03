@@ -38,7 +38,14 @@ export default function VideoNewsSection() {
 
   return (
     <>
-      <div className="mt-16">
+      <div 
+        className="mt-16 p-8 rounded-3xl"
+        style={{
+          background: theme === 'dark' 
+            ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(168, 85, 247, 0.12), rgba(59, 130, 246, 0.12))'
+            : 'linear-gradient(135deg, rgba(239, 68, 68, 0.06), rgba(168, 85, 247, 0.06), rgba(59, 130, 246, 0.06))',
+        }}
+      >
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600">
