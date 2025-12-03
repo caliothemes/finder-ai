@@ -20,7 +20,16 @@ export default function AdminVideoScan() {
   const [scanning, setScanning] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [editForm, setEditForm] = useState({});
+  const [showChannelModal, setShowChannelModal] = useState(false);
+  const [newChannelUrl, setNewChannelUrl] = useState('');
+  const [newChannelName, setNewChannelName] = useState('');
   const queryClient = useQueryClient();
+
+  // Charger les chaînes YouTube enregistrées
+  const { data: youtubeChannels = [] } = useQuery({
+    queryKey: ['youtubeChannels'],
+    queryFn: () => base44.entities.YouTubeChannel.filter({ active: true }),
+  });
 
   const { data: discoveries = [], isLoading } = useQuery({
     queryKey: ['videoDiscoveries'],
