@@ -138,6 +138,11 @@ Date actuelle: ${today}
 CHAÎNES À RECHERCHER:
 ${channelsList}
 
+CRITÈRES DE SÉLECTION DES VIDÉOS:
+- Prendre TOUTE vidéo dont le titre contient "IA" ou "AI" (intelligence artificielle)
+- Sujets acceptés: ChatGPT, Claude, Gemini, OpenAI, Anthropic, Midjourney, Sora, LLM, Machine Learning, Deep Learning, etc.
+- Vidéos récentes de préférence (dernières semaines/mois)
+
 ÉTAPE 2 - Pour CHAQUE vidéo trouvée:
 1. Note le VIDEO ID (11 caractères après "watch?v=" ou après "youtu.be/")
 2. Construis l'URL: https://www.youtube.com/watch?v=[VIDEO_ID]
