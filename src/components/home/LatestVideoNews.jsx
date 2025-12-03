@@ -160,7 +160,7 @@ export default function LatestVideoNews() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {youtubeChannels.map((channel) => (
+                {[...youtubeChannels].sort(() => Math.random() - 0.5).slice(0, 5).map((channel) => (
                   <a
                     key={channel.id}
                     href={channel.url}
