@@ -889,7 +889,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">URL du site *</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>URL du site *</label>
                   <Input
                     value={approveFormData.website_url || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, website_url: e.target.value})}
