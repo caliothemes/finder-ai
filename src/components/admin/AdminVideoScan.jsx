@@ -417,46 +417,44 @@ Retourne pour chaque vidéo trouvée:
           <div className="grid md:grid-cols-2 gap-4">
             {discoveries.map((video) => (
               <Card key={video.id} className="overflow-hidden">
-                <div className="relative aspect-video bg-slate-900 overflow-hidden">
-                  {/* Cadre TV/Moniteur */}
-                  <div className="absolute inset-2 rounded-lg overflow-hidden border-4 border-slate-700 shadow-inner bg-black">
-                    {video.thumbnail_url ? (
-                      <img
-                        src={video.thumbnail_url}
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-800">
-                        <Video className="w-12 h-12 text-slate-500" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                      <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
-                        <Play className="w-7 h-7 text-red-600 ml-1" fill="currentColor" />
-                      </div>
+                <div className="relative aspect-video bg-slate-100">
+                  {video.thumbnail_url ? (
+                    <img
+                      src={video.thumbnail_url}
+                      alt={video.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Video className="w-12 h-12 text-slate-400" />
                     </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                    <Play className="w-12 h-12 text-white" />
                   </div>
                   {video.duration && (
-                    <Badge className="absolute bottom-4 right-4 bg-black/80 text-white text-xs">
+                    <Badge className="absolute bottom-2 right-2 bg-black/70 text-white">
                       {video.duration}
                     </Badge>
                   )}
-                  {/* Indicateur LED */}
-                  <div className="absolute bottom-3 left-4 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 </div>
                 <CardContent className="p-4">
                   <h4 className="font-semibold line-clamp-2 mb-2">{video.title}</h4>
                   <p className="text-sm text-slate-600 mb-2">{video.source_name}</p>
                   <p className="text-xs text-slate-500 line-clamp-2 mb-2">{video.description}</p>
                   {video.tags && video.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-3">
+                    <div className="flex flex-wrap gap-1 mb-2">
                       {video.tags.slice(0, 4).map((tag, idx) => (
                         <Badge key={idx} className="bg-purple-100 text-purple-700 text-xs px-2 py-0">
                           {tag}
                         </Badge>
                       ))}
                     </div>
+                  )}
+                  {video.video_url && (
+                    <p className="text-xs text-slate-400 font-mono truncate mb-3" title={video.video_url}>
+                      {video.video_url}
+                    </p>
                   )}
                   <div className="flex gap-2">
                     <Button
@@ -500,23 +498,18 @@ Retourne pour chaque vidéo trouvée:
           <div className="grid md:grid-cols-3 gap-4">
             {publishedVideos.slice(0, 6).map((video) => (
               <Card key={video.id} className="overflow-hidden">
-                <div className="relative aspect-video bg-slate-900 overflow-hidden">
-                  {/* Cadre TV/Moniteur */}
-                  <div className="absolute inset-1 rounded overflow-hidden border-2 border-slate-700 shadow-inner bg-black">
-                    {video.thumbnail_url ? (
-                      <img
-                        src={video.thumbnail_url}
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-800">
-                        <Video className="w-8 h-8 text-slate-500" />
-                      </div>
-                    )}
-                  </div>
-                  {/* Indicateur LED */}
-                  <div className="absolute bottom-2 left-2 w-1.5 h-1.5 rounded-full bg-green-500" />
+                <div className="relative aspect-video bg-slate-100">
+                  {video.thumbnail_url ? (
+                    <img
+                      src={video.thumbnail_url}
+                      alt={video.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Video className="w-8 h-8 text-slate-400" />
+                    </div>
+                  )}
                 </div>
                 <CardContent className="p-3">
                   <h4 className="font-medium text-sm line-clamp-2 mb-2">{video.title}</h4>

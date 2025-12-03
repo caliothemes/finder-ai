@@ -118,10 +118,19 @@ export default function LatestVideoNews() {
                     <h3 className="text-white font-bold text-lg line-clamp-2 mb-2 drop-shadow-lg">
                       {language === 'en' ? video.title_en || video.title : video.title}
                     </h3>
-                    <div className="flex items-center gap-2 text-white/80 text-sm">
+                    <div className="flex items-center gap-2 text-white/80 text-sm mb-2">
                       <Calendar className="w-3 h-3" />
                       {moment(video.published_date).format('DD MMM YYYY')}
                     </div>
+                    {video.tags && video.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {video.tags.slice(0, 3).map((tag, idx) => (
+                          <Badge key={idx} className="bg-purple-600 text-white text-xs px-2 py-0.5">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

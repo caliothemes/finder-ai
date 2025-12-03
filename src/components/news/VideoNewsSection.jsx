@@ -120,22 +120,20 @@ export default function VideoNewsSection() {
                   {language === 'en' ? video.description_en || video.description : video.description}
                 </p>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                    <Calendar className="w-3 h-3" />
-                    {moment(video.published_date).format('DD MMM YYYY')}
-                  </div>
-                  
-                  {video.tags && video.tags.length > 0 && (
-                    <div className="flex gap-1">
-                      {video.tags.slice(0, 2).map((tag, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs px-2 py-0">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
+                <div className="flex items-center gap-1 text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                  <Calendar className="w-3 h-3" />
+                  {moment(video.published_date).format('DD MMM YYYY')}
                 </div>
+                
+                {video.tags && video.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {video.tags.slice(0, 3).map((tag, idx) => (
+                      <Badge key={idx} className="bg-purple-600 text-white text-xs px-2 py-0.5">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
