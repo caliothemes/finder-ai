@@ -937,7 +937,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Image de couverture</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Image de couverture</label>
                   <div className="space-y-2">
                     {approveFormData.cover_image_url && (
                       <img src={approveFormData.cover_image_url} alt="Cover" className="w-full h-32 rounded-lg object-cover" />
