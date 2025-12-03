@@ -41,20 +41,78 @@ export default function AdminVideoScan() {
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-created_date', 50),
   });
 
+  // Mutations pour gérer les chaînes
+  const addChannelMutation = useMutation({
+    mutationFn: async () => {
+      if (!newChannelUrl || !newChannelName) {
+        toast.error('Veuillez remplir tous les champs');
+        return;
+      }
+      
+      // Extraire l'ID ou handle de la chaîne
+      let channelId = '';
+      if (newChannelUrl.includes('@')) {
+        channelId = newChannelUrl.split('@')[1]?.split('/')[0] || '';
+      } else if (newChannelUrl.includes('/channel/')) {
+        channelId = newChannelUrl.split('/channel/')[1]?.split('/')[0] || '';
+      }
+      
+      await base44.entities.YouTubeChannel.create({
+        name: newChannelName,
+        url: newChannelUrl,
+        channel_id: channelId,
+        active: true
+      });
+      
+      toast.success('Chaîne ajoutée !');
+      setNewChannelUrl('');
+      setNewChannelName('');
+      setShowChannelModal(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['youtubeChannels'] });
+    }
+  });
+
+  const toggleChannelMutation = useMutation({
+    mutationFn: async ({ id, active }) => {
+      await base44.entities.YouTubeChannel.update(id, { active });
+      toast.success(active ? 'Chaîne activée' : 'Chaîne désactivée');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['youtubeChannels'] });
+    }
+  });
+
+  const deleteChannelMutation = useMutation({
+    mutationFn: async (id) => {
+      await base44.entities.YouTubeChannel.delete(id);
+      toast.success('Chaîne supprimée');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['youtubeChannels'] });
+    }
+  });
+
   const scanMutation = useMutation({
     mutationFn: async () => {
       setScanning(true);
+      
+      // Construire la liste des chaînes à scanner
+      const channelsList = youtubeChannels.length > 0 
+        ? youtubeChannels.map((ch, i) => `${i + 1}. ${ch.name} (${ch.url})`).join('\n')
+        : `1. Underscore_ (https://www.youtube.com/channel/UCx_N9LnjjK6DSvOd26heuQw)
+2. VisionIA-FR (https://www.youtube.com/@VisionIA-FR)
+3. Explor_IA (https://www.youtube.com/@Explor_IA)
+4. malvaAI (https://www.youtube.com/@malvaAI)`;
       
       const result = await base44.integrations.Core.InvokeLLM({
         prompt: `Recherche les 10 dernières vidéos YouTube populaires et récentes sur l'intelligence artificielle, ChatGPT, les outils IA, l'actualité IA. 
         
         IMPORTANT - Recherche EN PRIORITÉ sur ces chaînes YouTube spécifiques:
-        1. Underscore_ (https://www.youtube.com/channel/UCx_N9LnjjK6DSvOd26heuQw) - chaîne tech française
-        2. VisionIA-FR (https://www.youtube.com/@VisionIA-FR) - actualités IA en français
-        3. Explor_IA (https://www.youtube.com/@Explor_IA) - exploration de l'IA
-        4. malvaAI (https://www.youtube.com/@malvaAI) - tutoriels et actualités IA
+${channelsList}
         
-        Puis complète avec d'autres chaînes tech populaires.
+        Puis complète avec d'autres chaînes tech populaires si nécessaire.
         
         Privilégie:
         - Les vidéos des 14 derniers jours
