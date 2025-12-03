@@ -109,47 +109,34 @@ export default function AdminVideoScan() {
       const today = new Date().toISOString().split('T')[0];
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Tu es un expert en veille technologique sur l'intelligence artificielle.
+        prompt: `MISSION: Trouve les vidéos YouTube RÉCENTES sur l'intelligence artificielle.
 
-Date actuelle: ${today}
+Date: ${today}
 
-MISSION CRITIQUE: Recherche sur internet les 8 à 10 vidéos YouTube LES PLUS RÉCENTES (derniers 7-14 jours) sur l'actualité de l'intelligence artificielle.
-
-CHAÎNES YOUTUBE À RECHERCHER EN PRIORITÉ:
+RECHERCHE ces chaînes YouTube sur internet:
 ${channelsList}
 
-AUTRES CHAÎNES RECOMMANDÉES:
-- Fireship, Two Minute Papers, AI Explained, Matt Wolfe, TheAIGRID
-- Chaînes tech françaises parlant d'IA
+Autres chaînes: Fireship, Two Minute Papers, AI Explained, Matt Wolfe, TheAIGRID
 
-SUJETS RECHERCHÉS:
-- Nouvelles versions de ChatGPT, Claude, Gemini, Llama
-- Nouveaux outils IA (Sora, Midjourney, Runway, etc.)
-- Actualités OpenAI, Anthropic, Google DeepMind, Meta AI
-- Tutoriels et reviews d'outils IA populaires
-- Annonces majeures dans le domaine de l'IA
+Sujets: ChatGPT, Claude, Gemini, Llama, Sora, Midjourney, OpenAI, Anthropic, Google AI
 
-⚠️ RÈGLES STRICTES POUR LES URLS - TRÈS IMPORTANT:
-1. Tu DOIS récupérer les VRAIES URLs YouTube des vidéos que tu trouves
-2. Le video_id (11 caractères après watch?v=) DOIT être le vrai ID de la vidéo
-3. NE PAS inventer d'URLs - utilise UNIQUEMENT les URLs réelles trouvées sur internet
-4. Si tu ne trouves pas l'URL exacte d'une vidéo, NE L'INCLUS PAS dans les résultats
-5. Format obligatoire: https://www.youtube.com/watch?v=XXXXXXXXXXX (11 caractères)
-6. La thumbnail DOIT utiliser le même video_id: https://img.youtube.com/vi/XXXXXXXXXXX/maxresdefault.jpg
+⚠️ CRITIQUE - URLs:
+- Extrais les VRAIES URLs YouTube depuis les résultats de recherche
+- Format: https://www.youtube.com/watch?v=XXXXXXXXXXX (le X = video ID de 11 caractères)
+- NE JAMAIS INVENTER d'URL - si tu n'as pas l'URL réelle, n'inclus pas la vidéo
+- Thumbnail: https://img.youtube.com/vi/[MÊME_VIDEO_ID]/maxresdefault.jpg
 
-Pour chaque vidéo RÉELLE trouvée, retourne:
-- title: titre en français (traduit si nécessaire)
-- title_en: titre original ou en anglais
-- description: résumé en 2-3 phrases en français
-- description_en: résumé en anglais
-- video_url: URL EXACTE de la vidéo (https://www.youtube.com/watch?v=VIDEO_ID_RÉEL)
-- thumbnail_url: https://img.youtube.com/vi/VIDEO_ID_RÉEL/maxresdefault.jpg
-- source_name: nom exact de la chaîne YouTube
-- duration: durée (ex: "12:34")
-- published_date: date au format YYYY-MM-DD
-- tags: 3-5 tags pertinents
-
-RAPPEL: Mieux vaut retourner moins de vidéos avec des URLs correctes que beaucoup de vidéos avec des URLs inventées!`,
+Retourne pour chaque vidéo trouvée:
+- title: titre FR
+- title_en: titre EN
+- description: résumé FR (2-3 phrases)
+- description_en: résumé EN
+- video_url: URL YouTube EXACTE trouvée
+- thumbnail_url: thumbnail avec le même video_id
+- source_name: nom de la chaîne
+- duration: durée
+- published_date: YYYY-MM-DD
+- tags: 3-5 tags`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
