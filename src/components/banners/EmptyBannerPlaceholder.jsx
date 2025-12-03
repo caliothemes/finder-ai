@@ -35,29 +35,50 @@ export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
   // Article format (pour homepage_hero et explore_top)
   if (variant === 'article') {
     return (
-      <div className="group bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-3xl overflow-hidden border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl">
+      <div 
+        className="group rounded-3xl overflow-hidden border-2 border-dashed transition-all duration-300 hover:shadow-xl"
+        style={{
+          background: theme === 'dark' 
+            ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.3), rgba(30, 41, 59, 0.8), rgba(157, 23, 77, 0.3))'
+            : 'linear-gradient(to bottom right, #faf5ff, #ffffff, #fdf2f8)',
+          borderColor: theme === 'dark' ? 'rgba(147, 51, 234, 0.5)' : '#d8b4fe'
+        }}
+      >
         <div className="flex flex-col md:flex-row">
           {/* Image placeholder à gauche */}
-          <div className="md:w-2/5 h-48 md:h-auto bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center relative overflow-hidden">
+          <div 
+            className="md:w-2/5 h-48 md:h-auto flex items-center justify-center relative overflow-hidden"
+            style={{
+              background: theme === 'dark'
+                ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.5), rgba(157, 23, 77, 0.5))'
+                : 'linear-gradient(to bottom right, #e9d5ff, #fbcfe8)'
+            }}
+          >
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgZmlsbD0icmdiYSgxNDcsIDUxLCAyMzQsIDAuMSkiIGN4PSIyMCIgY3k9IjIwIiByPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-50"></div>
             <div className="relative text-center p-6">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                 <Sparkles className="w-10 h-10 text-white" />
               </div>
-              <p className="text-purple-700 font-medium text-sm">Votre image ici</p>
+              <p className="font-medium text-sm" style={{ color: theme === 'dark' ? '#c4b5fd' : '#7c3aed' }}>Votre image ici</p>
             </div>
           </div>
 
           {/* Contenu à droite */}
           <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium w-fit mb-4">
+            <div 
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium w-fit mb-4"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(147, 51, 234, 0.3)' : '#f3e8ff',
+                color: theme === 'dark' ? '#c4b5fd' : '#7c3aed'
+              }}
+            >
               <Sparkles className="w-3 h-3" />
               Espace disponible
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+            <h3 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
               Titre de votre service IA
             </h3>
-            <p className="text-slate-600 mb-6 text-base leading-relaxed">
+            <p className="mb-6 text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               Rédigez une description accrocheuse pour présenter votre service IA. 
               Expliquez les avantages et fonctionnalités qui font la différence pour vos utilisateurs.
             </p>
