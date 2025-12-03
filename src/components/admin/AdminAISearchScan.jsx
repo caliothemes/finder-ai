@@ -898,7 +898,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Modèle de prix</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Modèle de prix</label>
                   <Select 
                     value={approveFormData.pricing || 'freemium'} 
                     onValueChange={(v) => setApproveFormData({...approveFormData, pricing: v})}
