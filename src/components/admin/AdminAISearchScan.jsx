@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function AdminAISearchScan() {
   const [editingId, setEditingId] = useState(null);
