@@ -1143,7 +1143,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6 pt-4 border-t">
+            <div className="flex gap-3 mt-6 pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
               <Button
                 onClick={() => {
                   const hasDuplicates = checkForDuplicates(approveFormData, approvingDiscovery, selectedCategories);
