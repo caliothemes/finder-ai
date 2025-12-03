@@ -977,7 +977,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {/* Features FR */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Fonctionnalités (FR)</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Fonctionnalités (FR)</label>
                   <div className="space-y-2">
                     {(approveFormData.features || []).map((feature, idx) => (
                       <div key={idx} className="flex gap-2">
