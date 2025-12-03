@@ -860,7 +860,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tagline (EN)</label>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Tagline (EN)</label>
                   <Input
                     value={approveFormData.tagline_en || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, tagline_en: e.target.value})}
