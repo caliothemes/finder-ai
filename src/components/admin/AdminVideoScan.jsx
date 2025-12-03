@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Video, Search, Loader2, Check, X, Play, ExternalLink, Trash2, RefreshCw } from 'lucide-react';
+import { Video, Search, Loader2, Check, X, Play, ExternalLink, Trash2, RefreshCw, Plus, Youtube, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
 import {
   Dialog,
   DialogContent,
