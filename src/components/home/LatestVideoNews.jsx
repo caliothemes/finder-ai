@@ -62,7 +62,7 @@ export default function LatestVideoNews() {
           </div>
 
           {/* Video Grid - 3 videos */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {videos.map((video) => (
               <div
                 key={video.id}
