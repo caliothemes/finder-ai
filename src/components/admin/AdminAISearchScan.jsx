@@ -603,7 +603,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                         className="max-w-md"
                       />
                     ) : (
-                      <CardTitle className="text-xl">{discovery.name}</CardTitle>
+                      <CardTitle className="text-xl" style={{ color: 'var(--text-primary)' }}>{discovery.name}</CardTitle>
                     )}
                     <Badge
                       variant={
