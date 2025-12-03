@@ -109,11 +109,11 @@ export default function AdminVideoScan() {
       const today = new Date().toISOString().split('T')[0];
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Tu es un expert en veille technologique sur l'intelligence artificielle. 
+        prompt: `Tu es un expert en veille technologique sur l'intelligence artificielle.
 
 Date actuelle: ${today}
 
-MISSION: Recherche sur internet les 8 à 10 vidéos YouTube LES PLUS RÉCENTES (derniers 7-14 jours) sur l'actualité de l'intelligence artificielle.
+MISSION CRITIQUE: Recherche sur internet les 8 à 10 vidéos YouTube LES PLUS RÉCENTES (derniers 7-14 jours) sur l'actualité de l'intelligence artificielle.
 
 CHAÎNES YOUTUBE À RECHERCHER EN PRIORITÉ:
 ${channelsList}
@@ -129,22 +129,27 @@ SUJETS RECHERCHÉS:
 - Tutoriels et reviews d'outils IA populaires
 - Annonces majeures dans le domaine de l'IA
 
-IMPORTANT: 
-- Fournis UNIQUEMENT des vidéos RÉELLES avec des URLs YouTube valides
-- Le VIDEO_ID doit être un vrai ID YouTube (11 caractères alphanumériques)
-- Vérifie que les vidéos existent vraiment
+⚠️ RÈGLES STRICTES POUR LES URLS - TRÈS IMPORTANT:
+1. Tu DOIS récupérer les VRAIES URLs YouTube des vidéos que tu trouves
+2. Le video_id (11 caractères après watch?v=) DOIT être le vrai ID de la vidéo
+3. NE PAS inventer d'URLs - utilise UNIQUEMENT les URLs réelles trouvées sur internet
+4. Si tu ne trouves pas l'URL exacte d'une vidéo, NE L'INCLUS PAS dans les résultats
+5. Format obligatoire: https://www.youtube.com/watch?v=XXXXXXXXXXX (11 caractères)
+6. La thumbnail DOIT utiliser le même video_id: https://img.youtube.com/vi/XXXXXXXXXXX/maxresdefault.jpg
 
-Pour chaque vidéo, retourne:
+Pour chaque vidéo RÉELLE trouvée, retourne:
 - title: titre en français (traduit si nécessaire)
 - title_en: titre original ou en anglais
 - description: résumé en 2-3 phrases en français
 - description_en: résumé en anglais
-- video_url: URL complète https://www.youtube.com/watch?v=VIDEO_ID
-- thumbnail_url: https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg
+- video_url: URL EXACTE de la vidéo (https://www.youtube.com/watch?v=VIDEO_ID_RÉEL)
+- thumbnail_url: https://img.youtube.com/vi/VIDEO_ID_RÉEL/maxresdefault.jpg
 - source_name: nom exact de la chaîne YouTube
 - duration: durée (ex: "12:34")
 - published_date: date au format YYYY-MM-DD
-- tags: 3-5 tags pertinents`,
+- tags: 3-5 tags pertinents
+
+RAPPEL: Mieux vaut retourner moins de vidéos avec des URLs correctes que beaucoup de vidéos avec des URLs inventées!`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
