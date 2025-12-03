@@ -12,10 +12,8 @@ import {
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { useTheme } from '@/components/ThemeProvider';
 
 export default function AdminAISearchScan() {
-  const { theme } = useTheme();
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [isScanning, setIsScanning] = useState(false);
@@ -525,11 +523,8 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
       {/* Pagination Top */}
       {totalPages > 1 && (
-        <div 
-          className="flex items-center justify-between p-4 rounded-xl border"
-          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
-        >
-          <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
+        <div className="flex items-center justify-between bg-white p-4 rounded-xl border">
+          <span className="text-sm text-slate-600">
             Affichage {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredDiscoveries.length)} sur {filteredDiscoveries.length}
           </span>
           <div className="flex items-center gap-2">
@@ -575,17 +570,8 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
       {/* Discoveries List */}
       <div className="space-y-4">
         {paginatedDiscoveries.map((discovery) => (
-          <Card 
-            key={discovery.id} 
-            className="overflow-hidden"
-            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
-          >
-            <CardHeader 
-              style={{ 
-                background: theme === 'dark' 
-                  ? 'linear-gradient(to right, rgba(30,41,59,0.8), rgba(88,28,135,0.2))' 
-                  : 'linear-gradient(to right, #f8fafc, rgba(147, 51, 234, 0.1))' 
-              }}
+          <Card key={discovery.id} className="overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-slate-50 to-purple-50">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -603,7 +589,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                         className="max-w-md"
                       />
                     ) : (
-                      <CardTitle className="text-xl" style={{ color: 'var(--text-primary)' }}>{discovery.name}</CardTitle>
+                      <CardTitle className="text-xl">{discovery.name}</CardTitle>
                     )}
                     <Badge
                       variant={
@@ -638,9 +624,9 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                   ) : (
                     <>
                       {discovery.tagline && (
-                        <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>{discovery.tagline}</p>
+                        <p className="text-sm text-slate-600 mb-2">{discovery.tagline}</p>
                       )}
-                      <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{discovery.description}</p>
+                      <p className="text-sm text-slate-700 mb-2">{discovery.description}</p>
                       {discovery.website_url && (
                         <a
                           href={discovery.website_url}
@@ -671,7 +657,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               <div className="space-y-3 mb-4">
                 {discovery.suggested_categories?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold mr-2" style={{ color: 'var(--text-muted)' }}>Catégories:</span>
+                    <span className="text-xs font-semibold text-slate-600 mr-2">Catégories:</span>
                     {discovery.suggested_categories.map((cat, i) => (
                       <Badge key={i} variant="outline" className="mr-1">
                         {categories.find(c => c.id === cat)?.name || cat}
@@ -682,7 +668,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 
                 {discovery.tags?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold mr-2" style={{ color: 'var(--text-muted)' }}>Tags:</span>
+                    <span className="text-xs font-semibold text-slate-600 mr-2">Tags:</span>
                     {discovery.tags.map((tag, i) => (
                       <Badge key={i} variant="secondary" className="mr-1 text-xs">
                         {tag}
@@ -693,8 +679,8 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {discovery.features?.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Fonctionnalités:</span>
-                    <ul className="list-disc list-inside text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+                    <span className="text-xs font-semibold text-slate-600">Fonctionnalités:</span>
+                    <ul className="list-disc list-inside text-sm text-slate-700 mt-1">
                       {discovery.features.slice(0, 3).map((feature, i) => (
                         <li key={i}>{feature}</li>
                       ))}
@@ -704,7 +690,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 pt-3 border-t" style={{ borderColor: 'var(--border-color)' }}>
+              <div className="flex items-center gap-2 pt-3 border-t">
                 {editingId === discovery.id ? (
                   <>
                     <Button onClick={handleSave} size="sm">
@@ -769,16 +755,10 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               </div>
 
               {discovery.admin_notes && (
-                <div 
-                  className="mt-3 p-2 rounded"
-                  style={{ 
-                    backgroundColor: theme === 'dark' ? 'rgba(251, 191, 36, 0.1)' : '#fefce8',
-                    border: theme === 'dark' ? '1px solid rgba(251, 191, 36, 0.3)' : '1px solid #fde047'
-                  }}
-                >
+                <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-yellow-600 mt-0.5" />
-                    <p className="text-xs" style={{ color: theme === 'dark' ? '#fde047' : '#854d0e' }}>{discovery.admin_notes}</p>
+                    <p className="text-xs text-yellow-800">{discovery.admin_notes}</p>
                   </div>
                 </div>
               )}
@@ -788,11 +768,11 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
         {filteredDiscoveries.length === 0 && (
           <div className="text-center py-12">
-            <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
-            <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+            <Sparkles className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">
               Aucune découverte pour le moment
             </h3>
-            <p className="mb-4" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-slate-600 mb-4">
               Lancez un scan pour découvrir de nouveaux services IA
             </p>
             <Button
@@ -810,14 +790,11 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
       {/* Modal de validation avec édition complète */}
       {approvingDiscovery && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-          <div 
-            className="rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-            style={{ backgroundColor: 'var(--bg-card)' }}
-          >
+          <div className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Publier: {approvingDiscovery.name}</h2>
-                <p style={{ color: 'var(--text-muted)' }}>Modifiez les informations avant de publier le service</p>
+                <h2 className="text-2xl font-bold mb-1">Publier: {approvingDiscovery.name}</h2>
+                <p className="text-slate-600">Modifiez les informations avant de publier le service</p>
               </div>
               <Button
                 onClick={handleAutoTranslate}
@@ -842,7 +819,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               {/* Colonne gauche */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Nom *</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Nom *</label>
                   <Input
                     value={approveFormData.name || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, name: e.target.value})}
@@ -851,7 +828,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Tagline (FR)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tagline (FR)</label>
                   <Input
                     value={approveFormData.tagline || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, tagline: e.target.value})}
@@ -860,7 +837,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Tagline (EN)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Tagline (EN)</label>
                   <Input
                     value={approveFormData.tagline_en || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, tagline_en: e.target.value})}
@@ -869,7 +846,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Description (FR)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Description (FR)</label>
                   <Textarea
                     value={approveFormData.description || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, description: e.target.value})}
@@ -879,7 +856,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Description (EN)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Description (EN)</label>
                   <Textarea
                     value={approveFormData.description_en || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, description_en: e.target.value})}
@@ -889,7 +866,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>URL du site *</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">URL du site *</label>
                   <Input
                     value={approveFormData.website_url || ''}
                     onChange={(e) => setApproveFormData({...approveFormData, website_url: e.target.value})}
@@ -898,7 +875,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Modèle de prix</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Modèle de prix</label>
                   <Select 
                     value={approveFormData.pricing || 'freemium'} 
                     onValueChange={(v) => setApproveFormData({...approveFormData, pricing: v})}
@@ -920,7 +897,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               <div className="space-y-4">
                 {/* Images */}
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Logo</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Logo</label>
                   <div className="flex items-center gap-3">
                     {approveFormData.logo_url && (
                       <img src={approveFormData.logo_url} alt="Logo" className="w-16 h-16 rounded-lg object-cover" />
@@ -937,7 +914,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Image de couverture</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Image de couverture</label>
                   <div className="space-y-2">
                     {approveFormData.cover_image_url && (
                       <img src={approveFormData.cover_image_url} alt="Cover" className="w-full h-32 rounded-lg object-cover" />
@@ -977,7 +954,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {/* Features FR */}
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Fonctionnalités (FR)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Fonctionnalités (FR)</label>
                   <div className="space-y-2">
                     {(approveFormData.features || []).map((feature, idx) => (
                       <div key={idx} className="flex gap-2">
@@ -1015,7 +992,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
                 {/* Features EN */}
                 <div>
-                  <label className="text-sm font-medium mb-1 block" style={{ color: 'var(--text-secondary)' }}>Features (EN)</label>
+                  <label className="text-sm font-medium text-slate-700 mb-1 block">Features (EN)</label>
                   <div className="space-y-2">
                     {(approveFormData.features_en || []).map((feature, idx) => (
                       <div key={idx} className="flex gap-2">
@@ -1054,7 +1031,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                 {/* Tags */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Tags</label>
+                    <label className="text-sm font-medium text-slate-700">Tags</label>
                     <Button
                       type="button"
                       variant="outline"
@@ -1111,19 +1088,12 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
 
             {/* Catégories */}
             <div className="mt-6">
-              <label className="text-sm font-medium mb-2 block" style={{ color: 'var(--text-secondary)' }}>Catégories *</label>
-              <div 
-                className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 rounded-lg"
-                style={{ border: '1px solid var(--border-color)' }}
-              >
+              <label className="text-sm font-medium text-slate-700 mb-2 block">Catégories *</label>
+              <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 border rounded-lg">
                 {categories.map(cat => (
                   <label 
                     key={cat.id} 
-                    className="flex items-center gap-2 p-2 rounded cursor-pointer transition-colors text-sm"
-                    style={{ 
-                      border: '1px solid var(--border-color)',
-                      backgroundColor: selectedCategories.includes(cat.id) ? (theme === 'dark' ? 'rgba(147, 51, 234, 0.2)' : '#f3e8ff') : 'transparent'
-                    }}
+                    className="flex items-center gap-2 p-2 border rounded cursor-pointer hover:bg-slate-50 transition-colors text-sm"
                   >
                     <input
                       type="checkbox"
@@ -1137,13 +1107,13 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
                       }}
                       className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
                     />
-                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{cat.name}</span>
+                    <span className="font-medium text-slate-900">{cat.name}</span>
                   </label>
                 ))}
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6 pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
+            <div className="flex gap-3 mt-6 pt-4 border-t">
               <Button
                 onClick={() => {
                   const hasDuplicates = checkForDuplicates(approveFormData, approvingDiscovery, selectedCategories);
