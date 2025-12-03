@@ -18,6 +18,11 @@ export default function LatestVideoNews() {
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 3),
   });
 
+  const { data: youtubeChannels = [] } = useQuery({
+    queryKey: ['youtubeChannelsHome'],
+    queryFn: () => base44.entities.YouTubeChannel.filter({ active: true }),
+  });
+
   // Extraire l'ID YouTube
   const getYouTubeVideoId = (url) => {
     if (!url) return null;
