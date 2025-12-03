@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Video, Search, Loader2, Check, X, Play, ExternalLink, Trash2, Plus, Youtube } from 'lucide-react';
+import { Video, Search, Loader2, Check, X, Play, ExternalLink, Trash2, Plus, Youtube, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
