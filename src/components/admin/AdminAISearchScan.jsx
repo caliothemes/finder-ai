@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function AdminAISearchScan() {
+  const { theme } = useTheme();
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [isScanning, setIsScanning] = useState(false);
