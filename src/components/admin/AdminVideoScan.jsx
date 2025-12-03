@@ -465,7 +465,12 @@ Retourne UNIQUEMENT les vidéos avec des URLs RÉELLES trouvées:
                 </div>
                 <CardContent className="p-4">
                   <h4 className="font-semibold line-clamp-2 mb-2">{video.title}</h4>
-                  <p className="text-sm text-slate-600 mb-2">{video.source_name}</p>
+                  <div className="flex items-center justify-between text-sm text-slate-600 mb-2">
+                    <span>{video.source_name}</span>
+                    {video.published_date && (
+                      <span className="text-xs text-slate-400">{video.published_date}</span>
+                    )}
+                  </div>
                   <p className="text-xs text-slate-500 line-clamp-2 mb-2">{video.description}</p>
                   {video.tags && video.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-2">
@@ -537,7 +542,8 @@ Retourne UNIQUEMENT les vidéos avec des URLs RÉELLES trouvées:
                   )}
                 </div>
                 <CardContent className="p-3">
-                  <h4 className="font-medium text-sm line-clamp-2 mb-2">{video.title}</h4>
+                  <h4 className="font-medium text-sm line-clamp-2 mb-1">{video.title}</h4>
+                  <p className="text-xs text-slate-400 mb-2">{video.published_date}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-slate-500">{video.source_name}</span>
                     <Button
