@@ -453,18 +453,23 @@ Retourne pour chaque vidéo trouvée:
           <div className="grid md:grid-cols-3 gap-4">
             {publishedVideos.slice(0, 6).map((video) => (
               <Card key={video.id} className="overflow-hidden">
-                <div className="relative aspect-video bg-slate-100">
-                  {video.thumbnail_url ? (
-                    <img
-                      src={video.thumbnail_url}
-                      alt={video.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Video className="w-8 h-8 text-slate-400" />
-                    </div>
-                  )}
+                <div className="relative aspect-video bg-slate-900 overflow-hidden">
+                  {/* Cadre TV/Moniteur */}
+                  <div className="absolute inset-1 rounded overflow-hidden border-2 border-slate-700 shadow-inner bg-black">
+                    {video.thumbnail_url ? (
+                      <img
+                        src={video.thumbnail_url}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-slate-800">
+                        <Video className="w-8 h-8 text-slate-500" />
+                      </div>
+                    )}
+                  </div>
+                  {/* Indicateur LED */}
+                  <div className="absolute bottom-2 left-2 w-1.5 h-1.5 rounded-full bg-green-500" />
                 </div>
                 <CardContent className="p-3">
                   <h4 className="font-medium text-sm line-clamp-2 mb-2">{video.title}</h4>
