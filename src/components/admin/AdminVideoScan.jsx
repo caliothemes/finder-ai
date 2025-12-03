@@ -106,30 +106,45 @@ export default function AdminVideoScan() {
 3. Explor_IA (https://www.youtube.com/@Explor_IA)
 4. malvaAI (https://www.youtube.com/@malvaAI)`;
       
+      const today = new Date().toISOString().split('T')[0];
+      
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Recherche les 10 dernières vidéos YouTube populaires et récentes sur l'intelligence artificielle, ChatGPT, les outils IA, l'actualité IA. 
-        
-        IMPORTANT - Recherche EN PRIORITÉ sur ces chaînes YouTube spécifiques:
+        prompt: `Tu es un expert en veille technologique sur l'intelligence artificielle. 
+
+Date actuelle: ${today}
+
+MISSION: Recherche sur internet les 8 à 10 vidéos YouTube LES PLUS RÉCENTES (derniers 7-14 jours) sur l'actualité de l'intelligence artificielle.
+
+CHAÎNES YOUTUBE À RECHERCHER EN PRIORITÉ:
 ${channelsList}
-        
-        Puis complète avec d'autres chaînes tech populaires si nécessaire.
-        
-        Privilégie:
-        - Les vidéos des 14 derniers jours
-        - Les tutoriels, actualités, reviews d'outils IA
-        - Les annonces importantes sur l'IA
-        
-        Pour chaque vidéo trouvée, fournis:
-        - title: titre en français
-        - title_en: titre en anglais
-        - description: description courte en français (2-3 phrases résumant le contenu)
-        - description_en: description courte en anglais  
-        - video_url: URL YouTube complète (format https://www.youtube.com/watch?v=VIDEO_ID)
-        - thumbnail_url: URL de la miniature (format https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)
-        - source_name: nom de la chaîne
-        - duration: durée estimée
-        - published_date: date de publication (format YYYY-MM-DD)
-        - tags: tableau de 3-5 tags pertinents`,
+
+AUTRES CHAÎNES RECOMMANDÉES:
+- Fireship, Two Minute Papers, AI Explained, Matt Wolfe, TheAIGRID
+- Chaînes tech françaises parlant d'IA
+
+SUJETS RECHERCHÉS:
+- Nouvelles versions de ChatGPT, Claude, Gemini, Llama
+- Nouveaux outils IA (Sora, Midjourney, Runway, etc.)
+- Actualités OpenAI, Anthropic, Google DeepMind, Meta AI
+- Tutoriels et reviews d'outils IA populaires
+- Annonces majeures dans le domaine de l'IA
+
+IMPORTANT: 
+- Fournis UNIQUEMENT des vidéos RÉELLES avec des URLs YouTube valides
+- Le VIDEO_ID doit être un vrai ID YouTube (11 caractères alphanumériques)
+- Vérifie que les vidéos existent vraiment
+
+Pour chaque vidéo, retourne:
+- title: titre en français (traduit si nécessaire)
+- title_en: titre original ou en anglais
+- description: résumé en 2-3 phrases en français
+- description_en: résumé en anglais
+- video_url: URL complète https://www.youtube.com/watch?v=VIDEO_ID
+- thumbnail_url: https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg
+- source_name: nom exact de la chaîne YouTube
+- duration: durée (ex: "12:34")
+- published_date: date au format YYYY-MM-DD
+- tags: 3-5 tags pertinents`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
