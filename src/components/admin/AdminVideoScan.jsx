@@ -41,9 +41,11 @@ export default function AdminVideoScan() {
   const queryClient = useQueryClient();
 
   // Charger les chaînes YouTube enregistrées
+  const [showAllChannels, setShowAllChannels] = useState(false);
+  
   const { data: youtubeChannels = [] } = useQuery({
     queryKey: ['youtubeChannels'],
-    queryFn: () => base44.entities.YouTubeChannel.filter({ active: true }),
+    queryFn: () => base44.entities.YouTubeChannel.list(),
   });
 
   const { data: discoveries = [], isLoading } = useQuery({
@@ -124,34 +126,40 @@ export default function AdminVideoScan() {
       const today = new Date().toISOString().split('T')[0];
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `MISSION: Trouve les vidéos YouTube RÉCENTES sur l'intelligence artificielle.
+        prompt: `MISSION: Recherche sur internet les vidéos YouTube RÉCENTES sur l'intelligence artificielle.
 
-Date: ${today}
+Date actuelle: ${today}
 
-RECHERCHE ces chaînes YouTube sur internet:
+ÉTAPE 1 - Recherche Google ces requêtes EXACTES:
+- "site:youtube.com ${youtubeChannels.slice(0, 5).map(c => c.name).join(' OR ')}" 
+- "site:youtube.com AI news ${today.substring(0, 7)}"
+- "site:youtube.com ChatGPT Claude Gemini 2024"
+
+CHAÎNES À RECHERCHER:
 ${channelsList}
 
-Autres chaînes: Fireship, Two Minute Papers, AI Explained, Matt Wolfe, TheAIGRID
+ÉTAPE 2 - Pour CHAQUE vidéo trouvée:
+1. Note le VIDEO ID (11 caractères après "watch?v=" ou après "youtu.be/")
+2. Construis l'URL: https://www.youtube.com/watch?v=[VIDEO_ID]
+3. Construis la thumbnail: https://img.youtube.com/vi/[VIDEO_ID]/maxresdefault.jpg
 
-Sujets: ChatGPT, Claude, Gemini, Llama, Sora, Midjourney, OpenAI, Anthropic, Google AI
+⚠️ RÈGLES ABSOLUES:
+- Le video_url DOIT contenir un ID de 11 caractères (lettres, chiffres, - ou _)
+- Si tu ne trouves PAS l'ID réel de la vidéo, NE L'INCLUS PAS
+- Exemple valide: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+- INTERDIT d'inventer des IDs comme "XXXXXXXXXXX" ou "abc123..."
 
-⚠️ CRITIQUE - URLs:
-- Extrais les VRAIES URLs YouTube depuis les résultats de recherche
-- Format: https://www.youtube.com/watch?v=XXXXXXXXXXX (le X = video ID de 11 caractères)
-- NE JAMAIS INVENTER d'URL - si tu n'as pas l'URL réelle, n'inclus pas la vidéo
-- Thumbnail: https://img.youtube.com/vi/[MÊME_VIDEO_ID]/maxresdefault.jpg
-
-Retourne pour chaque vidéo trouvée:
-- title: titre FR
-- title_en: titre EN
+Retourne UNIQUEMENT les vidéos avec des URLs RÉELLES trouvées:
+- title: titre en français
+- title_en: titre en anglais  
 - description: résumé FR (2-3 phrases)
 - description_en: résumé EN
-- video_url: URL YouTube EXACTE trouvée
-- thumbnail_url: thumbnail avec le même video_id
+- video_url: URL YouTube avec vrai ID
+- thumbnail_url: thumbnail YouTube avec même ID
 - source_name: nom de la chaîne
-- duration: durée
+- duration: durée estimée
 - published_date: YYYY-MM-DD
-- tags: 3-5 tags`,
+- tags: 3-5 mots-clés`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
@@ -365,12 +373,15 @@ Retourne pour chaque vidéo trouvée:
               Aucune chaîne ajoutée. Le scan utilisera les chaînes par défaut.
             </p>
           ) : (
-            <div className="space-y-2 max-h-48 overflow-y-auto">
-              {youtubeChannels.map((channel) => (
+            <div className="space-y-2">
+              {(showAllChannels ? youtubeChannels : youtubeChannels.slice(0, 3)).map((channel) => (
                 <div key={channel.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Youtube className="w-4 h-4 text-red-500" />
                     <span className="font-medium text-sm">{channel.name}</span>
+                    {!channel.active && (
+                      <Badge variant="outline" className="text-xs text-slate-400">Inactive</Badge>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <a href={channel.url} target="_blank" rel="noopener noreferrer">
@@ -389,6 +400,20 @@ Retourne pour chaque vidéo trouvée:
                   </div>
                 </div>
               ))}
+              {youtubeChannels.length > 3 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAllChannels(!showAllChannels)}
+                  className="w-full text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                >
+                  {showAllChannels ? (
+                    <>Voir moins</>
+                  ) : (
+                    <>+ {youtubeChannels.length - 3} autres chaînes</>
+                  )}
+                </Button>
+              )}
             </div>
           )}
         </CardContent>
