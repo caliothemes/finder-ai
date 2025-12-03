@@ -3,8 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Users, Sparkles, Heart, Eye, Star, MessageSquare, FileText, Crown, Image, Activity, Calendar, Clock, UserCheck } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function AdminStats() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const { data: services = [] } = useQuery({
     queryKey: ['allServices'],
     queryFn: () => base44.entities.AIService.list(),
