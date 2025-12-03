@@ -156,15 +156,18 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffeeee] py-12 px-6">
+    <div 
+      className="min-h-screen py-12 px-6"
+      style={{ backgroundColor: theme === 'dark' ? 'var(--bg-secondary)' : '#ffeeee' }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-8 h-8 text-purple-600" />
-            <h1 className="text-4xl font-bold text-slate-900">Administration</h1>
+            <h1 className="text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>Administration</h1>
           </div>
-          <p className="text-slate-600">Gérez Finder AI - Tableau de bord administrateur</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Gérez Finder AI - Tableau de bord administrateur</p>
         </div>
 
         {activeSection ? (
@@ -185,6 +188,10 @@ export default function Admin() {
                 <Card
                   key={section.id}
                   className="cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-300 relative"
+                  style={{ 
+                    backgroundColor: 'var(--bg-card)', 
+                    borderColor: theme === 'dark' ? 'var(--border-color)' : undefined 
+                  }}
                   onClick={() => setActiveSection(section.id)}
                 >
                   {section.badge > 0 && (
@@ -196,11 +203,11 @@ export default function Admin() {
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="flex items-center justify-between">
+                    <CardTitle className="flex items-center justify-between" style={{ color: 'var(--text-primary)' }}>
                       {section.label}
-                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" style={{ color: 'var(--text-muted)' }} />
                     </CardTitle>
-                    <CardDescription>{section.description}</CardDescription>
+                    <CardDescription style={{ color: 'var(--text-muted)' }}>{section.description}</CardDescription>
                   </CardHeader>
                 </Card>
               );
