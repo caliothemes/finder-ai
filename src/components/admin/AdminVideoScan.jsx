@@ -171,10 +171,19 @@ Pour chaque vidéo, retourne:
         }
       });
 
+      console.log('Résultat du scan:', result);
+      
       if (result.videos && result.videos.length > 0) {
+        // Filtrer les vidéos avec des URLs valides
+        const validVideos = result.videos.filter(v => {
+          if (!v.video_url) return false;
+          const videoIdMatch = v.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+          return videoIdMatch !== null;
+        });
+        
         // Vérifier les doublons
         const existingUrls = [...discoveries, ...publishedVideos].map(v => v.video_url);
-        const newVideos = result.videos.filter(v => !existingUrls.includes(v.video_url));
+        const newVideos = validVideos.filter(v => !existingUrls.includes(v.video_url));
         
         if (newVideos.length > 0) {
           await base44.entities.AIVideoDiscovery.bulkCreate(
@@ -185,8 +194,10 @@ Pour chaque vidéo, retourne:
           );
           toast.success(`${newVideos.length} nouvelle(s) vidéo(s) découverte(s) !`);
         } else {
-          toast.info('Aucune nouvelle vidéo trouvée');
+          toast.info(`${validVideos.length} vidéos trouvées mais déjà présentes ou invalides`);
         }
+      } else {
+        toast.warning('Aucune vidéo retournée par le scan');
       }
       
       setScanning(false);
