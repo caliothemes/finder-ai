@@ -1,32 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Video, Play, ExternalLink, Clock, Calendar } from 'lucide-react';
+import { Video, Play, Clock, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
-import {
-  Dialog,
-  DialogContent,
-} from '@/components/ui/dialog';
 import moment from 'moment';
 
 export default function VideoNewsSection() {
   const { language } = useLanguage();
   const { theme } = useTheme();
-  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ['videoNews'],
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 12),
   });
-
-  const getYouTubeEmbedUrl = (url) => {
-    if (!url) return null;
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-  };
 
   if (isLoading || videos.length === 0) return null;
 
@@ -51,14 +39,16 @@ export default function VideoNewsSection() {
         {/* Video Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video) => (
-            <div
+            <a
               key={video.id}
-              className="group rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer"
+              href={video.video_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer block"
               style={{ 
                 backgroundColor: 'var(--bg-card)', 
                 border: '1px solid var(--border-color)',
               }}
-              onClick={() => setSelectedVideo(video)}
             >
               {/* Thumbnail */}
               <div className="relative aspect-video overflow-hidden">
@@ -124,58 +114,11 @@ export default function VideoNewsSection() {
                   )}
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
 
-      {/* Video Player Modal */}
-      <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden" style={{ backgroundColor: 'var(--bg-card)' }}>
-          {selectedVideo && (
-            <div>
-              <div className="aspect-video bg-black">
-                {getYouTubeEmbedUrl(selectedVideo.video_url) ? (
-                  <iframe
-                    src={`${getYouTubeEmbedUrl(selectedVideo.video_url)}?autoplay=1`}
-                    className="w-full h-full"
-                    allowFullScreen
-                    allow="autoplay"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white">
-                    <Video className="w-16 h-16" />
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                  {language === 'en' ? selectedVideo.title_en || selectedVideo.title : selectedVideo.title}
-                </h2>
-                <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
-                  {language === 'en' ? selectedVideo.description_en || selectedVideo.description : selectedVideo.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Badge className="bg-red-100 text-red-700">
-                      {selectedVideo.source_name}
-                    </Badge>
-                    <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                      {moment(selectedVideo.published_date).format('DD MMMM YYYY')}
-                    </span>
-                  </div>
-                  <a href={selectedVideo.video_url} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" size="sm">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Watch on YouTube' : 'Voir sur YouTube'}
-                    </Button>
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

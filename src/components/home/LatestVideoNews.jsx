@@ -1,31 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Video, Play, Clock, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
-import {
-  Dialog,
-  DialogContent,
-} from '@/components/ui/dialog';
 import moment from 'moment';
 
 export default function LatestVideoNews() {
   const { language } = useLanguage();
   const { theme } = useTheme();
-  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ['latestVideoNews'],
     queryFn: () => base44.entities.AIVideoNews.filter({ status: 'published' }, '-published_date', 2),
   });
-
-  const getYouTubeEmbedUrl = (url) => {
-    if (!url) return null;
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-  };
 
   if (isLoading || videos.length === 0) return null;
 
@@ -51,16 +40,18 @@ export default function LatestVideoNews() {
           {/* Video Grid - 2 videos */}
           <div className="grid md:grid-cols-2 gap-6">
             {videos.map((video) => (
-              <div
+              <a
                 key={video.id}
-                className="group rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl cursor-pointer relative"
+                href={video.video_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl cursor-pointer relative block"
                 style={{ 
                   background: theme === 'dark' 
                     ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(168, 85, 247, 0.1))' 
                     : 'linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(168, 85, 247, 0.05))',
                   border: '1px solid var(--border-color)',
                 }}
-                onClick={() => setSelectedVideo(video)}
               >
                 {/* Thumbnail */}
                 <div className="relative aspect-video overflow-hidden">
@@ -111,43 +102,11 @@ export default function LatestVideoNews() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Video Player Modal */}
-      <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden" style={{ backgroundColor: 'var(--bg-card)' }}>
-          {selectedVideo && (
-            <div>
-              <div className="aspect-video bg-black">
-                {getYouTubeEmbedUrl(selectedVideo.video_url) ? (
-                  <iframe
-                    src={`${getYouTubeEmbedUrl(selectedVideo.video_url)}?autoplay=1`}
-                    className="w-full h-full"
-                    allowFullScreen
-                    allow="autoplay"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white">
-                    <Video className="w-16 h-16" />
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                  {language === 'en' ? selectedVideo.title_en || selectedVideo.title : selectedVideo.title}
-                </h2>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                  {language === 'en' ? selectedVideo.description_en || selectedVideo.description : selectedVideo.description}
-                </p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
