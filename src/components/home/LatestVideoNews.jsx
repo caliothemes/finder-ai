@@ -61,17 +61,15 @@ export default function LatestVideoNews() {
             </div>
           </div>
 
-          {/* Video Grid - 2 videos */}
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* Video Grid - 3 videos */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {videos.map((video) => (
               <div
                 key={video.id}
                 onClick={() => setSelectedVideo(video)}
-                className="group rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl cursor-pointer relative"
+                className="group rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer"
                 style={{ 
-                  background: theme === 'dark' 
-                    ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(168, 85, 247, 0.1))' 
-                    : 'linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(168, 85, 247, 0.05))',
+                  backgroundColor: 'var(--bg-card)', 
                   border: '1px solid var(--border-color)',
                 }}
               >
@@ -81,57 +79,61 @@ export default function LatestVideoNews() {
                     <img
                       src={video.thumbnail_url}
                       alt={language === 'en' ? video.title_en || video.title : video.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
-                      <Video className="w-16 h-16" style={{ color: 'var(--text-muted)' }} />
+                      <Video className="w-12 h-12" style={{ color: 'var(--text-muted)' }} />
                     </div>
                   )}
                   
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  
-                  {/* Play button */}
+                  {/* Play overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-white/95 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-2xl group-hover:shadow-red-500/30">
-                      <Play className="w-9 h-9 text-red-600 ml-1.5" fill="currentColor" />
+                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center transform group-hover:scale-110 transition-transform shadow-lg">
+                      <Play className="w-7 h-7 text-red-600 ml-1" fill="currentColor" />
                     </div>
                   </div>
 
                   {/* Duration badge */}
                   {video.duration && (
-                    <Badge className="absolute bottom-4 right-4 bg-black/80 text-white border-0 backdrop-blur-sm">
+                    <Badge className="absolute bottom-3 right-3 bg-black/80 text-white border-0">
                       <Clock className="w-3 h-3 mr-1" />
                       {video.duration}
                     </Badge>
                   )}
 
                   {/* Source badge */}
-                  <Badge className="absolute top-4 left-4 bg-gradient-to-r from-red-600 to-pink-600 text-white border-0 shadow-lg">
+                  <Badge className="absolute top-3 left-3 bg-red-600 text-white border-0">
                     <Video className="w-3 h-3 mr-1" />
                     {video.source_name}
                   </Badge>
+                </div>
 
-                  {/* Title overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-white font-bold text-lg line-clamp-2 mb-2 drop-shadow-lg">
-                      {language === 'en' ? video.title_en || video.title : video.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-white/80 text-sm mb-2">
-                      <Calendar className="w-3 h-3" />
-                      {moment(video.published_date).format('DD MMM YYYY')}
-                    </div>
-                    {video.tags && video.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {video.tags.slice(0, 3).map((tag, idx) => (
-                          <Badge key={idx} className="bg-purple-600 text-white text-xs px-2 py-0.5">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-purple-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
+                    {language === 'en' ? video.title_en || video.title : video.title}
+                  </h3>
+                  
+                  <p className="text-sm line-clamp-2 mb-3" style={{ color: 'var(--text-muted)' }}>
+                    {language === 'en' ? video.description_en || video.description : video.description}
+                  </p>
+
+                  <div className="flex items-center gap-1 text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                    <Calendar className="w-3 h-3" />
+                    {moment(video.published_date).format('DD MMM YYYY')}
                   </div>
+                  
+                  {video.tags && video.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {video.tags.slice(0, 3).map((tag, idx) => (
+                        <Badge key={idx} className="bg-purple-600 text-white text-xs px-2 py-0.5">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
