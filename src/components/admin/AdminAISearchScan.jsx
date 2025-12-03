@@ -704,7 +704,7 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 pt-3 border-t">
+              <div className="flex items-center gap-2 pt-3 border-t" style={{ borderColor: 'var(--border-color)' }}>
                 {editingId === discovery.id ? (
                   <>
                     <Button onClick={handleSave} size="sm">
