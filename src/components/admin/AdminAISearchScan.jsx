@@ -810,11 +810,14 @@ Return ONLY a JSON array of lowercase French tags, no duplicates.`,
       {/* Modal de validation avec édition complète */}
       {approvingDiscovery && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-          <div className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div 
+            className="rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            style={{ backgroundColor: 'var(--bg-card)' }}
+          >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold mb-1">Publier: {approvingDiscovery.name}</h2>
-                <p className="text-slate-600">Modifiez les informations avant de publier le service</p>
+                <h2 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Publier: {approvingDiscovery.name}</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Modifiez les informations avant de publier le service</p>
               </div>
               <Button
                 onClick={handleAutoTranslate}
