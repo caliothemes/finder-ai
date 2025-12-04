@@ -5,18 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
-// Crédits par jour selon la position
-const CREDITS_PER_DAY = {
-  homepage_hero: 3,
-  homepage_sidebar: 2,
-  homepage_category_bottom: 1,
-  explore_top: 2,
-  explore_sidebar: 1
-};
+import { getPositionByValue } from './bannerPositions';
 
 export default function BannerCalendar({ bannerId, position, onReserve }) {
-  const creditsPerDay = CREDITS_PER_DAY[position] || 1;
+  const positionConfig = getPositionByValue(position);
+  const creditsPerDay = positionConfig?.creditsPerDay || 1;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState([]);
 

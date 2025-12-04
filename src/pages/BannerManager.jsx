@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import BannerCalendar from '@/components/banners/BannerCalendar';
 import BannerPositionSelector from '@/components/banners/BannerPositionSelector';
+import { getPositionByValue } from '@/components/banners/bannerPositions';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function BannerManager() {
@@ -84,8 +85,10 @@ export default function BannerManager() {
   const reserveDatesMutation = useMutation({
     mutationFn: async ({ bannerId, dates }) => {
       const banner = myBanners.find(b => b.id === bannerId);
+      const positionConfig = getPositionByValue(banner.position);
+      const creditsPerDay = positionConfig?.creditsPerDay || 1;
       const newDates = [...(banner.reserved_dates || []), ...dates];
-      const creditsNeeded = dates.length * 1;
+      const creditsNeeded = dates.length * creditsPerDay;
       
       if (proAccount.credits < creditsNeeded) {
         throw new Error('Crédits insuffisants');
@@ -271,9 +274,32 @@ export default function BannerManager() {
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">{t('banner_image_label')}</label>
+                  {(() => {
+                    const posConfig = getPositionByValue(formData.position);
+                    return (
+                      <p className="text-xs text-slate-500 mb-2">
+                        📐 Taille recommandée : <span className="font-semibold text-purple-600">{posConfig?.recommendedSize || '1200 x 200 px'}</span>
+                      </p>
+                    );
+                  })()}
                   <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
                   {formData.image_url && (
-                    <img src={formData.image_url} alt="Preview" className="mt-2 w-full h-32 object-cover rounded-lg" />
+                    <div className="mt-3">
+                      <p className="text-xs text-slate-500 mb-2">Aperçu :</p>
+                      {(formData.position === 'homepage_sidebar' || formData.position === 'explore_sidebar') ? (
+                        <div className="w-full max-w-sm rounded-lg overflow-hidden border">
+                          <img src={formData.image_url} alt="Preview" className="w-full aspect-[4/3] object-cover" />
+                        </div>
+                      ) : (formData.position === 'homepage_hero' || formData.position === 'explore_top') ? (
+                        <div className="w-full max-w-md rounded-lg overflow-hidden border">
+                          <img src={formData.image_url} alt="Preview" className="w-full aspect-[3/2] object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-full rounded-lg overflow-hidden border">
+                          <img src={formData.image_url} alt="Preview" className="w-full aspect-[6/1] object-cover" />
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
 
