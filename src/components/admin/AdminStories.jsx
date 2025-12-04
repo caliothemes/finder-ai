@@ -292,20 +292,61 @@ export default function AdminStories() {
       {/* Preview Modal */}
       {previewStory && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => setPreviewStory(null)}>
-          <div className="relative w-full max-w-md aspect-[9/16] rounded-3xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          <div 
+            className="relative w-full max-w-xs sm:max-w-sm rounded-3xl overflow-hidden" 
+            style={{ aspectRatio: '9/16', maxHeight: 'calc(100vh - 100px)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
             <img src={previewStory.image_url} alt={previewStory.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
             
+            {/* Fixed dark overlay */}
+            <div 
+              className="absolute bottom-0 left-0 right-0 rounded-b-3xl"
+              style={{ 
+                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.4) 80%, transparent 100%)',
+                height: '60%'
+              }}
+            />
+            
+            {/* Close button */}
             <button
               onClick={() => setPreviewStory(null)}
-              className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+              className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors z-10"
             >
               <X className="w-6 h-6 text-white" />
             </button>
+
+            {/* Download button */}
+            <button
+              onClick={() => handleDownloadStory(previewStory)}
+              disabled={isDownloading}
+              className="absolute top-4 right-16 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10 disabled:opacity-50"
+              style={{ 
+                background: 'linear-gradient(135deg, #9333ea 0%, #ec4899 100%)',
+                boxShadow: '0 4px 12px rgba(147, 51, 234, 0.5)'
+              }}
+              title="Télécharger pour Instagram"
+            >
+              {isDownloading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Download className="w-5 h-5 text-white" />
+              )}
+            </button>
             
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              <h2 className="text-2xl font-bold text-white mb-2">{previewStory.title}</h2>
-              <p className="text-white/90 text-sm leading-relaxed">{previewStory.text}</p>
+            <div className="absolute bottom-0 left-0 right-0 p-10">
+              <h2 className="text-2xl font-bold text-white mb-3" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
+                {previewStory.title}
+              </h2>
+              <p className="text-white text-sm leading-relaxed mb-4" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                {previewStory.text}
+              </p>
+              <div 
+                className="inline-block px-5 py-2.5 rounded-full text-white text-sm font-medium"
+                style={{ backgroundColor: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)' }}
+              >
+                Découvrir →
+              </div>
               <div className="flex items-center gap-2 mt-4 text-white/70 text-sm">
                 <Eye className="w-4 h-4" />
                 <span>{previewStory.views} vues</span>
