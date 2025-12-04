@@ -143,7 +143,7 @@ export default function StoriesViewer({ onClose }) {
           )}
 
           {/* Story Content */}
-          <div className="relative w-full max-w-md aspect-[9/16] rounded-3xl overflow-hidden mx-4">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md rounded-3xl overflow-hidden mx-4" style={{ aspectRatio: '9/16', maxHeight: 'calc(100vh - 120px)' }}>
             <img 
               src={stories[currentIndex].image_url} 
               alt={stories[currentIndex].title}
