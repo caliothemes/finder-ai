@@ -121,6 +121,15 @@ export default function StoriesViewer({ onClose }) {
             <X className="w-6 h-6 text-white" />
           </button>
 
+          {/* Download for Instagram button */}
+          <button
+            onClick={handleDownloadForInstagram}
+            className="absolute top-4 right-16 w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-sm rounded-full flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors z-10"
+            title="Télécharger pour Instagram"
+          >
+            <Download className="w-5 h-5 text-white" />
+          </button>
+
           {/* Navigation */}
           {currentIndex > 0 && (
             <button
