@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { toast } from 'sonner';
-
 export default function StoriesViewer({ onClose }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const queryClient = useQueryClient();
@@ -48,164 +46,6 @@ export default function StoriesViewer({ onClose }) {
       incrementViewMutation.mutate(stories[currentIndex].id);
     }
   }, []);
-
-  const handleDownloadForInstagram = async () => {
-    const story = stories[currentIndex];
-    if (!story) return;
-
-    try {
-      toast.info('Génération de la story...');
-
-      // Story dimensions (9:16 ratio for Instagram)
-      const width = 1080;
-      const height = 1920;
-
-      // Create canvas
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-
-      // Load and draw background image
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = story.image_url;
-      });
-
-      // Draw image covering full canvas
-      const imgRatio = img.width / img.height;
-      const canvasRatio = width / height;
-      let drawWidth, drawHeight, drawX, drawY;
-
-      if (imgRatio > canvasRatio) {
-        drawHeight = height;
-        drawWidth = height * imgRatio;
-        drawX = (width - drawWidth) / 2;
-        drawY = 0;
-      } else {
-        drawWidth = width;
-        drawHeight = width / imgRatio;
-        drawX = 0;
-        drawY = (height - drawHeight) / 2;
-      }
-
-      ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-
-      // Draw dark gradient overlay at bottom
-      const gradient = ctx.createLinearGradient(0, height * 0.4, 0, height);
-      gradient.addColorStop(0, 'rgba(0,0,0,0)');
-      gradient.addColorStop(0.3, 'rgba(0,0,0,0.4)');
-      gradient.addColorStop(0.6, 'rgba(0,0,0,0.7)');
-      gradient.addColorStop(1, 'rgba(0,0,0,0.85)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-
-      // Text settings
-      const padding = 80;
-      const maxWidth = width - (padding * 2);
-      let currentY = height - 200;
-
-      // Helper function to wrap text
-      const wrapText = (text, maxWidth) => {
-        const words = text.split(' ');
-        const lines = [];
-        let currentLine = '';
-
-        words.forEach(word => {
-          const testLine = currentLine ? `${currentLine} ${word}` : word;
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > maxWidth && currentLine) {
-            lines.push(currentLine);
-            currentLine = word;
-          } else {
-            currentLine = testLine;
-          }
-        });
-        if (currentLine) lines.push(currentLine);
-        return lines;
-      };
-
-      // Draw description text first (to calculate position for title)
-      ctx.font = '600 42px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.95)';
-      ctx.textAlign = 'left';
-      
-      const descLines = wrapText(story.text || '', maxWidth);
-      const descLineHeight = 56;
-      
-      // Calculate total text height
-      const titleFont = 'bold 72px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-      ctx.font = titleFont;
-      const titleLines = wrapText(story.title, maxWidth);
-      const titleLineHeight = 90;
-      
-      const totalTextHeight = (titleLines.length * titleLineHeight) + 40 + (descLines.length * descLineHeight) + 100;
-      currentY = height - totalTextHeight;
-
-      // Draw title with shadow
-      ctx.font = titleFont;
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0,0,0,0.8)';
-      ctx.shadowBlur = 20;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 4;
-
-      titleLines.forEach((line, i) => {
-        ctx.fillText(line, padding, currentY + (i * titleLineHeight));
-      });
-
-      currentY += titleLines.length * titleLineHeight + 40;
-
-      // Draw description
-      ctx.font = '600 42px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.9)';
-      ctx.shadowBlur = 10;
-
-      descLines.forEach((line, i) => {
-        ctx.fillText(line, padding, currentY + (i * descLineHeight));
-      });
-
-      // Reset shadow
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-
-      // Draw "Découvrir →" button
-      currentY += descLines.length * descLineHeight + 50;
-      const buttonText = 'Découvrir →';
-      ctx.font = '600 36px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-      const buttonWidth = ctx.measureText(buttonText).width + 60;
-      const buttonHeight = 70;
-
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.beginPath();
-      ctx.roundRect(padding, currentY - 45, buttonWidth, buttonHeight, 35);
-      ctx.fill();
-
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(buttonText, padding + 30, currentY);
-
-      // Convert to blob and download
-      canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `story-${story.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        URL.revokeObjectURL(url);
-        a.remove();
-        toast.success('Story téléchargée !');
-      }, 'image/png', 1);
-
-    } catch (error) {
-      console.error('Download error:', error);
-      toast.error('Erreur lors du téléchargement');
-    }
-  };
 
   useEffect(() => {
     const timer = setTimeout(nextStory, 5000);
@@ -309,22 +149,7 @@ export default function StoriesViewer({ onClose }) {
               </div>
             </Link>
 
-            {/* Download button inside story card */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleDownloadForInstagram();
-              }}
-              className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 z-20"
-              style={{ 
-                background: 'linear-gradient(135deg, #9333ea 0%, #ec4899 100%)',
-                boxShadow: '0 4px 12px rgba(147, 51, 234, 0.5)'
-              }}
-              title="Télécharger pour Instagram"
-            >
-              <Download className="w-5 h-5 text-white" />
-            </button>
+
           </div>
         </>
       )}
