@@ -7,8 +7,11 @@ import { Sparkles, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import EmptyBannerPlaceholder from './EmptyBannerPlaceholder';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function ActiveBanner({ position, showPlaceholder = false }) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const today = new Date().toISOString().split('T')[0];
 
   const { data: activeBanner, isLoading } = useQuery({
@@ -49,9 +52,25 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
   // Format Card (comme les autres services)
   if (isCardFormat) {
     return (
-      <div className="group bg-gradient-to-br from-purple-100 via-purple-50 to-pink-100 rounded-3xl overflow-hidden border-2 border-purple-400 ring-2 ring-purple-200 hover:border-purple-500 hover:ring-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+      <div 
+        className="group rounded-3xl overflow-hidden border-2 ring-2 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+        style={{
+          background: isDark 
+            ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.3), rgba(30, 41, 59, 0.8), rgba(157, 23, 77, 0.3))'
+            : 'linear-gradient(to bottom right, #f3e8ff, #faf5ff, #fce7f3)',
+          borderColor: isDark ? 'rgba(147, 51, 234, 0.6)' : '#c084fc',
+          boxShadow: isDark ? '0 0 20px rgba(147, 51, 234, 0.2)' : undefined
+        }}
+      >
         {/* Image */}
-        <div className="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 overflow-hidden">
+        <div 
+          className="relative h-48 overflow-hidden"
+          style={{
+            background: isDark 
+              ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.4), rgba(157, 23, 77, 0.4))'
+              : 'linear-gradient(to bottom right, #f3e8ff, #fce7f3)'
+          }}
+        >
           <a href={activeBanner.target_url} target="_blank" rel="noopener noreferrer">
             <img 
               src={activeBanner.image_url} 
@@ -88,12 +107,12 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
         {/* Content */}
         <div className="p-6">
           <a href={activeBanner.target_url} target="_blank" rel="noopener noreferrer">
-            <h3 className="text-lg font-semibold text-slate-900 mb-2 hover:text-purple-600 transition-colors">
+            <h3 className="text-lg font-semibold mb-2 hover:text-purple-400 transition-colors" style={{ color: 'var(--text-primary)' }}>
               {activeBanner.title}
             </h3>
           </a>
           {activeBanner.description && (
-            <p className="text-slate-600 mb-4 line-clamp-[8] text-sm font-normal">
+            <p className="mb-4 line-clamp-[8] text-sm font-normal" style={{ color: 'var(--text-secondary)' }}>
               {activeBanner.description}
             </p>
           )}
@@ -102,7 +121,14 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
           {activeBanner.badges && activeBanner.badges.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               {activeBanner.badges.map((badge, idx) => (
-                <Badge key={idx} className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200">
+                <Badge 
+                  key={idx} 
+                  style={{
+                    background: isDark ? 'rgba(147, 51, 234, 0.3)' : 'linear-gradient(to right, #f3e8ff, #fce7f3)',
+                    color: isDark ? '#c4b5fd' : '#7c3aed',
+                    borderColor: isDark ? 'rgba(147, 51, 234, 0.5)' : '#e9d5ff'
+                  }}
+                >
                   {badge}
                 </Badge>
               ))}
@@ -122,9 +148,10 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
           {/* Pro promo encart */}
           <Link 
             to={createPageUrl('ProAccount')}
-            className="mt-3 block text-center text-xs text-purple-600 hover:text-purple-700 transition-colors"
+            className="mt-3 block text-center text-xs transition-colors"
+            style={{ color: isDark ? '#c4b5fd' : '#7c3aed' }}
           >
-            <span className="opacity-70">🚀 Votre service IA ici ?</span>
+            <span style={{ opacity: 0.7 }}>🚀 Votre service IA ici ?</span>
             <br />
             <span className="font-semibold underline">Devenir Pro</span>
           </Link>
@@ -138,7 +165,15 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
 
     if (isArticleFormat) {
       return (
-        <div className="group bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-3xl overflow-hidden border-2 border-purple-300 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <div 
+          className="group rounded-3xl overflow-hidden border-2 shadow-xl hover:shadow-2xl transition-all duration-300"
+          style={{
+            background: isDark 
+              ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.2), rgba(30, 41, 59, 0.9), rgba(157, 23, 77, 0.2))'
+              : 'linear-gradient(to bottom right, #faf5ff, #ffffff, #fdf2f8)',
+            borderColor: isDark ? 'rgba(147, 51, 234, 0.5)' : '#d8b4fe'
+          }}
+        >
           <div className="flex flex-col md:flex-row">
             {/* Image à gauche */}
             <div className="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
@@ -178,12 +213,12 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
             {/* Contenu à droite */}
             <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
               <a href={activeBanner.target_url} target="_blank" rel="noopener noreferrer">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3 hover:text-purple-600 transition-colors">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 hover:text-purple-400 transition-colors" style={{ color: 'var(--text-primary)' }}>
                   {activeBanner.title}
                 </h3>
               </a>
               {activeBanner.description && (
-                <p className="text-slate-600 mb-6 text-base leading-relaxed line-clamp-4">
+                <p className="mb-6 text-base leading-relaxed line-clamp-4" style={{ color: 'var(--text-secondary)' }}>
                   {activeBanner.description}
                 </p>
               )}
