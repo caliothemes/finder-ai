@@ -159,7 +159,7 @@ export default function AdminStories() {
 
   const { data: aiServices = [], isLoading: servicesLoading } = useQuery({
     queryKey: ['aiServices'],
-    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }),
+    queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-created_date'),
   });
 
   const { data: stories = [], isLoading: storiesLoading } = useQuery({
