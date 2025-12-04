@@ -10,15 +10,23 @@ export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
   // Card format (comme les cards de services)
   if (variant === 'card') {
     return (
-      <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8 min-h-[300px]">
+      <div 
+        className="group rounded-2xl border-2 border-dashed transition-all duration-300 hover:shadow-xl flex items-center justify-center p-8 min-h-[300px]"
+        style={{
+          background: theme === 'dark' 
+            ? 'linear-gradient(to bottom right, rgba(88, 28, 135, 0.2), rgba(30, 41, 59, 0.5), rgba(157, 23, 77, 0.2))'
+            : 'linear-gradient(to bottom right, #faf5ff, #fdf4ff, #faf5ff)',
+          borderColor: theme === 'dark' ? 'rgba(147, 51, 234, 0.5)' : '#d8b4fe'
+        }}
+      >
         <div className="text-center">
           <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2">
+          <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
             Votre Service IA ici
           </h3>
-          <p className="text-sm text-slate-600 mb-4">
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
             Augmentez votre visibilité avec un compte pro
           </p>
           <Link to={createPageUrl('ProAccount')}>
@@ -96,7 +104,15 @@ export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
 
   // Banner format (horizontal) - pour les autres positions
   return (
-    <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 border-2 border-dashed border-purple-300 hover:border-purple-400 transition-all duration-300 h-[150px] md:h-[200px]">
+    <div 
+      className="relative group overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-300 h-[150px] md:h-[200px]"
+      style={{
+        background: theme === 'dark' 
+          ? 'linear-gradient(to right, rgba(88, 28, 135, 0.2), rgba(157, 23, 77, 0.2), rgba(88, 28, 135, 0.2))'
+          : 'linear-gradient(to right, #f3e8ff, #fce7f3, #f3e8ff)',
+        borderColor: theme === 'dark' ? 'rgba(147, 51, 234, 0.5)' : '#d8b4fe'
+      }}
+    >
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center px-4">
           <div className="flex items-center justify-center gap-3 mb-3">
@@ -104,10 +120,10 @@ export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="text-left">
-              <h3 className="text-lg md:text-xl font-bold text-slate-900">
+              <h3 className="text-lg md:text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
                 Votre bannière ici
               </h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                 Atteignez des milliers d'utilisateurs
               </p>
             </div>
