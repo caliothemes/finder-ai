@@ -264,6 +264,35 @@ Return JSON format:
     }
   };
 
+  const handleAutoFetchLogo = async () => {
+    if (!approveFormData.website_url) {
+      toast.error('URL du site requis pour récupérer le logo');
+      return;
+    }
+
+    setFetchingLogo(true);
+    try {
+      const ogResponse = await fetch(`https://api.microlink.io?url=${encodeURIComponent(approveFormData.website_url)}&meta=true`);
+      const ogData = await ogResponse.json();
+
+      if (ogData?.data?.logo?.url) {
+        setApproveFormData({ ...approveFormData, logo_url: ogData.data.logo.url });
+        toast.success('Logo récupéré depuis le site !');
+      } else if (ogData?.data?.image?.url) {
+        // Fallback to main image if no logo
+        setApproveFormData({ ...approveFormData, logo_url: ogData.data.image.url });
+        toast.success('Image principale utilisée comme logo');
+      } else {
+        toast.error('Aucun logo trouvé sur le site');
+      }
+    } catch (error) {
+      console.error('Logo fetch error:', error);
+      toast.error('Erreur lors de la récupération du logo');
+    } finally {
+      setFetchingLogo(false);
+    }
+  };
+
   const handleAutoGenerateCover = async () => {
     if (!approveFormData.name) {
       toast.error('Nom requis pour générer une image');
