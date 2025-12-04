@@ -169,6 +169,7 @@ export default function AdminAISearchScan() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [fetchingCover, setFetchingCover] = useState(false);
+  const [fetchingLogo, setFetchingLogo] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [isGeneratingTags, setIsGeneratingTags] = useState(false);
 
