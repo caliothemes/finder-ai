@@ -49,6 +49,32 @@ export default function StoriesViewer({ onClose }) {
     }
   }, []);
 
+  const handleDownloadForInstagram = async () => {
+    const story = stories[currentIndex];
+    if (!story) return;
+
+    try {
+      // Copy text to clipboard
+      const textContent = `${story.title}\n\n${story.text}`;
+      await navigator.clipboard.writeText(textContent);
+      toast.success('Texte copié ! Téléchargement de l\'image...');
+
+      // Download image
+      const response = await fetch(story.image_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `story-${story.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      toast.error('Erreur lors du téléchargement');
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(nextStory, 5000);
     return () => clearTimeout(timer);
