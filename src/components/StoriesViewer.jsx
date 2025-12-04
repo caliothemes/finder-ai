@@ -156,23 +156,50 @@ export default function StoriesViewer({ onClose }) {
               alt={stories[currentIndex].title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            
+            {/* Fixed dark overlay - no theme dependency */}
+            <div 
+              className="absolute bottom-0 left-0 right-0 rounded-b-3xl"
+              style={{ 
+                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.4) 80%, transparent 100%)',
+                height: '60%'
+              }}
+            />
             
             <Link
               to={createPageUrl(`AIDetail?id=${stories[currentIndex].ai_service_id}`)}
-              className="absolute bottom-0 left-0 right-0 p-8"
+              className="absolute bottom-0 left-0 right-0 p-10"
             >
-              {/* Dark overlay under text */}
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] rounded-t-2xl -mx-8 -mb-8 px-8 pb-8" style={{ top: '-20px' }} />
-              
-              <div className="relative">
-                <h2 className="text-3xl font-bold text-white mb-3 drop-shadow-lg">{stories[currentIndex].title}</h2>
-                <p className="text-white/95 text-base leading-relaxed mb-4 drop-shadow-md">{stories[currentIndex].text}</p>
-                <div className="inline-block px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium hover:bg-white/30 transition-colors">
-                  Découvrir →
-                </div>
+              <h2 className="text-3xl font-bold text-white mb-4" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
+                {stories[currentIndex].title}
+              </h2>
+              <p className="text-white text-base leading-relaxed mb-6" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                {stories[currentIndex].text}
+              </p>
+              <div 
+                className="inline-block px-6 py-3 rounded-full text-white font-medium transition-all hover:scale-105"
+                style={{ backgroundColor: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)' }}
+              >
+                Découvrir →
               </div>
             </Link>
+
+            {/* Download button inside story card */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDownloadForInstagram();
+              }}
+              className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 z-20"
+              style={{ 
+                background: 'linear-gradient(135deg, #9333ea 0%, #ec4899 100%)',
+                boxShadow: '0 4px 12px rgba(147, 51, 234, 0.5)'
+              }}
+              title="Télécharger pour Instagram"
+            >
+              <Download className="w-5 h-5 text-white" />
+            </button>
           </div>
         </>
       )}
