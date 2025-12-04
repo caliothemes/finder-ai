@@ -162,10 +162,15 @@ export default function StoriesViewer({ onClose }) {
               to={createPageUrl(`AIDetail?id=${stories[currentIndex].ai_service_id}`)}
               className="absolute bottom-0 left-0 right-0 p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-3">{stories[currentIndex].title}</h2>
-              <p className="text-white/90 text-base leading-relaxed mb-4">{stories[currentIndex].text}</p>
-              <div className="inline-block px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium hover:bg-white/30 transition-colors">
-                Découvrir →
+              {/* Dark overlay under text */}
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] rounded-t-2xl -mx-8 -mb-8 px-8 pb-8" style={{ top: '-20px' }} />
+              
+              <div className="relative">
+                <h2 className="text-3xl font-bold text-white mb-3 drop-shadow-lg">{stories[currentIndex].title}</h2>
+                <p className="text-white/95 text-base leading-relaxed mb-4 drop-shadow-md">{stories[currentIndex].text}</p>
+                <div className="inline-block px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium hover:bg-white/30 transition-colors">
+                  Découvrir →
+                </div>
               </div>
             </Link>
           </div>
