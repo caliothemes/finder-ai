@@ -150,10 +150,23 @@ export default function Explore() {
           {(() => {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            const newServicesCount = allServices.filter(s => new Date(s.created_date) >= sevenDaysAgo).length;
-            return newServicesCount > 0 ? (
+            const threeDaysAgo = new Date();
+            threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+            const newServicesCount7Days = allServices.filter(s => new Date(s.created_date) >= sevenDaysAgo).length;
+            const newServicesCount3Days = allServices.filter(s => new Date(s.created_date) >= threeDaysAgo).length;
+            return (newServicesCount7Days > 0 || newServicesCount3Days > 0) ? (
               <p className="text-sm mt-2" style={{ color: 'var(--text-muted)' }}>
-                <span className="font-semibold text-green-500">{newServicesCount}</span> nouveauté{newServicesCount > 1 ? 's' : ''} ces 7 derniers jours
+                {newServicesCount7Days > 0 && (
+                  <span>
+                    <span className="font-semibold text-green-500">{newServicesCount7Days}</span> nouveauté{newServicesCount7Days > 1 ? 's' : ''} ces 7 derniers jours
+                  </span>
+                )}
+                {newServicesCount7Days > 0 && newServicesCount3Days > 0 && <span> • </span>}
+                {newServicesCount3Days > 0 && (
+                  <span>
+                    <span className="font-semibold text-emerald-500">{newServicesCount3Days}</span> nouveauté{newServicesCount3Days > 1 ? 's' : ''} ces 3 derniers jours
+                  </span>
+                )}
               </p>
             ) : null;
           })()}
