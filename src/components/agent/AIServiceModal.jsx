@@ -90,6 +90,41 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
           setImageUrl(imgResult.url);
           break;
 
+        case 'create-logo':
+          const logoResult = await base44.integrations.Core.GenerateImage({
+            prompt: `Professional logo design for a company called "${input}". Modern, clean, minimalist style. Vector-like, simple shapes, memorable. High quality logo on white background.`
+          });
+          setImageUrl(logoResult.url);
+          break;
+
+        case 'create-story':
+          const storyResult = await base44.integrations.Core.GenerateImage({
+            prompt: `Instagram story design about: ${input}. Vertical format 9:16, vibrant colors, modern aesthetic, eye-catching, social media ready. High quality, professional design.`
+          });
+          setImageUrl(storyResult.url);
+          break;
+
+        case 'create-thumbnail':
+          const thumbResult = await base44.integrations.Core.GenerateImage({
+            prompt: `YouTube thumbnail for video about: ${input}. Bold text, vibrant colors, high contrast, attention-grabbing, 16:9 format. Professional quality, click-worthy design.`
+          });
+          setImageUrl(thumbResult.url);
+          break;
+
+        case 'create-poster':
+          const posterResult = await base44.integrations.Core.GenerateImage({
+            prompt: `Event poster design for: ${input}. Eye-catching, professional, modern layout, vibrant colors, clear typography. High quality poster design.`
+          });
+          setImageUrl(posterResult.url);
+          break;
+
+        case 'product-photo':
+          const productResult = await base44.integrations.Core.GenerateImage({
+            prompt: `Professional product photography of: ${input}. Clean white background, studio lighting, high quality, commercial photography style, detailed and sharp.`
+          });
+          setImageUrl(productResult.url);
+          break;
+
         case 'code-gen':
           result = await base44.integrations.Core.InvokeLLM({
             prompt: `Génère du code ${language2 || 'JavaScript'} pour: ${input}\n\nRéponds UNIQUEMENT avec le code, sans explications.`,
@@ -201,14 +236,34 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
   };
 
   const renderServiceInterface = () => {
-    // Services de génération d'images
-    if (service.id === 'generate') {
+    // Services de génération d'images (tous les services image)
+    if (['generate', 'create-logo', 'create-story', 'create-thumbnail', 'create-poster', 'product-photo'].includes(service.id)) {
+      let placeholder = language === 'fr' ? 'Décrivez ce que vous voulez créer...' : 'Describe what you want to create...';
+      let buttonText = language === 'fr' ? 'Générer' : 'Generate';
+      
+      if (service.id === 'create-logo') {
+        placeholder = language === 'fr' ? 'Nom de votre marque ou entreprise...' : 'Your brand or company name...';
+        buttonText = language === 'fr' ? 'Créer le logo' : 'Create logo';
+      } else if (service.id === 'create-story') {
+        placeholder = language === 'fr' ? 'Sujet de votre story (ex: promotion, citation inspirante...)' : 'Story topic (e.g: promotion, inspiring quote...)';
+        buttonText = language === 'fr' ? 'Créer la story' : 'Create story';
+      } else if (service.id === 'create-thumbnail') {
+        placeholder = language === 'fr' ? 'Sujet de votre vidéo YouTube...' : 'Your YouTube video topic...';
+        buttonText = language === 'fr' ? 'Créer la miniature' : 'Create thumbnail';
+      } else if (service.id === 'create-poster') {
+        placeholder = language === 'fr' ? 'Décrivez votre événement ou affiche...' : 'Describe your event or poster...';
+        buttonText = language === 'fr' ? 'Créer l\'affiche' : 'Create poster';
+      } else if (service.id === 'product-photo') {
+        placeholder = language === 'fr' ? 'Décrivez votre produit...' : 'Describe your product...';
+        buttonText = language === 'fr' ? 'Générer la photo' : 'Generate photo';
+      }
+
       return (
         <>
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={language === 'fr' ? 'Décrivez l\'image que vous souhaitez générer...' : 'Describe the image you want to generate...'}
+            placeholder={placeholder}
             className="min-h-[100px]"
             style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
           />
@@ -218,11 +273,32 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
           >
             {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <ImageIcon className="w-4 h-4 mr-2" />}
-            {language === 'fr' ? 'Générer l\'image' : 'Generate image'}
+            {buttonText}
           </Button>
+          {loading && (
+            <div className="text-center py-4">
+              <p className="text-sm animate-pulse" style={{ color: 'var(--text-muted)' }}>
+                {language === 'fr' ? '🎨 Génération en cours... (5-10 secondes)' : '🎨 Generating... (5-10 seconds)'}
+              </p>
+            </div>
+          )}
           {imageUrl && (
-            <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
-              <img src={imageUrl} alt="Generated" className="w-full" />
+            <div className="space-y-3">
+              <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                <img src={imageUrl} alt="Generated" className="w-full" />
+              </div>
+              <Button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = imageUrl;
+                  link.download = 'generated-image.png';
+                  link.click();
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                {language === 'fr' ? '⬇️ Télécharger l\'image' : '⬇️ Download image'}
+              </Button>
             </div>
           )}
         </>

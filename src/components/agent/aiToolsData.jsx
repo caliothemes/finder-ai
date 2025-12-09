@@ -18,36 +18,6 @@ export const aiToolsCategories = [
         prompt: { fr: 'Quels sont les meilleurs outils pour supprimer l\'arrière-plan d\'une image ?', en: 'What are the best tools to remove image backgrounds?' }
       },
       {
-        id: 'upscale',
-        name: { fr: 'Améliorer la qualité', en: 'Upscale Image' },
-        description: { 
-          fr: 'Augmentez la résolution de vos images sans perte de qualité', 
-          en: 'Increase image resolution without quality loss' 
-        },
-        icon: 'Sparkles',
-        prompt: { fr: 'Recommande-moi des outils pour améliorer la qualité d\'une image', en: 'Recommend tools to upscale images' }
-      },
-      {
-        id: 'compress',
-        name: { fr: 'Compresser images', en: 'Compress Images' },
-        description: { 
-          fr: 'Réduisez la taille de vos images tout en conservant leur qualité', 
-          en: 'Reduce image size while maintaining quality' 
-        },
-        icon: 'Minimize2',
-        prompt: { fr: 'Quels outils pour compresser des images efficacement ?', en: 'Which tools to compress images efficiently?' }
-      },
-      {
-        id: 'convert',
-        name: { fr: 'Convertir format', en: 'Convert Format' },
-        description: { 
-          fr: 'Convertissez vos images entre différents formats (PNG, JPG, WEBP...)', 
-          en: 'Convert images between formats (PNG, JPG, WEBP...)' 
-        },
-        icon: 'RefreshCw',
-        prompt: { fr: 'Outils pour convertir des formats d\'images', en: 'Tools to convert image formats' }
-      },
-      {
         id: 'generate',
         name: { fr: 'Générer image IA', en: 'Generate AI Image' },
         description: { 
@@ -58,14 +28,54 @@ export const aiToolsCategories = [
         prompt: { fr: 'Quels sont les meilleurs générateurs d\'images par IA ?', en: 'What are the best AI image generators?' }
       },
       {
-        id: 'edit',
-        name: { fr: 'Éditer avec IA', en: 'AI Edit' },
+        id: 'create-logo',
+        name: { fr: 'Créer un logo', en: 'Create Logo' },
         description: { 
-          fr: 'Modifiez vos images avec des outils IA intelligents', 
-          en: 'Edit images with smart AI tools' 
+          fr: 'Générez un logo professionnel pour votre marque avec l\'IA', 
+          en: 'Generate a professional logo for your brand with AI' 
         },
-        icon: 'Edit',
-        prompt: { fr: 'Outils IA pour éditer et retoucher des images', en: 'AI tools to edit and retouch images' }
+        icon: 'CircleDot',
+        prompt: { fr: 'Générateurs de logos IA', en: 'AI logo generators' }
+      },
+      {
+        id: 'create-story',
+        name: { fr: 'Créer une story', en: 'Create Story' },
+        description: { 
+          fr: 'Générez des visuels parfaits pour vos stories Instagram et réseaux sociaux', 
+          en: 'Generate perfect visuals for your Instagram stories and social media' 
+        },
+        icon: 'Smartphone',
+        prompt: { fr: 'Outils pour créer des stories Instagram', en: 'Tools to create Instagram stories' }
+      },
+      {
+        id: 'create-thumbnail',
+        name: { fr: 'Créer miniature YouTube', en: 'Create YouTube Thumbnail' },
+        description: { 
+          fr: 'Générez des miniatures accrocheuses pour vos vidéos YouTube', 
+          en: 'Generate eye-catching thumbnails for your YouTube videos' 
+        },
+        icon: 'Monitor',
+        prompt: { fr: 'Créateurs de miniatures YouTube', en: 'YouTube thumbnail creators' }
+      },
+      {
+        id: 'create-poster',
+        name: { fr: 'Créer une affiche', en: 'Create Poster' },
+        description: { 
+          fr: 'Générez des affiches et flyers professionnels pour vos événements', 
+          en: 'Generate professional posters and flyers for your events' 
+        },
+        icon: 'FileImage',
+        prompt: { fr: 'Générateurs d\'affiches IA', en: 'AI poster generators' }
+      },
+      {
+        id: 'product-photo',
+        name: { fr: 'Photo produit IA', en: 'AI Product Photo' },
+        description: { 
+          fr: 'Créez des photos produits professionnelles avec différents arrière-plans', 
+          en: 'Create professional product photos with different backgrounds' 
+        },
+        icon: 'ShoppingBag',
+        prompt: { fr: 'Générateurs de photos produits IA', en: 'AI product photo generators' }
       }
     ]
   },
