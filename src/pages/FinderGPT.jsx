@@ -19,7 +19,7 @@ export default function FinderGPT() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [toolsSidebarExpanded, setToolsSidebarExpanded] = useState(false);
   const messagesEndRef = useRef(null);
   const lastAssistantRef = useRef(null);
   const { language, t } = useLanguage();
@@ -404,14 +404,17 @@ ${JSON.stringify(context.news, null, 0)}
   return (
     <>
       {/* AI Tools Sidebar */}
-      <AIToolsSidebar onToolSelect={handleToolSelect} />
+      <AIToolsSidebar 
+        onToolSelect={handleToolSelect} 
+        onExpandChange={setToolsSidebarExpanded}
+      />
 
       <div 
-        className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] flex flex-col overflow-hidden w-full max-w-full transition-all duration-300" 
+        className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] flex flex-col overflow-hidden transition-all duration-300" 
         style={{ 
           backgroundColor: 'var(--bg-secondary)',
-          marginLeft: '0',
-          paddingLeft: '0'
+          marginLeft: toolsSidebarExpanded ? '256px' : '64px',
+          width: toolsSidebarExpanded ? 'calc(100% - 256px)' : 'calc(100% - 64px)'
         }}
       >
         {/* Header */}
