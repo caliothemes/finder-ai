@@ -17,9 +17,22 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
   const [imageUrl, setImageUrl] = useState('');
   const [targetLang, setTargetLang] = useState('en');
   const [language2, setLanguage2] = useState('');
+  const [user, setUser] = useState(null);
   const { language } = useLanguage();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+
+  React.useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    loadUser();
+  }, []);
 
   if (!service) return null;
 
@@ -35,12 +48,30 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
 
   const handleProcess = async () => {
     if (!input.trim()) return;
+
+    // Check user credits
+    if (!user) {
+      base44.auth.redirectToLogin();
+      return;
+    }
+
+    const freeGensUsed = user.free_generations_used || 0;
+    const credits = user.ai_credits || 0;
+
+    if (freeGensUsed >= 10 && credits <= 0) {
+      toast.error(language === 'fr' 
+        ? 'Vous n\'avez plus de crédits. Achetez-en sur la page Tarifs.' 
+        : 'No credits remaining. Buy more on Pricing page.');
+      return;
+    }
+
     setLoading(true);
     setOutput('');
     setImageUrl('');
 
     try {
       let result;
+      let resultUrl = '';
       
       switch(service.id) {
         case 'grammar':
@@ -88,6 +119,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: input
           });
           setImageUrl(imgResult.url);
+          resultUrl = imgResult.url;
           break;
 
         case 'create-logo':
@@ -95,6 +127,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: `Professional logo design for a company called "${input}". Modern, clean, minimalist style. Vector-like, simple shapes, memorable. High quality logo on white background.`
           });
           setImageUrl(logoResult.url);
+          resultUrl = logoResult.url;
           break;
 
         case 'create-story':
@@ -102,6 +135,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: `Instagram story design about: ${input}. Vertical format 9:16, vibrant colors, modern aesthetic, eye-catching, social media ready. High quality, professional design.`
           });
           setImageUrl(storyResult.url);
+          resultUrl = storyResult.url;
           break;
 
         case 'create-thumbnail':
@@ -109,6 +143,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: `YouTube thumbnail for video about: ${input}. Bold text, vibrant colors, high contrast, attention-grabbing, 16:9 format. Professional quality, click-worthy design.`
           });
           setImageUrl(thumbResult.url);
+          resultUrl = thumbResult.url;
           break;
 
         case 'create-poster':
@@ -116,6 +151,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: `Event poster design for: ${input}. Eye-catching, professional, modern layout, vibrant colors, clear typography. High quality poster design.`
           });
           setImageUrl(posterResult.url);
+          resultUrl = posterResult.url;
           break;
 
         case 'product-photo':
@@ -123,6 +159,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
             prompt: `Professional product photography of: ${input}. Clean white background, studio lighting, high quality, commercial photography style, detailed and sharp.`
           });
           setImageUrl(productResult.url);
+          resultUrl = productResult.url;
           break;
 
         case 'code-gen':
@@ -258,6 +295,28 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
           });
           setOutput(result);
       }
+
+      // Save to history and deduct credits
+      const creditsUsed = freeGensUsed >= 10 ? 1 : 0;
+      
+      await base44.entities.AIToolGeneration.create({
+        user_email: user.email,
+        service_id: service.id,
+        service_name: service.name[language],
+        input: input,
+        output: result || '',
+        output_url: resultUrl,
+        credits_used: creditsUsed
+      });
+
+      // Update user credits
+      if (freeGensUsed < 10) {
+        await base44.auth.updateMe({ free_generations_used: freeGensUsed + 1 });
+      } else {
+        await base44.auth.updateMe({ ai_credits: credits - 1 });
+      }
+
+      toast.success(language === 'fr' ? 'Génération réussie !' : 'Generation successful!');
     } catch (error) {
       toast.error(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred');
     } finally {

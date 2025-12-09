@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { User, Mail, Calendar, Heart, PlusCircle, Edit, Clock, Camera, Loader2, Pencil, Check, X, ChevronLeft, ChevronRight, Zap, History, Image as ImageIcon, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -97,6 +97,12 @@ export default function Profile() {
   const { data: mySubmissions = [] } = useQuery({
     queryKey: ['mySubmissions', user?.email],
     queryFn: () => base44.entities.AIService.filter({ submitted_by: user.email }),
+    enabled: !!user,
+  });
+
+  const { data: toolsHistory = [] } = useQuery({
+    queryKey: ['toolsHistory', user?.email],
+    queryFn: () => base44.entities.AIToolGeneration.filter({ user_email: user.email }, '-created_date', 50),
     enabled: !!user,
   });
 
@@ -207,6 +213,46 @@ export default function Profile() {
             </div>
           </div>
         </div>
+
+        {/* Crédits Block */}
+        <Card className="mb-8 bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-purple-700">
+                <Zap className="w-5 h-5" />
+                Mes Crédits IA
+              </span>
+              <Link to={createPageUrl('Tarifs')}>
+                <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                  Acheter des crédits
+                </Button>
+              </Link>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-5xl font-bold text-purple-600">
+                  {user.ai_credits || 0}
+                </div>
+                <p className="text-sm text-slate-600 mt-1">
+                  crédits disponibles
+                </p>
+                <p className="text-xs text-slate-500 mt-2">
+                  ✨ {10 - (user.free_generations_used || 0)} générations gratuites restantes
+                </p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-slate-700">
+                  {toolsHistory.length}
+                </div>
+                <p className="text-sm text-slate-600">
+                  générations au total
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -385,6 +431,48 @@ export default function Profile() {
             service={editingService}
             onClose={() => setEditingService(null)}
           />
+        )}
+
+        {/* Tools History */}
+        {toolsHistory.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <History className="w-5 h-5" />
+                Historique des générations IA
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {toolsHistory.slice(0, 10).map((gen) => (
+                  <div key={gen.id} className="p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        {gen.output_url ? <ImageIcon className="w-4 h-4 text-purple-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
+                        <span className="font-medium text-slate-900">{gen.service_name}</span>
+                        {gen.credits_used > 0 && (
+                          <Badge variant="outline" className="text-xs">
+                            {gen.credits_used} crédit{gen.credits_used > 1 ? 's' : ''}
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-xs text-slate-500">
+                        {new Date(gen.created_date).toLocaleDateString('fr-FR')}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-2">{gen.input.slice(0, 100)}...</p>
+                    {gen.output_url ? (
+                      <img src={gen.output_url} alt="Generated" className="w-full max-w-xs rounded-lg border" />
+                    ) : gen.output && (
+                      <div className="text-xs text-slate-500 bg-white p-2 rounded border max-h-20 overflow-hidden">
+                        {gen.output.slice(0, 200)}...
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* My Reviews */}
