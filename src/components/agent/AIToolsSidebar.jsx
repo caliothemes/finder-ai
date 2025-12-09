@@ -28,7 +28,7 @@ export default function AIToolsSidebar({ onExpandChange }) {
   return (
     <TooltipProvider delayDuration={0}>
       <div 
-        className={`fixed left-0 lg:left-72 top-[72px] md:top-[80px] h-[calc(100vh-72px)] md:h-[calc(100vh-80px)] transition-all duration-300 z-40 flex flex-col ${
+        className={`fixed left-0 lg:left-72 top-[72px] md:top-[80px] bottom-0 transition-all duration-300 z-40 flex flex-col ${
           isExpanded ? 'w-64' : 'w-16'
         }`}
         style={{
