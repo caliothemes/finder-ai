@@ -254,6 +254,19 @@ const translations = {
     agent_saved: "✨ Conversations sauvegardées",
     agent_login_prompt: "Connecte-toi pour sauvegarder",
 
+    // AI Tools Sidebar
+    tools_sidebar_title: "⚡ Outils IA Rapides",
+    tools_sidebar_subtitle: "Cliquez pour utiliser",
+    tools_sidebar_instant: "Services IA instantanés",
+    tools_image_generation: "Génération Image",
+    tools_legal: "Juridique & Legal",
+    tools_text_writing: "Rédaction & Texte",
+    tools_code_dev: "Code & Dev",
+    tools_marketing: "Marketing & SEO",
+    tools_business: "Business & Finance",
+    tools_education: "Éducation & Formation",
+    tools_video_audio: "Vidéo & Audio",
+
     // Common
           common_loading: "Chargement...",
           common_cancel: "Annuler",
@@ -565,6 +578,19 @@ const translations = {
     agent_new_chat: "New",
     agent_saved: "✨ Conversations saved automatically",
     agent_login_prompt: "Log in to save your history",
+
+    // AI Tools Sidebar
+    tools_sidebar_title: "⚡ Quick AI Tools",
+    tools_sidebar_subtitle: "Click to use",
+    tools_sidebar_instant: "Instant AI services",
+    tools_image_generation: "Image Generation",
+    tools_legal: "Legal & Law",
+    tools_text_writing: "Writing & Text",
+    tools_code_dev: "Code & Dev",
+    tools_marketing: "Marketing & SEO",
+    tools_business: "Business & Finance",
+    tools_education: "Education & Training",
+    tools_video_audio: "Video & Audio",
 
     // Common
           common_loading: "Loading...",

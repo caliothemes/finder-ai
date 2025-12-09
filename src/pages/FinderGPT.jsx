@@ -9,6 +9,7 @@ import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import ReactMarkdown from 'react-markdown';
+import AIToolsSidebar from '@/components/agent/AIToolsSidebar';
 
 export default function FinderGPT() {
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ export default function FinderGPT() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const messagesEndRef = useRef(null);
   const lastAssistantRef = useRef(null);
   const { language, t } = useLanguage();
@@ -395,10 +397,25 @@ ${JSON.stringify(context.news, null, 0)}
     );
   }
 
+  const handleToolSelect = (promptText) => {
+    setInput(promptText);
+  };
+
   return (
-    <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] flex flex-col overflow-hidden w-full max-w-full" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-      {/* Header */}
-      <div className="px-3 md:px-6 py-2 md:py-4 flex-shrink-0" style={{ backgroundColor: 'var(--bg-card)', borderBottom: '1px solid var(--border-color)' }}>
+    <>
+      {/* AI Tools Sidebar */}
+      <AIToolsSidebar onToolSelect={handleToolSelect} />
+
+      <div 
+        className="h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] flex flex-col overflow-hidden w-full max-w-full transition-all duration-300" 
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          marginLeft: '0',
+          paddingLeft: '0'
+        }}
+      >
+        {/* Header */}
+        <div className="px-3 md:px-6 py-2 md:py-4 flex-shrink-0" style={{ backgroundColor: 'var(--bg-card)', borderBottom: '1px solid var(--border-color)' }}>
         <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
           <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-2xl flex items-center justify-center flex-shrink-0">
             <Bot className="w-4 h-4 md:w-7 md:h-7 text-white" />
@@ -627,6 +644,7 @@ ${JSON.stringify(context.news, null, 0)}
           </p>
         </form>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
