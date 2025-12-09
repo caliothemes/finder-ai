@@ -14,6 +14,7 @@ import AINews from './pages/AINews';
 import AINewsDetail from './pages/AINewsDetail';
 import FinderGPT from './pages/FinderGPT';
 import AIToolsCategory from './pages/AIToolsCategory';
+import Tarifs from './pages/Tarifs';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "AINewsDetail": AINewsDetail,
     "FinderGPT": FinderGPT,
     "AIToolsCategory": AIToolsCategory,
+    "Tarifs": Tarifs,
 }
 
 export const pagesConfig = {
