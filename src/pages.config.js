@@ -13,6 +13,7 @@ import LegalMentions from './pages/LegalMentions';
 import AINews from './pages/AINews';
 import AINewsDetail from './pages/AINewsDetail';
 import FinderGPT from './pages/FinderGPT';
+import AIToolsCategory from './pages/AIToolsCategory';
 import __Layout from './Layout.jsx';
 
 
@@ -32,6 +33,7 @@ export const PAGES = {
     "AINews": AINews,
     "AINewsDetail": AINewsDetail,
     "FinderGPT": FinderGPT,
+    "AIToolsCategory": AIToolsCategory,
 }
 
 export const pagesConfig = {
