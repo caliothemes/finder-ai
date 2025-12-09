@@ -220,7 +220,7 @@ export default function Profile() {
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-purple-700">
                 <Zap className="w-5 h-5" />
-                Mes Crédits IA
+                Mes Crédits
               </span>
               <Link to={createPageUrl('Tarifs')}>
                 <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
@@ -233,12 +233,15 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-5xl font-bold text-purple-600">
-                  {user.ai_credits || 0}
+                  {user.credits || 0}
                 </div>
                 <p className="text-sm text-slate-600 mt-1">
                   crédits disponibles
                 </p>
                 <p className="text-xs text-slate-500 mt-2">
+                  💡 Utilisables pour services IA et bannières
+                </p>
+                <p className="text-xs text-slate-500">
                   ✨ {10 - (user.free_generations_used || 0)} générations gratuites restantes
                 </p>
               </div>
@@ -247,7 +250,7 @@ export default function Profile() {
                   {toolsHistory.length}
                 </div>
                 <p className="text-sm text-slate-600">
-                  générations au total
+                  générations IA
                 </p>
               </div>
             </div>

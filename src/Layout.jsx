@@ -914,6 +914,7 @@ function LayoutContent({ children, currentPageName }) {
                           <h3 className="font-bold mb-4">{t('footer_contribute')}</h3>
                           <ul className="space-y-2 text-slate-400">
                             <li><Link to={createPageUrl('SubmitAI')} className="hover:text-white transition-colors">{t('footer_submit_ai')}</Link></li>
+                            <li><Link to={createPageUrl('Tarifs')} className="hover:text-white transition-colors">{language === 'fr' ? 'Tarifs' : 'Pricing'}</Link></li>
                           </ul>
                         </div>
 

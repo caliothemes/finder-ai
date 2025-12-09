@@ -56,7 +56,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
     }
 
     const freeGensUsed = user.free_generations_used || 0;
-    const credits = user.ai_credits || 0;
+    const credits = user.credits || 0;
 
     if (freeGensUsed >= 10 && credits <= 0) {
       toast.error(language === 'fr' 
@@ -313,7 +313,7 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
       if (freeGensUsed < 10) {
         await base44.auth.updateMe({ free_generations_used: freeGensUsed + 1 });
       } else {
-        await base44.auth.updateMe({ ai_credits: credits - 1 });
+        await base44.auth.updateMe({ credits: credits - 1 });
       }
 
       toast.success(language === 'fr' ? 'Génération réussie !' : 'Generation successful!');
