@@ -156,6 +156,16 @@ export const aiToolsCategories = [
     color: 'from-blue-500 to-cyan-500',
     services: [
       {
+        id: 'find-lawyer',
+        name: { fr: 'Trouver un avocat', en: 'Find a Lawyer' },
+        description: { 
+          fr: 'Recherchez des avocats spécialisés près de chez vous avec l\'IA', 
+          en: 'Find specialized lawyers near you with AI' 
+        },
+        icon: 'Users',
+        prompt: { fr: 'Comment trouver un bon avocat ?', en: 'How to find a good lawyer?' }
+      },
+      {
         id: 'contract',
         name: { fr: 'Générer contrat', en: 'Generate Contract' },
         description: { 
@@ -166,21 +176,11 @@ export const aiToolsCategories = [
         prompt: { fr: 'Outils IA pour générer des contrats juridiques', en: 'AI tools to generate legal contracts' }
       },
       {
-        id: 'analyze-doc',
-        name: { fr: 'Analyser document', en: 'Analyze Document' },
-        description: { 
-          fr: 'Analysez et comprenez des documents juridiques complexes', 
-          en: 'Analyze and understand complex legal documents' 
-        },
-        icon: 'FileSearch',
-        prompt: { fr: 'Recommande des outils pour analyser des documents juridiques', en: 'Recommend tools to analyze legal documents' }
-      },
-      {
         id: 'legal-advice',
-        name: { fr: 'Conseil juridique', en: 'Legal Advice' },
+        name: { fr: 'Conseil juridique IA', en: 'AI Legal Advice' },
         description: { 
-          fr: 'Obtenez des réponses à vos questions juridiques de base', 
-          en: 'Get answers to basic legal questions' 
+          fr: 'Obtenez des réponses à vos questions juridiques avec l\'IA', 
+          en: 'Get answers to legal questions with AI' 
         },
         icon: 'MessageCircle',
         prompt: { fr: 'Assistants IA pour conseils juridiques', en: 'AI assistants for legal advice' }

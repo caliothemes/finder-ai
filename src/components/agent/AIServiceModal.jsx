@@ -221,6 +221,36 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
           setOutput(result);
           break;
 
+        case 'find-lawyer':
+          result = await base44.integrations.Core.InvokeLLM({
+            prompt: `Recherche des avocats spécialisés selon ces critères: ${input}. 
+            Fournis une liste de 3-5 avocats avec:
+            - Nom du cabinet ou de l'avocat
+            - Spécialité juridique
+            - Localisation
+            - Coordonnées (téléphone, email, site web si disponibles)
+            - Bref résumé de leurs compétences
+            
+            Format la réponse de manière claire et structurée.`,
+            add_context_from_internet: true
+          });
+          setOutput(result);
+          break;
+
+        case 'legal-advice':
+          result = await base44.integrations.Core.InvokeLLM({
+            prompt: `Question juridique: ${input}
+            
+            Fournis une réponse claire et détaillée en expliquant:
+            - Les aspects juridiques pertinents
+            - Les droits et obligations
+            - Les démarches possibles
+            - IMPORTANT: Précise que ceci est une information générale et qu'il est recommandé de consulter un avocat pour un cas spécifique.`,
+            add_context_from_internet: true
+          });
+          setOutput(result);
+          break;
+
         default:
           result = await base44.integrations.Core.InvokeLLM({
             prompt: `${service.description[language]}. Requête: ${input}`,
@@ -394,6 +424,52 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
               >
                 <Copy className="w-4 h-4" />
               </Button>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    // Service de recherche d'avocats
+    if (service.id === 'find-lawyer') {
+      return (
+        <>
+          <div className="space-y-3">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={language === 'fr' ? 'Ville ou région...' : 'City or region...'}
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+            />
+            <Input
+              value={language2}
+              onChange={(e) => setLanguage2(e.target.value)}
+              placeholder={language === 'fr' ? 'Spécialité (droit du travail, immobilier, famille...)' : 'Specialty (labor law, real estate, family...)'}
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+            />
+          </div>
+          <Button 
+            onClick={() => {
+              const query = `${input} ${language2}`;
+              setInput(query);
+              handleProcess();
+            }}
+            disabled={loading || !input.trim()}
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+          >
+            {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <MessageSquare className="w-4 h-4 mr-2" />}
+            {language === 'fr' ? '🔍 Rechercher des avocats' : '🔍 Search lawyers'}
+          </Button>
+          {loading && (
+            <div className="text-center py-4">
+              <p className="text-sm animate-pulse" style={{ color: 'var(--text-muted)' }}>
+                {language === 'fr' ? '⚖️ Recherche en cours sur le web...' : '⚖️ Searching the web...'}
+              </p>
+            </div>
+          )}
+          {output && (
+            <div className="rounded-xl p-4 border" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+              <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color: 'var(--text-primary)' }}>{output}</p>
             </div>
           )}
         </>
