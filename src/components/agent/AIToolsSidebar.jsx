@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
-import { 
-  ChevronRight, ChevronLeft, ChevronDown, // Added ChevronDown
-  Image, Scale, FileText, Code, 
-  TrendingUp, Briefcase, GraduationCap,
-  Wand2, ShoppingCart, Video, Mail,
-  FileCheck, UserSearch, Palette,
-  Languages, Bug, Search, Lightbulb
-} from 'lucide-react';
+import { ChevronRight, ChevronLeft, Home, Sparkles, Image, Scale, FileText, Code, TrendingUp, Briefcase, GraduationCap, Video } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-// Added Accordion components
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { aiToolsCategories } from './aiToolsData';
 
-export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Added onExpandChange prop
+const iconMap = {
+  Image, Scale, FileText, Code, TrendingUp, Briefcase, GraduationCap, Video, Sparkles
+};
+
+export default function AIToolsSidebar({ onExpandChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { language } = useLanguage();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
-  // Modified handleToggle to call onExpandChange
   const handleToggle = () => {
     const newState = !isExpanded;
     setIsExpanded(newState);
@@ -28,12 +25,10 @@ export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Ad
     }
   };
 
-
-
   return (
     <TooltipProvider delayDuration={0}>
       <div 
-        className={`fixed left-0 lg:left-72 top-[72px] md:top-[80px] h-[calc(100vh-72px)] md:h-[calc(100vh-80px)] transition-all duration-300 z-40 flex flex-col ${ // Added flex-col
+        className={`fixed left-0 lg:left-72 top-[72px] md:top-[80px] h-[calc(100vh-72px)] md:h-[calc(100vh-80px)] transition-all duration-300 z-40 flex flex-col ${
           isExpanded ? 'w-64' : 'w-16'
         }`}
         style={{
@@ -42,13 +37,13 @@ export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Ad
           borderRight: `1px solid ${isDark ? 'rgba(71, 85, 105, 0.5)' : 'rgba(226, 232, 240, 1)'}`
         }}
       >
-        {/* Toggle Button - Moved to the top and outside the scrollable content */}
+        {/* Toggle Button */}
         <button
           onClick={handleToggle}
           className="w-full flex items-center justify-center py-3 transition-colors"
           style={{ 
             color: isDark ? '#94a3b8' : '#64748b',
-            borderBottom: `1px solid ${isDark ? 'rgba(71, 85, 105, 0.5)' : 'rgba(226, 232, 240, 1)'}` // Added borderBottom
+            borderBottom: `1px solid ${isDark ? 'rgba(71, 85, 105, 0.5)' : 'rgba(226, 232, 240, 1)'}`
           }}
         >
           {isExpanded ? (
@@ -58,31 +53,61 @@ export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Ad
           )}
         </button>
 
-        {/* Content - This div is now flex-1 and scrollable */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto py-4">
-          {/* Title when expanded */}
+          {/* Home Link */}
+          <div className={`${isExpanded ? 'px-4' : 'px-2'} mb-4`}>
+            {!isExpanded ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to={createPageUrl('FinderGPT')}
+                    className="flex items-center justify-center px-2 py-2 rounded-lg transition-all hover:bg-purple-500/10"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    <Home className="w-5 h-5 flex-shrink-0" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="font-medium">
+                  Agent FinderAI
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Link
+                to={createPageUrl('FinderGPT')}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-purple-500/10"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                <Home className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm font-medium">
+                  Agent FinderAI
+                </span>
+              </Link>
+            )}
+          </div>
+
           {isExpanded && (
-            <div className="px-4 mb-4">
+            <div className="px-4 mb-4 pb-4" style={{ borderBottom: `1px solid ${isDark ? 'rgba(71, 85, 105, 0.5)' : 'rgba(226, 232, 240, 1)'}` }}>
               <h3 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
-                {language === 'fr' ? '⚡ Outils IA Rapides' : '⚡ Quick AI Tools'}
+                {language === 'fr' ? '⚡ Services IA' : '⚡ AI Services'}
               </h3>
               <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-                {language === 'fr' ? 'Cliquez pour utiliser' : 'Click to use'}
+                {language === 'fr' ? 'Cliquez pour explorer' : 'Click to explore'}
               </p>
             </div>
           )}
 
-          {/* Categories - Conditional rendering based on isExpanded */}
+          {/* Categories */}
           {!isExpanded ? (
-            // Collapsed state: Show icons with tooltips
             <div className="space-y-2 px-2">
-              {categories.map((category) => {
-                const CategoryIcon = category.icon;
+              {aiToolsCategories.map((category) => {
+                const CategoryIcon = iconMap[category.icon] || Sparkles;
                 return (
                   <Tooltip key={category.id}>
                     <TooltipTrigger asChild>
-                      <div 
-                        className="flex items-center justify-center px-2 py-2 rounded-lg cursor-pointer transition-all"
+                      <Link
+                        to={createPageUrl('AIToolsCategory') + '?category=' + category.slug}
+                        className="flex items-center justify-center px-2 py-2 rounded-lg cursor-pointer transition-all hover:scale-105"
                         style={{
                           backgroundColor: isDark ? 'rgba(71, 85, 105, 0.3)' : 'rgba(241, 245, 249, 1)',
                         }}
@@ -90,7 +115,7 @@ export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Ad
                         <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center`}>
                           <CategoryIcon className="w-4 h-4 text-white" />
                         </div>
-                      </div>
+                      </Link>
                     </TooltipTrigger>
                     <TooltipContent side="right" className="font-medium">
                       {category.name[language]}
@@ -100,62 +125,34 @@ export default function AIToolsSidebar({ onToolSelect, onExpandChange }) { // Ad
               })}
             </div>
           ) : (
-            // Expanded state: Show categories as accordions
-            <Accordion type="multiple" className="px-2">
-              {categories.map((category) => {
-                const CategoryIcon = category.icon;
+            <div className="space-y-2 px-2">
+              {aiToolsCategories.map((category) => {
+                const CategoryIcon = iconMap[category.icon] || Sparkles;
                 return (
-                  <AccordionItem 
-                    key={category.id} 
-                    value={category.id}
-                    className="border-b-0" // Remove default border-b from AccordionItem
+                  <Link
+                    key={category.id}
+                    to={createPageUrl('AIToolsCategory') + '?category=' + category.slug}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all group hover:bg-purple-500/10"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(71, 85, 105, 0.3)' : 'rgba(241, 245, 249, 1)',
+                    }}
                   >
-                    <AccordionTrigger 
-                      className="flex items-center justify-between gap-3 px-2 py-2 hover:no-underline rounded-lg transition-all [&[data-state=open]>svg]:rotate-180" // Tailwind classes for rotation
-                      style={{
-                        backgroundColor: isDark ? 'rgba(71, 85, 105, 0.3)' : 'rgba(241, 245, 249, 1)',
-                      }}
-                    >
-                      <div className="flex items-center gap-2 flex-1">
-                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0`}>
-                          <CategoryIcon className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-xs font-medium truncate" style={{ color: 'var(--text-primary)' }}>
-                          {category.name[language]}
-                        </span>
-                      </div>
-                      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" /> {/* Accordion indicator */}
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-1 pb-0"> {/* Adjusted padding */}
-                      <div className="space-y-1 pl-2">
-                        {category.tools.map((tool, idx) => {
-                          const ToolIcon = tool.icon;
-                          return (
-                            <button
-                              key={idx}
-                              onClick={() => handleToolClick(tool)}
-                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md transition-all text-left group"
-                              style={{ color: 'var(--text-secondary)' }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = isDark ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.05)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = 'transparent';
-                              }}
-                            >
-                              <ToolIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
-                              <span className="text-xs truncate group-hover:text-purple-600 transition-colors">
-                                {tool.name[language]}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
+                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                      <CategoryIcon className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium truncate block group-hover:text-purple-600 transition-colors" style={{ color: 'var(--text-primary)' }}>
+                        {category.name[language]}
+                      </span>
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                        {category.services.length} {language === 'fr' ? 'services' : 'services'}
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--text-muted)' }} />
+                  </Link>
                 );
               })}
-            </Accordion>
+            </div>
           )}
         </div>
 
