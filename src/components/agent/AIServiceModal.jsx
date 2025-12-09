@@ -8,6 +8,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import NoBGModal from './NoBGModal';
 
 export default function AIServiceModal({ service, isOpen, onClose }) {
   const [input, setInput] = useState('');
@@ -21,6 +22,11 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
   const isDark = theme === 'dark';
 
   if (!service) return null;
+
+  // Service spécial pour noBG.me
+  if (service.id === 'remove-bg') {
+    return <NoBGModal isOpen={isOpen} onClose={onClose} />;
+  }
 
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
