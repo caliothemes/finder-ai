@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { aiToolsCategories } from '@/components/agent/aiToolsData';
 import AIServiceModal from '@/components/agent/AIServiceModal';
+import AIToolsSidebar from '@/components/agent/AIToolsSidebar';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import { createPageUrl } from '@/utils';
@@ -30,6 +31,7 @@ const iconMap = {
 export default function AIToolsCategory() {
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toolsSidebarExpanded, setToolsSidebarExpanded] = useState(false);
   const location = useLocation();
   const { language } = useLanguage();
   const { theme } = useTheme();
@@ -68,7 +70,15 @@ export default function AIToolsCategory() {
 
   return (
     <>
-      <div className="min-h-screen py-12 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+      <AIToolsSidebar onExpandChange={setToolsSidebarExpanded} />
+      
+      <div 
+        className="min-h-screen py-12 px-6 transition-all duration-300" 
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          marginLeft: toolsSidebarExpanded ? '256px' : '64px'
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
