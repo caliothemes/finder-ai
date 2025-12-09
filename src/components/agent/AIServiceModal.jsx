@@ -22,6 +22,113 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
+  // Exemples de prompts par service
+  const getExamplePrompts = () => {
+    const examples = {
+      'generate': {
+        fr: ['Un chat astronaute dans l\'espace', 'Paysage futuriste avec des gratte-ciels', 'Portrait d\'une femme style art déco'],
+        en: ['An astronaut cat in space', 'Futuristic cityscape with skyscrapers', 'Woman portrait in art deco style']
+      },
+      'create-logo': {
+        fr: ['TechVision', 'Green Earth Solutions', 'Pixel Studio'],
+        en: ['TechVision', 'Green Earth Solutions', 'Pixel Studio']
+      },
+      'create-story': {
+        fr: ['Soldes -50% ce weekend', 'Citation motivante du jour', 'Nouveau produit disponible'],
+        en: ['50% off this weekend', 'Motivational quote of the day', 'New product available']
+      },
+      'create-thumbnail': {
+        fr: ['Comment gagner de l\'argent en ligne', 'Top 10 des astuces iPhone', 'Recette de gâteau au chocolat'],
+        en: ['How to make money online', 'Top 10 iPhone tips', 'Chocolate cake recipe']
+      },
+      'create-poster': {
+        fr: ['Concert de jazz le 15 mars', 'Festival d\'été 2025', 'Soirée Halloween'],
+        en: ['Jazz concert on March 15', 'Summer festival 2025', 'Halloween party']
+      },
+      'product-photo': {
+        fr: ['Bouteille de parfum luxe', 'Montre connectée noire', 'Casque audio sans fil'],
+        en: ['Luxury perfume bottle', 'Black smartwatch', 'Wireless headphones']
+      },
+      'grammar': {
+        fr: ['Je suis allé au magasin hier et j\'ai acheter des pommes', 'Il faut que je vien te voir demain', 'C\'est article est très intéressant'],
+        en: ['I go to the store yesterday and buy apples', 'He don\'t knows the answer', 'Their going to the beach']
+      },
+      'translate': {
+        fr: ['Bonjour, comment allez-vous ?', 'Je voudrais réserver une table', 'Où se trouve la gare ?'],
+        en: ['Hello, how are you?', 'I would like to book a table', 'Where is the train station?']
+      },
+      'summarize': {
+        fr: ['[Collez un long article ici]', '[Résumez ce document]', '[Votre texte long]'],
+        en: ['[Paste a long article here]', '[Summarize this document]', '[Your long text]']
+      },
+      'paraphrase': {
+        fr: ['L\'intelligence artificielle révolutionne notre société', 'Ce projet nécessite une attention particulière', 'Les résultats sont très encourageants'],
+        en: ['Artificial intelligence is transforming society', 'This project requires special attention', 'The results are very encouraging']
+      },
+      'write': {
+        fr: ['Article sur les bienfaits du sport', 'Email de relance client', 'Description de produit e-commerce'],
+        en: ['Article about sports benefits', 'Customer follow-up email', 'E-commerce product description']
+      },
+      'code-gen': {
+        fr: ['Fonction de tri de tableau', 'API REST avec authentification', 'Formulaire de contact avec validation'],
+        en: ['Array sorting function', 'REST API with authentication', 'Contact form with validation']
+      },
+      'debug': {
+        fr: ['[Collez votre code avec bug]', 'function add(a, b) { return a - b }', '[Code à debugger]'],
+        en: ['[Paste your buggy code]', 'function add(a, b) { return a - b }', '[Code to debug]']
+      },
+      'explain': {
+        fr: ['[Code complexe à expliquer]', 'const result = arr.map(x => x * 2)', '[Algorithme à comprendre]'],
+        en: ['[Complex code to explain]', 'const result = arr.map(x => x * 2)', '[Algorithm to understand]']
+      },
+      'optimize': {
+        fr: ['[Code lent à optimiser]', 'for loop imbriqués', '[Code redondant]'],
+        en: ['[Slow code to optimize]', 'Nested for loops', '[Redundant code]']
+      },
+      'copywriting': {
+        fr: ['Formation en ligne de marketing digital', 'Logiciel de gestion de projet', 'Service de coaching personnel'],
+        en: ['Online digital marketing course', 'Project management software', 'Personal coaching service']
+      },
+      'seo': {
+        fr: ['[Votre contenu web]', 'Article de blog sur le fitness', '[Page produit e-commerce]'],
+        en: ['[Your web content]', 'Fitness blog article', '[E-commerce product page]']
+      },
+      'ads': {
+        fr: ['Nouveau smartphone innovant', 'Formation Excel en ligne', 'Restaurant italien authentique'],
+        en: ['Innovative new smartphone', 'Online Excel training', 'Authentic Italian restaurant']
+      },
+      'social': {
+        fr: ['Lancement de notre nouveau produit', 'Tips pour être productif', 'Partage d\'expérience client'],
+        en: ['Launching our new product', 'Productivity tips', 'Customer success story']
+      },
+      'hashtags': {
+        fr: ['Post sur le fitness et la motivation', 'Recette de cuisine healthy', 'Voyage en Asie'],
+        en: ['Fitness motivation post', 'Healthy cooking recipe', 'Asia travel']
+      },
+      'business-plan': {
+        fr: ['Application de livraison de repas', 'Plateforme de freelancing', 'Boutique en ligne de vêtements'],
+        en: ['Meal delivery app', 'Freelancing platform', 'Online clothing store']
+      },
+      'contract': {
+        fr: ['Contrat de prestation de services', 'Accord de confidentialité', 'Contrat de location'],
+        en: ['Service agreement', 'Non-disclosure agreement', 'Rental contract']
+      },
+      'cgv': {
+        fr: ['Boutique en ligne de produits artisanaux', 'Plateforme SaaS B2B', 'Service de consulting'],
+        en: ['Online artisan products store', 'B2B SaaS platform', 'Consulting service']
+      },
+      'find-lawyer': {
+        fr: ['Paris - Droit du travail', 'Lyon - Droit immobilier', 'Marseille - Droit de la famille'],
+        en: ['New York - Labor law', 'Los Angeles - Real estate law', 'Chicago - Family law']
+      },
+      'legal-advice': {
+        fr: ['Quels sont mes droits en cas de licenciement ?', 'Comment protéger mon idée de startup ?', 'Que faire en cas de litige avec un voisin ?'],
+        en: ['What are my rights if I\'m fired?', 'How to protect my startup idea?', 'What to do in case of dispute with neighbor?']
+      }
+    };
+    return examples[service.id] || { fr: [], en: [] };
+  };
+
   React.useEffect(() => {
     const loadUser = async () => {
       try {
@@ -325,6 +432,9 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
   };
 
   const renderServiceInterface = () => {
+    const examplePrompts = getExamplePrompts();
+    const examples = examplePrompts[language] || [];
+
     // Services de génération d'images (tous les services image)
     if (['generate', 'create-logo', 'create-story', 'create-thumbnail', 'create-poster', 'product-photo'].includes(service.id)) {
       let placeholder = language === 'fr' ? 'Décrivez ce que vous voulez créer...' : 'Describe what you want to create...';
@@ -349,6 +459,25 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
 
       return (
         <>
+          {examples.length > 0 && !input && (
+            <div className="mb-3">
+              <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                💡 {language === 'fr' ? 'Essayez ces exemples :' : 'Try these examples:'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {examples.map((example, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setInput(example)}
+                    className="px-3 py-1.5 rounded-lg text-xs hover:bg-purple-100 transition-colors"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -398,6 +527,25 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
     if (service.id === 'translate') {
       return (
         <>
+          {examples.length > 0 && !input && (
+            <div className="mb-3">
+              <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                💡 {language === 'fr' ? 'Essayez ces exemples :' : 'Try these examples:'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {examples.map((example, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setInput(example)}
+                    className="px-3 py-1.5 rounded-lg text-xs hover:bg-purple-100 transition-colors"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <select
             value={targetLang}
             onChange={(e) => setTargetLang(e.target.value)}
@@ -446,6 +594,25 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
     if (['code-gen', 'debug', 'explain', 'optimize'].includes(service.id)) {
       return (
         <>
+          {examples.length > 0 && !input && (
+            <div className="mb-3">
+              <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                💡 {language === 'fr' ? 'Essayez ces exemples :' : 'Try these examples:'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {examples.map((example, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setInput(example)}
+                    className="px-3 py-1.5 rounded-lg text-xs hover:bg-purple-100 transition-colors"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {service.id === 'code-gen' && (
             <Input
               value={language2}
@@ -493,6 +660,29 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
     if (service.id === 'find-lawyer') {
       return (
         <>
+          {examples.length > 0 && !input && (
+            <div className="mb-3">
+              <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                💡 {language === 'fr' ? 'Essayez ces exemples :' : 'Try these examples:'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {examples.map((example, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      const parts = example.split(' - ');
+                      setInput(parts[0]);
+                      if (parts[1]) setLanguage2(parts[1]);
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs hover:bg-purple-100 transition-colors"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="space-y-3">
             <Input
               value={input}
@@ -538,6 +728,25 @@ export default function AIServiceModal({ service, isOpen, onClose }) {
     // Services de texte standard
     return (
       <>
+        {examples.length > 0 && !input && (
+          <div className="mb-3">
+            <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+              💡 {language === 'fr' ? 'Essayez ces exemples :' : 'Try these examples:'}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {examples.map((example, i) => (
+                <button
+                  key={i}
+                  onClick={() => setInput(example)}
+                  className="px-3 py-1.5 rounded-lg text-xs hover:bg-purple-100 transition-colors"
+                  style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                >
+                  {example}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
