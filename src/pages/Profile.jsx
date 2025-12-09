@@ -220,11 +220,11 @@ export default function Profile() {
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-purple-700">
                 <Zap className="w-5 h-5" />
-                Mes Crédits
+                {t('credits_title')}
               </span>
               <Link to={createPageUrl('Tarifs')}>
                 <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
-                  Acheter des crédits
+                  {t('credits_buy')}
                 </Button>
               </Link>
             </CardTitle>
@@ -236,13 +236,13 @@ export default function Profile() {
                   {user.credits || 0}
                 </div>
                 <p className="text-sm text-slate-600 mt-1">
-                  crédits disponibles
+                  {t('credits_available')}
                 </p>
                 <p className="text-xs text-slate-500 mt-2">
-                  💡 Utilisables pour services IA et bannières
+                  💡 {t('credits_usage')}
                 </p>
                 <p className="text-xs text-slate-500">
-                  ✨ {10 - (user.free_generations_used || 0)} générations gratuites restantes
+                  ✨ {10 - (user.free_generations_used || 0)} {t('credits_free_remaining')}
                 </p>
               </div>
               <div className="text-right">
@@ -250,7 +250,7 @@ export default function Profile() {
                   {toolsHistory.length}
                 </div>
                 <p className="text-sm text-slate-600">
-                  générations IA
+                  {t('credits_ai_generations')}
                 </p>
               </div>
             </div>
@@ -442,7 +442,7 @@ export default function Profile() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <History className="w-5 h-5" />
-                Historique des générations IA
+                {t('history_title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -455,7 +455,7 @@ export default function Profile() {
                         <span className="font-medium text-slate-900">{gen.service_name}</span>
                         {gen.credits_used > 0 && (
                           <Badge variant="outline" className="text-xs">
-                            {gen.credits_used} crédit{gen.credits_used > 1 ? 's' : ''}
+                            {gen.credits_used} {gen.credits_used > 1 ? t('history_credits') : t('history_credit')}
                           </Badge>
                         )}
                       </div>

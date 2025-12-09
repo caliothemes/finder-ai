@@ -327,8 +327,21 @@ const translations = {
     home_newsletter_error_email: "Veuillez entrer votre email",
     home_newsletter_error: "Une erreur s'est produite. Veuillez réessayer.",
     home_newsletter_success_toast: "Merci ! Vous êtes inscrit à notre newsletter 🎉",
-  },
-  en: {
+
+    // Credits
+    credits_title: "Mes Crédits",
+    credits_available: "crédits disponibles",
+    credits_usage: "Utilisables pour services IA et bannières",
+    credits_free_remaining: "générations gratuites restantes",
+    credits_buy: "Acheter des crédits",
+    credits_ai_generations: "générations IA",
+
+    // AI Tools History
+    history_title: "Historique des générations IA",
+    history_credit: "crédit",
+    history_credits: "crédits",
+    },
+    en: {
     // Navigation
     nav_home: "Home",
     nav_explore: "AI Explorer",
@@ -652,8 +665,21 @@ const translations = {
     home_newsletter_error_email: "Please enter your email",
     home_newsletter_error: "An error occurred. Please try again.",
     home_newsletter_success_toast: "Thank you! You are subscribed to our newsletter 🎉",
-  }
-};
+
+    // Credits
+    credits_title: "My Credits",
+    credits_available: "credits available",
+    credits_usage: "Usable for AI services and banners",
+    credits_free_remaining: "free generations remaining",
+    credits_buy: "Buy credits",
+    credits_ai_generations: "AI generations",
+
+    // AI Tools History
+    history_title: "AI Generation History",
+    history_credit: "credit",
+    history_credits: "credits",
+    }
+    };
 
 const LanguageContext = createContext();
 
