@@ -397,15 +397,21 @@ ${JSON.stringify(context.news, null, 0)}
     );
   }
 
-  const handleToolSelect = (promptText) => {
-    setInput(promptText);
-  };
+  // Check for prompt in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const promptFromUrl = urlParams.get('prompt');
+    if (promptFromUrl && user) {
+      setInput(promptFromUrl);
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [user]);
 
   return (
     <>
       {/* AI Tools Sidebar */}
       <AIToolsSidebar 
-        onToolSelect={handleToolSelect} 
         onExpandChange={setToolsSidebarExpanded}
       />
 
