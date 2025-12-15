@@ -548,7 +548,7 @@ RÈGLE ABSOLUE: Si l'ID de vidéo contient "XXXX" ou est un placeholder, NE PAS 
         <div>
           <h3 className="font-semibold mb-4">Vidéos publiées</h3>
           <div className="grid md:grid-cols-3 gap-4">
-            {publishedVideos.slice(0, 6).map((video) => (
+            {publishedVideos.slice(0, 15).map((video) => (
               <Card key={video.id} className="overflow-hidden">
                 <div className="relative aspect-video bg-slate-100">
                   {video.thumbnail_url ? (

@@ -169,7 +169,7 @@ export default function VideoNewsSection() {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all hover:scale-105"
                   style={{ 
                     backgroundColor: theme === 'dark' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)',
-                    color: 'var(--text-primary)',
+                    color: theme === 'dark' ? '#f8fafc' : 'var(--text-primary)',
                     border: '1px solid rgba(239, 68, 68, 0.3)'
                   }}
                 >
@@ -185,7 +185,7 @@ export default function VideoNewsSection() {
       {/* Video Player Modal */}
       {selectedVideo && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto"
           onClick={() => setSelectedVideo(null)}
         >
           {/* Backdrop */}
@@ -193,7 +193,7 @@ export default function VideoNewsSection() {
           
           {/* Modal Content */}
           <div 
-            className="relative w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl my-8"
             style={{ backgroundColor: 'var(--bg-card)' }}
             onClick={(e) => e.stopPropagation()}
           >
