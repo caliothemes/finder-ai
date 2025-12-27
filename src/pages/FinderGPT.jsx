@@ -298,100 +298,178 @@ ${JSON.stringify(context.news, null, 0)}
     }
   };
 
-  // Show login prompt for non-authenticated users
-  if (authChecked && !user) {
+  // Show prompt to create account when trying to interact
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  const handleInteraction = () => {
+    if (!user) {
+      setShowLoginPrompt(true);
+    }
+  };
+
+  // For non-authenticated users - show the page with overlay on interaction
+  if (authChecked && !user && !showLoginPrompt) {
     return (
-      <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-        {/* Header */}
-        <div className="px-4 md:px-6 py-3 md:py-4" style={{ backgroundColor: 'var(--bg-card)', borderBottom: '1px solid var(--border-color)' }}>
-          <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0">
-              <Bot className="w-5 h-5 md:w-7 md:h-7 text-white" />
+      <>
+        <AIToolsSidebar onExpandChange={setToolsSidebarExpanded} />
+        
+        <div 
+          className="h-[calc(100vh-80px)] flex flex-col overflow-hidden transition-all duration-300" 
+          style={{ 
+            backgroundColor: 'var(--bg-secondary)',
+            marginLeft: toolsSidebarExpanded ? '256px' : '64px',
+            width: toolsSidebarExpanded ? 'calc(100% - 256px)' : 'calc(100% - 64px)'
+          }}
+        >
+          {/* Header */}
+          <div className="px-3 md:px-6 py-2 md:py-4 flex-shrink-0" style={{ backgroundColor: 'var(--bg-card)', borderBottom: '1px solid var(--border-color)' }}>
+            <div className="max-w-4xl mx-auto flex items-center gap-2 md:gap-3">
+              <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg md:rounded-2xl flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4 md:w-7 md:h-7 text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-base md:text-xl font-bold flex items-center gap-1 md:gap-2" style={{ color: 'var(--text-primary)' }}>
+                  Agent FinderAI
+                  <Sparkles className="w-3 h-3 md:w-5 md:h-5 text-yellow-500" />
+                </h1>
+                <p className="text-[10px] md:text-sm truncate" style={{ color: 'var(--text-secondary)' }}>
+                  {t('agent_subtitle')}
+                </p>
+              </div>
             </div>
-            <div className="min-w-0">
-              <h1 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-                Agent FinderAI
-                <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
-              </h1>
-              <p className="text-xs md:text-sm truncate" style={{ color: 'var(--text-secondary)' }}>
-                {t('agent_subtitle')}
+          </div>
+
+          {/* Demo content */}
+          <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center py-4 md:py-12 px-2">
+                <div className="w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-3xl flex items-center justify-center mx-auto mb-3 md:mb-6 shadow-lg">
+                  <Bot className="w-7 h-7 md:w-10 md:h-10 text-white" />
+                </div>
+                <h2 className="text-lg md:text-2xl font-bold mb-1 md:mb-3" style={{ color: 'var(--text-primary)' }}>
+                  {t('agent_welcome')}
+                </h2>
+                <p className="text-xs md:text-base mb-4 md:mb-8 max-w-md mx-auto px-2" style={{ color: 'var(--text-secondary)' }}>
+                  {t('agent_description')}
+                </p>
+                
+                {/* Example suggestions - clickable but triggers login */}
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-3 max-w-2xl mx-auto">
+                  {suggestions.map((suggestion, i) => (
+                    <button
+                      key={i}
+                      onClick={handleInteraction}
+                      className="text-left px-3 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl transition-all text-xs md:text-sm hover:border-purple-300"
+                      style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Disabled Input - triggers login on click */}
+          <div className="px-4 md:px-6 py-2 md:py-4 flex-shrink-0 w-full" style={{ background: theme === 'dark' ? 'linear-gradient(to right, rgba(88, 28, 135, 0.15), rgba(157, 23, 77, 0.15), rgba(88, 28, 135, 0.15))' : 'linear-gradient(to right, rgba(250, 245, 255, 1), rgba(252, 231, 243, 1), rgba(250, 245, 255, 1))', borderTop: '1px solid var(--border-color)' }}>
+            <div className="max-w-4xl mx-auto w-full">
+              <div className="flex gap-2 w-full" onClick={handleInteraction}>
+                <div className="flex-1 relative min-w-0 cursor-pointer">
+                  <div className="w-full min-h-[40px] md:min-h-[50px] rounded-lg border px-3 py-2 flex items-center" style={{ backgroundColor: 'var(--bg-card)', borderColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.3)' : 'rgba(192, 132, 252, 0.5)', color: 'var(--text-muted)', opacity: 0.6 }}>
+                    <span className="text-sm md:text-base">{t('agent_placeholder')}</span>
+                  </div>
+                </div>
+                <Button 
+                  type="button"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-2.5 md:px-6 h-[40px] md:h-auto flex-shrink-0"
+                >
+                  <Send className="w-4 h-4 md:w-5 md:h-5" />
+                </Button>
+              </div>
+              <p className="text-[9px] md:text-xs text-purple-500 mt-1 md:mt-2 text-center">
+                {t('agent_login_prompt')}
               </p>
             </div>
           </div>
         </div>
+      </>
+    );
+  }
 
-        {/* Login Prompt */}
-        <div className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="max-w-md w-full text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
-              <Bot className="w-12 h-12 text-white" />
-            </div>
-            
-            <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
-              {t('agent_create_account')}
-            </h2>
-            
-            <p className="mb-6" style={{ color: 'var(--text-secondary)' }}>
-              {t('agent_signup_desc')}
-            </p>
-
-            {/* Features */}
-            <div className="grid grid-cols-1 gap-3 mb-8 text-left">
-              <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Zap className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {t('agent_feature_recommendations')}
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                    {t('agent_feature_recommendations_desc')}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-5 h-5 text-pink-600" />
-                </div>
-                <div>
-                  <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {t('agent_feature_favorites')}
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                    {t('agent_feature_favorites_desc')}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {t('agent_feature_history')}
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                    {t('agent_feature_history_desc')}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <Button 
-              onClick={() => base44.auth.redirectToLogin()}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg rounded-xl shadow-lg"
-            >
-              <LogIn className="w-5 h-5 mr-2" />
-              {t('agent_signup_btn')}
-            </Button>
-            
-            <p className="text-xs mt-4" style={{ color: 'var(--text-muted)' }}>
-              {t('agent_signup_info')}
-            </p>
+  // Show full login modal when trying to interact
+  if (authChecked && !user && showLoginPrompt) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
+        <div className="max-w-md w-full text-center p-8 rounded-3xl" style={{ backgroundColor: 'var(--bg-card)' }}>
+          <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <Bot className="w-12 h-12 text-white" />
           </div>
+          
+          <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
+            {language === 'fr' ? 'Créez votre compte gratuit' : 'Create your free account'}
+          </h2>
+          
+          <p className="mb-6" style={{ color: 'var(--text-secondary)' }}>
+            {language === 'fr' 
+              ? 'Pour utiliser Agent FinderAI et accéder aux services IA, créez votre compte gratuit en 20 secondes !'
+              : 'To use Agent FinderAI and access AI services, create your free account in 20 seconds!'}
+          </p>
+
+          {/* Features */}
+          <div className="grid grid-cols-1 gap-3 mb-8 text-left">
+            <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Zap className="w-5 h-5 text-purple-600" />
+              </div>
+              <div>
+                <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {language === 'fr' ? 'Chat avec l\'agent IA' : 'Chat with AI agent'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+              <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-pink-600" />
+              </div>
+              <div>
+                <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {language === 'fr' ? 'Services IA gratuits' : 'Free AI services'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Heart className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {language === 'fr' ? 'Sauvegarde des favoris' : 'Save favorites'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Button 
+            onClick={() => base44.auth.redirectToLogin()}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg rounded-xl shadow-lg mb-3"
+          >
+            <LogIn className="w-5 h-5 mr-2" />
+            {language === 'fr' ? 'Créer mon compte gratuit' : 'Create my free account'}
+          </Button>
+
+          <button
+            onClick={() => setShowLoginPrompt(false)}
+            className="text-sm hover:underline"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            {language === 'fr' ? 'Retour' : 'Back'}
+          </button>
+          
+          <p className="text-xs mt-4" style={{ color: 'var(--text-muted)' }}>
+            ✨ 100% gratuit • Pas de carte bancaire • Accès en 20 secondes
+          </p>
         </div>
       </div>
     );
