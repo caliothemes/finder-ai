@@ -20,6 +20,7 @@ export default function FinderGPT() {
   const [isListening, setIsListening] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const [toolsSidebarExpanded, setToolsSidebarExpanded] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const messagesEndRef = useRef(null);
   const lastAssistantRef = useRef(null);
   const { language, t } = useLanguage();
@@ -298,9 +299,7 @@ ${JSON.stringify(context.news, null, 0)}
     }
   };
 
-  // Show prompt to create account when trying to interact
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-
+  // Handle interaction for non-logged users
   const handleInteraction = () => {
     if (!user) {
       setShowLoginPrompt(true);
