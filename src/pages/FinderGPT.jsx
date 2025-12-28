@@ -306,8 +306,17 @@ ${JSON.stringify(context.news, null, 0)}
     }
   };
 
+  // Show loading during auth check
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+      </div>
+    );
+  }
+
   // For non-authenticated users - show the page with overlay on interaction
-  if (authChecked && !user && !showLoginPrompt) {
+  if (!user && !showLoginPrompt) {
     return (
       <>
         <AIToolsSidebar onExpandChange={setToolsSidebarExpanded} />
@@ -396,7 +405,7 @@ ${JSON.stringify(context.news, null, 0)}
   }
 
   // Show full login modal when trying to interact
-  if (authChecked && !user && showLoginPrompt) {
+  if (!user && showLoginPrompt) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
         <div className="max-w-md w-full text-center p-8 rounded-3xl" style={{ backgroundColor: 'var(--bg-card)' }}>
