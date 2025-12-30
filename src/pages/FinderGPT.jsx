@@ -27,24 +27,6 @@ export default function FinderGPT() {
   const { theme } = useTheme();
   const queryClient = useQueryClient();
 
-  // Load user
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const isAuth = await base44.auth.isAuthenticated();
-        if (isAuth) {
-          const currentUser = await base44.auth.me();
-          setUser(currentUser);
-        }
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setAuthChecked(true);
-      }
-    };
-    loadUser();
-  }, []);
-
   // Fetch chat history for logged in users
   const { data: chatHistory = [] } = useQuery({
     queryKey: ['gptChatHistory', user?.email],
@@ -144,6 +126,24 @@ export default function FinderGPT() {
   });
 
   const chatContainerRef = useRef(null);
+
+  // Load user
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const isAuth = await base44.auth.isAuthenticated();
+        if (isAuth) {
+          const currentUser = await base44.auth.me();
+          setUser(currentUser);
+        }
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+    loadUser();
+  }, []);
 
   const scrollToLastAssistant = () => {
     if (lastAssistantRef.current && chatContainerRef.current) {
