@@ -84,36 +84,49 @@ export default function BannerManager() {
 
   const reserveDatesMutation = useMutation({
     mutationFn: async ({ bannerId, dates }) => {
-      console.log('START', { bannerId, dates });
+      console.log('🚀 MUTATION START', { bannerId, dates, userRole: user?.role });
+      
       const banner = myBanners.find(b => b.id === bannerId);
+      if (!banner) throw new Error('Bannière introuvable');
+      
       const config = getPositionByValue(banner.position);
       const creditsNeeded = dates.length * config.creditsPerDay;
       
-      if (proAccount.credits < creditsNeeded) throw new Error('Pas assez de crédits');
+      console.log('💰 Crédits:', { available: proAccount.credits, needed: creditsNeeded, isAdmin: user?.role === 'admin' });
+      
+      // Bypass check crédits pour admin
+      if (user?.role !== 'admin' && proAccount.credits < creditsNeeded) {
+        throw new Error('Pas assez de crédits');
+      }
 
       const allDates = [...(banner.reserved_dates || []), ...dates];
+      console.log('📅 Nouvelles dates:', allDates);
 
-      console.log('UPDATE banner', allDates);
       await base44.entities.BannerReservation.update(bannerId, {
         reserved_dates: allDates,
         credits_used: (banner.credits_used || 0) + creditsNeeded
       });
+      console.log('✅ Bannière mise à jour');
 
-      console.log('UPDATE pro');
-      await base44.entities.ProAccount.update(proAccount.id, {
-        credits: proAccount.credits - creditsNeeded
-      });
+      // Ne déduire des crédits que si pas admin
+      if (user?.role !== 'admin') {
+        await base44.entities.ProAccount.update(proAccount.id, {
+          credits: proAccount.credits - creditsNeeded
+        });
+        console.log('✅ Crédits déduits');
+      }
 
-      console.log('DONE');
+      console.log('🎉 MUTATION SUCCESS');
       return dates.length;
     },
     onSuccess: (count) => {
+      console.log('✅ onSuccess appelé');
       queryClient.invalidateQueries();
       setReservingBanner(null);
       toast.success(`${count} dates réservées !`);
     },
     onError: (e) => {
-      console.error('ERR', e);
+      console.error('❌ ERREUR MUTATION:', e);
       toast.error(e.message);
     }
   });
@@ -402,7 +415,10 @@ export default function BannerManager() {
                   <BannerCalendar
                     bannerId={banner.id}
                     position={banner.position}
-                    onReserve={(dates) => reserveDatesMutation.mutate({ bannerId: banner.id, dates })}
+                    onReserve={(dates) => {
+                      console.log('📞 onReserve callback', dates);
+                      reserveDatesMutation.mutate({ bannerId: banner.id, dates });
+                    }}
                   />
                 </div>
               )}
