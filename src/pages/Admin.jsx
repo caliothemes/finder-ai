@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, FileText, Mail, Image, 
   BarChart3, Users, Sparkles, Shield, Search,
-  ChevronRight, Newspaper, Award, Video
+  ChevronRight, Newspaper, Award, Video, Database
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from '@/components/ThemeProvider';
@@ -26,6 +26,7 @@ import AdminFinderAIReviews from '@/components/admin/AdminFinderAIReviews';
 import AdminReviewsManager from '@/components/admin/AdminReviewsManager';
 import AdminVideoScan from '@/components/admin/AdminVideoScan';
 import AdminWrapper from '@/components/admin/AdminWrapper';
+import AdminBackup from '@/components/admin/AdminBackup';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -118,6 +119,7 @@ export default function Admin() {
   if (!user) return null;
 
   const adminSections = [
+    { id: 'backup', label: 'Sauvegarde BDD', icon: Database, description: 'Export JSON complet', color: 'from-emerald-600 to-teal-600' },
     { id: 'ai-scan', label: 'AI Search Scan', icon: Search, description: 'Scanner automatique de services IA', color: 'from-purple-600 to-pink-600', badge: pendingDiscoveriesCount },
     { id: 'services', label: 'Services IA', icon: Sparkles, description: 'Gérer les services IA', color: 'from-purple-600 to-indigo-600' },
     { id: 'ownership', label: 'Revendications IA', icon: Shield, description: 'Valider les revendications', color: 'from-amber-600 to-yellow-600', badge: pendingClaimsCount },
@@ -138,6 +140,7 @@ export default function Admin() {
   const renderSection = () => {
     const content = (() => {
       switch (activeSection) {
+        case 'backup': return <AdminBackup />;
         case 'ai-scan': return <AdminAISearchScan />;
         case 'video-scan': return <AdminVideoScan />;
         case 'news': return <AdminNews />;
