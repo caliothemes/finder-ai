@@ -87,15 +87,16 @@ export default function BannerManager() {
       const banner = myBanners.find(b => b.id === bannerId);
       const positionConfig = getPositionByValue(banner.position);
       const creditsPerDay = positionConfig?.creditsPerDay || 1;
-      const newDates = [...(banner.reserved_dates || []), ...dates];
       const creditsNeeded = dates.length * creditsPerDay;
       
       if (proAccount.credits < creditsNeeded) {
         throw new Error('Crédits insuffisants');
       }
 
+      const allDates = [...new Set([...(banner.reserved_dates || []), ...dates])].sort();
+
       await base44.entities.BannerReservation.update(bannerId, {
-        reserved_dates: newDates,
+        reserved_dates: allDates,
         credits_used: (banner.credits_used || 0) + creditsNeeded
       });
 
@@ -106,9 +107,9 @@ export default function BannerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myBanners'] });
       queryClient.invalidateQueries({ queryKey: ['proAccount'] });
-      queryClient.invalidateQueries({ queryKey: ['bannerReservations'] });
+      queryClient.invalidateQueries({ queryKey: ['reserved-dates'] });
       setReservingBanner(null);
-      toast.success('Dates réservées avec succès ! 🎉');
+      toast.success('Dates réservées ! 🎉');
     },
     onError: (error) => {
       toast.error(error.message);

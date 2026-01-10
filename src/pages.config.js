@@ -39,7 +39,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Home",
+    mainPage: "BannerManager",
     Pages: PAGES,
     Layout: __Layout,
 };
