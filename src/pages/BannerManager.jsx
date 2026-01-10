@@ -84,35 +84,37 @@ export default function BannerManager() {
 
   const reserveDatesMutation = useMutation({
     mutationFn: async ({ bannerId, dates }) => {
+      console.log('START', { bannerId, dates });
       const banner = myBanners.find(b => b.id === bannerId);
-      const positionConfig = getPositionByValue(banner.position);
-      const creditsPerDay = positionConfig?.creditsPerDay || 1;
-      const creditsNeeded = dates.length * creditsPerDay;
+      const config = getPositionByValue(banner.position);
+      const creditsNeeded = dates.length * config.creditsPerDay;
       
-      if (proAccount.credits < creditsNeeded) {
-        throw new Error('Crédits insuffisants');
-      }
+      if (proAccount.credits < creditsNeeded) throw new Error('Pas assez de crédits');
 
-      const allDates = [...new Set([...(banner.reserved_dates || []), ...dates])].sort();
+      const allDates = [...(banner.reserved_dates || []), ...dates];
 
+      console.log('UPDATE banner', allDates);
       await base44.entities.BannerReservation.update(bannerId, {
         reserved_dates: allDates,
         credits_used: (banner.credits_used || 0) + creditsNeeded
       });
 
+      console.log('UPDATE pro');
       await base44.entities.ProAccount.update(proAccount.id, {
         credits: proAccount.credits - creditsNeeded
       });
+
+      console.log('DONE');
+      return dates.length;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myBanners'] });
-      queryClient.invalidateQueries({ queryKey: ['proAccount'] });
-      queryClient.invalidateQueries({ queryKey: ['reserved-dates'] });
+    onSuccess: (count) => {
+      queryClient.invalidateQueries();
       setReservingBanner(null);
-      toast.success('Dates réservées ! 🎉');
+      toast.success(`${count} dates réservées !`);
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (e) => {
+      console.error('ERR', e);
+      toast.error(e.message);
     }
   });
 
