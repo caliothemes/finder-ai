@@ -85,9 +85,10 @@ function AdminNavLink() {
 
 // Hook pour tracker les nouveautés depuis la dernière visite
 function useNewItemsTracker() {
+  // TOUS les hooks doivent être appelés en premier
   const location = useLocation();
   
-  // Récupérer les counts actuels
+  // Récupérer les counts actuels - tous les hooks d'abord
   const { data: aiServicesCount = 0 } = useQuery({
     queryKey: ['aiServicesCount'],
     queryFn: async () => {
@@ -107,13 +108,13 @@ function useNewItemsTracker() {
   });
 
   const { data: newsCount = 0 } = useQuery({
-        queryKey: ['newsCount'],
-        queryFn: async () => {
-          const news = await base44.entities.AINews.filter({ status: 'published' });
-          return news.length;
-        },
-        staleTime: 60000,
-      });
+    queryKey: ['newsCount'],
+    queryFn: async () => {
+      const news = await base44.entities.AINews.filter({ status: 'published' });
+      return news.length;
+    },
+    staleTime: 60000,
+  });
 
 
 
