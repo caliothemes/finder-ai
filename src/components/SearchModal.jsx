@@ -31,22 +31,23 @@ const pricingFilters = [
 ];
 
 export default function SearchModal({ isOpen, onClose }) {
+  // TOUS les hooks doivent être appelés AVANT toute logique ou return
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPricing, setSelectedPricing] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [recentSearches, setRecentSearches] = useState([]);
 
-  // Hooks doivent toujours être appelés, peu importe isOpen
+  // Hooks TOUJOURS appelés - pas de enabled conditionnel
   const { data: allServices = [] } = useQuery({
     queryKey: ['allAIServices'],
     queryFn: () => base44.entities.AIService.filter({ status: 'approved' }),
-    enabled: isOpen,
+    staleTime: 300000,
   });
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: () => base44.entities.Category.list(),
-    enabled: isOpen,
+    staleTime: 300000,
   });
 
   useEffect(() => {
