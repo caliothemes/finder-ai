@@ -24,6 +24,7 @@ export default function ScrollToTop() {
     });
   };
 
+  // Return après les hooks
   if (!isVisible) return null;
 
   return (
