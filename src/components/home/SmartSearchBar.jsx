@@ -7,6 +7,7 @@ import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function SmartSearchBar({ onSearch }) {
+  // Tous les hooks en premier
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,18 +32,6 @@ export default function SmartSearchBar({ onSearch }) {
     queryKey: ['allServicesSearch'],
     queryFn: () => base44.entities.AIService.filter({ status: 'approved' }, '-views', 100),
   });
-
-  const filteredServices = query.length >= 2
-    ? allServices.filter(s => 
-        s.name.toLowerCase().includes(query.toLowerCase()) ||
-        s.description?.toLowerCase().includes(query.toLowerCase()) ||
-        s.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-      ).slice(0, 6)
-    : [];
-
-  const trendingServices = allServices
-    .filter(s => s.cover_image_url || s.logo_url)
-    .slice(0, 4);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
