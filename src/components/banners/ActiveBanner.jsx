@@ -18,7 +18,6 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
   
   const { data: activeBanner, isLoading } = useQuery({
     queryKey: ['activeBanner', position, today],
-    queryKey: ['activeBanner', position, today],
     queryFn: async () => {
       try {
         const banners = await base44.entities.BannerReservation.filter({
