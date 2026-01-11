@@ -12,8 +12,14 @@ import { useTheme } from '@/components/ThemeProvider';
 export default function ActiveBanner({ position, showPlaceholder = false }) {
   // Tous les hooks en premier
   const { theme } = useTheme();
+  
+  // Toutes les variables et calculs AVANT useQuery
   const today = new Date().toISOString().split('T')[0];
+  const isDark = theme === 'dark';
+  const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
+  const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
 
+  // useQuery après les calculs simples
   const { data: activeBanner, isLoading } = useQuery({
     queryKey: ['activeBanner', position, today],
     queryFn: async () => {
@@ -36,11 +42,6 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
       }
     },
   });
-
-  // Toutes les variables calculées AVANT les returns
-  const isDark = theme === 'dark';
-  const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
-  const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
 
   // Returns conditionnels après tous les hooks et calculs
   if (!isLoading && !activeBanner && showPlaceholder) {
