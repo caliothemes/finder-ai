@@ -12,9 +12,7 @@ import { useTheme } from '@/components/ThemeProvider';
 export default function ActiveBanner({ position, showPlaceholder = false }) {
   // TOUS LES HOOKS EN PREMIER - AUCUNE LOGIQUE AVANT
   const { theme } = useTheme();
-  
-  // Calcul de today avant useQuery (car utilisé dans queryKey)
-  const today = new Date().toISOString().split('T')[0];
+  const today = React.useMemo(() => new Date().toISOString().split('T')[0], []);
   
   const { data: activeBanner, isLoading } = useQuery({
     queryKey: ['activeBanner', position, today],
