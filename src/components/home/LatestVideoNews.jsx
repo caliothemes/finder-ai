@@ -23,7 +23,7 @@ export default function LatestVideoNews() {
     queryFn: () => base44.entities.YouTubeChannel.filter({ active: true }),
   });
 
-  // Extraire l'ID YouTube
+  // Extraire l'ID YouTube - défini avant le return conditionnel
   const getYouTubeVideoId = (url) => {
     if (!url) return null;
     const patterns = [
@@ -38,6 +38,7 @@ export default function LatestVideoNews() {
     return null;
   };
 
+  // Return conditionnel après tous les hooks
   if (isLoading || videos.length === 0) return null;
 
   return (
