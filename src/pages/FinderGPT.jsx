@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import AIToolsSidebar from '@/components/agent/AIToolsSidebar';
 
 export default function FinderGPT() {
+  // TOUS LES HOOKS EN PREMIER - AVANT TOUTE LOGIQUE
   const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -23,6 +24,7 @@ export default function FinderGPT() {
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const messagesEndRef = useRef(null);
   const lastAssistantRef = useRef(null);
+  const chatContainerRef = useRef(null);
   const { language, t } = useLanguage();
   const { theme } = useTheme();
   const queryClient = useQueryClient();
@@ -124,8 +126,6 @@ export default function FinderGPT() {
     queryKey: ['gptNews'],
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 50),
   });
-
-  const chatContainerRef = useRef(null);
 
   // Load user
   useEffect(() => {
