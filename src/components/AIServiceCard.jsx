@@ -12,6 +12,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function AIServiceCard({ service, onToggleFavorite, isFavorite, hasFinderReview = false, finderReviewRating = null }) {
+  // TOUS les hooks en premier - AVANT toute logique
   const { language, t } = useLanguage();
   const { theme } = useTheme();
 
