@@ -5,6 +5,7 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 export default function StoriesViewer({ onClose }) {
+  // TOUS les hooks en premier
   const [currentIndex, setCurrentIndex] = useState(0);
   const queryClient = useQueryClient();
 
@@ -23,6 +24,29 @@ export default function StoriesViewer({ onClose }) {
     },
   });
 
+  // Tous les useEffect AVANT les fonctions qui les utilisent
+  useEffect(() => {
+    if (stories.length && stories[currentIndex]) {
+      incrementViewMutation.mutate(stories[currentIndex].id);
+    }
+  }, []);
+
+  useEffect(() => {
+    const nextStory = () => {
+      if (currentIndex < stories.length - 1) {
+        const newIndex = currentIndex + 1;
+        setCurrentIndex(newIndex);
+        incrementViewMutation.mutate(stories[newIndex].id);
+      } else {
+        onClose();
+      }
+    };
+    
+    const timer = setTimeout(nextStory, 5000);
+    return () => clearTimeout(timer);
+  }, [currentIndex, stories.length, incrementViewMutation, onClose]);
+
+  // Fonctions après les hooks
   const nextStory = () => {
     if (currentIndex < stories.length - 1) {
       const newIndex = currentIndex + 1;
@@ -41,17 +65,7 @@ export default function StoriesViewer({ onClose }) {
     }
   };
 
-  useEffect(() => {
-    if (stories.length && stories[currentIndex]) {
-      incrementViewMutation.mutate(stories[currentIndex].id);
-    }
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(nextStory, 5000);
-    return () => clearTimeout(timer);
-  }, [currentIndex]);
-
+  // Return conditionnel APRÈS tous les hooks
   if (!stories.length) {
     return (
       <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
