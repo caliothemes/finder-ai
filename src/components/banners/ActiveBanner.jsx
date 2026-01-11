@@ -10,8 +10,8 @@ import EmptyBannerPlaceholder from './EmptyBannerPlaceholder';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function ActiveBanner({ position, showPlaceholder = false }) {
+  // Tous les hooks en premier
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
   const today = new Date().toISOString().split('T')[0];
 
   const { data: activeBanner, isLoading } = useQuery({
@@ -37,11 +37,12 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
     },
   });
 
-  // Déterminer le format AVANT les returns
+  // Toutes les variables calculées AVANT les returns
+  const isDark = theme === 'dark';
   const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
   const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
 
-  // Si pas de bannière et placeholder demandé, afficher le placeholder
+  // Returns conditionnels après tous les hooks et calculs
   if (!isLoading && !activeBanner && showPlaceholder) {
     return <EmptyBannerPlaceholder variant={isArticleFormat ? 'article' : isCardFormat ? 'card' : 'banner'} />;
   }
