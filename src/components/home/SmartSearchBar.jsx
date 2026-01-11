@@ -48,6 +48,19 @@ export default function SmartSearchBar({ onSearch }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Calculs dérivés après les hooks
+  const filteredServices = query.length >= 2
+    ? allServices.filter(s => 
+        s.name.toLowerCase().includes(query.toLowerCase()) ||
+        s.description?.toLowerCase().includes(query.toLowerCase()) ||
+        s.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+      ).slice(0, 6)
+    : [];
+
+  const trendingServices = allServices
+    .filter(s => s.cover_image_url || s.logo_url)
+    .slice(0, 4);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (query.trim()) {
