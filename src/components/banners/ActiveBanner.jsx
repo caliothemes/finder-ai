@@ -13,12 +13,14 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
   // TOUS LES HOOKS EN PREMIER - AUCUNE LOGIQUE AVANT
   const { theme } = useTheme();
   
+  // Calcul de today avant useQuery (car utilisé dans queryKey)
+  const today = new Date().toISOString().split('T')[0];
+  
   const { data: activeBanner, isLoading } = useQuery({
-    queryKey: ['activeBanner', position, new Date().toISOString().split('T')[0]],
+    queryKey: ['activeBanner', position, today],
     queryKey: ['activeBanner', position, today],
     queryFn: async () => {
       try {
-        const today = new Date().toISOString().split('T')[0];
         const banners = await base44.entities.BannerReservation.filter({
           position: position,
           validated: true,
