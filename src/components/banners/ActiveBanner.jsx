@@ -37,17 +37,16 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
     },
   });
 
+  // Déterminer le format AVANT les returns
+  const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
+  const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
+
   // Si pas de bannière et placeholder demandé, afficher le placeholder
   if (!isLoading && !activeBanner && showPlaceholder) {
-    const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
-    const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
     return <EmptyBannerPlaceholder variant={isArticleFormat ? 'article' : isCardFormat ? 'card' : 'banner'} />;
   }
 
   if (isLoading || !activeBanner) return null;
-
-  // Positions en format card (sidebar)
-  const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
 
   // Format Card (comme les autres services)
   if (isCardFormat) {
@@ -161,8 +160,6 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
           }
 
   // Format Article pour homepage_hero et explore_top
-    const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
-
     if (isArticleFormat) {
       return (
         <div 
