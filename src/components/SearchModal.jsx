@@ -36,13 +36,7 @@ export default function SearchModal({ isOpen, onClose }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [recentSearches, setRecentSearches] = useState([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('recentSearches');
-    if (saved) {
-      setRecentSearches(JSON.parse(saved).slice(0, 5));
-    }
-  }, [isOpen]);
-
+  // Hooks doivent toujours être appelés, peu importe isOpen
   const { data: allServices = [] } = useQuery({
     queryKey: ['allAIServices'],
     queryFn: () => base44.entities.AIService.filter({ status: 'approved' }),
@@ -54,6 +48,13 @@ export default function SearchModal({ isOpen, onClose }) {
     queryFn: () => base44.entities.Category.list(),
     enabled: isOpen,
   });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('recentSearches');
+    if (saved) {
+      setRecentSearches(JSON.parse(saved).slice(0, 5));
+    }
+  }, [isOpen]);
 
   // Trending services (most viewed)
   const trendingServices = useMemo(() => {
