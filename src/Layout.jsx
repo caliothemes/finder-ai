@@ -164,8 +164,8 @@ function LayoutContent({ children, currentPageName }) {
     const [storiesOpen, setStoriesOpen] = useState(false);
     const { language, changeLanguage, t } = useLanguage();
     const { theme } = useTheme();
-    const newItems = useNewItemsTracker();
     const location = useLocation();
+    const newItems = useNewItemsTracker();
 
     // Scroll to top on route change
     useEffect(() => {
