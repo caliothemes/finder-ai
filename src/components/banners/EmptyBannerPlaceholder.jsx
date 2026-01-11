@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function EmptyBannerPlaceholder({ variant = 'banner' }) {
+  // Hook doit toujours être appelé en premier
   const { theme } = useTheme();
+  
   // Card format (comme les cards de services)
   if (variant === 'card') {
     return (
