@@ -51,11 +51,6 @@ export default function Home() {
     },
   });
 
-  const aiServices = [...rawAIServices]
-    .filter(s => s.cover_image_url)
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
-    .slice(0, 15);
-
   const { data: favorites = [] } = useQuery({
     queryKey: ['favorites', user?.email],
     queryFn: () => user ? base44.entities.Favorite.filter({ user_email: user.email }) : [],
@@ -108,6 +103,11 @@ export default function Home() {
       window.location.href = `/search?q=${encodeURIComponent(query)}`;
     }
   };
+
+  const aiServices = [...rawAIServices]
+    .filter(s => s.cover_image_url)
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+    .slice(0, 15);
 
   if (categoriesLoading || servicesLoading) {
     return (
