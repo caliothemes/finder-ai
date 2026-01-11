@@ -13,6 +13,7 @@ export default function LatestNews() {
     queryFn: () => base44.entities.AINews.filter({ status: 'published' }, '-created_date', 3),
   });
 
+  // Déplacer la condition après les hooks
   if (isLoading || articles.length === 0) return null;
 
   return (
