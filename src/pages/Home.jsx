@@ -18,21 +18,10 @@ import ActiveBanner from '@/components/banners/ActiveBanner';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Home() {
+  // TOUS LES HOOKS EN PREMIER
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
   const { t } = useLanguage();
-
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const currentUser = await base44.auth.me();
-        setUser(currentUser);
-      } catch (error) {
-        setUser(null);
-      }
-    };
-    loadUser();
-  }, []);
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories'],
@@ -98,6 +87,19 @@ export default function Home() {
     },
   });
 
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    loadUser();
+  }, []);
+
+  // CALCULS APRÈS LES HOOKS
   const handleSearch = (query) => {
     if (query.trim()) {
       window.location.href = `/search?q=${encodeURIComponent(query)}`;
