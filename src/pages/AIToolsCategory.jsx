@@ -10,22 +10,22 @@ import {
   Image, Scale, FileText, Code, 
   TrendingUp, Briefcase, GraduationCap, Video,
   Sparkles, MessageSquare, ArrowRight,
-  Wand2, CheckCircle, Languages, Minimize2,
+  Wand2, CheckCircle, Languages,
   RefreshCw, Palette, FileCheck, Search,
   PenTool, BarChart, Receipt, HelpCircle,
   Layers, BookOpen, Users, Mic, Film, Music,
   Shield, Bug, Target, Share2, Hash,
   CheckSquare, MessageCircle,
-  Presentation, ShoppingBag, Mail, CircleDot, Smartphone, Monitor, Zap
+  Presentation, ShoppingBag, Mail, CircleDot, Smartphone, Monitor, Zap, FileImage
 } from 'lucide-react';
 
 const iconMap = {
   Image, Scale, FileText, Code, TrendingUp, Briefcase, GraduationCap, Video,
-  Sparkles, MessageSquare, Wand2, CheckCircle, Languages, Minimize2,
+  Sparkles, MessageSquare, Wand2, CheckCircle, Languages,
   RefreshCw, Palette, FileCheck, Search, PenTool, BarChart, Receipt,
   HelpCircle, Layers, BookOpen, Users, Mic, Film, Music, Shield,
   Bug, Target, Share2, Hash, CheckSquare, MessageCircle,
-  Presentation, ShoppingBag, Mail, CircleDot, Smartphone, Monitor, Zap
+  Presentation, ShoppingBag, Mail, CircleDot, Smartphone, Monitor, Zap, FileImage
 };
 
 export default function AIToolsCategory() {
