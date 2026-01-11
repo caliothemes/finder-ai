@@ -9,8 +9,10 @@ import DefaultAILogo from '@/components/DefaultAILogo';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function HomeFeaturedAI({ aiServices, onToggleFavorite, favorites = [], finderReviews = [] }) {
+  // Tous les hooks en premier
   const { language } = useLanguage();
 
+  // Toutes les fonctions helper après les hooks
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
   };
@@ -19,6 +21,7 @@ export default function HomeFeaturedAI({ aiServices, onToggleFavorite, favorites
     return finderReviews.find(r => r.ai_service_id === serviceId && r.active);
   };
 
+  // Return conditionnel après tous les hooks et fonctions
   if (!aiServices || aiServices.length === 0) return null;
 
   return (
