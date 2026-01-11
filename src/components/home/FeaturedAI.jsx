@@ -31,11 +31,11 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     staleTime: 60000,
   });
   
-  // Toujours 15 cards max: promo card + bannière payante (si présente) + services IA
-  // 1 slot réservé pour promo card, 1 pour bannière payante (si présente)
-  const maxServices = hasPaidBanner ? 14 : 15; // 15 - (1 bannière si présente)
+  // Calculer avant tout return
+  const maxServices = hasPaidBanner ? 14 : 15;
   const displayedServices = aiServices.slice(0, maxServices);
   
+  // Fonctions helper définies avant les returns
   const isFavorite = (serviceId) => {
     return favorites.some(fav => fav.ai_service_id === serviceId);
   };
@@ -44,7 +44,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     return finderReviews.find(r => r.ai_service_id === serviceId && r.active);
   };
 
-  // Vérifier si le service est nouveau (moins de 7 jours)
   const isNew = (service) => {
     if (!service.created_date) return false;
     const createdDate = new Date(service.created_date);
@@ -52,8 +51,6 @@ export default function FeaturedAI({ aiServices, onToggleFavorite, favorites = [
     const diffDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
     return diffDays < 7;
   };
-
-
 
   return (
     <div className="py-16 px-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
