@@ -18,6 +18,7 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
     queryKey: ['activeBanner', position, today],
     queryFn: async () => {
       try {
+        const today = new Date().toISOString().split('T')[0];
         const banners = await base44.entities.BannerReservation.filter({
           position: position,
           validated: true,
@@ -36,6 +37,11 @@ export default function ActiveBanner({ position, showPlaceholder = false }) {
       }
     },
   });
+
+  // Calculs après les hooks
+  const isDark = theme === 'dark';
+  const isCardFormat = position === 'homepage_sidebar' || position === 'explore_sidebar';
+  const isArticleFormat = position === 'homepage_hero' || position === 'explore_top';
 
   // Returns conditionnels après tous les hooks et calculs
   if (!isLoading && !activeBanner && showPlaceholder) {
